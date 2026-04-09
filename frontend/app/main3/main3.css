@@ -135,7 +135,6 @@
 
 /* 지도 섹션 */
 .main3 .map-section { padding: 60px 0; background: #fff; }
-.main3 .map-wrapper { position: relative; max-width: 600px; height: 600px; margin: 0 auto; background: url('/map.png') no-repeat center/contain; opacity: 0.9; }
 .main3 .map-marker { position: absolute; display: flex; flex-direction: column; align-items: center; transform: translate(-50%, -50%) scale(0); opacity: 0; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
 .main3 .reveal.active .map-marker { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 .main3 .reveal.active .map-marker:nth-child(1) { transition-delay: 0.2s; }
@@ -317,18 +316,219 @@
 .main3 .school-feature-img { height: 180px; background-color: #f1f3f5; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #888; font-size: 14px; border-bottom: 1px solid #eaeaea; }
 .main3 .school-feature-title { padding: 15px; text-align: center; font-size: 14px; font-weight: bold; color: #111; line-height: 1.4; }
 
-/* 반응형 */
-@media (max-width: 768px) {
-  .main3-header { padding: 15px 20px; flex-wrap: wrap; gap: 10px; }
-  .main3-header .nav-links { gap: 15px; font-size: 14px; }
-  .main3 .hero-brand h1 { font-size: 32px; }
-  .main3 .agenda-grid { grid-template-columns: 1fr; }
-  .main3 .gateway-grid { grid-template-columns: 1fr; }
-  .main3 .card-grid { grid-template-columns: 1fr; }
-  .main3 .service-grid { grid-template-columns: 1fr; }
-  .main3 .school-process-grid { grid-template-columns: repeat(2, 1fr); }
+/* ============================
+   햄버거 메뉴
+   ============================ */
+.main3-header .hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 4px;
+  background: none;
+  border: none;
+}
+.main3-header .hamburger span {
+  display: block;
+  width: 24px;
+  height: 2.5px;
+  background: #111;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+.main3-header .hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+.main3-header .hamburger.open span:nth-child(2) { opacity: 0; }
+.main3-header .hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+/* 모바일 드로어 메뉴 */
+.main3-mobile-menu {
+  display: none;
+  position: fixed;
+  top: 65px;
+  left: 0;
+  width: 100%;
+  background: rgba(255,255,255,0.98);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #eee;
+  z-index: 999;
+  padding: 20px 24px 28px;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+.main3-mobile-menu.open { display: flex; }
+.main3-mobile-menu a {
+  display: block;
+  padding: 14px 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #333;
+  border-bottom: 1px solid #f0f0f0;
+  text-decoration: none;
+}
+.main3-mobile-menu a:last-of-type { border-bottom: none; }
+.main3-mobile-menu a.active-nav { color: #1a56db; }
+.main3-mobile-menu .mobile-consult-btn {
+  margin-top: 16px;
+  width: 100%;
+  padding: 14px;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ============================
+   태블릿 (1024px 이하)
+   ============================ */
+@media (max-width: 1024px) {
+  .main3 .container { padding: 0 24px; }
+  .main3-header { padding: 16px 24px; }
+  .main3-header .nav-links { gap: 22px; font-size: 14px; }
+
+  .main3 .hero-brand h1 { font-size: 40px; }
+  .main3 .hero-brand > .container > p { font-size: 17px; }
+  .main3 .hero-stats { gap: 40px; padding: 24px; }
+  .main3 .hero-stats .stat-item h3 { font-size: 30px; }
+
+  .main3 .section-title { font-size: 30px; }
+  .main3 .agenda-header h2 { font-size: 30px; }
+  .main3 .teaser-text.step-2 { font-size: 36px; }
+  .main3 .teaser-text.step-3 { font-size: 28px; }
+
+  .main3 .agenda-grid { grid-template-columns: 1fr 1fr; gap: 18px; }
+  .main3 .gateway-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
   .main3 .media-grid { grid-template-columns: repeat(2, 1fr); }
-  .main3 .hero-stats { gap: 30px; }
+  .main3 .school-process-grid { grid-template-columns: repeat(2, 1fr); }
+  .main3 .school-feature-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .main3 .agenda-card { padding: 36px 28px; }
+  .main3 .gateway-card { padding: 0; }
+  .main3 .info-card { padding: 36px 24px; }
+  .main3 .smart-card-top { flex-direction: column; }
+  .main3 .smart-card-img { width: 100%; height: 140px; }
+}
+
+/* ============================
+   모바일 (768px 이하)
+   ============================ */
+@media (max-width: 768px) {
+  /* 헤더 */
+  .main3-header { padding: 14px 20px; }
+  .main3-header .nav-links { display: none; }
+  .main3-header .consult-btn { display: none; }
+  .main3-header .hamburger { display: flex; }
+
+  /* 히어로 */
+  .main3 .hero-brand {
+    min-height: 100svh;
+    padding: 100px 20px 160px;
+    background-attachment: scroll; /* iOS fixed 버그 방지 */
+  }
+  .main3 .hero-brand h1 { font-size: 28px; letter-spacing: -0.5px; }
+  .main3 .hero-brand > .container > p { font-size: 15px; }
+  .main3 .hero-buttons { flex-direction: column; align-items: center; gap: 12px; }
+  .main3 .btn-primary, .main3 .btn-outline { width: 100%; max-width: 320px; text-align: center; }
+
+  /* hero-stats: absolute → 일반 흐름 */
+  .main3 .hero-stats-wrapper {
+    position: relative;
+    bottom: auto;
+    margin-top: 32px;
+    padding: 0;
+  }
+  .main3 .hero-stats {
+    gap: 20px;
+    padding: 20px 16px;
+    border-radius: 14px;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  .main3 .hero-stats .stat-item { text-align: center; min-width: 80px; }
+  .main3 .hero-stats .stat-item h3 { font-size: 26px; }
+  .main3 .hero-stats .stat-item p { font-size: 12px; }
+
+  /* 티저 */
+  .main3 .teaser-section { padding: 60px 0 40px; }
+  .main3 .teaser-text.step-1 { font-size: 17px; }
+  .main3 .teaser-text.step-2 { font-size: 26px; }
+  .main3 .teaser-text.step-3 { font-size: 22px; }
+  .main3 .teaser-text.step-4 { font-size: 15px; padding: 12px 20px; }
+
+  /* 섹션 공통 */
+  .main3 .section-title { font-size: 24px; }
+  .main3 .section-desc { font-size: 14px; }
+  .main3 .agenda-header h2 { font-size: 24px; }
+  .main3 .agenda-section, .main3 .gateway-section,
+  .main3 .category-section, .main3 .services,
+  .main3 .testimonials, .main3 .media,
+  .main3 .map-section, .main3 .partners { padding: 48px 0; }
+
+  /* 그리드 1열 */
+  .main3 .agenda-grid { grid-template-columns: 1fr; gap: 14px; }
+  .main3 .gateway-grid { grid-template-columns: 1fr; gap: 16px; }
+  .main3 .card-grid { grid-template-columns: 1fr; gap: 14px; }
+  .main3 .service-grid { grid-template-columns: 1fr; gap: 14px; }
+  .main3 .school-process-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .main3 .school-feature-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .main3 .media-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .main3 .grid-2x2 { grid-template-columns: 1fr; }
+
+  /* 카드 패딩 */
+  .main3 .agenda-card { padding: 28px 20px; }
+  .main3 .info-card { padding: 28px 20px; }
+  .main3 .smart-card-top { flex-direction: column; padding: 20px; }
+  .main3 .smart-card-img { width: 100%; height: 120px; }
+  .main3 .gateway-img { height: 160px; }
+
+  /* 히어로 서브 */
+  .main3 .hero-premium { padding: 80px 20px; background-attachment: scroll; }
+  .main3 .hero-premium h1 { font-size: 28px; }
+  .main3 .hero-premium p { font-size: 15px; }
+  .main3 .hero { padding: 60px 20px; }
+  .main3 .hero h1 { font-size: 26px; }
+
+  /* 학교 통계 */
+  .main3 .school-stats { flex-direction: column; gap: 24px; margin-top: 40px; padding-top: 32px; }
+  .main3 .school-stat-item h3 { font-size: 36px; }
+  .main3 .school-process-num { font-size: 28px; }
+
+  /* CTA */
+  .main3 .cta-footer { padding: 56px 20px; }
+  .main3 .cta-footer h2 { font-size: 24px; }
+  .main3 .cta-btn-white { font-size: 15px; padding: 14px 24px; }
+
+  /* FAB */
+  .main3-fab { bottom: 16px; right: 16px; }
+  .main3-fab .chatbot-badge { font-size: 13px; padding: 12px 18px; }
+
+  /* 모달 */
+  .main3-modal .modal-content { padding: 30px 20px; border-radius: 16px; }
+  .main3-modal .modal-form-content { padding: 24px 16px; }
+  .main3-modal .modal-header h2 { font-size: 22px; }
   .main3-modal .form-grid-2 { grid-template-columns: 1fr; }
   .main3-modal .module-checkbox-grid { grid-template-columns: 1fr; }
+  .main3-modal .chat-modal-content { height: 85svh; border-radius: 20px 20px 0 0; align-self: flex-end; }
+
+  /* 지도 */
+  .main3 .map-section .container > div { flex-direction: column; align-items: center; }
+
+  /* 센터 카드 */
+  .main3 .center-row-card { padding: 20px; }
+}
+
+/* ============================
+   소형 모바일 (480px 이하)
+   ============================ */
+@media (max-width: 480px) {
+  .main3 .hero-brand h1 { font-size: 24px; }
+  .main3 .school-process-grid { grid-template-columns: 1fr; }
+  .main3 .school-feature-grid { grid-template-columns: 1fr; }
+  .main3 .media-grid { grid-template-columns: 1fr; }
+  .main3 .hero-stats .stat-item h3 { font-size: 22px; }
+  .main3 .agenda-icon { font-size: 36px; }
+  .main3 .agenda-card h3, .main3 .info-card h3 { font-size: 20px; }
 }

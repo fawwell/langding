@@ -16,7 +16,7 @@ export default function Main3Home() {
   return (
     <>
       {/* 히어로 브랜드 */}
-      <RevealWrapper className="hero-brand">
+      <RevealWrapper className="hero-brand" style={{ paddingBottom: 'calc(60px + env(safe-area-inset-bottom))' }}>
         <div className="container">
           <div className="hero-subtitle">FaWW : Family Wholesome Wellness</div>
           <h1>
