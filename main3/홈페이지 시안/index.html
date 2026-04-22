@@ -4,23 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FaWW - 토탈 피지컬케어 솔루션 그룹</title>
-    <!-- Swiper CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;600;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* 1. 전체적인 요소 사이 간격 아주 조금씩 띄우기 */
+        section {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        .container {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        
+        /* 7. 아코디언 요소 클릭 시 옆 칸의 높이가 같이 늘어나는 현상 방지 */
+        .faq-list.grid-2x2 {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 25px !important;
+            align-items: start !important; /* 핵심: 각 카드가 자기 안의 콘텐츠 높이만큼만 커짐 */
+        }
+        @media (max-width: 768px) {
+            .faq-list.grid-2x2 { grid-template-columns: 1fr !important; }
+        }
+    </style>
 </head>
 <body>
 
     <header>
         <div class="logo" onclick="switchPage('page-home', document.getElementById('nav-home'))">FaWW</div>
+        <button class="hamburger-btn" onclick="toggleMobileMenu()">☰</button>
         <ul class="nav-links">
             <li><a href="#" id="nav-home" class="active-nav" onclick="switchPage('page-home', this)">파우 소개</a></li>
             <li><a href="#" id="nav-ai" onclick="switchPage('page-ai', this)">스마트 AI 체형분석</a></li>
-            <li><a href="#" id="nav-physical" onclick="switchPage('page-physical', this)">피지컬케어</a></li> 
+            <li><a href="#" id="nav-physical" onclick="switchPage('page-physical', this)">피지컬케어</a></li>
             <li><a href="#" id="nav-mall" onclick="switchPage('page-mall', this)">피지컬케어 mall</a></li>
         </ul>
         <div class="nav-actions">
-            <button class="consult-btn" onclick="openModal('modal-proposal')">도입 및 제휴 문의</button>
+            <button class="btn-outline" style="padding: 8px 16px; margin-right: 10px; font-size: 13px; border-color: #eee; color: #555; background: #fff;" onclick="alert('회사소개서 PDF가 다운로드됩니다.')">📥 소개서 다운로드</button>
+            <button class="consult-btn" style="background-color: #2b8a3e;" onclick="openModal('modal-proposal')">도입 및 제휴 문의</button>
         </div>
     </header>
 
@@ -28,27 +53,30 @@
         <div class="chatbot-badge" onclick="openModal('modal-chat')">💬 실시간 챗봇 문의</div>
     </div>
 
-    <!-- ============================================== -->
-    <!-- 0. 파우 소개 (메인 홈페이지) -->
-    <!-- ============================================== -->
     <main id="page-home" class="page-content active">
         <section class="hero-brand reveal">
-            <div class="container">
+            <!-- 🎬 고화질 비디오 배경 -->
+            <video class="hero-video-bg" autoplay loop muted playsinline>
+                <source src="background3.mp4" type="video/mp4">
+            </video>
+            <div class="hero-overlay"></div>
+            
+            <div class="container" style="position: relative; z-index: 2;">
                 <div class="hero-subtitle">FaWW : Family Wholesome Wellness</div>
-                <h1>임직원의 건강한 신체는 기업의 성장을 견인하고,<br><span>안전한 사회를 만드는 가장 확실한 자산입니다.</span></h1>
-                <p>신체적, 정신적, 사회적 건강의 조화를 추구하며,<br>20,000+ 데이터로 검증된 업계 최초 피지컬케어 원조 전문가가 함께합니다.</p>
+                <h1><span>산재 예방</span>은 근로자의 <span>건강</span>으로부터 나옵니다</h1>
+                <p>스마트 AI를 활용한 맞춤형 케어프로그램<br>근골격계 질환, 1:1 케어 프로그램을 통한 산재 예방 시스템을<br>업계 최초로 도입한 피지컬케어 전문가가 함께합니다</p>
                 <div class="hero-buttons">
                     <button class="btn-primary" onclick="openModal('modal-proposal')">맞춤 솔루션 문의하기</button>
-                    <button class="btn-outline" style="background:rgba(255,255,255,0.1); color:#fff; border-color:rgba(255,255,255,0.5); backdrop-filter:blur(5px);" onclick="switchPage('page-ai', document.getElementById('nav-ai'))">프로그램 자세히 보기</button>
+                    
+               
                 </div>
             </div>
-            
             <div class="hero-stats-wrapper">
                 <div class="hero-stats reveal reveal-scale">
-                    <div class="stat-item"><h3><span class="count-up" data-target="12">0</span>년+</h3><p>웰니스 관리 노하우</p></div>
+                    <div class="stat-item"><h3><span class="count-up" data-target="12">0</span>년+</h3><p>피지컬케어 도입</p></div>
                     <div class="stat-item"><h3><span class="count-up" data-target="120">0</span>+</h3><p>파트너 기업 및 학교</p></div>
                     <div class="stat-item"><h3><span class="count-up" data-target="99">0</span>%</h3><p>고객 만족도</p></div>
-                    <div class="stat-item"><h3><span class="count-up" data-target="20000" data-format="true">0</span>+</h3><p>누적 관리 회원</p></div>
+                    <div class="stat-item"><h3><span class="count-up" data-target="20000" data-format="true">0</span>+</h3><p>관리 임직원 수</p></div>
                 </div>
             </div>
         </section>
@@ -56,62 +84,134 @@
         <section class="teaser-section reveal">
             <div class="container text-center">
                 <div class="teaser-text step-1">담당자님,</div>
-                <div class="teaser-text step-2">임직원 분들의 <span style="color:#1a56db">건강과 행복</span>을 찾으시나요?</div>
-                <div class="teaser-text step-3">주식회사 파우(FaWW)가 찾아드리겠습니다.</div>
-                <div class="teaser-text step-4">"피지컬케어의 원조"로서 증명해 온 결과값으로 직접 느껴보세요.</div>
-                <div class="teaser-text step-5">지금부터 주식회사 파우(FaWW)를 소개합니다. ▼</div>
+                <div class="teaser-text step-2"> <span style="color:#2b8a3e">사고 없는 현장</span>과 <span style="color:#2b8a3e">건강한 사무환경</span>을 만드는<br>산업안전보건의 파트너를 찾으시나요?</div>
+                <div class="teaser-text step-3"> 파우(FaWW)가 함께 하겠습니다.</div>
+                <div class="teaser-text step-4">"피지컬케어 원조"로서 증명해온 결과를 보여드리겠습니다.</div>
+                <div class="teaser-text step-5">지금부터 파우(FaWW)를 소개합니다. ▼</div>
             </div>
         </section>
+               
 
+<section class="jelly-chart-section reveal" style="padding: 80px 0; background-color: #f8f9fa; border-top: 1px solid #eee;">
+            <div class="container text-center" style="overflow: visible;">
+                <h2 class="section-title">FaWW 피지컬케어 종합 만족도</h2>
+                <p class="section-desc" style="margin-bottom: 60px;">2만 건 이상의 데이터가 증명하는 트렌디한 결과</p>
+                
+                <div class="jelly-pie-wrapper">
+                    <div class="jelly-pie-scene">
+                        <div class="jelly-shadow"></div>
+                        <div class="jelly-layer bottom"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" class="j-bg"/><circle cx="16" cy="16" r="8" class="j-fg" pathLength="100"/></svg></div>
+                        <div class="jelly-layer mid1"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" class="j-bg"/><circle cx="16" cy="16" r="8" class="j-fg" pathLength="100"/></svg></div>
+                        <div class="jelly-layer mid2"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" class="j-bg"/><circle cx="16" cy="16" r="8" class="j-fg" pathLength="100"/></svg></div>
+                        <div class="jelly-layer top">
+                            <svg viewBox="0 0 32 32">
+                                <circle cx="16" cy="16" r="8" class="j-bg" pathLength="100"/>
+                                <circle cx="16" cy="16" r="8" class="j-fg count-up-circle" pathLength="100"/>
+                            </svg>
+                            <div class="jelly-gloss"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="jelly-text-float">
+                        <div style="display: flex; align-items: baseline; justify-content: center;">
+                            <span class="jelly-percent count-up" data-target="99">0</span>
+                            <span class="jelly-sign">%</span>
+                        </div>
+                        <span class="jelly-label">매우 만족</span>
+                    </div>
+                </div>
+
+                <div class="pie-legend">
+                    <span class="legend-item"><span class="legend-color" style="background: rgba(43, 138, 62, 0.8);"></span>매우 만족 99%</span>
+                    <span class="legend-item"><span class="legend-color" style="background: rgba(232, 245, 233, 0.8);"></span>만족 1%</span>
+                    <span class="legend-item"><span class="legend-color" style="background:#888;"></span>보통 0%</span>
+                    <span class="legend-item"><span class="legend-color" style="background:#333;"></span>불만족 0%</span>
+                </div>
+            </div>
+        </section>
         <section class="agenda-section reveal">
             <div class="container">
                 <div class="agenda-header">
-                    <h2>조직의 가장 큰 고민,<br><span>'신체 건강(Physical)'</span>에서 해답을 찾다</h2>
-                    <p>단순한 복지를 넘어 중대재해, 저출산, 멘탈케어까지. 국가와 기업의 핵심 과제를 해결합니다.</p>
+                    <h2>조직의 가장 큰 고민,<br><span>'피지컬케어(Physical Care)'</span>에서 해답을 찾다</h2>
+                    <p>단순한 복지를 넘어 산업재해, 저출산, 멘탈케어까지. 국가와 기업의 핵심 과제를 해결합니다.</p>
                 </div>
-                
                 <div class="agenda-grid">
-                    <div class="agenda-card reveal reveal-left delay-1">
+                    <div class="agenda-card reveal">
                         <div class="agenda-icon">🚨</div>
-                        <h3>건강한 몸이 최고의 퍼포먼스입니다</h3>
-                        <p>눈에 보이지 않는 신체의 피로와 통증은 예고 없이 찾아오는 산재의 씨앗입니다. 근골격계 질환을 선제적으로 예방하여 법적 리스크를 낮추고 조직의 생산성을 극대화하십시오.</p>
+                        <h3>건강한 몸이 곧<br>산재의 예방입니다</h3>
+                        <p>눈에 보이지 않는 신체의 피로와 통증은 예고 없이 찾아오는 산재의 씨앗입니다. 근골격계 질환을 선제적으로 예방하여 <br>법적 리스크를 낮추고 조직의 생산성을 극대화하십시오.</p>
                     </div>
-                    <div class="agenda-card reveal delay-2">
+                    <div class="agenda-card reveal delay-1">
                         <div class="agenda-icon">👶</div>
-                        <h3>여성 임직원의 일·가정 양립 파트너</h3>
+                        <h3>산모의 건강이<br>성공적 복직의 시작입니다 </h3>
                         <p>출산 친화적 조직문화, 이제는 신체의 근본적인 건강에서 출발해야 합니다. 전문가의 섬세한 피지컬케어로 출산 전후의 신체 회복을 돕고, 일과 가정이 양립하는 건강한 환경을 완성합니다.</p>
                     </div>
-                    <div class="agenda-card reveal reveal-right delay-3">
+                    <div class="agenda-card reveal delay-2">
                         <div class="agenda-icon">🧠</div>
-                        <h3>신체의 활력이 마음 안식을 보장입니다</h3>
+                        <h3>신체가 건강해야<br>마음도 건강해집니다</h3>
                         <p>굳어있는 몸의 긴장은 곧 우울감과 번아웃으로 이어집니다. 전문가의 직접적인 피지컬케어로 신체의 활력을 되찾아주고, 마음의 병과 극단적인 선택을 예방하는 새로운 EAP를 제시합니다.</p>
                     </div>
                 </div>
 
-                <div class="expert-banner reveal reveal-scale" style="margin-top: 60px;">
+                <div class="expert-banner reveal">
                     <h4>⚠️ 자격증 없는 무자격 플랫폼 업체를 주의하십시오.</h4>
-                    <p>단순 요가 강사나 마사지사를 매칭해주는 타 플랫폼과 비교를 거부합니다. FaWW는 <strong>12년 이상의 독보적 임상 노하우</strong>를 바탕으로 '피지컬케어관리사' 자격증을 창시한 <strong>대한민국 '원조(Original)'</strong> 그룹입니다.<br>검증되지 않은 1회성 휴식이 아닌, 뼈와 근막을 완벽히 이해하는 진짜 전문가의 개입만이 실질적인 지표 변화를 만듭니다.</p>
+                    <p>단순 외부 강사들을 매칭해주는 타 플랫폼과 비교를 거부합니다. FaWW는 <strong>12년 이상의 독보적 임상 노하우</strong>를 바탕으로 '피지컬케어관리사' 자격증을 창시한 <strong>대한민국 '원조(Original)'</strong> 그룹입니다.<br>검증되지 않은 1회성 휴식이 아닌, 뼈와 근막을 완벽히 이해하는 진짜 전문가의 개입만이 실질적인 지표 변화를 만듭니다.</p>
                 </div>
 
-                <div class="expert-features" style="margin-top: 80px;">
-                    <div class="section-title reveal" style="font-size: 28px; margin-bottom: 30px;">FaWW만의 독보적 EAP 운영 시스템</div>
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;">
-                        <div class="agenda-card reveal reveal-left" style="border: 2px solid #1a56db; box-shadow: 0 10px 30px rgba(26,86,219,0.08);">
+                <div class="expert-features">
+                    <div class="section-title reveal">FaWW만의 독보적 EAP 운영 시스템</div>
+                    <div class="expert-grid">
+                        <div class="agenda-card reveal" style="border: 2px solid #2b8a3e; box-shadow: 0 10px 30px rgba(43, 138, 62, 0.08);">
                             <div class="agenda-icon">📊</div>
                             <h3>담당자의 성과를 증명하는 '사후 리포트'</h3>
-                            <p>현장 케어 후 단순 만족도 조사가 아닌, <strong>AI 스캐닝 기반의 신체 개선 수치를 시각화한 리포트</strong>를 제공합니다. 인사평가, ESG 및 산업안전보건 증빙 자료로 즉시 활용 가능한 결과물을 책임집니다.</p>
+                            <p>현장 케어 후 단순 만족도 조사가 아닌, <strong>AI 스캐닝 기반의 <br>신체 개선 수치를 시각화한 리포트</strong>를 제공합니다. 인사평가, ESG 및 <br>산업안전보건 증빙 자료로 즉시 활용 가능한 결과물을 책임집니다.</p>
                             <div class="mini-chart">
-                                <div class="mini-bar mini-bar-1"></div>
-                                <div class="mini-bar mini-bar-2"></div>
-                                <div class="mini-bar mini-bar-3"></div>
+                                <div class="mini-bar mini-bar-1" style="background-color: #2b8a3e;"></div>
+                                <div class="mini-bar mini-bar-2" style="background-color: #40c057;"></div>
+                                <div class="mini-bar mini-bar-3" style="background-color: #8ce99a;"></div>
                             </div>
                         </div>
-                        <div class="agenda-card reveal reveal-right" style="border: 2px solid #111; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
+                        <div class="agenda-card reveal delay-1" style="border: 2px solid #111; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
                             <div class="agenda-icon">🏅</div>
-                            <h3>'원조' 피지컬 마스터 100% 검증 파견</h3>
-                            <p>외부 강사를 대충 소싱하여 단순 매칭하지 않습니다. 12년 노하우가 담긴 자체 아카데미의 <strong>피지컬케어 자격 인증(PCM, PTS)을 완벽히 통과한 최상위 전문가</strong>만을 육성 및 파견합니다. 이것이 흉내 낼 수 없는 원조의 격차입니다.</p>
+                            <h3>'원조' 피지컬케어 전문가 100% 검증 파견</h3>
+                            <p>외부 강사를 대충 고용하여 단순 파견하지 않습니다. <br>12년 노하우가 담긴 자체 아카데미의 <strong>피지컬케어 자격 인증(PCM, PTS)을 완벽히 통과한 최상위 전문가</strong>만을 육성 및 파견합니다. </p>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="comparison-section reveal" style="padding: 60px 0; background: #fff; border-top: 1px solid #eee;">
+            <div class="container">
+                <h2 class="section-title">품의서가 통과되는 압도적 차이</h2>
+                <p class="section-desc">단순 매칭 플랫폼과 피지컬케어 원조 그룹의 본질적인 차이를 확인하세요.</p>
+                <div class="compare-table-wrapper" style="max-width: 900px; margin: 30px auto 0; border: 1px solid #eaeaea; border-radius: 12px; overflow: hidden;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: center;">
+                        <thead>
+                            <tr style="background: #f8f9fa;">
+                                <th style="padding: 20px; border-bottom: 1px solid #eaeaea;">비교 항목</th>
+                                <th style="padding: 20px; border-bottom: 1px solid #eaeaea; color: #666;">타사 일반 플랫폼</th>
+                                <th style="padding: 20px; border-bottom: 1px solid #eaeaea; background: #2b8a3e; color: #fff; font-size: 18px;">FaWW 피지컬케어 (원조)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 20px; font-weight: bold; border-bottom: 1px solid #eaeaea; text-align: left; background: #fdfdfd;">전문가 파견 기준</td>
+                                <td style="padding: 20px; border-bottom: 1px solid #eaeaea; color: #555;">단기 프리랜서 매칭</td>
+                                <td style="padding: 20px; border-bottom: 1px solid #eaeaea; font-weight: bold; color: #2b8a3e; background: #e8f5e9;">100% 정규 과정 수료 마스터</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 20px; font-weight: bold; border-bottom: 1px solid #eaeaea; text-align: left; background: #fdfdfd;">효과 측정/증빙</td>
+                                <td style="padding: 20px; border-bottom: 1px solid #eaeaea; color: #555;">단순 만족도 설문</td>
+                                <td style="padding: 20px; border-bottom: 1px solid #eaeaea; font-weight: bold; color: #2b8a3e; background: #e8f5e9;">스마트 AI 수치화 리포트</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 20px; font-weight: bold; text-align: left; background: #fdfdfd;">케어의 본질</td>
+                                <td style="padding: 20px; color: #555;">일시적인 근육 이완</td>
+                                <td style="padding: 20px; font-weight: bold; color: #2b8a3e; background: #e8f5e9;">근육/관절 기반 통증 개선</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
@@ -119,37 +219,37 @@
         <section class="gateway-section reveal">
             <div class="container">
                 <div style="text-align:center; margin-bottom: 50px;">
-                    <h2 style="font-size: 32px; font-weight:800; color:#111; letter-spacing:-1px;">온전한 웰니스를 향한 세 가지 솔루션</h2>
-                    <p style="color:#666; font-size:16px;">FaWW의 3가지 핵심 비즈니스로 여러분의 조직과 일상에 건강을 선물하세요.</p>
+                    <h2 style="font-size: 32px; font-weight:800; color:#111; letter-spacing:-1px;"> 지속가능한 웰니스 솔루션</h2>
+                    <p style="color:#666; font-size:16px;">FaWW의 3가지 비즈니스로 여러분의 조직과 일상에 건강을 선물하세요.</p>
                 </div>
                 <div class="gateway-grid">
-                    <div class="gateway-card reveal reveal-scale delay-1" onclick="switchPage('page-ai', document.getElementById('nav-ai'))">
-                        <div class="gateway-img scan-wrapper" style="background-color: #f0f4ff; color: #1a56db;">
+                    <div class="gateway-card reveal" onclick="switchPage('page-ai', document.getElementById('nav-ai'))">
+                        <div class="gateway-img scan-wrapper" style="background-color: #e8f5e9; color: #2b8a3e;">
                             <div class="scan-line"></div>
                             B2B / 학교 솔루션 화면
                         </div>
                         <div class="gateway-content">
                             <div class="tags-wrap"><span class="hash-tag">#임직원_통증관리</span><span class="hash-tag">#학생_체형검진</span></div>
                             <h2>스마트 AI 체형분석 솔루션</h2>
-                            <p>기업의 업무 효율을 높이는 EAP 복지 프로그램부터 학교 단체 검진까지, 데이터 기반의 정확한 리포트를 제공합니다.</p>
+                            <p>기업의 업무 효율을 높이는 EAP 복지 <br>프로그램부터 학교 단체 검진까지, 데이터 <br>기반의 정확한 리포트를 제공합니다.</p>
                             <div class="gateway-btn">조직 맞춤 솔루션 보기</div>
                         </div>
                     </div>
-                    <div class="gateway-card reveal reveal-scale delay-2" onclick="switchPage('page-physical', document.getElementById('nav-physical'))">
+                    <div class="gateway-card reveal delay-1" onclick="switchPage('page-physical', document.getElementById('nav-physical'))">
                         <div class="gateway-img">피지컬케어 센터/아카데미 화면</div>
                         <div class="gateway-content">
                             <div class="tags-wrap"><span class="hash-tag">#로컬센터</span><span class="hash-tag">#전문가양성</span></div>
                             <h2>FaWW 피지컬케어</h2>
-                            <p>전국 주요 오프라인 거점 센터를 통한 개인 맞춤 관리와, 압도적인 전문가를 양성하는 아카데미 교육 과정을 운영합니다.</p>
+                            <p>전국 주요 오프라인 거점 센터를 통한 <br>개인 맞춤 관리와, 압도적인 전문가를 양성하는 아카데미 교육 과정을 운영합니다.</p>
                             <div class="gateway-btn">피지컬케어 자세히 보기</div>
                         </div>
                     </div>
-                    <div class="gateway-card reveal reveal-scale delay-3" onclick="switchPage('page-mall', document.getElementById('nav-mall'))">
+                    <div class="gateway-card reveal delay-2" onclick="switchPage('page-mall', document.getElementById('nav-mall'))">
                         <div class="gateway-img">교구몰 쇼핑 화면</div>
                         <div class="gateway-content">
                             <div class="tags-wrap"><span class="hash-tag">#홈케어교구</span><span class="hash-tag">#복지포인트</span></div>
                             <h2>피지컬케어 Mall</h2>
-                            <p>전문가가 직접 검증한 릴렉싱 및 트레이닝 교구. 기업 복지 포인트 차감 및 안전한 셀프 홈케어를 완벽 지원합니다.</p>
+                            <p>전문가가 직접 검증한 릴렉싱 및 트레이닝 교구. 기업 복지 포인트 차감 및 안전한 <br>셀프 홈케어를 완벽 지원합니다.</p>
                             <div class="gateway-btn">검증 교구 쇼핑하기</div>
                         </div>
                     </div>
@@ -159,13 +259,50 @@
 
         <section class="testimonials reveal">
             <div class="container">
-                <h2 class="section-title">조직 담당자 98% 추천 생생 후기</h2>
+                <h2 class="section-title">  담당자가 99%만족한 FaWW의 솔루션</h2>
+                <div class="review-filter-wrapper" style="text-align: center; margin-bottom: 20px;">
+                    <button class="review-filter-btn active" onclick="filterReviews('all', this)">전체 보기</button>
+                    <button class="review-filter-btn" onclick="filterReviews('b2b', this)">🏢 기업/HR 담당자</button>
+                    <button class="review-filter-btn" onclick="filterReviews('school', this)">🏫 학교/보건교사</button>
+                </div>
+
                 <div class="swiper reviewSwiper" style="margin-top: 40px; padding: 20px 0;">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide"><div class="testimonial-card"><div class="stars">★★★★★</div><p class="review-text">"수업 끝나고 사무실로 복귀할 때 벌써 변화를 체감합니다. 발바닥, 종아리, 허벅지 움직임부터가 다르네요. 최고입니다!"</p><div class="reviewer-info"><div class="reviewer-avatar"></div><span>S사 운영팀</span></div></div></div>
-                        <div class="swiper-slide"><div class="testimonial-card"><div class="stars">★★★★★</div><p class="review-text">"늘어나는 산재 발생이 큰 고민이었는데 업무 시작 전 사고를 예방하는 프로그램을 진행하면서 눈에 띄게 줄었어요."</p><div class="reviewer-info"><div class="reviewer-avatar"></div><span>H사 안전환경팀</span></div></div></div>
-                        <div class="swiper-slide"><div class="testimonial-card"><div class="stars">★★★★☆</div><p class="review-text">"모든 학생이 형평성 있게 검진을 이용할 수 있다는 점이 좋았어요. 체계적인 데이터 리포트 덕분에 학부모님들 만족도도 높습니다."</p><div class="reviewer-info"><div class="reviewer-avatar"></div><span>OO고등학교 보건교사</span></div></div></div>
-                        <div class="swiper-slide"><div class="testimonial-card"><div class="stars">★★★★★</div><p class="review-text">"직원들의 거북목이 확실히 좋아지는게 보입니다. 정기적으로 계속 도입할 예정입니다."</p><div class="reviewer-info"><div class="reviewer-avatar"></div><span>N사 복지담당자</span></div></div></div>
+                    <div class="swiper-wrapper" id="review-wrapper">
+                        <div class="swiper-slide" data-type="b2b">
+                            <div class="testimonial-card">
+                                <div class="stars">★★★★★</div>
+                                <p class="review-text">"수업 끝나고 사무실로 복귀할 때 벌써 변화를 체감합니다. 발바닥, 종아리, 허벅지 움직임부터가 다르네요. 최고입니다!"</p>
+                                <div class="reviewer-info"><div class="reviewer-avatar"></div><span>S사 운영팀</span></div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide" data-type="b2b">
+                            <div class="testimonial-card">
+                                <div class="stars">★★★★★</div>
+                                <p class="review-text">"늘어나는 산재 발생이 큰 고민이었는데 업무 시작 전 사고를 예방하는 프로그램을 진행하면서 눈에 띄게 줄었어요."</p>
+                                <div class="reviewer-info"><div class="reviewer-avatar"></div><span>H사 안전환경팀</span></div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide" data-type="school">
+                            <div class="testimonial-card">
+                                <div class="stars">★★★★☆</div>
+                                <p class="review-text">"모든 학생이 형평성 있게 검진을 이용할 수 있다는 점이 좋았어요. 체계적인 데이터 리포트 덕분에 학부모님들 만족도도 높습니다."</p>
+                                <div class="reviewer-info"><div class="reviewer-avatar"></div><span>OO고등학교 보건교사</span></div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide" data-type="b2b">
+                            <div class="testimonial-card">
+                                <div class="stars">★★★★★</div>
+                                <p class="review-text">"직원들의 거북목이 확실히 좋아지는게 보입니다. 정기적으로 계속 도입할 예정입니다."</p>
+                                <div class="reviewer-info"><div class="reviewer-avatar"></div><span>N사 복지담당자</span></div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide" data-type="school">
+                            <div class="testimonial-card">
+                                <div class="stars">★★★★★</div>
+                                <p class="review-text">"아이들이 바른 자세에 대해 스스로 인지하게 된 것이 가장 큰 성과입니다. 정기적으로 계속 도입할 예정입니다."</p>
+                                <div class="reviewer-info"><div class="reviewer-avatar"></div><span>XX중학교 체육교사</span></div>
+                            </div>
+                        </div>
                     </div>
                     <div class="swiper-pagination"></div>
                 </div>
@@ -175,31 +312,23 @@
         <section class="map-section reveal">
             <div class="container">
                 <h2 class="section-title">전국 어디든, FaWW가 찾아갑니다</h2>
-                <p class="section-desc">전국 주요 기업 및 학교 500곳 이상 누적 방문 달성</p>
+                <p class="section-desc" style="margin-bottom: 50px;">전국 주요 기업 및 학교 500곳 이상 누적 방문 달성</p>
                 <div class="map-wrapper">
                     <div class="map-marker" style="top: 25%; left: 35%;">
                         <div class="marker-btn">서울/경기 230곳</div>
-                        <div class="marker-detail">
-                            <ul><li>삼성 계열사</li><li>현대 계열사</li><li>네이버/카카오</li></ul>
-                        </div>
+                        <div class="marker-detail"><ul><li>삼성 계열사</li><li>현대 계열사</li><li>네이버/카카오</li></ul></div>
                     </div>
                     <div class="map-marker" style="top: 40%; left: 60%;">
                         <div class="marker-btn">충청권 85곳</div>
-                        <div class="marker-detail">
-                            <ul><li>SK하이닉스</li><li>주요 공공기관</li></ul>
-                        </div>
+                        <div class="marker-detail"><ul><li>SK하이닉스</li><li>주요 공공기관</li></ul></div>
                     </div>
                     <div class="map-marker" style="top: 75%; left: 75%;">
                         <div class="marker-btn">부산/경남 110곳</div>
-                        <div class="marker-detail">
-                            <ul><li>현대자동차</li><li>주요 초중고교</li></ul>
-                        </div>
+                        <div class="marker-detail"><ul><li>현대자동차</li><li>주요 초중고교</li></ul></div>
                     </div>
                     <div class="map-marker" style="top: 60%; left: 40%;">
                         <div class="marker-btn">전라권 65곳</div>
-                        <div class="marker-detail">
-                            <ul><li>LG화학</li><li>주요 협력업체</li></ul>
-                        </div>
+                        <div class="marker-detail"><ul><li>LG화학</li><li>주요 협력업체</li></ul></div>
                     </div>
                 </div>
             </div>
@@ -220,185 +349,7 @@
                 </div>
             </div>
         </section>
-
-        <section class="media reveal">
-            <div class="container">
-                <h2 class="section-title">FaWW 미디어 보도</h2>
-                <div class="media-grid">
-                    <div class="media-item"><div class="media-thumb">기사 썸네일 이미지</div><div class="media-title">기업 복지 트렌드, 이제는 맞춤형 피지컬케어 시대</div></div>
-                    <div class="media-item"><div class="media-thumb">기사 썸네일 이미지</div><div class="media-title">FaWW, AI 체형분석 도입으로 업계 혁신 선도</div></div>
-                    <div class="media-item"><div class="media-thumb">기사 썸네일 이미지</div><div class="media-title">직장인 거북목 완화 프로젝트 성공 사례 조명</div></div>
-                    <div class="media-item"><div class="media-thumb">기사 썸네일 이미지</div><div class="media-title">건강한 조직문화를 위한 필수 선택, EAP 솔루션</div></div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- ============================================== -->
-    <!-- 1. 스마트 AI 체형분석 (게이트웨이) -->
-    <!-- ============================================== -->
-    <main id="page-ai" class="page-content">
-        <section class="hero reveal" style="background-color: #111;">
-            <div class="container">
-                <h1>데이터로 증명하는 <span>스마트 AI 체형분석</span></h1>
-                <p>기업의 생산성 향상부터 학생들의 바른 성장까지, 정확한 진단 솔루션을 제공합니다.</p>
-            </div>
-        </section>
-        <section class="category-section reveal">
-            <div class="container">
-                <h2 class="section-title">AI 체형분석 솔루션 타겟</h2>
-                <div class="card-grid">
-                    <div class="info-card reveal reveal-scale delay-1" onclick="switchPage('page-eap', document.getElementById('nav-ai'))" style="border-color:#1a56db; box-shadow: 0 10px 30px rgba(26,86,219,0.1);">
-                        <div class="card-icon" style="background:#1a56db; color:white;">01</div>
-                        <h3>기업 EAP (임직원 대상)</h3>
-                        <p>임직원의 근골격계 질환을 예방하고 업무 효율을 높이는 B2B 전용 체형분석 솔루션입니다.</p>
-                        <div class="view-details-btn">기업 EAP 상세 보기</div>
-                    </div>
-                    
-                    <div class="info-card reveal reveal-scale delay-2" onclick="switchPage('page-school', document.getElementById('nav-ai'))" style="border-color:#004d40; box-shadow: 0 10px 30px rgba(0,77,64,0.1);">
-                        <div class="card-icon" style="background:#004d40; color:white;">02</div>
-                        <h3>학교 (학생 대상)</h3>
-                        <p>성장기 학생들의 체형 검진과 더불어 스트레칭, 그룹운동 및 상세 통계 리포트를 제공합니다.</p>
-                        <div class="view-details-btn" style="color:#004d40;">학교 프로그램 상세 보기</div>
-                    </div>
-                    
-                    <div class="info-card reveal reveal-scale delay-3" onclick="switchPage('page-physical', document.getElementById('nav-physical')); openPhysicalSub('sub-center');">
-                        <div class="card-icon" style="color:#111;">03</div>
-                        <h3>개인</h3>
-                        <p>개인 맞춤형 체형 분석 및 근본적인 신체 개선을 원하신다면 가까운 피지컬케어 센터를 방문해 보세요.</p>
-                        <div class="view-details-btn" style="color:#111;">가까운 센터 찾기</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- ============================================== -->
-    <!-- 1-1. EAP 상세 페이지 (기업 전용) -->
-    <!-- ============================================== -->
-    <main id="page-eap" class="page-content">
-        <section class="hero-premium reveal">
-            <div class="container">
-                <div style="text-align: left;"><span class="back-btn" onclick="switchPage('page-ai', document.getElementById('nav-ai'))">← 타겟 선택으로 돌아가기</span></div>
-                <h1>인재가 머무는 회사,<br>조직문화의 완성은 FaWW</h1>
-                <p>데이터 기반의 피지컬케어 솔루션을 제안합니다.</p>
-                <button class="btn-primary" onclick="openModal('modal-proposal')" style="font-size: 18px; padding: 16px 36px;">우리 회사 맞춤 제안서 받기</button>
-            </div>
-        </section>
-
-        <section class="services reveal">
-            <div class="container">
-                <h2 class="section-title">FaWW 스마트 EAP 솔루션</h2>
-                <p class="section-desc">조직에 맞게 설계된 과학적 블록을 운영합니다.</p>
-                <div class="service-grid">
-                    <div class="smart-card reveal reveal-left" onclick="openModal('modal1')">
-                        <div class="smart-card-top">
-                            <div class="smart-card-img">AI 스캐닝 이미지</div>
-                            <div class="smart-card-body">
-                                <span class="gateway-badge">BLOCK 1. 진단</span>
-                                <h3>스마트 Ai 체형분석</h3>
-                                <p>통증의 원인을 파악하고, 신체 불균형을 구조적으로 분석하여 정확하게 관리합니다.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="smart-card reveal reveal-right" onclick="openModal('modal2')" style="border: 2px solid #1a56db;">
-                        <div class="smart-card-top">
-                            <div class="smart-card-img" style="background:#f0f4ff; color:#1a56db;">전문가 케어 이미지</div>
-                            <div class="smart-card-body">
-                                <span class="gateway-badge" style="background:#1a56db; color:#fff;">BLOCK 2. 케어</span>
-                                <h3>1:1 피지컬 케어</h3>
-                                <p>통증 개선과 부상 예방을 위한 전문가 수기치료와 테이핑, MCT 등을 현장에서 진행합니다.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="smart-card reveal reveal-left delay-1" onclick="openModal('modal4')">
-                        <div class="smart-card-top">
-                            <div class="smart-card-img">단체 운동 이미지</div>
-                            <div class="smart-card-body">
-                                <span class="gateway-badge">BLOCK 3. 실습</span>
-                                <h3>단체 운동 프로그램</h3>
-                                <p>의자나 소도구를 활용하여 업무 중에도 실천 가능한 코어 강화 및 근육 이완 루틴.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="smart-card reveal reveal-right delay-1" onclick="openModal('modal3')">
-                        <div class="smart-card-top">
-                            <div class="smart-card-img">강의 진행 이미지</div>
-                            <div class="smart-card-body">
-                                <span class="gateway-badge">BLOCK 4. 교육</span>
-                                <h3>강의 프로그램</h3>
-                                <p>거북목 교정, 대사증후군 예방, 식습관 개선 등 맞춤형 건강 특강을 제공합니다.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="faq-section reveal">
-            <div class="container text-center">
-                <div class="faq-header-wrap">
-                    <h2>기업 복지 담당자님, <span>이런 고민이 있으신가요?</span></h2>
-                    <p>운동부터 강연, 콘텐츠까지 맞춤 프로그램으로 해결해 드립니다.</p>
-                </div>
-                <div class="faq-list">
-                    <div class="faq-item" onclick="toggleFaq(this)">
-                        <div class="faq-tags"><span class="faq-tag">🧘‍♀️ 웰니스</span><span class="faq-tag">📅 헬스데이</span><span class="faq-tag">🏃 사내 운동</span></div>
-                        <div class="faq-title-wrap"><div class="faq-title">사내 웰니스 문화를 만들고 싶어요</div><div class="faq-icon">+</div></div>
-                        <div class="faq-content">FaWW의 단체 오피스 스트레칭과 건강 특강 모듈을 통해 직원들이 일상에서 쉽게 참여할 수 있는 웰니스 문화를 조성해 드립니다.</div>
-                    </div>
-                    <div class="faq-item" onclick="toggleFaq(this)">
-                        <div class="faq-tags"><span class="faq-tag">🤯 직무스트레스</span><span class="faq-tag">🔋 번아웃</span><span class="faq-tag">💬 감정 노동</span></div>
-                        <div class="faq-title-wrap"><div class="faq-title">임직원들의 마음의 피로를 풀어주고 싶어요</div><div class="faq-icon">+</div></div>
-                        <div class="faq-content">1:1 수기 케어를 통해 굳어있는 신체의 긴장을 풀고, 교감신경을 안정화하여 육체적/정신적 스트레스와 번아웃을 동시에 케어합니다.</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="testimonials reveal" style="background:#fff;">
-            <div class="container">
-                <h2 class="section-title">임직원 98% 추천 생생 후기</h2>
-                <div class="swiper reviewSwiper" style="margin-top: 40px; padding: 20px 0;">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide"><div class="testimonial-card" style="background:#f8f9fa;"><div class="stars">★★★★★</div><p class="review-text">"수업 끝나고 사무실로 복귀할 때 벌써 변화를 체감합니다. 발바닥, 종아리, 허벅지 움직임부터가 다르네요. 최고입니다!"</p><div class="reviewer-info"><div class="reviewer-avatar"></div><span>S사 운영팀</span></div></div></div>
-                        <div class="swiper-slide"><div class="testimonial-card" style="background:#f8f9fa;"><div class="stars">★★★★★</div><p class="review-text">"늘어나는 산재 발생이 큰 고민이었는데 업무 시작 전 사고를 예방하는 프로그램을 진행하면서 눈에 띄게 줄었어요."</p><div class="reviewer-info"><div class="reviewer-avatar"></div><span>H사 안전환경팀</span></div></div></div>
-                        <div class="swiper-slide"><div class="testimonial-card" style="background:#f8f9fa;"><div class="stars">★★★★☆</div><p class="review-text">"모든 임직원이 형평성 있게 복지를 이용할 수 있다는 점이 가장 좋았어요. 전문성 있는 코치님 덕분에 만족도가 높았습니다."</p><div class="reviewer-info"><div class="reviewer-avatar"></div><span>G사 인사팀</span></div></div></div>
-                    </div>
-                    <div class="swiper-pagination"></div>
-                </div>
-            </div>
-        </section>
-
-        <section class="map-section reveal" style="background:#f4f6f9;">
-            <div class="container">
-                <h2 class="section-title">전국 어디든, FaWW가 찾아갑니다</h2>
-                <p class="section-desc">전국 주요 기업 및 학교 500곳 이상 누적 방문 달성</p>
-                <div class="map-wrapper">
-                    <div class="map-marker" style="top: 25%; left: 35%;"><div class="marker-dot"></div><div class="marker-label">서울/경기 230곳</div></div>
-                    <div class="map-marker" style="top: 40%; left: 60%;"><div class="marker-dot"></div><div class="marker-label">충청권 85곳</div></div>
-                    <div class="map-marker" style="top: 75%; left: 75%;"><div class="marker-dot"></div><div class="marker-label">부산/경남 110곳</div></div>
-                    <div class="map-marker" style="top: 60%; left: 40%;"><div class="marker-dot"></div><div class="marker-label">전라권 65곳</div></div>
-                </div>
-            </div>
-        </section>
-
-        <section class="partners reveal">
-            <div class="container">
-                <h2 class="section-title">대한민국 일류 기업들이 FaWW와 함께합니다</h2>
-                <div class="swiper partnerSwiper" style="margin-top: 40px; padding: 10px 0;">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide"><div class="partner-logo">삼성 계열사</div></div>
-                        <div class="swiper-slide"><div class="partner-logo">현대 계열사</div></div>
-                        <div class="swiper-slide"><div class="partner-logo">네이버/카카오</div></div>
-                        <div class="swiper-slide"><div class="partner-logo">주요 금융권</div></div>
-                        <div class="swiper-slide"><div class="partner-logo">대형 게임사</div></div>
-                        <div class="swiper-slide"><div class="partner-logo">공공기관</div></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
+        
         <section class="media reveal" style="background:#f8f9fa;">
             <div class="container">
                 <h2 class="section-title">FaWW 미디어 보도</h2>
@@ -412,9 +363,156 @@
         </section>
     </main>
 
-    <!-- ============================================== -->
-    <!-- 1-2. 학교 상세 페이지 (학생 대상) -->
-    <!-- ============================================== -->
+
+    <main id="page-ai" class="page-content">
+        <section class="hero reveal" style="padding: 120px 20px;">
+            <video class="hero-video-bg" autoplay loop muted playsinline>
+                <source src="background.mp4" type="video/mp4">
+            </video>
+            <div class="hero-overlay"></div>
+            <div class="container" style="position: relative; z-index: 2;">
+                <h1>데이터로 증명하는 <span>스마트 AI 체형분석</span></h1>
+                <p>기업의 건강과 안전부터 학생들의 바른 성장까지, 정확한 진단 및 솔루션을 제공합니다.</p>
+            </div>
+        </section>
+        
+        <section class="category-section reveal">
+            <div class="container" style="text-align: center;">
+                <h2 class="section-title">해당되는 카테고리를 골라주세요</h2>
+                <div class="card-grid">
+                    <div class="info-card reveal" onclick="switchPage('page-eap', document.getElementById('nav-ai'))" style="border-color:#2b8a3e; box-shadow: 0 10px 30px rgba(43, 138, 62, 0.1);">
+                        <div class="card-icon" style="background:#2b8a3e; color:white;">01</div>
+                        <h3>기업</h3>
+                        <p>임직원의 근골격계 질환을 예방하고 <br>업무 효율을 높이는 B2B 전용 <br>체형분석 솔루션입니다.</p>
+                        <div class="view-details-btn">기업 EAP 상세 보기</div>
+                    </div>
+                    <div class="info-card reveal delay-1" onclick="switchPage('page-school', document.getElementById('nav-ai'))" style="border-color:#004d40; box-shadow: 0 10px 30px rgba(0,77,64,0.1);">
+                        <div class="card-icon" style="background:#004d40; color:white;">02</div>
+                        <h3>학교</h3>
+                        <p>성장기 학생들의 체형 검진과 더불어 스트레칭, 그룹운동 및 상세 통계 리포트를 제공합니다.</p>
+                        <div class="view-details-btn" style="color:#004d40;">학교 프로그램 상세 보기</div>
+                    </div>
+                    <div class="info-card reveal delay-2" onclick="switchPage('page-physical', document.getElementById('nav-physical')); openPhysicalSub('sub-center');">
+                        <div class="card-icon" style="color:#111;">03</div>
+                        <h3>개인</h3>
+                        <p>개인 맞춤형 체형 분석 및 근본적인 신체 개선을 원하신다면 가까운 피지컬케어 센터를 방문해 보세요.</p>
+                        <div class="view-details-btn" style="color:#111;">가까운 센터 찾기</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+    <main id="page-eap" class="page-content">
+        <section class="hero-premium reveal">
+            <div class="container">
+                <div style="text-align: left;"><span class="back-btn" onclick="switchPage('page-ai', document.getElementById('nav-ai'))">← 타겟 선택으로 돌아가기</span></div>
+                <h1>건강이 함께하는 회사,<br>기업복지의 원조는 FaWW</h1>
+                <p>AI 빅데이터 기반의 피지컬케어 솔루션을 제안합니다.</p>
+                <button class="btn-primary" onclick="openModal('modal-proposal')" style="font-size: 18px; padding: 16px 36px;">우리 회사 맞춤 제안서 받기</button>
+            </div>
+        </section>
+
+        <section class="services reveal" style="background-color: #fff;">
+            <div class="container">
+                <h2 class="section-title">기업 맞춤형 EAP 솔루션</h2>
+                <p class="section-desc">조직에 맞게 설계된 AI 기반 프로세스</p>
+                <div class="service-grid">
+                    <div class="smart-card reveal" onclick="openModal('modal1')">
+                        <div class="smart-card-top">
+                            <div class="smart-card-img">AI 스캐닝 이미지</div>
+                            <div class="smart-card-body">
+                                <span class="gateway-badge">BLOCK 1. 진단</span>
+                                <h3>스마트 Ai 체형분석</h3>
+                                <p>통증의 원인을 파악하고, 신체 불균형을 구조적으로 분석하여 정확하게 관리합니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="smart-card reveal delay-1" onclick="openModal('modal2')" style="border: 2px solid #2b8a3e;">
+                        <div class="smart-card-top">
+                            <div class="smart-card-img" style="background:#e8f5e9; color:#2b8a3e;">전문가 케어 이미지</div>
+                            <div class="smart-card-body">
+                                <span class="gateway-badge" style="background:#2b8a3e; color:#fff;">BLOCK 2. 케어</span>
+                                <h3>1:1 피지컬 케어</h3>
+                                <p>통증 개선과 부상 예방을 위한 전문가 수기치료와 테이핑, MCT 등을 현장에서 진행합니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="smart-card reveal delay-2" onclick="openModal('modal4')">
+                        <div class="smart-card-top">
+                            <div class="smart-card-img">단체 운동 이미지</div>
+                            <div class="smart-card-body">
+                                <span class="gateway-badge">BLOCK 3. 실습</span>
+                                <h3>단체 운동 프로그램</h3>
+                                <p>의자나 소도구를 활용하여 업무 중에도 실천 가능한 코어 강화 및 근육 이완 루틴.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="smart-card reveal delay-3" onclick="openModal('modal3')">
+                        <div class="smart-card-top">
+                            <div class="smart-card-img">강의 진행 이미지</div>
+                            <div class="smart-card-body">
+                                <span class="gateway-badge">BLOCK 4. 교육</span>
+                                <h3>강의 프로그램</h3>
+                                <p>거북목 교정, 대사증후군 예방, 식습관 개선 등 맞춤형 건강 특강을 제공합니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <section class="faq-section reveal">
+    <div class="container text-center">
+        <div class="faq-header-wrap">
+            <h2>기업 복지 담당자님, <span>어떤 고민이 있으세요?</span></h2>
+            <p>운동부터 강연, 콘텐츠까지 맞춤 프로그램으로 해결해 드립니다.</p>
+        </div>
+        <!-- 👇 여기에 grid-2x2 클래스가 추가되었습니다 👇 -->
+                <div class="faq-list grid-2x2" style="align-items: flex-start;">
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-title-wrap"><div class="faq-title"><span class="q-mark">Q.</span> 우리 회사는 인원이 많은데, 하루에 몇 명이나 케어를 받을 수 있나요?</div><div class="faq-icon">+</div></div>
+                <div class="faq-content"><span class="a-mark">A.</span> 투입되는 전문가 인원에 따라 유연하게 운영됩니다. 보통 전문가 1인당 하루(8시간 기준) 약 6~10명의 1:1 집중 케어가 가능하며, 단체 운동이나 강의 프로그램과 병행할 경우 하루 수백 명까지 참여 인원을 확대할 수 있습니다.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-title-wrap"><div class="faq-title"><span class="q-mark">Q.</span> 사내에 별도의 공간이 필요한가요? 공간이 협소해도 진행이 가능한지 궁금합니다.</div><div class="faq-icon">+</div></div>
+                <div class="faq-content"><span class="a-mark">A.</span> 네, 회의실이나 휴게실 정도의 유휴 공간만 있으면 충분합니다. 1:1 케어에 필요한 이동식 베드와 AI 체형 분석 장비는 저희가 직접 지참하며, 공간 크기에 맞춰 최적화된 동선으로 세팅해 드립니다.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-title-wrap"><div class="faq-title"><span class="q-mark">Q.</span> 서비스 이용 예약은 어떤 방식으로 이루어지나요? 인사팀에서 일일이 명단을 취합해야 하나요?</div><div class="faq-icon">+</div></div>
+                <div class="faq-content"><span class="a-mark">A.</span> 담당자님의 업무 부담을 줄이기 위해 자체 온라인 예약 시스템을 제공합니다. 임직원이 직접 원하는 시간에 접속해 예약하고 알림톡을 받을 수 있어, 별도의 명단 관리 없이 최종 확정 리스트만 확인하시면 됩니다.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-title-wrap"><div class="faq-title"><span class="q-mark">Q.</span> '스마트 AI 체형분석' 결과 리포트는 개인에게 별도로 제공되나요?</div><div class="faq-icon">+</div></div>
+                <div class="faq-content"><span class="a-mark">A.</span> 네, 분석 즉시 모바일 리포트가 개별 전송됩니다. 현재 나의 불균형 상태, 위험도 점수, 그리고 일상에서 실천할 수 있는 맞춤형 운동 처방이 포함되어 있어 구성원들의 만족도가 매우 높습니다.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-title-wrap"><div class="faq-title"><span class="q-mark">Q.</span> 1:1 케어에서 진행되는 'MCT'나 '수기치료'가 통증 완화에 즉각적인 효과가 있나요?</div><div class="faq-icon">+</div></div>
+                <div class="faq-content"><span class="a-mark">A.</span> 단순 마사지가 아닌 근막 이완(MCT)과 기능적 가동술을 결합한 전문 테라피입니다. 업무 중 발생하는 목, 어깨, 허리의 급성 통증과 근육 긴장을 즉각적으로 해소하여 업무 효율을 높이는 데 중점을 둡니다.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-title-wrap"><div class="faq-title"><span class="q-mark">Q.</span> 우리 직무 특성(예: 장시간 서 있는 업무)에 맞춘 커스터마이징이 가능한가요?</div><div class="faq-icon">+</div></div>
+                <div class="faq-content"><span class="a-mark">A.</span> 물론입니다. 사전 상담을 통해 해당 기업의 주된 업무 환경(데스크 워크, 현장직 등)을 분석하고, 그에 가장 빈번하게 발생하는 근골격계 질환 위주로 강의와 케어 루틴을 재구성하여 진행합니다.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-title-wrap"><div class="faq-title"><span class="q-mark">Q.</span> 4가지 블록을 반드시 패키지로 도입해야 하나요? 필요한 블록만 선택할 수 있나요?</div><div class="faq-icon">+</div></div>
+                <div class="faq-content"><span class="a-mark">A.</span> 전 사원 대상인 '강의'와 '진단'만 선택하시거나, 고위험군을 위한 '1:1 케어'만 집중 운영하는 등 기업의 예산과 필요에 따라 자유롭게 조합하여 설계할 수 있습니다.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-title-wrap"><div class="faq-title"><span class="q-mark">Q.</span> 서비스 도입 후 임직원 만족도 조사나 결과 보고서를 제공해 주시나요?</div><div class="faq-icon">+</div></div>
+                <div class="faq-content"><span class="a-mark">A.</span> 네, 프로그램 종료 후 참여도, 만족도 조사 결과, AI 분석 데이터 통계(익명 처리)를 포함한 성과 결과 보고서를 제공합니다. 이는 인사팀의 KPI 달성 증빙 및 차기 복지 예산 확보 자료로 활용하실 수 있습니다.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-title-wrap"><div class="faq-title"><span class="q-mark">Q.</span> AI 체형 분석 시 수집되는 개인정보나 신체 데이터는 어떻게 관리되나요?</div><div class="faq-icon">+</div></div>
+                <div class="faq-content"><span class="a-mark">A.</span> 수집된 모든 데이터는 암호화되어 안전하게 관리되며, 개인정보보호법을 준수합니다. 기업 측에는 개인의 세부 정보가 아닌 조직 전체의 건강 통계 지표만 제공되므로 안심하셔도 됩니다.</div>
+            </div>
+        </div>
+    </div>
+</section>
+    </main>
+
+
     <main id="page-school" class="page-content">
         <section class="hero-premium reveal" style="background: linear-gradient(rgba(0, 30, 20, 0.75), rgba(0, 30, 20, 0.9)), url('https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=2070&auto=format&fit=crop') no-repeat center/cover fixed;">
             <div class="container">
@@ -434,22 +532,22 @@
                 </div>
 
                 <div class="school-process-grid">
-                    <div class="school-process-card reveal reveal-scale delay-1">
+                    <div class="school-process-card reveal">
                         <span class="school-process-num">01</span>
                         <h3 class="school-process-title">사전 협의</h3>
                         <p class="school-process-desc">학교 환경 분석 및<br>맞춤 프로그램 설계</p>
                     </div>
-                    <div class="school-process-card reveal reveal-scale delay-2">
+                    <div class="school-process-card reveal delay-1">
                         <span class="school-process-num">02</span>
                         <h3 class="school-process-title">체형 측정</h3>
                         <p class="school-process-desc">전문 장비를 활용한<br>정밀 체형분석 실시</p>
                     </div>
-                    <div class="school-process-card reveal reveal-scale delay-3">
+                    <div class="school-process-card reveal delay-2">
                         <span class="school-process-num">03</span>
                         <h3 class="school-process-title">데이터 분석</h3>
                         <p class="school-process-desc">개인별·학급별<br>건강 데이터 리포트</p>
                     </div>
-                    <div class="school-process-card reveal reveal-scale delay-4">
+                    <div class="school-process-card reveal delay-3">
                         <span class="school-process-num">04</span>
                         <h3 class="school-process-title">사후 관리</h3>
                         <p class="school-process-desc">맞춤 운동 처방 및<br>추적 관리 시스템</p>
@@ -477,7 +575,7 @@
             <div class="container">
                 <h2 class="section-title">주요 프로그램 종류</h2>
                 <p class="section-desc">단순한 검진을 넘어 체계적인 교육과 관리를 동반합니다.</p>
-                <div class="service-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="service-grid">
                     <div class="smart-card">
                         <div class="smart-card-top" style="flex-direction: column; align-items: center; text-align: center;">
                             <div class="smart-card-img" style="width: 100%; height: 160px; background:#e0f2f1; color:#004d40;">스캐닝 진행 화면</div>
@@ -498,97 +596,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="smart-card">
-                        <div class="smart-card-top" style="flex-direction: column; align-items: center; text-align: center;">
-                            <div class="smart-card-img" style="width: 100%; height: 160px; background:#e0f2f1; color:#004d40;">데이터 통계 대시보드</div>
-                            <div class="smart-card-body" style="text-align: center; margin-top: 20px;">
-                                <span class="gateway-badge" style="background:#e0f2f1; color:#004d40;">PROGRAM 3</span>
-                                <h3>각 종 분야별 통계화</h3>
-                                <p>체형 분석 결과를 통한 수치화 데이터를 제공하여 학급별, 학년별 체계적인 보건 정책에 활용할 수 있습니다.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="category-section reveal" style="background-color: #f8f9fa;">
-            <div class="container">
-                <div class="school-header-wrap" style="text-align: center;">
-                    <h2>회원의 건강을 위한<br>더 많은 맞춤 기능을 사용할 수 있어요</h2>
-                    <p style="margin: 0 auto;">*라인업 별로 사용 가능한 기능이 상이할 수 있습니다.</p>
-                </div>
-                
-                <div class="school-feature-grid">
-                    <div class="school-feature-card">
-                        <div class="school-feature-img">모아레 분석 화면 캡쳐</div>
-                        <div class="school-feature-title">모아레 기능(화이트,프로)</div>
-                    </div>
-                    <div class="school-feature-card">
-                        <div class="school-feature-img">척추 3D 분석 화면 캡쳐</div>
-                        <div class="school-feature-title">척추 상세 분석 기능(프로 Only)</div>
-                    </div>
-                    <div class="school-feature-card">
-                        <div class="school-feature-img">바디 디자인 예측 화면 캡쳐</div>
-                        <div class="school-feature-title">바디 디자인 기능</div>
-                    </div>
-                    <div class="school-feature-card">
-                        <div class="school-feature-img">안면 대칭 분석 화면 캡쳐</div>
-                        <div class="school-feature-title">안면 분석 기능</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="testimonials reveal" style="background:#fff;">
-            <div class="container">
-                <h2 class="section-title">조직 담당자 98% 추천 생생 후기</h2>
-                <div class="swiper reviewSwiper" style="margin-top: 40px; padding: 20px 0;">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide"><div class="testimonial-card" style="background:#f8f9fa;"><div class="stars">★★★★★</div><p class="review-text">"모든 학생이 형평성 있게 검진을 이용할 수 있다는 점이 좋았어요. 체계적인 데이터 리포트 덕분에 학부모님들 만족도도 높습니다."</p><div class="reviewer-info"><div class="reviewer-avatar"></div><span>OO고등학교 보건교사</span></div></div></div>
-                        <div class="swiper-slide"><div class="testimonial-card" style="background:#f8f9fa;"><div class="stars">★★★★★</div><p class="review-text">"수업 끝나고 사무실로 복귀할 때 벌써 변화를 체감합니다. 발바닥, 종아리, 허벅지 움직임부터가 다르네요. 최고입니다!"</p><div class="reviewer-info"><div class="reviewer-avatar"></div><span>S사 운영팀</span></div></div></div>
-                        <div class="swiper-slide"><div class="testimonial-card" style="background:#f8f9fa;"><div class="stars">★★★★☆</div><p class="review-text">"아이들이 바른 자세에 대해 스스로 인지하게 된 것이 가장 큰 성과입니다. 정기적으로 계속 도입할 예정입니다."</p><div class="reviewer-info"><div class="reviewer-avatar"></div><span>XX중학교 체육교사</span></div></div></div>
-                    </div>
-                    <div class="swiper-pagination"></div>
-                </div>
-            </div>
-        </section>
-
-        <section class="map-section reveal" style="background:#f4f6f9;">
-            <div class="container">
-                <h2 class="section-title">전국 어디든, FaWW가 찾아갑니다</h2>
-                <p class="section-desc">전국 주요 기업 및 학교 500곳 이상 누적 방문 달성</p>
-                <div class="map-wrapper">
-                    <div class="map-marker" style="top: 25%; left: 35%;"><div class="marker-dot"></div><div class="marker-label">서울/경기 230곳</div></div>
-                    <div class="map-marker" style="top: 40%; left: 60%;"><div class="marker-dot"></div><div class="marker-label">충청권 85곳</div></div>
-                    <div class="map-marker" style="top: 75%; left: 75%;"><div class="marker-dot"></div><div class="marker-label">부산/경남 110곳</div></div>
-                    <div class="map-marker" style="top: 60%; left: 40%;"><div class="marker-dot"></div><div class="marker-label">전라권 65곳</div></div>
-                </div>
-            </div>
-        </section>
-
-        <section class="partners reveal" style="background:#fff;">
-            <div class="container">
-                <h2 class="section-title">대한민국 일류 기업과 학교가 FaWW와 함께합니다</h2>
-                <div class="swiper partnerSwiper" style="margin-top: 40px; padding: 10px 0;">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide"><div class="partner-logo">삼성 계열사</div></div>
-                        <div class="swiper-slide"><div class="partner-logo">현대 계열사</div></div>
-                        <div class="swiper-slide"><div class="partner-logo">네이버/카카오</div></div>
-                        <div class="swiper-slide"><div class="partner-logo">전국 주요 초중고</div></div>
-                        <div class="swiper-slide"><div class="partner-logo">공공기관</div></div>
-                    </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- ============================================== -->
-    <!-- 2. 피지컬케어 페이지 (게이트웨이 형태 대형 메뉴) -->
-    <!-- ============================================== -->
+
     <main id="page-physical" class="page-content">
-        <section class="hero reveal" style="background-color: #111;">
-            <div class="container">
+        <section class="hero reveal" style="padding: 120px 20px;">
+            <video class="hero-video-bg" autoplay loop muted playsinline>
+                <source src="background2.mp4" type="video/mp4">
+            </video>
+            <div class="hero-overlay"></div>
+            <div class="container" style="position: relative; z-index: 2;">
                 <h1>현장과 실무를 잇는 <span>FaWW 피지컬케어</span></h1>
                 <p>기업의 생산성부터 개인의 삶의 질 향상, 그리고 대한민국 최고 전문가 양성까지 아우릅니다.</p>
             </div>
@@ -596,43 +616,22 @@
 
         <div id="physical-gateway" class="container reveal active" style="padding: 60px 20px;">
             <div class="card-grid" style="gap: 30px;">
-                <div class="info-card reveal reveal-scale delay-1" onclick="openPhysicalSub('sub-eap')" style="padding: 60px 30px; border-color:#1a56db; box-shadow: 0 10px 30px rgba(26,86,219,0.1);">
-                    <div class="card-icon" style="width: 80px; height: 80px; font-size: 24px; background:#1a56db; color:white;">EAP</div>
-                    <h3 style="font-size: 26px;">피지컬케어</h3>
-                    <p style="font-size: 16px;">기업 임직원을 위한 맞춤형 방문 솔루션</p>
-                    <div class="view-details-btn">자세히 보기</div>
+                <div class="info-card reveal" onclick="switchPage('page-eap', document.getElementById('nav-ai'))">
+                    <div class="card-icon" style="background:#2b8a3e; color:white;">EAP</div>
+                    <h3>피지컬케어</h3>
+                    <p>기업 임직원을 위한 맞춤형 방문 솔루션</p>
                 </div>
-                <div class="info-card reveal reveal-scale delay-2" onclick="openPhysicalSub('sub-academy')" style="padding: 60px 30px;">
-                    <div class="card-icon" style="width: 80px; height: 80px; font-size: 24px; color:#111;">EDU</div>
-                    <h3 style="font-size: 26px;">자격증</h3>
-                    <p style="font-size: 16px;">오리지널 피지컬케어 전문가 양성 과정</p>
-                    <div class="view-details-btn" style="color:#111;">자세히 보기</div>
+                <div class="info-card reveal delay-1" onclick="openPhysicalSub('sub-academy')">
+                    <div class="card-icon" style="color:#111;">EDU</div>
+                    <h3>자격증</h3>
+                    <p>오리지널 피지컬케어 전문가 양성 과정</p>
                 </div>
-                <div class="info-card reveal reveal-scale delay-3" onclick="openPhysicalSub('sub-center')" style="padding: 60px 30px;">
-                    <div class="card-icon" style="width: 80px; height: 80px; font-size: 24px; color:#111;">CTR</div>
-                    <h3 style="font-size: 26px;">센터</h3>
-                    <p style="font-size: 16px;">가까운 직영 센터 1:1 맞춤형 피지컬케어</p>
-                    <div class="view-details-btn" style="color:#111;">자세히 보기</div>
+                <div class="info-card reveal delay-2" onclick="openPhysicalSub('sub-center')">
+                    <div class="card-icon" style="color:#111;">CTR</div>
+                    <h3>센터</h3>
+                    <p>가까운 직영 센터 1:1 맞춤형 피지컬케어</p>
                 </div>
             </div>
-        </div>
-
-        <div id="sub-eap" class="sub-page-content">
-            <section class="category-section reveal" style="background-color: #fff; padding-top: 40px;">
-                <div class="container">
-                    <div style="text-align: left;"><span class="back-btn-light" onclick="showPhysicalGateway()">← 카테고리 선택으로 돌아가기</span></div>
-                    <h2 class="section-title">피지컬케어 (EAP)</h2>
-                    <p class="section-desc">기업 임직원을 위한 맞춤형 방문 피지컬케어 솔루션</p>
-                    <div style="max-width: 600px; margin: 0 auto;">
-                        <div class="info-card" onclick="switchPage('page-eap', document.getElementById('nav-ai'))" style="border-color:#1a56db; box-shadow: 0 10px 30px rgba(26,86,219,0.1);">
-                            <div class="card-icon" style="background:#1a56db; color:white; width: 80px; height: 80px; font-size: 24px; margin-bottom: 30px;">EAP</div>
-                            <h3 style="font-size: 24px;">기업 EAP (임직원 대상)</h3>
-                            <p style="font-size: 16px;">AI 체형분석과 연계된 B2B 전용 근골격계 질환 예방 프로그램입니다.</p>
-                            <div class="view-details-btn" style="font-size: 16px; margin-top: 30px;">스마트 EAP 솔루션 바로가기</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
         </div>
 
         <div id="sub-academy" class="sub-page-content">
@@ -640,27 +639,88 @@
                 <div class="container">
                     <div style="text-align: left;"><span class="back-btn-light" onclick="showPhysicalGateway()">← 카테고리 선택으로 돌아가기</span></div>
                     <h2 class="section-title">자격증 교육 (아카데미)</h2>
-                    <p class="section-desc">대한민국 오리지널 피지컬케어 노하우 전수하는 정규 자격증 과정</p>
-                    <div class="grid-2x2">
-                        <div class="info-card">
-                            <div class="card-icon" style="color:#111;">PCM</div>
-                            <h3>피지컬케어 마스터</h3>
-                            <p>핵심 근막이완 및 체형교정 기술을 마스터하는 최고위 자격 과정.</p>
+                    <div class="academy-wrap">
+                        <!-- 1. 퍼스널 트레이닝 분야 -->
+                        <div class="academy-category reveal">
+                            <h3 class="academy-cat-title"><span>01</span> 퍼스널 트레이닝 분야</h3>
+                            <div class="academy-grid">
+                                <div class="academy-card">
+                                    <div class="ac-badge">PTS 1, 2급</div>
+                                    <h4>Personal Training Specialist</h4>
+                                    <p>이론과 실기 능력을 갖춘 전문 퍼스널 트레이너 양성 과정입니다. 운동, 재활, 영양, 세일즈를 종합적으로 다룹니다.</p>
+                                </div>
+                                <div class="academy-card">
+                                    <div class="ac-badge">PYTS 전문가 과정</div>
+                                    <h4>Personal Yoga Training Specialist</h4>
+                                    <p>정통 요가의 본질을 과학적으로 풀어내고 통증 분석 및 체형 교정을 결합한 전문가 과정입니다.</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="info-card">
-                            <div class="card-icon" style="color:#111;">PTS</div>
-                            <h3>퍼스널 트레이닝 스페셜리스트</h3>
-                            <p>기능성 해부학과 실전 트레이닝을 결합한 실전 코칭 과정.</p>
+
+                        <!-- 2. 교정 및 재활 분야 -->
+                        <div class="academy-category reveal">
+                            <h3 class="academy-cat-title"><span>02</span> 교정 및 재활 분야</h3>
+                            <div class="academy-grid">
+                                <div class="academy-card">
+                                    <div class="ac-badge">CWT 1, 2급</div>
+                                    <h4>Corrective Weight Training</h4>
+                                    <p>신체적 문제를 운동을 통해 해결하는 교정운동 전문가 과정입니다. 기능해부학과 생리학을 기반으로 체형 및 동작을 분석합니다.</p>
+                                </div>
+                                <div class="academy-card">
+                                    <div class="ac-badge">KSTS 1, 2급</div>
+                                    <h4>Korea Sports Taping Specialist</h4>
+                                    <p>스포츠 및 생활 체육 현장에서 경기력 향상과 부상 예방을 위해 테이핑 업무를 수행하는 전문가 과정입니다.</p>
+                                </div>
+                                <div class="academy-card">
+                                    <div class="ac-badge">선수트레이너 1, 2급</div>
+                                    <h4>Athletic Trainer</h4>
+                                    <p>과학적 근거를 바탕으로 운동선수들의 경기력 향상과 최상의 컨디셔닝을 돕는 프로그램 구성 및 트레이닝 수료 과정입니다.</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="info-card">
-                            <div class="card-icon" style="color:#111;">MD</div>
-                            <h3>미넥신</h3>
-                            <p>신경/근육 심화 이완술 전문가 과정.</p>
+
+                        <!-- 3. 필라테스 및 골프 전문 분야 -->
+                        <div class="academy-category reveal">
+                            <h3 class="academy-cat-title"><span>03</span> 필라테스 및 골프 전문 분야</h3>
+                            <div class="academy-grid">
+                                <div class="academy-card">
+                                    <div class="ac-badge">KSMP 1, 2, 3급</div>
+                                    <h4>Pilates Instructor</h4>
+                                    <p>기구 및 매트 운동을 활용하여 바른 체형을 위한 운동 평가, 상담 및 강사 양성 업무를 수행합니다.</p>
+                                </div>
+                                <div class="academy-card">
+                                    <div class="ac-badge">골프 컨디셔닝 1, 2, 3급</div>
+                                    <h4>MAXQ GOLF PHYSICAL TRAINING INSTITUTE</h4>
+                                    <p>골퍼의 경기력 향상과 컨디셔닝을 위한 운동 프로그램을 개발하고 운동역학적 스윙 분석 등을 제공합니다.</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="info-card">
-                            <div class="card-icon" style="color:#111;">AI</div>
-                            <h3>체형분석사</h3>
-                            <p>데이터 기반의 스마트 AI 스캐닝 및 체형 분석 전문 자격 과정.</p>
+
+                        <!-- 4. 웰니스 및 맞춤형 관리 분야 -->
+                        <div class="academy-category reveal">
+                            <h3 class="academy-cat-title"><span>04</span> 웰니스 및 맞춤형 관리 분야</h3>
+                            <div class="academy-grid">
+                                <div class="academy-card">
+                                    <div class="ac-badge">웰니스 코치 1, 2급</div>
+                                    <h4>Wellness Coach</h4>
+                                    <p>데이터 기반 분석을 통해 개인 맞춤형 처방 시스템을 운용하는 신체 건강 전문가 과정입니다.</p>
+                                </div>
+                                <div class="academy-card">
+                                    <div class="ac-badge">PCP 1, 2급</div>
+                                    <h4>Physical Care Professionals (피지컬케어관리사)</h4>
+                                    <p>직장인의 직무능력 향상을 위해 근무 형태 연구 및 체력/신체 능력 평가 후 맞춤형 솔루션을 제공합니다.</p>
+                                </div>
+                                <div class="academy-card">
+                                    <div class="ac-badge">SEP 1, 2급</div>
+                                    <h4>Senior Exercise Professionals (노인운동사)</h4>
+                                    <p>노인의 신체적 특징에 맞춰 낙상 예방 및 심혈관계 질환 예방을 돕는 안전한 운동 프로그램을 구성합니다.</p>
+                                </div>
+                                <div class="academy-card">
+                                    <div class="ac-badge">마인드 코칭 1, 2급</div>
+                                    <h4>Mind Coaching</h4>
+                                    <p>뇌파측정기 등을 활용해 스포츠 선수 및 일반인의 심리 상담과 멘탈 강화를 지도하는 과정입니다.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -672,39 +732,22 @@
                 <div class="container">
                     <div style="text-align: left;"><span class="back-btn-light" onclick="showPhysicalGateway()">← 카테고리 선택으로 돌아가기</span></div>
                     <h2 class="section-title">센터 (로컬) 소개</h2>
-                    <p class="section-desc">가까운 직영 센터에서 FaWW의 1:1 맞춤형 피지컬케어를 경험해 보세요.</p>
-                    <div class="grid-vertical" style="max-width: 800px; margin: 0 auto;">
+                    <div class="grid-vertical">
+                        <div class="center-row-card reveal">
+                            <div><span class="gateway-badge">Center 01</span><h3>영등포점 (본점)</h3></div>
+                            <div style="color: #2b8a3e; font-size: 24px;">→</div>
+                        </div>
                         <div class="center-row-card reveal delay-1">
-                            <div>
-                                <span class="gateway-badge">Center 01</span>
-                                <h3 style="font-size: 24px; font-weight: 800; color: #111;">영등포 본점</h3>
-                                <p style="color:#666; margin-top:5px;">서울 영등포구 선유동2로 (대표 직영점)</p>
-                            </div>
-                            <div style="color: #1a56db; font-size: 24px;">→</div>
+                            <div><span class="gateway-badge">Center 02</span><h3>동탄점 (2호점)</h3></div>
+                            <div style="color: #2b8a3e; font-size: 24px;">→</div>
                         </div>
                         <div class="center-row-card reveal delay-2">
-                            <div>
-                                <span class="gateway-badge">Center 02</span>
-                                <h3 style="font-size: 24px; font-weight: 800; color: #111;">강남점</h3>
-                                <p style="color:#666; margin-top:5px;">서울 강남구 테헤란로 (강남권 거점 센터)</p>
-                            </div>
-                            <div style="color: #1a56db; font-size: 24px;">→</div>
+                            <div><span class="gateway-badge">Center 03</span><h3>강남점 (3호점)</h3></div>
+                            <div style="color: #2b8a3e; font-size: 24px;">→</div>
                         </div>
                         <div class="center-row-card reveal delay-3">
-                            <div>
-                                <span class="gateway-badge">Center 03</span>
-                                <h3 style="font-size: 24px; font-weight: 800; color: #111;">동탄점</h3>
-                                <p style="color:#666; margin-top:5px;">경기 화성시 동탄대로 (경기 남부권 센터)</p>
-                            </div>
-                            <div style="color: #1a56db; font-size: 24px;">→</div>
-                        </div>
-                        <div class="center-row-card reveal delay-4">
-                            <div>
-                                <span class="gateway-badge">Center 04</span>
-                                <h3 style="font-size: 24px; font-weight: 800; color: #111;">여의도점</h3>
-                                <p style="color:#666; margin-top:5px;">서울 영등포구 여의대로 (직장인 특화 센터)</p>
-                            </div>
-                            <div style="color: #1a56db; font-size: 24px;">→</div>
+                            <div><span class="gateway-badge">Center 04</span><h3>여의도점 (4호점)</h3></div>
+                            <div style="color: #2b8a3e; font-size: 24px;">→</div>
                         </div>
                     </div>
                 </div>
@@ -712,59 +755,55 @@
         </div>
     </main>
 
-    <!-- ============================================== -->
-    <!-- 3. 피지컬케어 Mall 페이지 -->
-    <!-- ============================================== -->
     <main id="page-mall" class="page-content">
         <section class="hero reveal" style="background-color: #212529;">
-            <div class="container"><h1>검증된 교구, <span>피지컬케어 mall</span></h1><p>임직원 복지 포인트 차감을 지원하는 전용 교구몰입니다.</p></div>
+            <div class="container">
+                <h1>검증된 교구, <span>피지컬케어 mall</span></h1>
+                <p>임직원 복지 포인트 차감을 지원하는 전용 교구몰입니다.</p>
+            </div>
         </section>
-        <section class="category-section reveal" style="background-color: #f8f9fa;"><div class="container"><div class="product-grid">
-            <div class="product-card reveal reveal-scale delay-1"><div class="product-img">블랙테라</div><div class="product-info"><div class="product-title">블랙테라</div><button class="buy-btn">도입 문의</button></div></div>
-            <div class="product-card reveal reveal-scale delay-2"><div class="product-img">마사지스틱</div><div class="product-info"><div class="product-title">마사지스틱</div><button class="buy-btn">도입 문의</button></div></div>
-            <div class="product-card reveal reveal-scale delay-3"><div class="product-img">스포츠밴드</div><div class="product-info"><div class="product-title">스포츠밴드</div><button class="buy-btn">도입 문의</button></div></div>
-            <div class="product-card reveal reveal-scale delay-4"><div class="product-img">스트랩</div><div class="product-info"><div class="product-title">스트랩</div><button class="buy-btn">도입 문의</button></div></div>
-            <div class="product-card reveal reveal-scale delay-1"><div class="product-img">테이핑</div><div class="product-info"><div class="product-title">테이핑</div><button class="buy-btn">도입 문의</button></div></div>
-        </div></div></section>
+        <section class="category-section reveal" style="background-color: #f8f9fa;">
+            <div class="container">
+                <div class="product-grid">
+                    <div class="product-card reveal"><div class="product-img">블랙테라</div><div class="product-info"><div class="product-title">블랙테라</div><button class="buy-btn">도입 문의</button></div></div>
+                    <div class="product-card reveal delay-1"><div class="product-img">마사지스틱</div><div class="product-info"><div class="product-title">마사지스틱</div><button class="buy-btn">도입 문의</button></div></div>
+                    <div class="product-card reveal delay-2"><div class="product-img">스포츠밴드</div><div class="product-info"><div class="product-title">스포츠밴드</div><button class="buy-btn">도입 문의</button></div></div>
+                    <div class="product-card reveal delay-3"><div class="product-img">스트랩</div><div class="product-info"><div class="product-title">스트랩</div><button class="buy-btn">도입 문의</button></div></div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <section class="cta-footer reveal">
         <div class="container">
             <h2>FaWW와 함께 건강한 조직을 구축하세요</h2>
-            <p>우리 학교 및 기업 환경에 알맞는 건강 복지 프로그램을 맞춤 설계해 드립니다.</p>
+            <p style="margin-bottom: 30px;">우리 학교 및 기업 환경에 알맞는 건강 복지 프로그램을 맞춤 설계해 드립니다.</p>
             <button class="cta-btn-white" onclick="openModal('modal-proposal')">맞춤 제안서 및 견적 받기</button>
         </div>
     </section>
 
-    <!-- ================= 챗봇 모달 ================= -->
     <div id="modal-chat" class="modal">
         <div class="modal-content chat-modal-content">
-            <div class="chat-top-bar">
-                <button class="chat-close-btn" onclick="closeModal('modal-chat')">&times;</button>
-            </div>
-            
-            <div class="chat-profile-sec">
-                <div class="chat-profile-img">FW</div>
-                <div class="chat-profile-info">
-                    <h3>FaWW</h3>
-                    <p>⚡ 24시간 운영해요</p>
+            <div class="chat-header-bg">
+                <div class="chat-top-bar">
+                    <button class="chat-close-btn" onclick="closeModal('modal-chat')">&times;</button>
+                </div>
+                <div class="chat-profile-sec">
+                    <div class="chat-profile-img">FW</div>
+                    <div class="chat-profile-info">
+                        <h3>FaWW</h3>
+                        <p>⚡ 24시간 빠른 답변 대기중</p>
+                    </div>
                 </div>
             </div>
-            
             <div class="chat-body-sec">
                 <div class="chat-main-card">
-                    <div class="chat-main-card-header">
-                        <span class="sm-logo">FW</span>
-                        <span>FaWW</span>
-                    </div>
+                    <div class="chat-main-card-header"><span class="sm-logo">FW</span><span>FaWW</span></div>
                     <h4>압도적 건강복지의 시작! 💚</h4>
                     <p>No.1 피지컬케어 솔루션 FaWW와 함께하면<br>임직원과 학생이 건강해지고, 조직이 성장합니다.</p>
-                    
                     <button class="chat-inquire-btn" onclick="alert('제안서 요청 폼으로 연결됩니다.'); closeModal('modal-chat'); openModal('modal-proposal');">문의하기 ▼</button>
-                    
                     <div class="chat-reply-time"><span>👩‍💻</span> 몇 분 내 답변 받으실 수 있어요</div>
                 </div>
-                
                 <div class="chat-alt-card">
                     <span>다른 방법으로 문의</span>
                     <div class="chat-alt-icons">
@@ -773,48 +812,16 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="chat-bottom-nav">
-                <div class="chat-nav-item active">
-                    <span class="chat-nav-icon">🏠</span>
-                    <span>홈</span>
-                </div>
-                <div class="chat-nav-item">
-                    <span class="chat-nav-icon">💬</span>
-                    <span>대화</span>
-                </div>
-                <div class="chat-nav-item">
-                    <span class="chat-nav-icon">⚙️</span>
-                    <span>설정</span>
-                </div>
-            </div>
         </div>
     </div>
 
-    <!-- ================= 기존 EAP 정보 모달 ================= -->
     <div id="modal1" class="modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('modal1')">&times;</button>
-            <div class="modal-header">
-                <h2>BLOCK 1. 진단 모듈</h2>
-                <p>조직 파악을 위한 데이터 진단 블록</p>
-            </div>
+            <div class="modal-header"><h2>BLOCK 1. 진단 모듈</h2><p>조직 파악을 위한 데이터 진단 블록</p></div>
             <div class="info-sub-block-grid">
-                <div class="info-sub-block">
-                    <span class="info-sub-block-num">모듈 1-1</span>
-                    <div class="info-sub-block-title">3D AI 스캐닝</div>
-                    <p class="info-sub-block-desc">근골격계 관절의 정렬 상태 및 신체 불균형을 즉각적으로 수치화하여 객관적인 데이터를 확보합니다.</p>
-                </div>
-                <div class="info-sub-block">
-                    <span class="info-sub-block-num">모듈 1-2</span>
-                    <div class="info-sub-block-title">개별 리포트 전송 및 상담</div>
-                    <p class="info-sub-block-desc">거북목, 골반 틀어짐 등 분석된 결과지를 모바일로 전송하고, 전문가의 1:1 약식 상담을 진행합니다.</p>
-                </div>
-                <div class="info-sub-block">
-                    <span class="info-sub-block-num">모듈 1-3</span>
-                    <div class="info-sub-block-title">조직 통계 분석 보고서</div>
-                    <p class="info-sub-block-desc">부서 및 직군별 근골격계 위험도를 통계적으로 종합하여 HR 맞춤 분석 리포트로 제공합니다.</p>
-                </div>
+                <div class="info-sub-block"><span class="info-sub-block-num">모듈 1-1</span><div class="info-sub-block-title">3D AI 스캐닝</div><p class="info-sub-block-desc">근골격계 관절의 정렬 상태 및 신체 불균형을 즉각적으로 수치화하여 객관적인 데이터를 확보합니다.</p></div>
+                <div class="info-sub-block"><span class="info-sub-block-num">모듈 1-2</span><div class="info-sub-block-title">개별 리포트 전송 및 상담</div><p class="info-sub-block-desc">거북목, 골반 틀어짐 등 분석된 결과지를 모바일로 전송하고, 전문가의 1:1 약식 상담을 진행합니다.</p></div>
             </div>
         </div>
     </div>
@@ -822,14 +829,11 @@
     <div id="modal2" class="modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('modal2')">&times;</button>
-            <div class="modal-header">
-                <h2>BLOCK 2. 메인 케어 모듈</h2>
-                <p>FaWW 전문가의 시그니처 프리미엄 케어</p>
-            </div>
+            <div class="modal-header"><h2>BLOCK 2. 메인 케어 모듈</h2></div>
             <div class="info-sub-block signature-card">
                 <span class="info-sub-block-num">시그니처 프로그램</span>
                 <div class="info-sub-block-title">1:1 맞춤형 피지컬 케어</div>
-                <p class="info-sub-block-desc">국내 최고 수준의 피지컬케어 전문가가 기업 현장에 직접 파견됩니다.<br><br>단순한 마사지가 아닌 근본적인 통증 원인을 타겟팅하여 수기치료, 스포츠 테이핑, 진동건, MCT 등 다양한 솔루션을 통해 임직원의 즉각적인 컨디션을 회복시키고 업무 몰입도를 극대화합니다.</p>
+                <p class="info-sub-block-desc">국내 최고 수준의 피지컬케어 전문가가 기업 현장에 직접 파견됩니다.</p>
             </div>
         </div>
     </div>
@@ -837,21 +841,10 @@
     <div id="modal4" class="modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('modal4')">&times;</button>
-            <div class="modal-header">
-                <h2>BLOCK 3. 단체 운동 모듈</h2>
-                <p>일상을 바꾸는 기능성 트레이닝 처방</p>
-            </div>
+            <div class="modal-header"><h2>BLOCK 3. 단체 운동 모듈</h2></div>
             <div class="info-sub-block-grid">
-                <div class="info-sub-block">
-                    <span class="info-sub-block-num">모듈 3-1</span>
-                    <div class="info-sub-block-title">오피스 단체 스트레칭</div>
-                    <p class="info-sub-block-desc">사무실 의자나 간단한 소도구를 활용하여 업무 공간에서 즉시 적용할 수 있는 효과적인 스트레칭을 실습합니다.</p>
-                </div>
-                <div class="info-sub-block">
-                    <span class="info-sub-block-num">모듈 3-2</span>
-                    <div class="info-sub-block-title">기능성 운동 처방</div>
-                    <p class="info-sub-block-desc">근골격계 질환 예방을 위한 코어 강화 운동과 바른 자세를 스스로 유지할 수 있는 루틴 운동법을 교육합니다.</p>
-                </div>
+                <div class="info-sub-block"><span class="info-sub-block-num">모듈 3-1</span><div class="info-sub-block-title">오피스 단체 스트레칭</div></div>
+                <div class="info-sub-block"><span class="info-sub-block-num">모듈 3-2</span><div class="info-sub-block-title">기능성 운동 처방</div></div>
             </div>
         </div>
     </div>
@@ -859,31 +852,14 @@
     <div id="modal3" class="modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('modal3')">&times;</button>
-            <div class="modal-header">
-                <h2>BLOCK 4. 강의 모듈</h2>
-                <p>임직원 건강 지식 고취 및 예방 특강</p>
-            </div>
+            <div class="modal-header"><h2>BLOCK 4. 강의 모듈</h2></div>
             <div class="info-sub-block-grid">
-                <div class="info-sub-block">
-                    <span class="info-sub-block-num">모듈 4-1</span>
-                    <div class="info-sub-block-title">주요 질환 예방 특강</div>
-                    <p class="info-sub-block-desc">직장인 대사증후군, 심혈관질환 등 주요 질병의 예방 지식과 일상 속 관리 노하우를 전문적으로 교육합니다.</p>
-                </div>
-                <div class="info-sub-block">
-                    <span class="info-sub-block-num">모듈 4-2</span>
-                    <div class="info-sub-block-title">생활습관 개선 솔루션</div>
-                    <p class="info-sub-block-desc">건강한 라이프스타일을 위한 마인드셋, 수면 관리, 올바른 다이어트 및 식습관 개선 방법을 제시합니다.</p>
-                </div>
-                <div class="info-sub-block">
-                    <span class="info-sub-block-num">모듈 4-3</span>
-                    <div class="info-sub-block-title">고질병 예방 및 체형 교정</div>
-                    <p class="info-sub-block-desc">VDT 증후군, 거북목, 라운드숄더 등 현대 직장인의 필수 교정 지식을 현장감 있게 전달합니다.</p>
-                </div>
+                <div class="info-sub-block"><span class="info-sub-block-num">모듈 4-1</span><div class="info-sub-block-title">주요 질환 예방 특강</div></div>
+                <div class="info-sub-block"><span class="info-sub-block-num">모듈 4-2</span><div class="info-sub-block-title">생활습관 개선 솔루션</div></div>
             </div>
         </div>
     </div>
 
-    <!-- 제안서 요청 모달 -->
     <div id="modal-proposal" class="modal">
         <div class="modal-content modal-form-content">
             <button class="modal-close" onclick="closeModal('modal-proposal')">&times;</button>
@@ -891,125 +867,102 @@
                 <h2>기업/학교 맞춤형 제안서 요청</h2>
                 <p>조직 환경에 알맞은 솔루션 제안서를 보내드립니다.</p>
             </div>
-            <form onsubmit="event.preventDefault(); alert('제안서 요청이 성공적으로 접수되었습니다. 빠른 시일 내에 연락드리겠습니다.'); closeModal('modal-proposal');">
-                
-                <div class="form-group">
-                    <label class="field-label">소속 (기업명 또는 학교명) <span>*</span></label>
-                    <input type="text" class="form-control" placeholder="예: (주)파우 또는 OO고등학교" required>
-                </div>
-                
+            <form onsubmit="event.preventDefault(); alert('제안서 요청이 접수되었습니다.'); closeModal('modal-proposal');">
+                <div class="form-group"><label class="field-label">소속 <span>*</span></label><input type="text" class="form-control" required></div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div class="form-group"><label class="field-label">담당자 / 직급 <span>*</span></label><input type="text" class="form-control" required></div>
+                    <div class="form-group"><label class="field-label">담당자 <span>*</span></label><input type="text" class="form-control" required></div>
                     <div class="form-group"><label class="field-label">연락처 <span>*</span></label><input type="tel" class="form-control" required></div>
                 </div>
-                
-                <div class="form-group"><label class="field-label">업무용 이메일 <span>*</span></label><input type="email" class="form-control" required></div>
-                
+                <div class="form-group"><label class="field-label">이메일 <span>*</span></label><input type="email" class="form-control" required></div>
                 <div class="form-group">
-                    <label class="field-label">임직원(또는 학생) 규모 <span>*</span></label>
-                    <select class="form-control" required>
-                        <option value="">선택해주세요</option>
-                        <option value="50인 미만">50인 미만</option>
-                        <option value="50~100인">50인 ~ 100인</option>
-                        <option value="100~300인">100인 ~ 300인</option>
-                        <option value="300인 이상">300인 이상</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label class="field-label">희망 서비스 모듈 선택 (다중 선택 가능)</label>
-                    
-                    <div class="proposal-block">
-                        <div class="proposal-block-header" onclick="toggleProposalBlock(this)">
-                            <span>BLOCK 1. 진단 모듈</span>
-                            <span class="toggle-icon">▼</span>
-                        </div>
-                        <div class="proposal-block-content">
-                            <div class="module-checkbox-grid">
-                                <label class="module-checkbox">
-                                    <input type="checkbox" name="module" value="1-1">
-                                    <div><span class="chk-badge">BLOCK 1</span><br><span class="chk-text">1-1. 3D AI 스캐닝</span></div>
-                                </label>
-                                <label class="module-checkbox">
-                                    <input type="checkbox" name="module" value="1-2">
-                                    <div><span class="chk-badge">BLOCK 1</span><br><span class="chk-text">1-2. 리포트 & 약식 상담</span></div>
-                                </label>
-                                <label class="module-checkbox">
-                                    <input type="checkbox" name="module" value="1-3">
-                                    <div><span class="chk-badge">BLOCK 1</span><br><span class="chk-text">1-3. 조직 통계 분석 리포트</span></div>
-                                </label>
+                    <label class="field-label">희망 도입 모듈 및 세부 항목 선택 (대분류 클릭 후 세부 선택)</label>
+                    <div class="proposal-module-group" style="display:flex; flex-direction:column; gap:12px; margin-top: 10px;">
+                        <div class="proposal-block">
+                            <div class="proposal-block-header" onclick="toggleSubModulesList(this)">
+                                <span>🔍 BLOCK 1. 진단 (스마트 AI 체형분석)</span> <span class="toggle-icon">▼</span>
+                            </div>
+                            <div class="sub-modules" style="display:none; padding: 15px; border-top: 1px solid #eaeaea; background: #fafafa; flex-direction: column; gap: 10px;">
+                                <label class="checkbox-label"><input type="checkbox" name="sub_module" value="3D AI 스캐닝"> 3D AI 스캐닝</label>
+                                <label class="checkbox-label"><input type="checkbox" name="sub_module" value="개별 리포트 전송 및 상담"> 개별 리포트 전송 및 상담</label>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="proposal-block">
-                        <div class="proposal-block-header" onclick="toggleProposalBlock(this)">
-                            <span>BLOCK 2. 메인 케어 모듈</span>
-                            <span class="toggle-icon">▼</span>
-                        </div>
-                        <div class="proposal-block-content">
-                            <div class="module-checkbox-grid">
-                                <label class="module-checkbox" style="grid-column: span 2;">
-                                    <input type="checkbox" name="module" value="2-1">
-                                    <div><span class="chk-badge">BLOCK 2</span><br><span class="chk-text">시그니처 1:1 피지컬 케어</span></div>
-                                </label>
+                        <div class="proposal-block">
+                            <div class="proposal-block-header" onclick="toggleSubModulesList(this)">
+                                <span>💆 BLOCK 2. 케어 (1:1 피지컬 케어)</span> <span class="toggle-icon">▼</span>
+                            </div>
+                            <div class="sub-modules" style="display:none; padding: 15px; border-top: 1px solid #eaeaea; background: #fafafa; flex-direction: column; gap: 10px;">
+                                <label class="checkbox-label"><input type="checkbox" name="sub_module" value="1:1 맞춤형 피지컬 케어 파견"> 1:1 맞춤형 피지컬 케어 파견</label>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="proposal-block">
-                        <div class="proposal-block-header" onclick="toggleProposalBlock(this)">
-                            <span>BLOCK 3. 단체 운동 모듈</span>
-                            <span class="toggle-icon">▼</span>
-                        </div>
-                        <div class="proposal-block-content">
-                            <div class="module-checkbox-grid">
-                                <label class="module-checkbox">
-                                    <input type="checkbox" name="module" value="3-1">
-                                    <div><span class="chk-badge">BLOCK 3</span><br><span class="chk-text">3-1. 그룹/단체 스트레칭</span></div>
-                                </label>
-                                <label class="module-checkbox">
-                                    <input type="checkbox" name="module" value="3-2">
-                                    <div><span class="chk-badge">BLOCK 3</span><br><span class="chk-text">3-2. 기능성 운동 처방 실습</span></div>
-                                </label>
+                        <div class="proposal-block">
+                            <div class="proposal-block-header" onclick="toggleSubModulesList(this)">
+                                <span>🤸‍♀️ BLOCK 3. 실습 (단체 운동 프로그램)</span> <span class="toggle-icon">▼</span>
+                            </div>
+                            <div class="sub-modules" style="display:none; padding: 15px; border-top: 1px solid #eaeaea; background: #fafafa; flex-direction: column; gap: 10px;">
+                                <label class="checkbox-label"><input type="checkbox" name="sub_module" value="오피스 단체 스트레칭"> 오피스 단체 스트레칭</label>
+                                <label class="checkbox-label"><input type="checkbox" name="sub_module" value="기능성 운동 처방"> 기능성 운동 처방</label>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="proposal-block">
-                        <div class="proposal-block-header" onclick="toggleProposalBlock(this)">
-                            <span>BLOCK 4. 강의 모듈</span>
-                            <span class="toggle-icon">▼</span>
-                        </div>
-                        <div class="proposal-block-content">
-                            <div class="module-checkbox-grid">
-                                <label class="module-checkbox">
-                                    <input type="checkbox" name="module" value="4-1">
-                                    <div><span class="chk-badge">BLOCK 4</span><br><span class="chk-text">4-1. 질환 예방 특강</span></div>
-                                </label>
-                                <label class="module-checkbox">
-                                    <input type="checkbox" name="module" value="4-2">
-                                    <div><span class="chk-badge">BLOCK 4</span><br><span class="chk-text">4-2. 생활습관 개선 솔루션</span></div>
-                                </label>
-                                <label class="module-checkbox">
-                                    <input type="checkbox" name="module" value="4-3">
-                                    <div><span class="chk-badge">BLOCK 4</span><br><span class="chk-text">4-3. 고질병 예방/교정 특강</span></div>
-                                </label>
+                        <div class="proposal-block">
+                            <div class="proposal-block-header" onclick="toggleSubModulesList(this)">
+                                <span>👨‍🏫 BLOCK 4. 교육 (강의 프로그램)</span> <span class="toggle-icon">▼</span>
+                            </div>
+                            <div class="sub-modules" style="display:none; padding: 15px; border-top: 1px solid #eaeaea; background: #fafafa; flex-direction: column; gap: 10px;">
+                                <label class="checkbox-label"><input type="checkbox" name="sub_module" value="주요 질환 예방 특강"> 주요 질환 예방 특강 (거북목 등)</label>
+                                <label class="checkbox-label"><input type="checkbox" name="sub_module" value="생활습관 개선 솔루션"> 생활습관 개선 솔루션</label>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="form-group"><label class="field-label">주요 문의사항</label><textarea class="form-control" placeholder="도입 목적이나 불편사항을 남겨주시면 더욱 정확한 제안이 가능합니다."></textarea></div>
                 <button type="submit" class="form-submit-btn">선택한 모듈로 제안서 요청하기</button>
             </form>
         </div>
     </div>
 
-    <!-- Swiper JS CDN -->
+    <div id="modal-quiz" class="modal">
+        <div class="modal-content quiz-modal-content" style="max-width: 500px; text-align: center;">
+            <button class="modal-close" onclick="closeModal('modal-quiz')">&times;</button>
+            <div id="quiz-step-1" class="quiz-step active">
+                <span class="gateway-badge" style="background:#e8f5e9; color:#2b8a3e; padding:4px 10px; border-radius:12px; font-weight:bold; font-size:12px;">STEP 1</span>
+                <h2 style="font-size: 24px; font-weight: 800; margin: 15px 0;">어떤 조직의 담당자이신가요?</h2>
+                <div class="quiz-options" style="display: flex; flex-direction: column; gap: 12px; margin-top: 30px;">
+                    <button class="quiz-btn" style="background: #f8f9fa; border: 2px solid #eaeaea; padding: 20px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer;" onclick="nextQuizStep(2, 'b2b')">🏢 일반 기업 (HR/복지 담당)</button>
+                    <button class="quiz-btn" style="background: #f8f9fa; border: 2px solid #eaeaea; padding: 20px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer;" onclick="nextQuizStep(2, 'school')">🏫 학교 (보건/체육교사)</button>
+                </div>
+            </div>
+            <div id="quiz-step-2" class="quiz-step" style="display: none;">
+                <span class="gateway-badge" style="background:#e8f5e9; color:#2b8a3e; padding:4px 10px; border-radius:12px; font-weight:bold; font-size:12px;">STEP 2</span>
+                <h2 style="font-size: 24px; font-weight: 800; margin: 15px 0;">가장 큰 고민(목적)은 무엇인가요?</h2>
+                <div class="quiz-options" id="quiz-options-2" style="display: flex; flex-direction: column; gap: 12px; margin-top: 30px;">
+                </div>
+            </div>
+            <div id="quiz-step-result" class="quiz-step" style="display: none;">
+                <div class="quiz-result-header" style="background: #e8f5e9; padding: 30px; border-radius: 16px; margin-bottom: 20px;">
+                    <div style="font-size: 40px; margin-bottom: 10px;">🎯</div>
+                    <h3 style="font-size: 20px; font-weight: 800; color: #2b8a3e;">담당자님을 위한 최적의 조합!</h3>
+                </div>
+                <h2 id="quiz-result-title" style="font-size: 24px; font-weight: 800; margin-bottom: 15px;">스마트 AI 스캐닝 + 1:1 케어</h2>
+                <p id="quiz-result-desc" style="color: #666; margin-bottom: 30px; line-height: 1.6;">근골격계 질환의 근본적인 원인을 찾고, 전문가가 직접 현장에서 케어하여 즉각적인 업무 효율을 높입니다.</p>
+                <button class="form-submit-btn" style="width: 100%; padding: 18px; background-color: #111; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: 800; cursor: pointer;" onclick="closeModal('modal-quiz'); openModal('modal-proposal');">이 구성으로 제안서 요청하기</button>
+                <button class="btn-outline" style="width: 100%; margin-top: 10px; padding: 14px 28px; border-radius: 8px; font-weight: bold; background: #fff; color: #2b8a3e; border: 1px solid #2b8a3e; cursor: pointer;" onclick="resetQuiz()">다시 하기</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <!-- Custom JS -->
     <script src="script.js"></script>
 
+    <!-- 💡 [안전장치] 스크립트 에러 시 화면 백지화 완벽 방어 -->
+    <script>
+        setTimeout(function() {
+            document.querySelectorAll('.reveal').forEach(function(el) {
+                if (window.getComputedStyle(el).opacity === '0') {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                    el.style.transition = 'opacity 0.5s ease';
+                }
+            });
+        }, 500);
+    </script>
 </body>
 </html>
