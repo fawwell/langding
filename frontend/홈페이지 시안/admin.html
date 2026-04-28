@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FaWW - 관리자 대시보드 (시안)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f0f2f5; color: #333; }
+        
+        .admin-header {
+            background: #111;
+            color: #fff;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .admin-logo { font-size: 24px; font-weight: 900; color: #2b8a3e; letter-spacing: -1px; }
+        
+        .admin-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .admin-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .admin-title-row h2 { font-size: 24px; font-weight: 800; }
+        
+        .table-wrapper {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+            border: 1px solid #eaeaea;
+        }
+        
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        thead { background: #f8f9fa; }
+        th { padding: 18px 20px; font-size: 14px; font-weight: bold; color: #666; border-bottom: 1px solid #eaeaea; }
+        td { padding: 18px 20px; font-size: 14px; border-bottom: 1px solid #eaeaea; color: #111; }
+        tbody tr:hover { background-color: #fafafa; }
+        
+        .tag-badge {
+            display: inline-block;
+            background: #e8f5e9;
+            color: #2b8a3e;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 4px;
+            margin-bottom: 4px;
+            white-space: nowrap;
+        }
+
+        .empty-state { text-align: center; padding: 60px; color: #888; font-weight: bold; }
+        
+        .btn-clear { background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .btn-clear:hover { background: #c82333; }
+    </style>
+</head>
+<body>
+
+    <header class="admin-header">
+        <div class="admin-logo">FaWW Admin</div>
+        <div>최고관리자 님</div>
+    </header>
+
+    <div class="admin-container">
+        <div class="admin-title-row">
+            <h2>제안서 접수 내역 <span style="color:#2b8a3e; font-size:18px;" id="countText">(0건)</span></h2>
+            <button class="btn-clear" onclick="clearData()">데이터 초기화</button>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>접수일시</th>
+                        <th>소속(기업/학교)</th>
+                        <th>담당자</th>
+                        <th>연락처</th>
+                        <th>이메일</th>
+                        <th>선택한 파트 (모듈)</th>
+                    </tr>
+                </thead>
+                <tbody id="dataTableBody">
+                    <!-- 자바스크립트로 데이터가 여기에 들어옵니다 -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function loadData() {
+            const tbody = document.getElementById('dataTableBody');
+            const requests = JSON.parse(localStorage.getItem('faww_requests') || '[]');
+            document.getElementById('countText').innerText = `(${requests.length}건)`;
+            
+            if (requests.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="empty-state">접수된 제안서 요청이 없습니다. 메인 페이지에서 폼을 제출해 보세요.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = requests.map(req => `
+                <tr>
+                    <td style="color:#888; font-size:13px;">${req.date}</td>
+                    <td style="font-weight:bold;">${req.company}</td>
+                    <td>${req.manager}</td>
+                    <td>${req.phone}</td>
+                    <td>${req.email}</td>
+                    <td>${req.modules.length > 0 ? req.modules.map(m => `<span class="tag-badge">${m}</span>`).join('') : '<span style="color:#aaa">-</span>'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function clearData() {
+            if(confirm('모든 접수 내역을 삭제하시겠습니까?')) {
+                localStorage.removeItem('faww_requests');
+                loadData();
+            }
+        }
+
+        // 페이지 로드 시 데이터 불러오기
+        loadData();
+    </script>
+</body>
+</html>
