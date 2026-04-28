@@ -71,6 +71,29 @@ function toggleSubModulesList(headerEl) {
     }
 }
 
+/* ================= 커스텀 토스트 알림 로직 ================= */
+function showToast(message) {
+    // 기존 토스트 제거
+    const existingToast = document.querySelector('.custom-toast');
+    if (existingToast) {
+        existingToast.remove();
+    }
+
+    const toast = document.createElement('div');
+    toast.className = 'custom-toast';
+    toast.innerHTML = message;
+    document.body.appendChild(toast);
+
+    // 강제 리플로우 후 show 클래스 추가 (애니메이션 트리거)
+    setTimeout(() => { toast.classList.add('show'); }, 10);
+
+    // 3.5초 뒤 제거
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => { toast.remove(); }, 400); // CSS transition 시간 대기
+    }, 3500);
+}
+
 /* 모달 스크립트 */
 function openModal(modalId) { 
     if(modalId === 'modal-quiz' && typeof resetQuiz === 'function') resetQuiz();
@@ -333,4 +356,29 @@ function resetQuiz() {
     document.querySelectorAll('.quiz-step').forEach(el => el.style.display = 'none');
     const step1 = document.getElementById('quiz-step-1');
     if(step1) step1.style.display = 'block';
+}
+
+/* ================= 폼 데이터 저장 로직 (시안용) ================= */
+function submitProposalForm(event) {
+    event.preventDefault();
+    const form = event.target;
+    
+    // 폼 데이터 수집
+    const data = {
+        company: form.querySelector('input[name="company"]').value,
+        manager: form.querySelector('input[name="manager"]').value,
+        phone: form.querySelector('input[name="phone"]').value,
+        email: form.querySelector('input[name="email"]').value,
+        modules: Array.from(form.querySelectorAll('input[name="sub_module"]:checked')).map(cb => cb.value),
+        date: new Date().toLocaleString()
+    };
+
+    // 브라우저 로컬 스토리지에 저장 (임시 DB 역할)
+    let requests = JSON.parse(localStorage.getItem('faww_requests') || '[]');
+    requests.unshift(data); // 최신 데이터가 위로 오도록 배열 맨 앞에 추가
+    localStorage.setItem('faww_requests', JSON.stringify(requests));
+
+    showToast('✅ 제안서 요청이 성공적으로 접수되었습니다.<br><span style="font-size:13px; color:#aaa; font-weight:normal; margin-top:5px; display:inline-block;">(admin.html 파일에서 접수 내역을 확인해 보세요!)</span>');
+    closeModal('modal-proposal');
+    form.reset(); // 폼 초기화
 }

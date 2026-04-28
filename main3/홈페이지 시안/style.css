@@ -147,6 +147,13 @@ header { display: flex; justify-content: space-between; align-items: center; pad
 .reviewer-info { font-weight: bold; font-size: 14px; color: #666; border-top: 1px solid #ddd; padding-top: 15px; display: flex; align-items: center; gap: 10px; }
 .reviewer-avatar { width: 36px; height: 36px; background-color: #ccc; border-radius: 50%; }
 
+/* 담당자 후기 슬라이드 페이징(점) 간격 조정 */
+.testimonials .swiper-pagination {
+    position: relative; /* absolute 포지셔닝 해제 */
+    bottom: auto; /* 기존 bottom 값 초기화 */
+    margin-top: 30px; /* 슬라이드와 점 사이의 간격 추가 */
+}
+
 /* ================= 🚀 반응형 인터랙티브 지도 ================= */
 .map-section { padding: 60px 0; background: #fff; }
 .map-wrapper { position: relative; max-width: 600px; height: 600px; margin: 0 auto; background: url('https://img.icons8.com/ios-filled/512/e9ecef/south-korea-map.png') no-repeat center center / contain !important; }
@@ -318,6 +325,31 @@ header { display: flex; justify-content: space-between; align-items: center; pad
 .chat-icon-btn:hover { transform: scale(1.1); }
 .chat-bottom-nav { background: #f4f5f7; display: flex; justify-content: space-around; padding: 12px 0 20px; border-top: 1px solid #eaeaea; }
 
+/* ================= 🚀 세련된 커스텀 토스트 알림 ================= */
+.custom-toast {
+    position: fixed;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(17, 17, 17, 0.95);
+    color: #fff;
+    padding: 16px 28px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    z-index: 100000;
+    transition: bottom 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    text-align: center;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    word-break: keep-all;
+    min-width: 320px;
+    line-height: 1.5;
+}
+.custom-toast.show { bottom: 40px; }
+@media (max-width: 768px) { .custom-toast { width: 90%; min-width: auto; bottom: -120px; } .custom-toast.show { bottom: 20px; } }
+
 /* 모달 (팝업) 공통 */
 .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 10000; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
 .modal.active { display: flex; }
@@ -332,7 +364,8 @@ header { display: flex; justify-content: space-between; align-items: center; pad
 /* 폼 모달 */
 .form-group { margin-bottom: 24px; text-align: left; }
 .form-group label.field-label { display: block; font-weight: bold; font-size: 14px; margin-bottom: 8px; color: #333;}
-.form-control { width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; }
+.form-control { width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+.form-control:focus { outline: none; border-color: #2b8a3e; box-shadow: 0 0 0 3px rgba(43, 138, 62, 0.15); }
 .form-submit-btn { width: 100%; padding: 18px; background-color: #111; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: 800; cursor: pointer; transition: 0.3s; }
 .form-submit-btn:hover { background-color: #2b8a3e; transform: scale(1.02); }
 
