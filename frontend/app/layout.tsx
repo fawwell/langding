@@ -1,34 +1,20 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
-import "./globals.css";
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+import type { Metadata } from 'next';
+import './globals.css';
+import './v2_style.css'; // 💡 핵심: 재진님의 디자인을 최상위 권력으로 격상시킵니다!
 
 export const metadata: Metadata = {
-  title: "SportCoach - 스포츠 지도사 플랫폼",
-  description:
-    "전문 스포츠 지도사와 함께 체계적인 트레이닝을 경험하세요. 맞춤형 프로그램, 전문 코칭, 체계적인 관리.",
+  title: 'FaWW - 토탈 피지컬케어 솔루션 그룹',
+  description: '조직의 가장 큰 고민, 피지컬케어에서 해답을 찾다',
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="ko">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body>
         {children}
       </body>
     </html>

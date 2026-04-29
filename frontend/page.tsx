@@ -1,91 +1,262 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import './v2_style.css';
+import React, { useState, useEffect, MouseEvent, FormEvent } from 'react';
+import '../v2_style.css';
 
-export default function V2MainPage() {
+export default function Home() {
     const [activePage, setActivePage] = useState('page-home');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeModal, setActiveModal] = useState<string | null>(null);
     const [activePhysicalSub, setActivePhysicalSub] = useState<string | null>(null);
     const [quizStep, setQuizStep] = useState(1);
-    const [quizType, setQuizType] = useState('b2b');
+    const [quizTarget, setQuizTarget] = useState('');
     const [reviewFilter, setReviewFilter] = useState('all');
+    const [quizResultTitle, setQuizResultTitle] = useState('');
+    const [quizResultDesc, setQuizResultDesc] = useState('');
 
+    // 리뷰 필터 시 Swiper 업데이트
     useEffect(() => {
-        // 스크롤 애니메이션 (IntersectionObserver 활용)
-        const observer = new IntersectionObserver((entries) => {
+        if (typeof window !== 'undefined' && (window as any).reviewSwiperInstance) {
+            (window as any).reviewSwiperInstance.update();
+            (window as any).reviewSwiperInstance.slideTo(0);
+        }
+    }, [reviewFilter]);
+
+    // 1. 스크롤 애니메이션 및 로직 (원본 script.js 1:1 이식)
+    useEffect(() => {
+        const revealObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
                 }
             });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        const countObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counters = entry.target.querySelectorAll('.count-up');
+                    counters.forEach(counter => {
+                        const target = +(counter.getAttribute('data-target') || 0);
+                        const isFormat = counter.getAttribute('data-format') === 'true';
+                        const duration = 2000;
+                        const increment = target / (duration / 16);
+                        let current = 0;
+
+                        const updateCounter = () => {
+                            current += increment;
+                            if (current < target) {
+                                counter.textContent = isFormat ? Math.ceil(current).toLocaleString() : Math.ceil(current).toString();
+                                requestAnimationFrame(updateCounter);
+                            } else {
+                                counter.textContent = isFormat ? target.toLocaleString() : target.toString();
+                            }
+                        };
+                        updateCounter();
+                    });
+
+                    if (entry.target.classList.contains('jelly-chart-section')) {
+                        const pieScene = entry.target.querySelector('.jelly-pie-scene');
+                        if (pieScene) pieScene.classList.add('animate');
+                    }
+                    observer.unobserve(entry.target);
+                }
+            });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        document.querySelectorAll('.hero-stats, .school-stats, .jelly-chart-section').forEach(el => countObserver.observe(el));
 
-        // 숫자 카운트업 애니메이션
-        const counters = document.querySelectorAll('.count-up');
-        counters.forEach(counter => {
-            const target = +(counter.getAttribute('data-target') || 0);
-            const duration = 2000;
-            const step = target / (duration / 16);
-            let current = 0;
-            const updateCounter = () => {
-                current += step;
-                if (current < target) {
-                    counter.textContent = Math.ceil(current).toString();
-                    requestAnimationFrame(updateCounter);
-                } else {
-                    counter.textContent = target.toString() + (counter.getAttribute('data-format') ? '만' : '');
-                }
-            };
-            updateCounter();
-        });
-
-        return () => observer.disconnect();
+        return () => {
+            revealObserver.disconnect();
+            countObserver.disconnect();
+        };
     }, [activePage, activePhysicalSub]);
 
+    // 2. 모바일 슬라이더 (원본 script.js 여백수치 +15 고정)
+    useEffect(() => {
+        if (typeof window === 'undefined' || window.innerWidth > 768) return;
+
+        const gridSelectors = '.agenda-grid, .gateway-grid, .card-grid, .service-grid, .school-process-grid, .school-feature-grid, .product-grid, .expert-grid, .grid-vertical, .grid-2x2';
+        const grids = document.querySelectorAll(gridSelectors);
+
+        grids.forEach(grid => {
+            if (grid.parentElement?.classList.contains('mobile-slider-wrapper')) return;
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'mobile-slider-wrapper';
+            grid.parentNode?.insertBefore(wrapper, grid);
+            wrapper.appendChild(grid);
+
+            const prevBtn = document.createElement('button');
+            prevBtn.innerHTML = '&#10094;';
+            prevBtn.className = 'mobile-nav-btn prev-btn';
+
+            const nextBtn = document.createElement('button');
+            nextBtn.innerHTML = '&#10095;';
+            nextBtn.className = 'mobile-nav-btn next-btn';
+
+            wrapper.appendChild(prevBtn);
+            wrapper.appendChild(nextBtn);
+
+            let autoPlayTimer: NodeJS.Timeout;
+            const slideNext = () => {
+                if (window.innerWidth > 768) return;
+                const firstChild = grid.children[0] as HTMLElement;
+                if(!firstChild) return;
+                const cardWidth = firstChild.offsetWidth + 15;
+                if (grid.scrollLeft + grid.clientWidth >= grid.scrollWidth - 10) {
+                    grid.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    grid.scrollBy({ left: cardWidth, behavior: 'smooth' });
+                }
+            };
+            const slidePrev = () => {
+                if (window.innerWidth > 768) return;
+                const firstChild = grid.children[0] as HTMLElement;
+                if(!firstChild) return;
+                const cardWidth = firstChild.offsetWidth + 15;
+                if (grid.scrollLeft <= 0) {
+                    grid.scrollTo({ left: grid.scrollWidth, behavior: 'smooth' });
+                } else {
+                    grid.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+                }
+            };
+
+            const resetTimer = () => { clearInterval(autoPlayTimer); autoPlayTimer = setInterval(slideNext, 3500); };
+            nextBtn.addEventListener('click', () => { slideNext(); resetTimer(); });
+            prevBtn.addEventListener('click', () => { slidePrev(); resetTimer(); });
+            autoPlayTimer = setInterval(slideNext, 3500);
+            grid.addEventListener('touchstart', () => clearInterval(autoPlayTimer), { passive: true });
+            grid.addEventListener('touchend', () => resetTimer(), { passive: true });
+        });
+    }, [activePage]);
+
+    // 3. Swiper 초기화 (CDN 방식)
+    useEffect(() => {
+        const initSwipers = () => {
+            if (typeof (window as any).Swiper !== 'undefined') {
+                (window as any).reviewSwiperInstance = new (window as any).Swiper(".reviewSwiper", {
+                    slidesPerView: 1, spaceBetween: 20, observer: true, observeParents: true,
+                    pagination: { el: ".swiper-pagination", clickable: true },
+                    breakpoints: { 768: { slidesPerView: 2, spaceBetween: 20 }, 1024: { slidesPerView: 3, spaceBetween: 30 } }
+                });
+                new (window as any).Swiper(".partnerSwiper", {
+                    slidesPerView: 2, spaceBetween: 15, loop: true, autoplay: { delay: 2000, disableOnInteraction: false },
+                    breakpoints: { 640: { slidesPerView: 3, spaceBetween: 20 }, 1024: { slidesPerView: 5, spaceBetween: 30 } }
+                });
+            }
+        };
+
+        if (!document.getElementById('swiper-script')) {
+            const script = document.createElement('script');
+            script.id = 'swiper-script';
+            script.src = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js';
+            script.onload = initSwipers;
+            document.body.appendChild(script);
+        } else {
+            initSwipers();
+        }
+    }, [activePage]);
+
+    // 인터랙션 함수들
     const switchPage = (pageId: string) => {
         setActivePage(pageId);
         setActivePhysicalSub(null);
         setIsMobileMenuOpen(false);
-        window.scrollTo(0, 0);
+        if (pageId !== 'page-physical') window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const openModal = (modalId: string) => setActiveModal(modalId);
-    const closeModal = () => setActiveModal(null);
-    const showToast = (msg: string) => alert(msg);
+    const openPhysicalSub = (subId: string) => {
+        setActivePhysicalSub(subId);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
-    const toggleSubModulesList = (e: React.MouseEvent<HTMLDivElement>) => {
-        const nextEl = e.currentTarget.nextElementSibling as HTMLElement;
-        if (nextEl) {
-            nextEl.style.display = nextEl.style.display === 'none' ? 'flex' : 'none';
-        }
+    const showPhysicalGateway = () => {
+        setActivePhysicalSub(null);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const openModal = (modalId: string) => {
+        if (modalId === 'modal-quiz') resetQuiz();
+        setActiveModal(modalId);
+        document.body.style.overflow = 'hidden';
     };
     
-    const toggleFaq = (e: React.MouseEvent<HTMLDivElement>) => {
+    const closeModal = () => {
+        setActiveModal(null);
+        document.body.style.overflow = 'auto';
+    };
+
+    const showToast = (message: string) => {
+        const existingToast = document.querySelector('.custom-toast');
+        if (existingToast) existingToast.remove();
+        const toast = document.createElement('div');
+        toast.className = 'custom-toast';
+        toast.innerHTML = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.classList.add('show'), 10);
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 400);
+        }, 3500);
+    };
+
+    const toggleFaq = (e: MouseEvent<HTMLDivElement>) => {
         e.currentTarget.classList.toggle('active');
     };
 
-    const submitProposalForm = (e: React.FormEvent<HTMLFormElement>) => {
+    const toggleSubModulesList = (e: MouseEvent<HTMLDivElement>) => {
+        const content = e.currentTarget.nextElementSibling as HTMLElement;
+        const icon = e.currentTarget.querySelector('.toggle-icon') as HTMLElement;
+        if (content && icon) {
+            if (content.style.display === 'flex') {
+                content.style.display = 'none';
+                icon.innerText = '▼';
+            } else {
+                content.style.display = 'flex';
+                icon.innerText = '▲';
+            }
+        }
+    };
+
+    const submitProposalForm = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const formData = new FormData(e.currentTarget);
+        const form = e.currentTarget;
         const data = {
-            date: new Date().toLocaleString(),
-            company: formData.get('company') as string,
-            manager: formData.get('manager') as string,
-            phone: formData.get('phone') as string,
-            email: formData.get('email') as string,
-            modules: formData.getAll('sub_module') as string[],
+            company: (form.elements.namedItem('company') as HTMLInputElement).value,
+            manager: (form.elements.namedItem('manager') as HTMLInputElement).value,
+            phone: (form.elements.namedItem('phone') as HTMLInputElement).value,
+            email: (form.elements.namedItem('email') as HTMLInputElement).value,
+            modules: Array.from(form.querySelectorAll('input[name="sub_module"]:checked')).map((cb: any) => cb.value),
+            date: new Date().toLocaleString()
         };
-        
-        const requests = JSON.parse(localStorage.getItem('faww_requests') || '[]');
-        requests.push(data);
+        let requests = JSON.parse(localStorage.getItem('faww_requests') || '[]');
+        requests.unshift(data);
         localStorage.setItem('faww_requests', JSON.stringify(requests));
-        
-        alert('성공적으로 제안서가 요청되었습니다. 관리자 페이지에서 확인 가능합니다.');
+        showToast('✅ 제안서 요청이 성공적으로 접수되었습니다.<br><span style="font-size:13px; color:#aaa; font-weight:normal; margin-top:5px; display:inline-block;">(admin.html 파일에서 접수 내역을 확인해 보세요!)</span>');
         closeModal();
+        form.reset();
+    };
+
+    const nextQuizStep = (step: number, target?: string) => {
+        if (target) setQuizTarget(target);
+        setQuizStep(step);
+    };
+
+    const showQuizResult = (type: string) => {
+        if (type === 'eap1') { setQuizResultTitle("스마트 AI 스캐닝 + 1:1 수기 케어"); setQuizResultDesc("근골격계 질환의 원인을 정확히 찾고, 원조 전문가가 현장에서 직접 케어하여 즉각적인 업무 효율을 높입니다."); }
+        else if (type === 'eap2') { setQuizResultTitle("1:1 프리미엄 릴렉싱 케어"); setQuizResultDesc("신체의 굳은 긴장을 이완시켜 교감신경을 안정화하고 정신적 번아웃을 예방하는 최적의 솔루션입니다."); }
+        else if (type === 'eap3') { setQuizResultTitle("오피스 단체 스트레칭 + 특강"); setQuizResultDesc("사무실 의자를 활용한 실습과 거북목 교정 특강을 통해 다함께 참여하는 건강 문화를 만듭니다."); }
+        else if (type === 'sch1') { setQuizResultTitle("학교 전용 3D AI 체형 검진 시스템"); setQuizResultDesc("모아레 및 척추 분석 기능을 통해 학생들의 성장 밸런스를 측정하고 학부모용 상세 리포트를 제공합니다."); }
+        else if (type === 'sch2') { setQuizResultTitle("학생 기능성 그룹 트레이닝"); setQuizResultDesc("체형 분석을 기반으로 성장기 학생들에게 꼭 필요한 맞춤형 교정 운동과 스트레칭을 지도합니다."); }
+        setQuizStep(3);
+    };
+
+    const resetQuiz = () => {
+        setQuizTarget('');
+        setQuizStep(1);
     };
 
     return (
@@ -113,7 +284,7 @@ export default function V2MainPage() {
             <main id="page-home" className={`page-content ${activePage === 'page-home' ? 'active' : ''}`}>
                 <section className="hero-brand reveal">
                     <video className="hero-video-bg" autoPlay loop muted playsInline>
-                        <source src="/background3.mp4" type="video/mp4" />
+                        <source src="background3.mp4" type="video/mp4" />
                     </video>
                     <div className="hero-overlay"></div>
                     
@@ -132,7 +303,7 @@ export default function V2MainPage() {
                         <div className="hero-stats reveal reveal-scale">
                             <div className="stat-item"><h3><span className="count-up" data-target="12">0</span>년+</h3><p>피지컬케어 도입</p></div>
                             <div className="stat-item"><h3><span className="count-up" data-target="120">0</span>+</h3><p>파트너 기업 및 학교</p></div>
-                            <div className="stat-item"><h3><span className="count-up" data-target="99">0</span>%</h3><p>고객 만족도</p></div>
+                            <div className="stat-item"><h3><span class="count-up" data-target="99">0</span>%</h3><p>고객 만족도</p></div>
                             <div className="stat-item"><h3><span className="count-up" data-target="20000" data-format="true">0</span>+</h3><p>관리 임직원 수</p></div>
                         </div>
                     </div>
@@ -156,9 +327,9 @@ export default function V2MainPage() {
                         <div className="jelly-pie-wrapper">
                             <div className="jelly-pie-scene">
                                 <div className="jelly-shadow"></div>
-                                <div className="jelly-layer bottom"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" className="j-bg" /><circle cx="16" cy="16" r="8" className="j-fg" pathLength={100} /></svg></div>
-                                <div className="jelly-layer mid1"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" className="j-bg" /><circle cx="16" cy="16" r="8" className="j-fg" pathLength={100} /></svg></div>
-                                <div className="jelly-layer mid2"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" className="j-bg" /><circle cx="16" cy="16" r="8" className="j-fg" pathLength={100} /></svg></div>
+                                <div className="jelly-layer bottom"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" className="j-bg"/><circle cx="16" cy="16" r="8" className="j-fg" pathLength={100} /></svg></div>
+                                <div className="jelly-layer mid1"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" className="j-bg"/><circle cx="16" cy="16" r="8" className="j-fg" pathLength={100} /></svg></div>
+                                <div className="jelly-layer mid2"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" className="j-bg"/><circle cx="16" cy="16" r="8" className="j-fg" pathLength={100} /></svg></div>
                                 <div className="jelly-layer top">
                                     <svg viewBox="0 0 32 32">
                                         <circle cx="16" cy="16" r="8" className="j-bg" pathLength={100} />
@@ -167,6 +338,7 @@ export default function V2MainPage() {
                                     <div className="jelly-gloss"></div>
                                 </div>
                             </div>
+                            
                             <div className="jelly-text-float">
                                 <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center' }}>
                                     <span className="jelly-percent count-up" data-target="99">0</span>
@@ -209,7 +381,7 @@ export default function V2MainPage() {
                                 <p>굳어있는 몸의 긴장은 곧 우울감과 번아웃으로 이어집니다. 전문가의 직접적인 피지컬케어로 신체의 활력을 되찾아주고, 마음의 병과 극단적인 선택을 예방하는 새로운 EAP를 제시합니다.</p>
                             </div>
                         </div>
-                        
+
                         <div className="expert-banner reveal">
                             <h4>⚠️ 자격증 없는 무자격 플랫폼 업체를 주의하십시오.</h4>
                             <p>단순 외부 강사들을 매칭해주는 타 플랫폼과 비교를 거부합니다. FaWW는 <strong>12년 이상의 독보적 임상 노하우</strong>를 바탕으로 &apos;피지컬케어관리사&apos; 자격증을 창시한 <strong>대한민국 &apos;원조(Original)&apos;</strong> 그룹입니다.<br />검증되지 않은 1회성 휴식이 아닌, 뼈와 근막을 완벽히 이해하는 진짜 전문가의 개입만이 실질적인 지표 변화를 만듭니다.</p>
@@ -322,60 +494,51 @@ export default function V2MainPage() {
                 <section className="testimonials reveal">
                     <div className="container">
                         <h2 className="section-title">담당자가 99%만족한 FaWW의 솔루션</h2>
-                        <div className="review-filter-wrapper">
+                        <div className="review-filter-wrapper" style={{ textAlign: 'center', marginBottom: '20px' }}>
                             <button className={`review-filter-btn ${reviewFilter === 'all' ? 'active' : ''}`} onClick={() => setReviewFilter('all')}>전체 보기</button>
                             <button className={`review-filter-btn ${reviewFilter === 'b2b' ? 'active' : ''}`} onClick={() => setReviewFilter('b2b')}>🏢 기업/HR 담당자</button>
                             <button className={`review-filter-btn ${reviewFilter === 'school' ? 'active' : ''}`} onClick={() => setReviewFilter('school')}>🏫 학교/보건교사</button>
                         </div>
 
                         <div className="swiper reviewSwiper" style={{ marginTop: '40px', padding: '20px 0' }}>
-                            <div className="swiper-wrapper" style={{ display: 'flex', overflowX: 'auto', gap: '20px' }}>
-                                {['all', 'b2b'].includes(reviewFilter) && (
-                                    <div className="swiper-slide" style={{ minWidth: '300px', flex: '0 0 auto' }}>
-                                        <div className="testimonial-card">
-                                            <div className="stars">★★★★★</div>
-                                            <p className="review-text">&quot;수업 끝나고 사무실로 복귀할 때 벌써 변화를 체감합니다. 발바닥, 종아리, 허벅지 움직임부터가 다르네요. 최고입니다!&quot;</p>
-                                            <div className="reviewer-info"><div className="reviewer-avatar"></div><span>S사 운영팀</span></div>
-                                        </div>
+                            <div className="swiper-wrapper" id="review-wrapper">
+                                <div className="swiper-slide" style={{ display: (reviewFilter === 'all' || reviewFilter === 'b2b') ? 'block' : 'none' }}>
+                                    <div className="testimonial-card">
+                                        <div className="stars">★★★★★</div>
+                                        <p className="review-text">&quot;수업 끝나고 사무실로 복귀할 때 벌써 변화를 체감합니다. 발바닥, 종아리, 허벅지 움직임부터가 다르네요. 최고입니다!&quot;</p>
+                                        <div className="reviewer-info"><div className="reviewer-avatar"></div><span>S사 운영팀</span></div>
                                     </div>
-                                )}
-                                {['all', 'b2b'].includes(reviewFilter) && (
-                                    <div className="swiper-slide" style={{ minWidth: '300px', flex: '0 0 auto' }}>
-                                        <div className="testimonial-card">
-                                            <div className="stars">★★★★★</div>
-                                            <p className="review-text">&quot;늘어나는 산재 발생이 큰 고민이었는데 업무 시작 전 사고를 예방하는 프로그램을 진행하면서 눈에 띄게 줄었어요.&quot;</p>
-                                            <div className="reviewer-info"><div className="reviewer-avatar"></div><span>H사 안전환경팀</span></div>
-                                        </div>
+                                </div>
+                                <div className="swiper-slide" style={{ display: (reviewFilter === 'all' || reviewFilter === 'b2b') ? 'block' : 'none' }}>
+                                    <div className="testimonial-card">
+                                        <div className="stars">★★★★★</div>
+                                        <p className="review-text">&quot;늘어나는 산재 발생이 큰 고민이었는데 업무 시작 전 사고를 예방하는 프로그램을 진행하면서 눈에 띄게 줄었어요.&quot;</p>
+                                        <div className="reviewer-info"><div className="reviewer-avatar"></div><span>H사 안전환경팀</span></div>
                                     </div>
-                                )}
-                                {['all', 'school'].includes(reviewFilter) && (
-                                    <div className="swiper-slide" style={{ minWidth: '300px', flex: '0 0 auto' }}>
-                                        <div className="testimonial-card">
-                                            <div className="stars">★★★★☆</div>
-                                            <p className="review-text">&quot;모든 학생이 형평성 있게 검진을 이용할 수 있다는 점이 좋았어요. 체계적인 데이터 리포트 덕분에 학부모님들 만족도도 높습니다.&quot;</p>
-                                            <div className="reviewer-info"><div className="reviewer-avatar"></div><span>OO고등학교 보건교사</span></div>
-                                        </div>
+                                </div>
+                                <div className="swiper-slide" style={{ display: (reviewFilter === 'all' || reviewFilter === 'school') ? 'block' : 'none' }}>
+                                    <div className="testimonial-card">
+                                        <div className="stars">★★★★☆</div>
+                                        <p className="review-text">&quot;모든 학생이 형평성 있게 검진을 이용할 수 있다는 점이 좋았어요. 체계적인 데이터 리포트 덕분에 학부모님들 만족도도 높습니다.&quot;</p>
+                                        <div className="reviewer-info"><div className="reviewer-avatar"></div><span>OO고등학교 보건교사</span></div>
                                     </div>
-                                )}
-                                {['all', 'b2b'].includes(reviewFilter) && (
-                                    <div className="swiper-slide" style={{ minWidth: '300px', flex: '0 0 auto' }}>
-                                        <div className="testimonial-card">
-                                            <div className="stars">★★★★★</div>
-                                            <p className="review-text">&quot;직원들의 거북목이 확실히 좋아지는게 보입니다. 정기적으로 계속 도입할 예정입니다.&quot;</p>
-                                            <div className="reviewer-info"><div className="reviewer-avatar"></div><span>N사 복지담당자</span></div>
-                                        </div>
+                                </div>
+                                <div className="swiper-slide" style={{ display: (reviewFilter === 'all' || reviewFilter === 'b2b') ? 'block' : 'none' }}>
+                                    <div className="testimonial-card">
+                                        <div className="stars">★★★★★</div>
+                                        <p className="review-text">&quot;직원들의 거북목이 확실히 좋아지는게 보입니다. 정기적으로 계속 도입할 예정입니다.&quot;</p>
+                                        <div className="reviewer-info"><div className="reviewer-avatar"></div><span>N사 복지담당자</span></div>
                                     </div>
-                                )}
-                                {['all', 'school'].includes(reviewFilter) && (
-                                    <div className="swiper-slide" style={{ minWidth: '300px', flex: '0 0 auto' }}>
-                                        <div className="testimonial-card">
-                                            <div className="stars">★★★★★</div>
-                                            <p className="review-text">&quot;아이들이 바른 자세에 대해 스스로 인지하게 된 것이 가장 큰 성과입니다. 정기적으로 계속 도입할 예정입니다.&quot;</p>
-                                            <div className="reviewer-info"><div className="reviewer-avatar"></div><span>XX중학교 체육교사</span></div>
-                                        </div>
+                                </div>
+                                <div className="swiper-slide" style={{ display: (reviewFilter === 'all' || reviewFilter === 'school') ? 'block' : 'none' }}>
+                                    <div className="testimonial-card">
+                                        <div className="stars">★★★★★</div>
+                                        <p className="review-text">&quot;아이들이 바른 자세에 대해 스스로 인지하게 된 것이 가장 큰 성과입니다. 정기적으로 계속 도입할 예정입니다.&quot;</p>
+                                        <div className="reviewer-info"><div className="reviewer-avatar"></div><span>XX중학교 체육교사</span></div>
                                     </div>
-                                )}
+                                </div>
                             </div>
+                            <div className="swiper-pagination"></div>
                         </div>
                     </div>
                 </section>
@@ -409,13 +572,13 @@ export default function V2MainPage() {
                     <div className="container">
                         <h2 className="section-title">대한민국 일류 기업과 학교들이 FaWW와 함께합니다</h2>
                         <div className="swiper partnerSwiper" style={{ marginTop: '40px', padding: '10px 0' }}>
-                            <div className="swiper-wrapper" style={{ display: 'flex', gap: '20px', overflowX: 'auto', paddingBottom: '10px' }}>
-                                <div className="swiper-slide" style={{ minWidth: '150px' }}><div className="partner-logo">삼성 계열사</div></div>
-                                <div className="swiper-slide" style={{ minWidth: '150px' }}><div className="partner-logo">현대 계열사</div></div>
-                                <div className="swiper-slide" style={{ minWidth: '150px' }}><div className="partner-logo">네이버/카카오</div></div>
-                                <div className="swiper-slide" style={{ minWidth: '150px' }}><div className="partner-logo">주요 금융권</div></div>
-                                <div className="swiper-slide" style={{ minWidth: '150px' }}><div className="partner-logo">전국 주요 초중고</div></div>
-                                <div className="swiper-slide" style={{ minWidth: '150px' }}><div className="partner-logo">공공기관</div></div>
+                            <div className="swiper-wrapper">
+                                <div className="swiper-slide"><div className="partner-logo">삼성 계열사</div></div>
+                                <div className="swiper-slide"><div className="partner-logo">현대 계열사</div></div>
+                                <div className="swiper-slide"><div className="partner-logo">네이버/카카오</div></div>
+                                <div className="swiper-slide"><div className="partner-logo">주요 금융권</div></div>
+                                <div className="swiper-slide"><div className="partner-logo">전국 주요 초중고</div></div>
+                                <div className="swiper-slide"><div className="partner-logo">공공기관</div></div>
                             </div>
                         </div>
                     </div>
@@ -438,7 +601,7 @@ export default function V2MainPage() {
             <main id="page-ai" className={`page-content ${activePage === 'page-ai' ? 'active' : ''}`}>
                 <section className="hero reveal" style={{ padding: '120px 20px' }}>
                     <video className="hero-video-bg" autoPlay loop muted playsInline>
-                        <source src="/background.mp4" type="video/mp4" />
+                        <source src="background.mp4" type="video/mp4" />
                     </video>
                     <div className="hero-overlay"></div>
                     <div className="container" style={{ position: 'relative', zIndex: 2 }}>
@@ -463,7 +626,7 @@ export default function V2MainPage() {
                                 <p>성장기 학생들의 체형 검진과 더불어 스트레칭, 그룹운동 및 상세 통계 리포트를 제공합니다.</p>
                                 <div className="view-details-btn" style={{ color: '#004d40' }}>학교 프로그램 상세 보기</div>
                             </div>
-                            <div className="info-card reveal delay-2" onClick={() => { switchPage('page-physical'); setActivePhysicalSub('sub-center'); }}>
+                            <div className="info-card reveal delay-2" onClick={() => { switchPage('page-physical'); openPhysicalSub('sub-center'); }}>
                                 <div className="card-icon" style={{ color: '#111' }}>03</div>
                                 <h3>개인</h3>
                                 <p>개인 맞춤형 체형 분석 및 근본적인 신체 개선을 원하신다면 가까운 피지컬케어 센터를 방문해 보세요.</p>
@@ -584,7 +747,7 @@ export default function V2MainPage() {
 
             {/* MAIN 4: 학교 */}
             <main id="page-school" className={`page-content ${activePage === 'page-school' ? 'active' : ''}`}>
-                <section className="hero-premium reveal" style={{ background: 'linear-gradient(rgba(0, 30, 20, 0.75), rgba(0, 30, 20, 0.9))' }}>
+                <section className="hero-premium reveal" style={{ background: "linear-gradient(rgba(0, 30, 20, 0.75), rgba(0, 30, 20, 0.9)), url('https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=2070&auto=format&fit=crop') no-repeat center/cover fixed" }}>
                     <div className="container">
                         <div style={{ textAlign: 'left' }}><span className="back-btn" onClick={() => switchPage('page-ai')}>← 타겟 선택으로 돌아가기</span></div>
                         <h1>바른 성장의 시작,<br />FaWW 학생 체형분석 솔루션</h1>
@@ -600,6 +763,7 @@ export default function V2MainPage() {
                             <h2>학교사업 ㅡ 학생 체형분석 솔루션</h2>
                             <p>성장기 학생들의 체형 데이터를 과학적으로 분석하고, 맞춤형 운동 프로그램을 제공합니다. 학교 현장에 최적화된 프로세스로 효율적인 건강관리를 지원합니다.</p>
                         </div>
+
                         <div className="school-process-grid">
                             <div className="school-process-card reveal">
                                 <span className="school-process-num">01</span>
@@ -670,11 +834,11 @@ export default function V2MainPage() {
                 </section>
             </main>
 
-            {/* MAIN 5: 피지컬케어 (아카데미/센터) */}
+            {/* MAIN 5: 피지컬케어 */}
             <main id="page-physical" className={`page-content ${activePage === 'page-physical' ? 'active' : ''}`}>
                 <section className="hero reveal" style={{ padding: '120px 20px' }}>
                     <video className="hero-video-bg" autoPlay loop muted playsInline>
-                        <source src="/background2.mp4" type="video/mp4" />
+                        <source src="background2.mp4" type="video/mp4" />
                     </video>
                     <div className="hero-overlay"></div>
                     <div className="container" style={{ position: 'relative', zIndex: 2 }}>
@@ -690,12 +854,12 @@ export default function V2MainPage() {
                             <h3>피지컬케어</h3>
                             <p>기업 임직원을 위한 맞춤형 방문 솔루션</p>
                         </div>
-                        <div className="info-card reveal delay-1" onClick={() => setActivePhysicalSub('sub-academy')}>
+                        <div className="info-card reveal delay-1" onClick={() => openPhysicalSub('sub-academy')}>
                             <div className="card-icon" style={{ color: '#111' }}>EDU</div>
                             <h3>자격증</h3>
                             <p>오리지널 피지컬케어 전문가 양성 과정</p>
                         </div>
-                        <div className="info-card reveal delay-2" onClick={() => setActivePhysicalSub('sub-center')}>
+                        <div className="info-card reveal delay-2" onClick={() => openPhysicalSub('sub-center')}>
                             <div className="card-icon" style={{ color: '#111' }}>CTR</div>
                             <h3>센터</h3>
                             <p>가까운 직영 센터 1:1 맞춤형 피지컬케어</p>
@@ -706,89 +870,38 @@ export default function V2MainPage() {
                 <div id="sub-academy" className={`sub-page-content ${activePhysicalSub === 'sub-academy' ? 'active' : ''}`}>
                     <section className="category-section reveal" style={{ backgroundColor: '#f8f9fa', paddingTop: '40px' }}>
                         <div className="container">
-                            <div style={{ textAlign: 'left' }}><span className="back-btn-light" onClick={() => setActivePhysicalSub(null)}>← 카테고리 선택으로 돌아가기</span></div>
+                            <div style={{ textAlign: 'left' }}><span className="back-btn-light" onClick={showPhysicalGateway}>← 카테고리 선택으로 돌아가기</span></div>
                             <h2 className="section-title">자격증 교육 (아카데미)</h2>
                             <div className="academy-wrap">
-                                {/* 1. 퍼스널 트레이닝 분야 */}
                                 <div className="academy-category reveal">
                                     <h3 className="academy-cat-title"><span>01</span> 퍼스널 트레이닝 분야</h3>
                                     <div className="academy-grid">
-                                        <div className="academy-card">
-                                            <div className="ac-badge">PTS 1, 2급</div>
-                                            <h4>Personal Training Specialist</h4>
-                                            <p>이론과 실기 능력을 갖춘 전문 퍼스널 트레이너 양성 과정입니다. 운동, 재활, 영양, 세일즈를 종합적으로 다룹니다.</p>
-                                        </div>
-                                        <div className="academy-card">
-                                            <div className="ac-badge">PYTS 전문가 과정</div>
-                                            <h4>Personal Yoga Training Specialist</h4>
-                                            <p>정통 요가의 본질을 과학적으로 풀어내고 통증 분석 및 체형 교정을 결합한 전문가 과정입니다.</p>
-                                        </div>
+                                        <div className="academy-card"><div className="ac-badge">PTS 1, 2급</div><h4>Personal Training Specialist</h4><p>이론과 실기 능력을 갖춘 전문 퍼스널 트레이너 양성 과정입니다. 운동, 재활, 영양, 세일즈를 종합적으로 다룹니다.</p></div>
+                                        <div className="academy-card"><div className="ac-badge">PYTS 전문가 과정</div><h4>Personal Yoga Training Specialist</h4><p>정통 요가의 본질을 과학적으로 풀어내고 통증 분석 및 체형 교정을 결합한 전문가 과정입니다.</p></div>
                                     </div>
                                 </div>
-
-                                {/* 2. 교정 및 재활 분야 */}
                                 <div className="academy-category reveal">
                                     <h3 className="academy-cat-title"><span>02</span> 교정 및 재활 분야</h3>
                                     <div className="academy-grid">
-                                        <div className="academy-card">
-                                            <div className="ac-badge">CWT 1, 2급</div>
-                                            <h4>Corrective Weight Training</h4>
-                                            <p>신체적 문제를 운동을 통해 해결하는 교정운동 전문가 과정입니다. 기능해부학과 생리학을 기반으로 체형 및 동작을 분석합니다.</p>
-                                        </div>
-                                        <div className="academy-card">
-                                            <div className="ac-badge">KSTS 1, 2급</div>
-                                            <h4>Korea Sports Taping Specialist</h4>
-                                            <p>스포츠 및 생활 체육 현장에서 경기력 향상과 부상 예방을 위해 테이핑 업무를 수행하는 전문가 과정입니다.</p>
-                                        </div>
-                                        <div className="academy-card">
-                                            <div className="ac-badge">선수트레이너 1, 2급</div>
-                                            <h4>Athletic Trainer</h4>
-                                            <p>과학적 근거를 바탕으로 운동선수들의 경기력 향상과 최상의 컨디셔닝을 돕는 프로그램 구성 및 트레이닝 수료 과정입니다.</p>
-                                        </div>
+                                        <div className="academy-card"><div className="ac-badge">CWT 1, 2급</div><h4>Corrective Weight Training</h4><p>신체적 문제를 운동을 통해 해결하는 교정운동 전문가 과정입니다. 기능해부학과 생리학을 기반으로 체형 및 동작을 분석합니다.</p></div>
+                                        <div className="academy-card"><div className="ac-badge">KSTS 1, 2급</div><h4>Korea Sports Taping Specialist</h4><p>스포츠 및 생활 체육 현장에서 경기력 향상과 부상 예방을 위해 테이핑 업무를 수행하는 전문가 과정입니다.</p></div>
+                                        <div className="academy-card"><div className="ac-badge">선수트레이너 1, 2급</div><h4>Athletic Trainer</h4><p>과학적 근거를 바탕으로 운동선수들의 경기력 향상과 최상의 컨디셔닝을 돕는 프로그램 구성 및 트레이닝 수료 과정입니다.</p></div>
                                     </div>
                                 </div>
-
-                                {/* 3. 필라테스 및 골프 전문 분야 */}
                                 <div className="academy-category reveal">
                                     <h3 className="academy-cat-title"><span>03</span> 필라테스 및 골프 전문 분야</h3>
                                     <div className="academy-grid">
-                                        <div className="academy-card">
-                                            <div className="ac-badge">KSMP 1, 2, 3급</div>
-                                            <h4>Pilates Instructor</h4>
-                                            <p>기구 및 매트 운동을 활용하여 바른 체형을 위한 운동 평가, 상담 및 강사 양성 업무를 수행합니다.</p>
-                                        </div>
-                                        <div className="academy-card">
-                                            <div className="ac-badge">골프 컨디셔닝 1, 2, 3급</div>
-                                            <h4>MAXQ GOLF PHYSICAL TRAINING INSTITUTE</h4>
-                                            <p>골퍼의 경기력 향상과 컨디셔닝을 위한 운동 프로그램을 개발하고 운동역학적 스윙 분석 등을 제공합니다.</p>
-                                        </div>
+                                        <div className="academy-card"><div className="ac-badge">KSMP 1, 2, 3급</div><h4>Pilates Instructor</h4><p>기구 및 매트 운동을 활용하여 바른 체형을 위한 운동 평가, 상담 및 강사 양성 업무를 수행합니다.</p></div>
+                                        <div className="academy-card"><div className="ac-badge">골프 컨디셔닝 1, 2, 3급</div><h4>MAXQ GOLF PHYSICAL TRAINING INSTITUTE</h4><p>골퍼의 경기력 향상과 컨디셔닝을 위한 운동 프로그램을 개발하고 운동역학적 스윙 분석 등을 제공합니다.</p></div>
                                     </div>
                                 </div>
-
-                                {/* 4. 웰니스 및 맞춤형 관리 분야 */}
                                 <div className="academy-category reveal">
                                     <h3 className="academy-cat-title"><span>04</span> 웰니스 및 맞춤형 관리 분야</h3>
                                     <div className="academy-grid">
-                                        <div className="academy-card">
-                                            <div className="ac-badge">웰니스 코치 1, 2급</div>
-                                            <h4>Wellness Coach</h4>
-                                            <p>데이터 기반 분석을 통해 개인 맞춤형 처방 시스템을 운용하는 신체 건강 전문가 과정입니다.</p>
-                                        </div>
-                                        <div className="academy-card">
-                                            <div className="ac-badge">PCP 1, 2급</div>
-                                            <h4>Physical Care Professionals (피지컬케어관리사)</h4>
-                                            <p>직장인의 직무능력 향상을 위해 근무 형태 연구 및 체력/신체 능력 평가 후 맞춤형 솔루션을 제공합니다.</p>
-                                        </div>
-                                        <div className="academy-card">
-                                            <div className="ac-badge">SEP 1, 2급</div>
-                                            <h4>Senior Exercise Professionals (노인운동사)</h4>
-                                            <p>노인의 신체적 특징에 맞춰 낙상 예방 및 심혈관계 질환 예방을 돕는 안전한 운동 프로그램을 구성합니다.</p>
-                                        </div>
-                                        <div className="academy-card">
-                                            <div className="ac-badge">마인드 코칭 1, 2급</div>
-                                            <h4>Mind Coaching</h4>
-                                            <p>뇌파측정기 등을 활용해 스포츠 선수 및 일반인의 심리 상담과 멘탈 강화를 지도하는 과정입니다.</p>
-                                        </div>
+                                        <div className="academy-card"><div className="ac-badge">웰니스 코치 1, 2급</div><h4>Wellness Coach</h4><p>데이터 기반 분석을 통해 개인 맞춤형 처방 시스템을 운용하는 신체 건강 전문가 과정입니다.</p></div>
+                                        <div className="academy-card"><div className="ac-badge">PCP 1, 2급</div><h4>Physical Care Professionals (피지컬케어관리사)</h4><p>직장인의 직무능력 향상을 위해 근무 형태 연구 및 체력/신체 능력 평가 후 맞춤형 솔루션을 제공합니다.</p></div>
+                                        <div className="academy-card"><div className="ac-badge">SEP 1, 2급</div><h4>Senior Exercise Professionals (노인운동사)</h4><p>노인의 신체적 특징에 맞춰 낙상 예방 및 심혈관계 질환 예방을 돕는 안전한 운동 프로그램을 구성합니다.</p></div>
+                                        <div className="academy-card"><div className="ac-badge">마인드 코칭 1, 2급</div><h4>Mind Coaching</h4><p>뇌파측정기 등을 활용해 스포츠 선수 및 일반인의 심리 상담과 멘탈 강화를 지도하는 과정입니다.</p></div>
                                     </div>
                                 </div>
                             </div>
@@ -799,25 +912,13 @@ export default function V2MainPage() {
                 <div id="sub-center" className={`sub-page-content ${activePhysicalSub === 'sub-center' ? 'active' : ''}`}>
                     <section className="category-section reveal" style={{ backgroundColor: '#fff', paddingTop: '40px' }}>
                         <div className="container">
-                            <div style={{ textAlign: 'left' }}><span className="back-btn-light" onClick={() => setActivePhysicalSub(null)}>← 카테고리 선택으로 돌아가기</span></div>
+                            <div style={{ textAlign: 'left' }}><span className="back-btn-light" onClick={showPhysicalGateway}>← 카테고리 선택으로 돌아가기</span></div>
                             <h2 className="section-title">센터 (로컬) 소개</h2>
                             <div className="grid-vertical">
-                                <div className="center-row-card reveal">
-                                    <div><span className="gateway-badge">Center 01</span><h3>영등포점 (본점)</h3></div>
-                                    <div style={{ color: '#2b8a3e', fontSize: '24px' }}>→</div>
-                                </div>
-                                <div className="center-row-card reveal delay-1">
-                                    <div><span className="gateway-badge">Center 02</span><h3>동탄점 (2호점)</h3></div>
-                                    <div style={{ color: '#2b8a3e', fontSize: '24px' }}>→</div>
-                                </div>
-                                <div className="center-row-card reveal delay-2">
-                                    <div><span className="gateway-badge">Center 03</span><h3>강남점 (3호점)</h3></div>
-                                    <div style={{ color: '#2b8a3e', fontSize: '24px' }}>→</div>
-                                </div>
-                                <div className="center-row-card reveal delay-3">
-                                    <div><span className="gateway-badge">Center 04</span><h3>여의도점 (4호점)</h3></div>
-                                    <div style={{ color: '#2b8a3e', fontSize: '24px' }}>→</div>
-                                </div>
+                                <div className="center-row-card reveal"><div><span className="gateway-badge">Center 01</span><h3>영등포점 (본점)</h3></div><div style={{ color: '#2b8a3e', fontSize: '24px' }}>→</div></div>
+                                <div className="center-row-card reveal delay-1"><div><span className="gateway-badge">Center 02</span><h3>동탄점 (2호점)</h3></div><div style={{ color: '#2b8a3e', fontSize: '24px' }}>→</div></div>
+                                <div className="center-row-card reveal delay-2"><div><span className="gateway-badge">Center 03</span><h3>강남점 (3호점)</h3></div><div style={{ color: '#2b8a3e', fontSize: '24px' }}>→</div></div>
+                                <div className="center-row-card reveal delay-3"><div><span className="gateway-badge">Center 04</span><h3>여의도점 (4호점)</h3></div><div style={{ color: '#2b8a3e', fontSize: '24px' }}>→</div></div>
                             </div>
                         </div>
                     </section>
@@ -844,6 +945,7 @@ export default function V2MainPage() {
                 </section>
             </main>
 
+            {/* 글로벌 푸터 CTA */}
             <section className="cta-footer reveal">
                 <div className="container">
                     <h2>FaWW와 함께 건강한 조직을 구축하세요</h2>
@@ -852,82 +954,15 @@ export default function V2MainPage() {
                 </div>
             </section>
 
-            {/* --- 모달(팝업) 영역 --- */}
-            {activeModal === 'modal-proposal' && (
-                <div className="modal active">
-                    <div className="modal-content modal-form-content">
-                        <button className="modal-close" onClick={closeModal}>&times;</button>
-                        <div className="modal-header">
-                            <h2>기업/학교 맞춤형 제안서 요청</h2>
-                            <p>조직 환경에 알맞은 솔루션 제안서를 보내드립니다.</p>
-                        </div>
-                        <form onSubmit={submitProposalForm}>
-                            <div className="form-group"><label className="field-label">소속 <span>*</span></label><input type="text" name="company" className="form-control" required /></div>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                                <div className="form-group"><label className="field-label">담당자 <span>*</span></label><input type="text" name="manager" className="form-control" required /></div>
-                                <div className="form-group"><label className="field-label">연락처 <span>*</span></label><input type="tel" name="phone" className="form-control" required /></div>
-                            </div>
-                            <div className="form-group"><label className="field-label">이메일 <span>*</span></label><input type="email" name="email" className="form-control" required /></div>
-                            
-                            <div className="form-group">
-                                <label className="field-label">희망 도입 파트 및 세부 항목 선택 (대분류 클릭 후 세부 선택)</label>
-                                <div className="proposal-module-group" style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '10px' }}>
-                                    <div className="proposal-block">
-                                        <div className="proposal-block-header" onClick={toggleSubModulesList}>
-                                            <span>▪ PART 1. 진단 (스마트 AI 체형분석)</span> <span>▼</span>
-                                        </div>
-                                        <div className="sub-modules" style={{ display: 'none', padding: '15px', borderTop: '1px solid #eaeaea', background: '#fafafa', flexDirection: 'column', gap: '10px' }}>
-                                            <label className="checkbox-label"><input type="checkbox" name="sub_module" value="3D AI 스캐닝" /> 3D AI 스캐닝</label>
-                                            <label className="checkbox-label"><input type="checkbox" name="sub_module" value="개별 리포트 전송 및 상담" /> 개별 리포트 전송 및 상담</label>
-                                        </div>
-                                    </div>
-                                    <div className="proposal-block">
-                                        <div className="proposal-block-header" onClick={toggleSubModulesList}>
-                                            <span>▪ PART 2. 케어 (1:1 피지컬 케어)</span> <span>▼</span>
-                                        </div>
-                                        <div className="sub-modules" style={{ display: 'none', padding: '15px', borderTop: '1px solid #eaeaea', background: '#fafafa', flexDirection: 'column', gap: '10px' }}>
-                                            <label className="checkbox-label"><input type="checkbox" name="sub_module" value="1:1 맞춤형 피지컬 케어 파견" /> 1:1 맞춤형 피지컬 케어 파견</label>
-                                        </div>
-                                    </div>
-                                    <div className="proposal-block">
-                                        <div className="proposal-block-header" onClick={toggleSubModulesList}>
-                                            <span>▪ PART 3. 실습 (단체 운동 프로그램)</span> <span>▼</span>
-                                        </div>
-                                        <div className="sub-modules" style={{ display: 'none', padding: '15px', borderTop: '1px solid #eaeaea', background: '#fafafa', flexDirection: 'column', gap: '10px' }}>
-                                            <label className="checkbox-label"><input type="checkbox" name="sub_module" value="오피스 단체 스트레칭" /> 오피스 단체 스트레칭</label>
-                                            <label className="checkbox-label"><input type="checkbox" name="sub_module" value="기능성 운동 처방" /> 기능성 운동 처방</label>
-                                        </div>
-                                    </div>
-                                    <div className="proposal-block">
-                                        <div className="proposal-block-header" onClick={toggleSubModulesList}>
-                                            <span>▪ PART 4. 교육 (강의 프로그램)</span> <span>▼</span>
-                                        </div>
-                                        <div className="sub-modules" style={{ display: 'none', padding: '15px', borderTop: '1px solid #eaeaea', background: '#fafafa', flexDirection: 'column', gap: '10px' }}>
-                                            <label className="checkbox-label"><input type="checkbox" name="sub_module" value="주요 질환 예방 특강" /> 주요 질환 예방 특강 (거북목 등)</label>
-                                            <label className="checkbox-label"><input type="checkbox" name="sub_module" value="생활습관 개선 솔루션" /> 생활습관 개선 솔루션</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="submit" className="form-submit-btn">제안서 요청하기</button>
-                        </form>
-                    </div>
-                </div>
-            )}
-
+            {/* 모달 영역 */}
             {activeModal === 'modal-chat' && (
                 <div className="modal active">
                     <div className="modal-content chat-modal-content">
                         <div className="chat-header-bg">
-                            <div className="chat-top-bar">
-                                <button className="chat-close-btn" onClick={closeModal}>&times;</button>
-                            </div>
+                            <div className="chat-top-bar"><button className="chat-close-btn" onClick={closeModal}>&times;</button></div>
                             <div className="chat-profile-sec">
                                 <div className="chat-profile-img">FW</div>
-                                <div className="chat-profile-info">
-                                    <h3>FaWW</h3>
-                                    <p>⚡ 24시간 빠른 답변 대기중</p>
-                                </div>
+                                <div className="chat-profile-info"><h3>FaWW</h3><p>⚡ 24시간 빠른 답변 대기중</p></div>
                             </div>
                         </div>
                         <div className="chat-body-sec">
@@ -950,68 +985,32 @@ export default function V2MainPage() {
                 </div>
             )}
 
-            {/* 파트 세부 정보 모달들 */}
             {activeModal === 'modal1' && (
                 <div className="modal active">
-                    <div className="modal-content">
-                        <button className="modal-close" onClick={closeModal}>&times;</button>
-                        <div className="modal-header"><h2>PART 1. 진단 파트</h2><p>조직 파악을 위한 데이터 진단 파트</p></div>
-                        <div className="info-sub-block-grid">
-                            <div className="info-sub-block"><span className="info-sub-block-num">파트 1-1</span><div className="info-sub-block-title">3D AI 스캐닝</div><p className="info-sub-block-desc">근골격계 관절의 정렬 상태 및 신체 불균형을 즉각적으로 수치화하여 객관적인 데이터를 확보합니다.</p></div>
-                            <div className="info-sub-block"><span className="info-sub-block-num">파트 1-2</span><div className="info-sub-block-title">개별 리포트 전송 및 상담</div><p className="info-sub-block-desc">거북목, 골반 틀어짐 등 분석된 결과지를 모바일로 전송하고, 전문가의 1:1 약식 상담을 진행합니다.</p></div>
-                        </div>
-                    </div>
+                    <div className="modal-content"><button className="modal-close" onClick={closeModal}>&times;</button><div className="modal-header"><h2>PART 1. 진단 파트</h2><p>조직 파악을 위한 데이터 진단 파트</p></div><div className="info-sub-block-grid"><div className="info-sub-block"><span className="info-sub-block-num">파트 1-1</span><div className="info-sub-block-title">3D AI 스캐닝</div><p className="info-sub-block-desc">근골격계 관절의 정렬 상태 및 신체 불균형을 즉각적으로 수치화하여 객관적인 데이터를 확보합니다.</p></div><div className="info-sub-block"><span className="info-sub-block-num">파트 1-2</span><div className="info-sub-block-title">개별 리포트 전송 및 상담</div><p className="info-sub-block-desc">거북목, 골반 틀어짐 등 분석된 결과지를 모바일로 전송하고, 전문가의 1:1 약식 상담을 진행합니다.</p></div></div></div>
                 </div>
             )}
-
             {activeModal === 'modal2' && (
                 <div className="modal active">
-                    <div className="modal-content">
-                        <button className="modal-close" onClick={closeModal}>&times;</button>
-                        <div className="modal-header"><h2>PART 2. 메인 케어 파트</h2></div>
-                        <div className="info-sub-block signature-card">
-                            <span className="info-sub-block-num">시그니처 프로그램</span>
-                            <div className="info-sub-block-title">1:1 맞춤형 피지컬 케어</div>
-                            <p className="info-sub-block-desc">국내 최고 수준의 피지컬케어 전문가가 기업 현장에 직접 파견됩니다.</p>
-                        </div>
-                    </div>
+                    <div className="modal-content"><button className="modal-close" onClick={closeModal}>&times;</button><div className="modal-header"><h2>PART 2. 메인 케어 파트</h2></div><div className="info-sub-block signature-card"><span className="info-sub-block-num">시그니처 프로그램</span><div className="info-sub-block-title">1:1 맞춤형 피지컬 케어</div><p className="info-sub-block-desc">국내 최고 수준의 피지컬케어 전문가가 기업 현장에 직접 파견됩니다.</p></div></div>
                 </div>
             )}
-
             {activeModal === 'modal4' && (
                 <div className="modal active">
-                    <div className="modal-content">
-                        <button className="modal-close" onClick={closeModal}>&times;</button>
-                        <div className="modal-header"><h2>PART 3. 단체 운동 파트</h2></div>
-                        <div className="info-sub-block-grid">
-                            <div className="info-sub-block"><span className="info-sub-block-num">파트 3-1</span><div className="info-sub-block-title">오피스 단체 스트레칭</div></div>
-                            <div className="info-sub-block"><span className="info-sub-block-num">파트 3-2</span><div className="info-sub-block-title">기능성 운동 처방</div></div>
-                        </div>
-                    </div>
+                    <div className="modal-content"><button className="modal-close" onClick={closeModal}>&times;</button><div className="modal-header"><h2>PART 3. 단체 운동 파트</h2></div><div className="info-sub-block-grid"><div className="info-sub-block"><span className="info-sub-block-num">파트 3-1</span><div className="info-sub-block-title">오피스 단체 스트레칭</div></div><div className="info-sub-block"><span className="info-sub-block-num">파트 3-2</span><div className="info-sub-block-title">기능성 운동 처방</div></div></div></div>
                 </div>
             )}
-
             {activeModal === 'modal3' && (
                 <div className="modal active">
-                    <div className="modal-content">
-                        <button className="modal-close" onClick={closeModal}>&times;</button>
-                        <div className="modal-header"><h2>PART 4. 강의 파트</h2></div>
-                        <div className="info-sub-block-grid">
-                            <div className="info-sub-block"><span className="info-sub-block-num">파트 4-1</span><div className="info-sub-block-title">주요 질환 예방 특강</div></div>
-                            <div className="info-sub-block"><span className="info-sub-block-num">파트 4-2</span><div className="info-sub-block-title">생활습관 개선 솔루션</div></div>
-                        </div>
-                    </div>
+                    <div className="modal-content"><button className="modal-close" onClick={closeModal}>&times;</button><div className="modal-header"><h2>PART 4. 강의 파트</h2></div><div className="info-sub-block-grid"><div className="info-sub-block"><span className="info-sub-block-num">파트 4-1</span><div className="info-sub-block-title">주요 질환 예방 특강</div></div><div className="info-sub-block"><span className="info-sub-block-num">파트 4-2</span><div className="info-sub-block-title">생활습관 개선 솔루션</div></div></div></div>
                 </div>
             )}
-
+            
             {activeModal === 'modal-download' && (
                 <div className="modal active">
                     <div className="modal-content" style={{ maxWidth: '550px' }}>
                         <button className="modal-close" onClick={closeModal}>&times;</button>
-                        <div className="modal-header">
-                            <h2>소개서 다운로드</h2>
-                            <p>필요한 분야의 소개서를 선택하여 다운로드하세요.</p>
-                        </div>
+                        <div className="modal-header"><h2>소개서 다운로드</h2><p>필요한 분야의 소개서를 선택하여 다운로드하세요.</p></div>
                         <div className="hero-buttons" style={{ flexDirection: 'column', gap: '15px', marginBottom: 0 }}>
                             <a href="/기업용_소개서.pdf" download className="btn-primary" style={{ width: '100%', textAlign: 'center', boxSizing: 'border-box' }} onClick={() => { showToast('📥 기업용 소개서가 다운로드됩니다.'); closeModal(); }}>🏢 기업용 소개서</a>
                             <a href="/학교용_소개서.pdf" download className="btn-primary" style={{ width: '100%', backgroundColor: '#004d40', textAlign: 'center', boxSizing: 'border-box' }} onClick={() => { showToast('📥 학교용 소개서가 다운로드됩니다.'); closeModal(); }}>🏫 학교용 소개서</a>
@@ -1021,44 +1020,100 @@ export default function V2MainPage() {
                 </div>
             )}
 
-            {/* 맞춤 견적 퀴즈 모달 (React 상태 기반 변환) */}
-            {activeModal === 'modal-quiz' && (
-                <div className="modal active quiz-modal-content">
-                    <div className="modal-content" style={{ maxWidth: '500px', textAlign: 'center', padding: '40px' }}>
+            {activeModal === 'modal-proposal' && (
+                <div className="modal active">
+                    <div className="modal-content modal-form-content">
                         <button className="modal-close" onClick={closeModal}>&times;</button>
-                        
+                        <div className="modal-header"><h2>기업/학교 맞춤형 제안서 요청</h2><p>조직 환경에 알맞은 솔루션 제안서를 보내드립니다.</p></div>
+                        <form onSubmit={submitProposalForm}>
+                            <div className="form-group"><label className="field-label">소속 <span>*</span></label><input type="text" name="company" className="form-control" required /></div>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                                <div className="form-group"><label className="field-label">담당자 <span>*</span></label><input type="text" name="manager" className="form-control" required /></div>
+                                <div className="form-group"><label className="field-label">연락처 <span>*</span></label><input type="tel" name="phone" className="form-control" required /></div>
+                            </div>
+                            <div className="form-group"><label className="field-label">이메일 <span>*</span></label><input type="email" name="email" className="form-control" required /></div>
+                            <div className="form-group">
+                                <label className="field-label">희망 도입 파트 및 세부 항목 선택 (대분류 클릭 후 세부 선택)</label>
+                                <div className="proposal-module-group" style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '10px' }}>
+                                    <div className="proposal-block">
+                                        <div className="proposal-block-header" onClick={toggleSubModulesList}><span>▪ PART 1. 진단 (스마트 AI 체형분석)</span> <span className="toggle-icon">▼</span></div>
+                                        <div className="sub-modules" style={{ display: 'none', padding: '15px', borderTop: '1px solid #eaeaea', background: '#fafafa', flexDirection: 'column', gap: '10px' }}>
+                                            <label className="checkbox-label"><input type="checkbox" name="sub_module" value="3D AI 스캐닝" /> 3D AI 스캐닝</label>
+                                            <label className="checkbox-label"><input type="checkbox" name="sub_module" value="개별 리포트 전송 및 상담" /> 개별 리포트 전송 및 상담</label>
+                                        </div>
+                                    </div>
+                                    <div className="proposal-block">
+                                        <div className="proposal-block-header" onClick={toggleSubModulesList}><span>▪ PART 2. 케어 (1:1 피지컬 케어)</span> <span className="toggle-icon">▼</span></div>
+                                        <div className="sub-modules" style={{ display: 'none', padding: '15px', borderTop: '1px solid #eaeaea', background: '#fafafa', flexDirection: 'column', gap: '10px' }}>
+                                            <label className="checkbox-label"><input type="checkbox" name="sub_module" value="1:1 맞춤형 피지컬 케어 파견" /> 1:1 맞춤형 피지컬 케어 파견</label>
+                                        </div>
+                                    </div>
+                                    <div className="proposal-block">
+                                        <div className="proposal-block-header" onClick={toggleSubModulesList}><span>▪ PART 3. 실습 (단체 운동 프로그램)</span> <span className="toggle-icon">▼</span></div>
+                                        <div className="sub-modules" style={{ display: 'none', padding: '15px', borderTop: '1px solid #eaeaea', background: '#fafafa', flexDirection: 'column', gap: '10px' }}>
+                                            <label className="checkbox-label"><input type="checkbox" name="sub_module" value="오피스 단체 스트레칭" /> 오피스 단체 스트레칭</label>
+                                            <label className="checkbox-label"><input type="checkbox" name="sub_module" value="기능성 운동 처방" /> 기능성 운동 처방</label>
+                                        </div>
+                                    </div>
+                                    <div className="proposal-block">
+                                        <div className="proposal-block-header" onClick={toggleSubModulesList}><span>▪ PART 4. 교육 (강의 프로그램)</span> <span className="toggle-icon">▼</span></div>
+                                        <div className="sub-modules" style={{ display: 'none', padding: '15px', borderTop: '1px solid #eaeaea', background: '#fafafa', flexDirection: 'column', gap: '10px' }}>
+                                            <label className="checkbox-label"><input type="checkbox" name="sub_module" value="주요 질환 예방 특강" /> 주요 질환 예방 특강 (거북목 등)</label>
+                                            <label className="checkbox-label"><input type="checkbox" name="sub_module" value="생활습관 개선 솔루션" /> 생활습관 개선 솔루션</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" className="form-submit-btn">선택한 파트로 제안서 요청하기</button>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {activeModal === 'modal-quiz' && (
+                <div className="modal active">
+                    <div className="modal-content quiz-modal-content" style={{ maxWidth: '500px', textAlign: 'center' }}>
+                        <button className="modal-close" onClick={closeModal}>&times;</button>
                         {quizStep === 1 && (
                             <div className="quiz-step active">
                                 <span className="gateway-badge" style={{ background: '#e8f5e9', color: '#2b8a3e', padding: '4px 10px', borderRadius: '12px', fontWeight: 'bold', fontSize: '12px' }}>STEP 1</span>
                                 <h2 style={{ fontSize: '24px', fontWeight: 800, margin: '15px 0' }}>어떤 조직의 담당자이신가요?</h2>
                                 <div className="quiz-options" style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '30px' }}>
-                                    <button className="quiz-btn" style={{ background: '#f8f9fa', border: '2px solid #eaeaea', padding: '20px', borderRadius: '12px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => { setQuizType('b2b'); setQuizStep(2); }}>🏢 일반 기업 (HR/복지 담당)</button>
-                                    <button className="quiz-btn" style={{ background: '#f8f9fa', border: '2px solid #eaeaea', padding: '20px', borderRadius: '12px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => { setQuizType('school'); setQuizStep(2); }}>🏫 학교 (보건/체육교사)</button>
+                                    <button className="quiz-btn" style={{ background: '#f8f9fa', border: '2px solid #eaeaea', padding: '20px', borderRadius: '12px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => nextQuizStep(2, 'b2b')}>🏢 일반 기업 (HR/복지 담당)</button>
+                                    <button className="quiz-btn" style={{ background: '#f8f9fa', border: '2px solid #eaeaea', padding: '20px', borderRadius: '12px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => nextQuizStep(2, 'school')}>🏫 학교 (보건/체육교사)</button>
                                 </div>
                             </div>
                         )}
-
                         {quizStep === 2 && (
                             <div className="quiz-step active">
                                 <span className="gateway-badge" style={{ background: '#e8f5e9', color: '#2b8a3e', padding: '4px 10px', borderRadius: '12px', fontWeight: 'bold', fontSize: '12px' }}>STEP 2</span>
                                 <h2 style={{ fontSize: '24px', fontWeight: 800, margin: '15px 0' }}>가장 큰 고민(목적)은 무엇인가요?</h2>
                                 <div className="quiz-options" style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '30px' }}>
-                                    <button className="quiz-btn" style={{ background: '#f8f9fa', border: '2px solid #eaeaea', padding: '20px', borderRadius: '12px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setQuizStep(3)}>임직원/학생 건강 진단</button>
-                                    <button className="quiz-btn" style={{ background: '#f8f9fa', border: '2px solid #eaeaea', padding: '20px', borderRadius: '12px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setQuizStep(3)}>실질적인 통증 케어</button>
+                                    {quizTarget === 'b2b' ? (
+                                        <>
+                                            <button className="quiz-btn" onClick={() => showQuizResult('eap1')}>🤕 임직원 거북목 등 통증/산재 예방</button>
+                                            <button className="quiz-btn" onClick={() => showQuizResult('eap2')}>🤯 직무 스트레스 및 번아웃 케어</button>
+                                            <button className="quiz-btn" onClick={() => showQuizResult('eap3')}>🧘‍♀️ 사내 웰니스(운동) 문화 조성</button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <button className="quiz-btn" onClick={() => showQuizResult('sch1')}>📊 전교생 스마트 체형 검진 (데이터화)</button>
+                                            <button className="quiz-btn" onClick={() => showQuizResult('sch2')}>🏃 성장기 체형 교정 그룹 운동</button>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         )}
-
                         {quizStep === 3 && (
                             <div className="quiz-step active">
                                 <div style={{ background: '#e8f5e9', padding: '30px', borderRadius: '16px', marginBottom: '20px' }}>
                                     <div style={{ fontSize: '40px', marginBottom: '10px' }}>🎯</div>
                                     <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#2b8a3e' }}>담당자님을 위한 최적의 조합!</h3>
                                 </div>
-                                <h2 style={{ fontSize: '24px', fontWeight: 800, marginBottom: '15px' }}>스마트 AI 스캐닝 + 1:1 케어</h2>
-                                <p style={{ color: '#666', marginBottom: '30px', lineHeight: '1.6' }}>근골격계 질환의 근본적인 원인을 찾고, 전문가가 직접 현장에서 케어하여 즉각적인 업무 효율을 높입니다.</p>
+                                <h2 style={{ fontSize: '24px', fontWeight: 800, marginBottom: '15px' }}>{quizResultTitle}</h2>
+                                <p style={{ color: '#666', marginBottom: '30px', lineHeight: '1.6' }}>{quizResultDesc}</p>
                                 <button className="form-submit-btn" style={{ width: '100%', padding: '18px', backgroundColor: '#111', color: 'white', border: 'none', borderRadius: '8px', fontSize: '18px', fontWeight: 800, cursor: 'pointer' }} onClick={() => { closeModal(); openModal('modal-proposal'); }}>이 구성으로 제안서 요청하기</button>
-                                <button className="btn-outline" style={{ width: '100%', marginTop: '10px', padding: '14px 28px', borderRadius: '8px', fontWeight: 'bold', background: '#fff', color: '#2b8a3e', border: '1px solid #2b8a3e', cursor: 'pointer' }} onClick={() => setQuizStep(1)}>다시 하기</button>
+                                <button className="btn-outline" style={{ width: '100%', marginTop: '10px', padding: '14px 28px', borderRadius: '8px', fontWeight: 'bold', background: '#fff', color: '#2b8a3e', border: '1px solid #2b8a3e', cursor: 'pointer' }} onClick={resetQuiz}>다시 하기</button>
                             </div>
                         )}
                     </div>
