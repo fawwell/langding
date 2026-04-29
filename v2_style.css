@@ -1,5 +1,5 @@
 /* =========================================================
-   1. 메인 홈페이지 스타일 (style.css + index.html 내부 스타일)
+   1. 메인 홈페이지 스타일
    ========================================================= */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Noto Sans KR', sans-serif; color: #333; line-height: 1.6; background-color: #f8f9fa; overflow-x: hidden; }
@@ -59,25 +59,10 @@ header { display: flex; justify-content: space-between; align-items: center; pad
 .hero-stats .stat-item h3 { font-size: 38px; color: #2b8a3e; margin-bottom: 5px; font-weight: 900; }
 .hero-stats .stat-item p { font-size: 15px; color: #666; font-weight: 600; }
 
-.teaser-section { padding: 80px 0 60px; background-color: #f8f9fa; }
-.teaser-text { opacity: 0; transform: translateY(15px); transition: all 0.6s ease-out; margin-bottom: 15px; word-break: keep-all; }
-.teaser-text.step-1 { font-size: 22px; color: #666; font-weight: bold; }
-.teaser-text.step-2 { font-size: 46px; color: #111; font-weight: 900; letter-spacing: -1px; margin-bottom: 30px; }
-.teaser-text.step-3 { font-size: 36px; color: #333; font-weight: 800; letter-spacing: -1px; margin-bottom: 30px; }
-.teaser-text.step-4 { font-size: 22px; color: #2b8a3e; font-weight: bold; background: #e8f5e9; display: inline-block; padding: 15px 35px; border-radius: 50px; margin-bottom: 60px; border: 1px solid #c8e6c9;}
-.teaser-text.step-5 { font-size: 16px; color: #888; font-weight: 600; letter-spacing: 1px;}
-.reveal.active .teaser-text.step-1 { opacity: 1; transform: translateY(0); transition-delay: 0.1s; }
-.reveal.active .teaser-text.step-2 { opacity: 1; transform: translateY(0); transition-delay: 0.4s; }
-.reveal.active .teaser-text.step-3 { opacity: 1; transform: translateY(0); transition-delay: 0.7s; }
-.reveal.active .teaser-text.step-4 { opacity: 1; transform: translateY(0); transition-delay: 1.0s; }
-.reveal.active .teaser-text.step-5 { opacity: 1; transform: translateY(0); transition-delay: 1.3s; animation: bounce 2s infinite 3s;}
-
-@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-
 /* 그리드 시스템 통합 */
 .agenda-grid, .gateway-grid, .card-grid, .expert-grid, .school-process-grid, .school-feature-grid, .product-grid, .service-grid, .grid-2x2 { max-width: 1100px; margin: 0 auto 40px auto; gap: 25px; padding: 15px; display: grid; }
 .agenda-grid, .gateway-grid, .card-grid { grid-template-columns: repeat(3, 1fr); }
-.expert-grid, .service-grid { grid-template-columns: repeat(2, 1fr); }
+.expert-grid, .service-grid, .grid-2x2 { grid-template-columns: repeat(2, 1fr); }
 .school-process-grid, .school-feature-grid, .media-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
 .faq-list.grid-2x2 { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 25px !important; align-items: start !important; }
 
@@ -104,12 +89,6 @@ header { display: flex; justify-content: space-between; align-items: center; pad
 
 .proposal-block { border: 1px solid #eaeaea; border-radius: 8px; margin-bottom: 12px; overflow: hidden; }
 .proposal-block-header { padding: 16px 20px; background: #f8f9fa; cursor: pointer; display: flex; justify-content: space-between; font-weight: bold; }
-
-/* 리뷰 필터 및 퀴즈 */
-.review-filter-btn { background: #fff; border: 1px solid #ddd; padding: 10px 20px; border-radius: 30px; font-size: 15px; font-weight: bold; color: #666; cursor: pointer; margin: 0 5px; transition: 0.2s; }
-.review-filter-btn.active, .review-filter-btn:hover { background: #111; color: #fff; border-color: #111; }
-.quiz-btn { background: #f8f9fa; border: 2px solid #eaeaea; padding: 20px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; margin-bottom: 10px; }
-.quiz-btn:hover { background: #e8f5e9; border-color: #2b8a3e; color: #2b8a3e; }
 
 /* 챗봇 FAB */
 .fab-container { position: fixed; bottom: 30px; right: 30px; z-index: 9999; }
