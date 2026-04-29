@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, MouseEvent, FormEvent } from 'react';
-import '../v2_style.css';
+import './v2_style.css';
 
 export default function Home() {
     const [activePage, setActivePage] = useState('page-home');
