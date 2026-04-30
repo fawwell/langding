@@ -144,6 +144,44 @@ export default function Home() {
         });
     }, [activePage, activePhysicalSub]);
 
+    // 돋보기 X-ray 효과
+    useEffect(() => {
+        if (activePage !== 'page-home' || window.innerWidth <= 768) return;
+
+        const container = document.querySelector('.magnify-container') as HTMLElement;
+        if (!container) return;
+
+        const glass = container.querySelector('.magnify-glass') as HTMLElement;
+
+        const handleMouseMove = (e: globalThis.MouseEvent) => {
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            requestAnimationFrame(() => {
+                container.style.setProperty('--x', `${x}px`);
+                container.style.setProperty('--y', `${y}px`);
+                if(glass) {
+                    glass.style.left = `${x}px`;
+                    glass.style.top = `${y}px`;
+                }
+            });
+        };
+
+        const handleMouseEnter = () => container.classList.add('active');
+        const handleMouseLeave = () => container.classList.remove('active');
+
+        container.addEventListener('mousemove', handleMouseMove);
+        container.addEventListener('mouseenter', handleMouseEnter);
+        container.addEventListener('mouseleave', handleMouseLeave);
+
+        return () => {
+            container.removeEventListener('mousemove', handleMouseMove);
+            container.removeEventListener('mouseenter', handleMouseEnter);
+            container.removeEventListener('mouseleave', handleMouseLeave);
+        };
+    }, [activePage]);
+
     // Swiper 마운트
     useEffect(() => {
         const initSwipers = () => {
@@ -338,6 +376,21 @@ export default function Home() {
                     </div>
                 </section>
                
+                {/* 💡 신규 추가: 돋보기 X-ray 인터랙션 섹션 💡 */}
+                <section className="magnify-section reveal">
+                    <div className="container text-center">
+                        <span className="section-kicker">AI-POWERED ANALYSIS</span>
+                        <h2 className="section-title">커서를 올려 AI 분석을 체험해보세요</h2>
+                        <p className="section-desc">FaWW의 스마트 AI 기술은 신체 불균형을 정밀하게 측정하여<br/>눈에 보이지 않는 통증의 원인을 찾아냅니다.</p>
+                        <div className="magnify-container">
+                            <div className="magnify-skeleton" style={{ backgroundImage: "url('/images/skeleton.png')" }}></div>
+                            <div className="magnify-human" style={{ backgroundImage: "url('/images/human.png')" }}></div>
+                            <div className="magnify-glass"></div>
+                        </div>
+                        <p style={{ marginTop: '20px', fontSize: '14px', color: '#888' }}>* 위 이미지는 이해를 돕기 위한 연출이며, 실제 분석은 전문 장비로 진행됩니다.</p>
+                    </div>
+                </section>
+
                 <section className="jelly-chart-section reveal" style={{ padding: '80px 0', backgroundColor: '#f8f9fa', borderTop: '1px solid #eee' }}>
                     <div className="container text-center" style={{ overflow: 'visible' }}>
                         <h2 className="section-title">FaWW 피지컬케어 종합 만족도</h2>
