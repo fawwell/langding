@@ -3,8 +3,9 @@
 import { useState } from 'react'
 import { useModal } from './ModalContext'
 
-const blocks = [
+const BLOCKS = [
   {
+    key: 'PART 1',
     label: 'BLOCK 1. 진단 모듈',
     modules: [
       { value: '1-1', text: '1-1. 3D AI 스캐닝' },
@@ -13,10 +14,12 @@ const blocks = [
     ],
   },
   {
+    key: 'PART 2',
     label: 'BLOCK 2. 메인 케어 모듈',
     modules: [{ value: '2-1', text: '시그니처 1:1 피지컬 케어', wide: true }],
   },
   {
+    key: 'PART 3',
     label: 'BLOCK 3. 단체 운동 모듈',
     modules: [
       { value: '3-1', text: '3-1. 그룹/단체 스트레칭' },
@@ -24,6 +27,7 @@ const blocks = [
     ],
   },
   {
+    key: 'PART 4',
     label: 'BLOCK 4. 강의 모듈',
     modules: [
       { value: '4-1', text: '4-1. 질환 예방 특강' },
@@ -33,22 +37,92 @@ const blocks = [
   },
 ]
 
+interface FormData {
+  company: string
+  manager: string
+  phone: string
+  email: string
+  scale: string
+  inquiry: string
+  parts: Record<string, { selected: boolean; sub_modules: string[] }>
+}
+
 export default function ProposalModal() {
   const { activeModal, closeModal } = useModal()
   const [openBlocks, setOpenBlocks] = useState<Record<number, boolean>>({})
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const [formData, setFormData] = useState<FormData>({
+    company: '',
+    manager: '',
+    phone: '',
+    email: '',
+    scale: '',
+    inquiry: '',
+    parts: Object.fromEntries(BLOCKS.map((b) => [b.key, { selected: false, sub_modules: [] }])),
+  })
 
   const toggleBlock = (i: number) => {
     setOpenBlocks((prev) => ({ ...prev, [i]: !prev[i] }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleModuleChange = (partKey: string, moduleValue: string, checked: boolean) => {
+    setFormData((prev) => {
+      const part = prev.parts[partKey]
+      const newSubModules = checked
+        ? [...part.sub_modules, moduleValue]
+        : part.sub_modules.filter((m) => m !== moduleValue)
+      return {
+        ...prev,
+        parts: {
+          ...prev.parts,
+          [partKey]: { selected: newSubModules.length > 0, sub_modules: newSubModules },
+        },
+      }
+    })
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSubmitted(true)
-    setTimeout(() => {
-      setSubmitted(false)
-      closeModal()
-    }, 2000)
+    setLoading(true)
+    setError(null)
+
+    try {
+      const response = await fetch('/api/v1/proposals', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+
+      if (!response.ok) {
+        throw new Error('제안서 요청에 실패했습니다.')
+      }
+
+      setSubmitted(true)
+      setTimeout(() => {
+        setSubmitted(false)
+        setFormData({
+          company: '',
+          manager: '',
+          phone: '',
+          email: '',
+          scale: '',
+          inquiry: '',
+          parts: Object.fromEntries(BLOCKS.map((b) => [b.key, { selected: false, sub_modules: [] }])),
+        })
+        closeModal()
+      }, 2000)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleChange = (field: keyof FormData, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
   if (activeModal !== 'proposal') return null
@@ -68,27 +142,62 @@ export default function ProposalModal() {
           </div>
         ) : (
           <form onSubmit={handleSubmit}>
+            {error && (
+              <div style={{ color: '#dc2626', padding: '12px', marginBottom: '16px', background: '#fef2f2', borderRadius: '8px', fontSize: 14 }}>
+                {error}
+              </div>
+            )}
             <div className="form-group">
               <label className="field-label">소속 (기업명 또는 학교명) <span>*</span></label>
-              <input type="text" className="form-control" placeholder="예: (주)파우 또는 OO고등학교" required />
+              <input
+                type="text"
+                className="form-control"
+                placeholder="예: (주)파우 또는 OO고등학교"
+                required
+                value={formData.company}
+                onChange={(e) => handleChange('company', e.target.value)}
+              />
             </div>
             <div className="form-grid-2">
               <div className="form-group">
                 <label className="field-label">담당자 / 직급 <span>*</span></label>
-                <input type="text" className="form-control" required />
+                <input
+                  type="text"
+                  className="form-control"
+                  required
+                  value={formData.manager}
+                  onChange={(e) => handleChange('manager', e.target.value)}
+                />
               </div>
               <div className="form-group">
                 <label className="field-label">연락처 <span>*</span></label>
-                <input type="tel" className="form-control" required />
+                <input
+                  type="tel"
+                  className="form-control"
+                  required
+                  value={formData.phone}
+                  onChange={(e) => handleChange('phone', e.target.value)}
+                />
               </div>
             </div>
             <div className="form-group">
               <label className="field-label">업무용 이메일 <span>*</span></label>
-              <input type="email" className="form-control" required />
+              <input
+                type="email"
+                className="form-control"
+                required
+                value={formData.email}
+                onChange={(e) => handleChange('email', e.target.value)}
+              />
             </div>
             <div className="form-group">
               <label className="field-label">임직원(또는 학생) 규모 <span>*</span></label>
-              <select className="form-control" required>
+              <select
+                className="form-control"
+                required
+                value={formData.scale}
+                onChange={(e) => handleChange('scale', e.target.value)}
+              >
                 <option value="">선택해주세요</option>
                 <option>50인 미만</option>
                 <option>50인 ~ 100인</option>
@@ -98,7 +207,7 @@ export default function ProposalModal() {
             </div>
             <div className="form-group">
               <label className="field-label">희망 서비스 모듈 선택 (다중 선택 가능)</label>
-              {blocks.map((block, i) => (
+              {BLOCKS.map((block, i) => (
                 <div key={i} className="proposal-block">
                   <div
                     className={`proposal-block-header ${openBlocks[i] ? 'active' : ''}`}
@@ -116,7 +225,13 @@ export default function ProposalModal() {
                             className="module-checkbox"
                             style={mod.wide ? { gridColumn: 'span 2' } : {}}
                           >
-                            <input type="checkbox" name="module" value={mod.value} />
+                            <input
+                              type="checkbox"
+                              name="module"
+                              value={mod.value}
+                              checked={formData.parts[block.key]?.sub_modules.includes(mod.value) ?? false}
+                              onChange={(e) => handleModuleChange(block.key, mod.value, e.target.checked)}
+                            />
                             <div>
                               <span className="chk-badge">{block.label.split('.')[0]}</span>
                               <br />
@@ -132,9 +247,16 @@ export default function ProposalModal() {
             </div>
             <div className="form-group">
               <label className="field-label">주요 문의사항</label>
-              <textarea className="form-control" placeholder="도입 목적이나 불편사항을 남겨주시면 더욱 정확한 제안이 가능합니다." />
+              <textarea
+                className="form-control"
+                placeholder="도입 목적이나 불편사항을 남겨주시면 더욱 정확한 제안이 가능합니다."
+                value={formData.inquiry}
+                onChange={(e) => handleChange('inquiry', e.target.value)}
+              />
             </div>
-            <button type="submit" className="form-submit-btn">선택한 모듈로 제안서 요청하기</button>
+            <button type="submit" className="form-submit-btn" disabled={loading}>
+              {loading ? '제출 중...' : '선택한 모듈로 제안서 요청하기'}
+            </button>
           </form>
         )}
       </div>

@@ -2,13 +2,29 @@
 
 import React, { useState, useEffect, MouseEvent, FormEvent } from 'react';
 import './v2_style.css';
+import { supabase } from '@/lib/supabase';
 
 export default function Home() {
+    const [mediaReports, setMediaReports] = useState<any[]>([]);
+
+    useEffect(() => {
+        const fetchMedia = async () => {
+            try {
+                const res = await fetch('http://localhost:8000/api/v1/media/');
+                const json = await res.json();
+                if (json.success) setMediaReports(json.data);
+            } catch (e) {
+                console.error("Failed to fetch media", e);
+            }
+        };
+        fetchMedia();
+    }, []);
+
     const [activePage, setActivePage] = useState('page-home');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeModal, setActiveModal] = useState<string | null>(null);
     const [activePhysicalSub, setActivePhysicalSub] = useState<string | null>(null);
-    
+
     // 퀴즈 관련 State
     const [quizStep, setQuizStep] = useState(1);
     const [quizTarget, setQuizTarget] = useState('');
@@ -17,6 +33,31 @@ export default function Home() {
 
     // 리뷰 필터 State
     const [reviewFilter, setReviewFilter] = useState('all');
+
+    // 폼 입력 검증 및 연동 State
+    const [inquiryText, setInquiryText] = useState('');
+    const [phoneValue, setPhoneValue] = useState('');
+    const [emailError, setEmailError] = useState('');
+
+    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let val = e.target.value.replace(/[^0-9]/g, '');
+        if (val.length > 3 && val.length <= 7) {
+            val = val.replace(/(\d{3})(\d+)/, '$1-$2');
+        } else if (val.length > 7) {
+            val = val.replace(/(\d{3})(\d{4})(\d+)/, '$1-$2-$3');
+        }
+        setPhoneValue(val.substring(0, 13));
+    };
+
+    const validateEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const email = e.target.value;
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (email && !re.test(email)) {
+            setEmailError('올바른 이메일 형식을 입력해 주세요.');
+        } else {
+            setEmailError('');
+        }
+    };
 
     // 리뷰 필터 시 Swiper 인스턴스 강제 업데이트 (원본 1:1 완벽 이식)
     useEffect(() => {
@@ -115,7 +156,7 @@ export default function Home() {
             const slideNext = () => {
                 if (window.innerWidth > 768) return;
                 const firstChild = grid.children[0] as HTMLElement;
-                if(!firstChild) return;
+                if (!firstChild) return;
                 const cardWidth = firstChild.offsetWidth + 15;
                 if (grid.scrollLeft + grid.clientWidth >= grid.scrollWidth - 10) {
                     grid.scrollTo({ left: 0, behavior: 'smooth' });
@@ -126,7 +167,7 @@ export default function Home() {
             const slidePrev = () => {
                 if (window.innerWidth > 768) return;
                 const firstChild = grid.children[0] as HTMLElement;
-                if(!firstChild) return;
+                if (!firstChild) return;
                 const cardWidth = firstChild.offsetWidth + 15;
                 if (grid.scrollLeft <= 0) {
                     grid.scrollTo({ left: grid.scrollWidth, behavior: 'smooth' });
@@ -158,18 +199,27 @@ export default function Home() {
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
 
+            const tiltX = ((y / rect.height) - 0.5) * -12;
+            const tiltY = ((x / rect.width) - 0.5) * 12;
+
             requestAnimationFrame(() => {
                 container.style.setProperty('--x', `${x}px`);
                 container.style.setProperty('--y', `${y}px`);
-                if(glass) {
+                container.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+                if (glass) {
                     glass.style.left = `${x}px`;
                     glass.style.top = `${y}px`;
+                    glass.style.display = 'block';
                 }
             });
         };
 
         const handleMouseEnter = () => container.classList.add('active');
-        const handleMouseLeave = () => container.classList.remove('active');
+        const handleMouseLeave = () => {
+            container.classList.remove('active');
+            container.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+            if (glass) glass.style.display = 'none';
+        };
 
         container.addEventListener('mousemove', handleMouseMove);
         container.addEventListener('mouseenter', handleMouseEnter);
@@ -232,7 +282,7 @@ export default function Home() {
         setActiveModal(modalId);
         document.body.style.overflow = 'hidden';
     };
-    
+
     const closeModal = () => {
         setActiveModal(null);
         document.body.style.overflow = 'auto';
@@ -270,23 +320,63 @@ export default function Home() {
         }
     };
 
-    const submitProposalForm = (e: FormEvent<HTMLFormElement>) => {
+    const submitProposalForm = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const form = e.currentTarget;
+
+        const parts: Record<string, { selected: boolean; sub_modules: string[] }> = {
+            part1: { selected: false, sub_modules: [] },
+            part2: { selected: false, sub_modules: [] },
+            part3: { selected: false, sub_modules: [] },
+            part4: { selected: false, sub_modules: [] },
+        };
+
+        const part1Checked = form.querySelectorAll('input[name="sub_module"]:checked');
+        if (part1Checked.length > 0) {
+            parts.part1.selected = true;
+            parts.part1.sub_modules = Array.from(part1Checked).map(cb => (cb as HTMLInputElement).value);
+        }
+
+        const allChecked = form.querySelectorAll('input[name="sub_module"]:checked');
+        if (allChecked.length === 0) {
+            showToast('⚠️ 희망 도입 파트(세부 항목)를 최소 1개 이상 체크해 주세요.');
+            return;
+        }
+        
+        if (emailError) {
+            showToast('⚠️ 올바른 이메일 주소를 입력해 주세요.');
+            return;
+        }
+
         const data = {
             company: (form.elements.namedItem('company') as HTMLInputElement).value,
             manager: (form.elements.namedItem('manager') as HTMLInputElement).value,
             phone: (form.elements.namedItem('phone') as HTMLInputElement).value,
             email: (form.elements.namedItem('email') as HTMLInputElement).value,
-            modules: Array.from(form.querySelectorAll('input[name="sub_module"]:checked')).map((cb: any) => cb.value),
-            date: new Date().toLocaleString()
+            scale: (form.elements.namedItem('scale') as HTMLSelectElement).value,
+            inquiry: (form.elements.namedItem('inquiry') as HTMLTextAreaElement)?.value || '',
+            parts: parts
         };
-        let requests = JSON.parse(localStorage.getItem('faww_requests') || '[]');
-        requests.unshift(data);
-        localStorage.setItem('faww_requests', JSON.stringify(requests));
-        showToast('✅ 제안서 요청이 성공적으로 접수되었습니다.<br><span style="font-size:13px; color:#aaa; font-weight:normal; margin-top:5px; display:inline-block;">(admin.html 파일에서 접수 내역을 확인해 보세요!)</span>');
-        closeModal();
-        form.reset();
+
+        try {
+            const res = await fetch('http://localhost:8000/api/v1/proposals/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (!res.ok) {
+                const err = await res.json();
+                showToast('❌ 저장 중 오류가 발생했습니다.<br>' + (err.detail || '알 수 없는 오류'));
+                return;
+            }
+
+            showToast('✅ 제안서 요청이 성공적으로 접수되었습니다.<br><span style="font-size:13px; color:#aaa; font-weight:normal; margin-top:5px; display:inline-block;">(admin.html 파일에서 접수 내역을 확인해 보세요!)</span>');
+            closeModal();
+            form.reset();
+        } catch (err) {
+            showToast('❌ 저장 중 오류가 발생했습니다.<br>네트워크 오류');
+        }
     };
 
     const nextQuizStep = (step: number, target?: string) => {
@@ -295,11 +385,16 @@ export default function Home() {
     };
 
     const showQuizResult = (type: string) => {
-        if (type === 'eap1') { setQuizResultTitle("스마트 AI 스캐닝 + 1:1 수기 케어"); setQuizResultDesc("근골격계 질환의 원인을 정확히 찾고, 원조 전문가가 현장에서 직접 케어하여 즉각적인 업무 효율을 높입니다."); }
-        else if (type === 'eap2') { setQuizResultTitle("1:1 프리미엄 릴렉싱 케어"); setQuizResultDesc("신체의 굳은 긴장을 이완시켜 교감신경을 안정화하고 정신적 번아웃을 예방하는 최적의 솔루션입니다."); }
-        else if (type === 'eap3') { setQuizResultTitle("오피스 단체 스트레칭 + 특강"); setQuizResultDesc("사무실 의자를 활용한 실습과 거북목 교정 특강을 통해 다함께 참여하는 건강 문화를 만듭니다."); }
-        else if (type === 'sch1') { setQuizResultTitle("학교 전용 3D AI 체형 검진 시스템"); setQuizResultDesc("모아레 및 척추 분석 기능을 통해 학생들의 성장 밸런스를 측정하고 학부모용 상세 리포트를 제공합니다."); }
-        else if (type === 'sch2') { setQuizResultTitle("학생 기능성 그룹 트레이닝"); setQuizResultDesc("체형 분석을 기반으로 성장기 학생들에게 꼭 필요한 맞춤형 교정 운동과 스트레칭을 지도합니다."); }
+        let title = ""; let desc = "";
+        if (type === 'eap1') { title = "스마트 AI 스캐닝 + 1:1 수기 케어"; desc = "근골격계 질환의 원인을 정확히 찾고, 원조 전문가가 현장에서 직접 케어하여 즉각적인 업무 효율을 높입니다."; }
+        else if (type === 'eap2') { title = "1:1 프리미엄 릴렉싱 케어"; desc = "신체의 굳은 긴장을 이완시켜 교감신경을 안정화하고 정신적 번아웃을 예방하는 최적의 솔루션입니다."; }
+        else if (type === 'eap3') { title = "오피스 단체 스트레칭 + 특강"; desc = "사무실 의자를 활용한 실습과 거북목 교정 특강을 통해 다함께 참여하는 건강 문화를 만듭니다."; }
+        else if (type === 'sch1') { title = "학교 전용 3D AI 체형 검진 시스템"; desc = "모아레 및 척추 분석 기능을 통해 학생들의 성장 밸런스를 측정하고 학부모용 상세 리포트를 제공합니다."; }
+        else if (type === 'sch2') { title = "학생 기능성 그룹 트레이닝"; desc = "체형 분석을 기반으로 성장기 학생들에게 꼭 필요한 맞춤형 교정 운동과 스트레칭을 지도합니다."; }
+        
+        setQuizResultTitle(title);
+        setQuizResultDesc(desc);
+        setInquiryText(`[맞춤 솔루션 퀴즈 매칭 결과]\n관심 프로그램: ${title}\n기대 효과: ${desc}\n\n`);
         setQuizStep(3);
     };
 
@@ -344,7 +439,7 @@ export default function Home() {
                         <source src="background3.mp4" type="video/mp4" />
                     </video>
                     <div className="hero-overlay"></div>
-                    
+
                     <div className="container" style={{ position: 'relative', zIndex: 2 }}>
                         <div className="hero-subtitle hero-el hero-el-1">FaWW : Family Wholesome Wellness</div>
                         <h1 className="hero-el hero-el-2"><span>산재 예방</span>은 근로자의 <span>건강</span>으로부터 나옵니다</h1>
@@ -352,8 +447,9 @@ export default function Home() {
                             <strong>스마트 AI를 활용한 맞춤형 케어프로그램</strong>
                             근골격계 질환, 1:1 케어 프로그램을 통한 산재 예방 시스템을<br />업계 최초로 도입한 피지컬케어 전문가가 함께합니다
                         </p>
-                        <div className="hero-buttons hero-el hero-el-4">
+                        <div className="hero-buttons hero-el hero-el-4" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                             <button className="btn-primary" onClick={() => openModal('modal-proposal')}>맞춤 솔루션 문의하기</button>
+                            <button className="btn-outline" style={{ background: 'rgba(255,255,255,0.1)', color: '#fff', border: '1px solid rgba(255,255,255,0.5)', padding: '16px 36px', borderRadius: '30px', fontWeight: 'bold' }} onClick={() => openModal('modal-quiz')}>내게 맞는 솔루션 찾기 (퀴즈)</button>
                         </div>
                     </div>
                     <div className="hero-stats-wrapper">
@@ -375,13 +471,13 @@ export default function Home() {
                         <div className="teaser-text step-5">지금부터 파우(FaWW)를 소개합니다. ▼</div>
                     </div>
                 </section>
-               
+
                 {/* 💡 신규 추가: 돋보기 X-ray 인터랙션 섹션 💡 */}
                 <section className="magnify-section reveal">
                     <div className="container text-center">
                         <span className="section-kicker">AI-POWERED ANALYSIS</span>
                         <h2 className="section-title">커서를 올려 AI 분석을 체험해보세요</h2>
-                        <p className="section-desc">FaWW의 스마트 AI 기술은 신체 불균형을 정밀하게 측정하여<br/>눈에 보이지 않는 통증의 원인을 찾아냅니다.</p>
+                        <p className="section-desc">FaWW의 스마트 AI 기술은 신체 불균형을 정밀하게 측정하여<br />눈에 보이지 않는 통증의 원인을 찾아냅니다.</p>
                         <div className="magnify-container">
                             <div className="magnify-skeleton" style={{ backgroundImage: "url('/images/skeleton.png')" }}></div>
                             <div className="magnify-human" style={{ backgroundImage: "url('/images/human.png')" }}></div>
@@ -395,22 +491,22 @@ export default function Home() {
                     <div className="container text-center" style={{ overflow: 'visible' }}>
                         <h2 className="section-title">FaWW 피지컬케어 종합 만족도</h2>
                         <p className="section-desc" style={{ marginBottom: '60px' }}>2만 건 이상의 데이터가 증명하는 트렌디한 결과</p>
-                        
+
                         <div className="jelly-pie-wrapper">
                             <div className="jelly-pie-scene">
                                 <div className="jelly-shadow"></div>
-                                <div className="jelly-layer bottom"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" className="j-bg"/><circle cx="16" cy="16" r="8" className="j-fg" pathLength="100"/></svg></div>
-                                <div className="jelly-layer mid1"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" className="j-bg"/><circle cx="16" cy="16" r="8" className="j-fg" pathLength="100"/></svg></div>
-                                <div className="jelly-layer mid2"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" className="j-bg"/><circle cx="16" cy="16" r="8" className="j-fg" pathLength="100"/></svg></div>
+                                <div className="jelly-layer bottom"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" className="j-bg" /><circle cx="16" cy="16" r="8" className="j-fg" pathLength="100" /></svg></div>
+                                <div className="jelly-layer mid1"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" className="j-bg" /><circle cx="16" cy="16" r="8" className="j-fg" pathLength="100" /></svg></div>
+                                <div className="jelly-layer mid2"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" className="j-bg" /><circle cx="16" cy="16" r="8" className="j-fg" pathLength="100" /></svg></div>
                                 <div className="jelly-layer top">
                                     <svg viewBox="0 0 32 32">
-                                        <circle cx="16" cy="16" r="8" className="j-bg" pathLength="100"/>
-                                        <circle cx="16" cy="16" r="8" className="j-fg count-up-circle" pathLength="100"/>
+                                        <circle cx="16" cy="16" r="8" className="j-bg" pathLength="100" />
+                                        <circle cx="16" cy="16" r="8" className="j-fg count-up-circle" pathLength="100" />
                                     </svg>
                                     <div className="jelly-gloss"></div>
                                 </div>
                             </div>
-                            
+
                             <div className="jelly-text-float">
                                 <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center' }}>
                                     <span className="jelly-percent count-up" data-target="99">0</span>
@@ -428,7 +524,7 @@ export default function Home() {
                         </div>
                     </div>
                 </section>
-                
+
                 <section className="agenda-section reveal">
                     <div className="container">
                         <div className="agenda-header">
@@ -537,7 +633,7 @@ export default function Home() {
                                 <div className="gateway-content">
                                     <div className="tags-wrap"><span className="hash-tag">#임직원_통증관리</span><span className="hash-tag">#학생_체형검진</span></div>
                                     <h2>스마트 AI 체형분석 솔루션</h2>
-                                    <p>기업의 업무 효율을 높이는 EAP 복지 <br />프로그램부터 학교 단체 검진까지, 데이터 <br />기반의 정확한 리포트를 제공합니다.</p>
+                                    <p>기업의 업무 효율을 높이는 <br /> EAP 복지 프로그램부터 학교 <br /> 단체 검진까지, 데이터 기반의 <br /> 정확한 리포트를 제공합니다.</p>
                                     <div className="gateway-btn">조직 맞춤 솔루션 보기</div>
                                 </div>
                             </div>
@@ -633,15 +729,28 @@ export default function Home() {
                         </div>
                     </div>
                 </section>
-                
+
                 <section className="media reveal" style={{ background: '#f8f9fa' }}>
                     <div className="container">
                         <h2 className="section-title">FaWW 미디어 보도</h2>
                         <div className="media-grid">
-                            <div className="media-item"><div className="media-thumb">기사 썸네일 이미지</div><div className="media-title">기업 복지 트렌드, 이제는 맞춤형 피지컬케어 시대</div></div>
-                            <div className="media-item"><div className="media-thumb">기사 썸네일 이미지</div><div className="media-title">FaWW, AI 체형분석 도입으로 업계 혁신 선도</div></div>
-                            <div className="media-item"><div className="media-thumb">기사 썸네일 이미지</div><div className="media-title">직장인 거북목 완화 프로젝트 성공 사례 조명</div></div>
-                            <div className="media-item"><div className="media-thumb">기사 썸네일 이미지</div><div className="media-title">건강한 조직문화를 위한 필수 선택, EAP 솔루션</div></div>
+                            {mediaReports.length > 0 ? (
+                                mediaReports.map((media) => (
+                                    <a key={media.id} href={media.url} target="_blank" rel="noopener noreferrer" className="media-item" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                                        <div className="media-thumb" style={{ backgroundImage: media.thumbnail_url ? `url(${media.thumbnail_url})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                                            {!media.thumbnail_url && "기사 썸네일 이미지"}
+                                        </div>
+                                        <div className="media-title">{media.title}</div>
+                                    </a>
+                                ))
+                            ) : (
+                                <>
+                                    <div className="media-item"><div className="media-thumb">기사 썸네일 이미지</div><div className="media-title">기업 복지 트렌드, 이제는 맞춤형 피지컬케어 시대</div></div>
+                                    <div className="media-item"><div className="media-thumb">기사 썸네일 이미지</div><div className="media-title">FaWW, AI 체형분석 도입으로 업계 혁신 선도</div></div>
+                                    <div className="media-item"><div className="media-thumb">기사 썸네일 이미지</div><div className="media-title">직장인 거북목 완화 프로젝트 성공 사례 조명</div></div>
+                                    <div className="media-item"><div className="media-thumb">기사 썸네일 이미지</div><div className="media-title">건강한 조직문화를 위한 필수 선택, EAP 솔루션</div></div>
+                                </>
+                            )}
                         </div>
                     </div>
                 </section>
@@ -649,17 +758,21 @@ export default function Home() {
 
             {/* MAIN 2: AI 체형분석 */}
             <main id="page-ai" className={`page-content ${activePage === 'page-ai' ? 'active' : ''}`}>
-                <section className="hero reveal" style={{ padding: '120px 20px' }}>
+                <section className="hero-brand hero-brand-sub reveal">
                     <video className="hero-video-bg" autoPlay loop muted playsInline>
                         <source src="background.mp4" type="video/mp4" />
                     </video>
                     <div className="hero-overlay"></div>
                     <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-                        <h1>데이터로 증명하는 <span>스마트 AI 체형분석</span></h1>
-                        <p>기업의 건강과 안전부터 학생들의 바른 성장까지, 정확한 진단 및 솔루션을 제공합니다.</p>
+                        <div className="hero-subtitle hero-el hero-el-1">AI Scanning</div>
+                        <h1 className="hero-el hero-el-2">데이터로 증명하는 <span>스마트 AI 체형분석</span></h1>
+                        <p className="hero-el hero-el-3">
+                            <strong>기업, 학교를 위한 정확한 진단</strong>
+                            기업의 건강과 안전부터 학생들의 바른 성장까지,<br />가장 정확한 진단 및 솔루션을 제공합니다
+                        </p>
                     </div>
                 </section>
-                
+
                 <section className="category-section reveal">
                     <div className="container" style={{ textAlign: 'center' }}>
                         <h2 className="section-title">해당되는 카테고리를 골라주세요</h2>
@@ -689,12 +802,19 @@ export default function Home() {
 
             {/* MAIN 3: 기업 EAP */}
             <main id="page-eap" className={`page-content ${activePage === 'page-eap' ? 'active' : ''}`}>
-                <section className="hero-premium reveal">
-                    <div className="container">
-                        <div style={{ textAlign: 'left' }}><span className="back-btn" onClick={() => switchPage('page-ai')}>← 타겟 선택으로 돌아가기</span></div>
-                        <h1>건강이 함께하는 회사,<br />기업복지의 원조는 FaWW</h1>
-                        <p>AI 빅데이터 기반의 피지컬케어 솔루션을 제안합니다.</p>
-                        <button className="btn-primary" onClick={() => openModal('modal-proposal')} style={{ fontSize: '18px', padding: '16px 36px' }}>우리 회사 맞춤 제안서 받기</button>
+                <section className="hero-brand hero-brand-sub hero-premium reveal">
+                    <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+                        <div style={{ textAlign: 'left', marginBottom: '20px' }}><span className="back-btn" style={{ color: '#aaa', cursor: 'pointer', fontSize: '14px', border: '1px solid #555', padding: '8px 16px', borderRadius: '20px' }} onClick={() => switchPage('page-ai')}>← 타겟 선택으로 돌아가기</span></div>
+                        
+                        <div className="hero-subtitle hero-el hero-el-1">FaWW EAP Solution</div>
+                        <h1 className="hero-el hero-el-2"><span>건강이 함께하는 회사</span>,<br />기업복지의 원조는 <span>FaWW</span></h1>
+                        <p className="hero-el hero-el-3">
+                            <strong>AI 빅데이터 기반의 피지컬케어 솔루션</strong>
+                            임직원의 건강 증진과 생산성 향상을 위한<br />맞춤형 복지 프로그램을 제안합니다
+                        </p>
+                        <div className="hero-buttons hero-el hero-el-4" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                            <button className="btn-primary" onClick={() => openModal('modal-proposal')}>우리 회사 맞춤 제안서 받기</button>
+                        </div>
                     </div>
                 </section>
 
@@ -886,14 +1006,18 @@ export default function Home() {
 
             {/* MAIN 5: 피지컬케어 */}
             <main id="page-physical" className={`page-content ${activePage === 'page-physical' ? 'active' : ''}`}>
-                <section className="hero reveal" style={{ padding: '120px 20px' }}>
+                <section className="hero-brand hero-brand-sub reveal">
                     <video className="hero-video-bg" autoPlay loop muted playsInline>
                         <source src="background2.mp4" type="video/mp4" />
                     </video>
                     <div className="hero-overlay"></div>
                     <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-                        <h1>현장과 실무를 잇는 <span>FaWW 피지컬케어</span></h1>
-                        <p>기업의 생산성부터 개인의 삶의 질 향상, 그리고 대한민국 최고 전문가 양성까지 아우릅니다.</p>
+                        <div className="hero-subtitle hero-el hero-el-1">FaWW Physical Care</div>
+                        <h1 className="hero-el hero-el-2">현장과 실무를 잇는 <span>FaWW 피지컬케어</span></h1>
+                        <p className="hero-el hero-el-3">
+                            <strong>대한민국 최고 전문가 양성 및 파견</strong>
+                            기업의 생산성 향상부터 개인의 삶의 질 회복까지,<br />근골격계 전문 관리로 완벽하게 아우릅니다
+                        </p>
                     </div>
                 </section>
 
@@ -977,10 +1101,14 @@ export default function Home() {
 
             {/* MAIN 6: MALL */}
             <main id="page-mall" className={`page-content ${activePage === 'page-mall' ? 'active' : ''}`}>
-                <section className="hero reveal" style={{ backgroundColor: '#212529' }}>
-                    <div className="container">
-                        <h1>검증된 교구, <span>피지컬케어 mall</span></h1>
-                        <p>임직원 복지 포인트 차감을 지원하는 전용 교구몰입니다.</p>
+                <section className="hero-brand hero-brand-sub reveal" style={{ backgroundColor: '#212529' }}>
+                    <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+                        <div className="hero-subtitle hero-el hero-el-1">Physical Care Mall</div>
+                        <h1 className="hero-el hero-el-2">검증된 교구, <span>피지컬케어 mall</span></h1>
+                        <p className="hero-el hero-el-3">
+                            <strong>전문가가 직접 선별한 건강 굿즈</strong>
+                            임직원 복지 포인트 차감을 지원하는 전용 교구몰에서<br />일상을 변화시키는 건강 아이템을 만나보세요
+                        </p>
                     </div>
                 </section>
                 <section className="category-section reveal" style={{ backgroundColor: '#f8f9fa' }}>
@@ -1002,6 +1130,26 @@ export default function Home() {
                     <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>맞춤 제안서 및 견적 받기</button>
                 </div>
             </section>
+
+            <footer style={{ backgroundColor: '#111', color: '#888', padding: '40px 20px', fontSize: '14px', lineHeight: '1.6' }}>
+                <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px', borderBottom: '1px solid #333', paddingBottom: '20px' }}>
+                        <div style={{ fontSize: '24px', fontWeight: '900', color: '#fff', letterSpacing: '-1px' }}>FaWW</div>
+                        <div style={{ display: 'flex', gap: '20px' }}>
+                            <a href="#" style={{ color: '#ccc', textDecoration: 'none' }}>이용약관</a>
+                            <a href="#" style={{ color: '#ccc', textDecoration: 'none', fontWeight: 'bold' }}>개인정보처리방침</a>
+                        </div>
+                    </div>
+                    <div>
+                        <p style={{ margin: '0 0 5px 0' }}>(주)파우코리아 | 대표이사: 홍길동 | 사업자등록번호: 123-45-67890</p>
+                        <p style={{ margin: '0 0 5px 0' }}>주소: 서울특별시 강남구 테헤란로 123, 4층 | 고객센터: 1588-0000</p>
+                        <p style={{ margin: '0' }}>이메일: contact@faww.co.kr | 통신판매업신고: 제2026-서울강남-0000호</p>
+                    </div>
+                    <div style={{ marginTop: '10px', color: '#555' }}>
+                        © {new Date().getFullYear()} FaWW Korea. All rights reserved.
+                    </div>
+                </div>
+            </footer>
 
             {/* 💡 모달 모음 - 원본 이모지 레이아웃 완벽 이식 */}
             {activeModal === 'modal-chat' && (
@@ -1054,16 +1202,16 @@ export default function Home() {
                     <div className="modal-content"><button className="modal-close" onClick={closeModal}>&times;</button><div className="modal-header"><h2>PART 4. 강의 파트</h2></div><div className="info-sub-block-grid"><div className="info-sub-block"><span className="info-sub-block-num">파트 4-1</span><div className="info-sub-block-title">주요 질환 예방 특강</div></div><div className="info-sub-block"><span className="info-sub-block-num">파트 4-2</span><div className="info-sub-block-title">생활습관 개선 솔루션</div></div></div></div>
                 </div>
             )}
-            
+
             {activeModal === 'modal-download' && (
                 <div className="modal active">
                     <div className="modal-content" style={{ maxWidth: '550px' }}>
                         <button className="modal-close" onClick={closeModal}>&times;</button>
                         <div className="modal-header"><h2>소개서 다운로드</h2><p>필요한 분야의 소개서를 선택하여 다운로드하세요.</p></div>
                         <div className="hero-buttons" style={{ flexDirection: 'column', gap: '15px', marginBottom: 0 }}>
-                            <a href="기업용_소개서.pdf" download className="btn-primary" style={{ width: '100%', textAlign: 'center', boxSizing: 'border-box' }} onClick={() => { showToast('📥 기업용 소개서가 다운로드됩니다.'); closeModal(); }}>🏢 기업용 소개서</a>
-                            <a href="학교용_소개서.pdf" download className="btn-primary" style={{ width: '100%', backgroundColor: '#004d40', textAlign: 'center', boxSizing: 'border-box' }} onClick={() => { showToast('📥 학교용 소개서가 다운로드됩니다.'); closeModal(); }}>🏫 학교용 소개서</a>
-                            <a href="AI체형분석_소개서.pdf" download className="btn-primary" style={{ width: '100%', backgroundColor: '#111', textAlign: 'center', boxSizing: 'border-box' }} onClick={() => { showToast('📥 AI 체형분석 소개서가 다운로드됩니다.'); closeModal(); }}>🤖 AI 체형분석 소개서</a>
+                            <a href="/파우 제안서(기업).pdf" download="파우_기업용_제안서.pdf" className="btn-primary" style={{ width: '100%', textAlign: 'center', boxSizing: 'border-box' }} onClick={() => { showToast('📥 기업용 소개서가 다운로드됩니다.'); closeModal(); }}>🏢 기업용 소개서</a>
+                            <a href="/파우 제안서(학교).pdf" download="파우_학교용_제안서.pdf" className="btn-primary" style={{ width: '100%', backgroundColor: '#004d40', textAlign: 'center', boxSizing: 'border-box' }} onClick={() => { showToast('📥 학교용 소개서가 다운로드됩니다.'); closeModal(); }}>🏫 학교용 소개서</a>
+                            <a href="/AI체형측정 제안서(기업).pdf" download="FaWW_AI체형측정_제안서.pdf" className="btn-primary" style={{ width: '100%', backgroundColor: '#111', textAlign: 'center', boxSizing: 'border-box' }} onClick={() => { showToast('📥 AI 체형분석 소개서가 다운로드됩니다.'); closeModal(); }}>🤖 AI 체형분석 소개서</a>
                         </div>
                     </div>
                 </div>
@@ -1078,9 +1226,23 @@ export default function Home() {
                             <div className="form-group"><label className="field-label">소속 <span>*</span></label><input type="text" name="company" className="form-control" required /></div>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
                                 <div className="form-group"><label className="field-label">담당자 <span>*</span></label><input type="text" name="manager" className="form-control" required /></div>
-                                <div className="form-group"><label className="field-label">연락처 <span>*</span></label><input type="tel" name="phone" className="form-control" required /></div>
+                                <div className="form-group"><label className="field-label">연락처 <span>*</span></label><input type="tel" name="phone" className="form-control" value={phoneValue} onChange={handlePhoneChange} placeholder="010-0000-0000" required /></div>
                             </div>
-                            <div className="form-group"><label className="field-label">이메일 <span>*</span></label><input type="email" name="email" className="form-control" required /></div>
+                            <div className="form-group">
+                                <label className="field-label">이메일 <span>*</span></label>
+                                <input type="email" name="email" className="form-control" onChange={validateEmail} placeholder="example@company.com" required />
+                                {emailError && <div style={{ color: '#d32f2f', fontSize: '12px', marginTop: '5px', fontWeight: 'bold' }}>{emailError}</div>}
+                            </div>
+                            <div className="form-group">
+                                <label className="field-label">임직원(또는 학생) 규모 <span>*</span></label>
+                                <select className="form-control" name="scale" required>
+                                    <option value="">선택해주세요</option>
+                                    <option>50인 미만</option>
+                                    <option>50인 ~ 100인</option>
+                                    <option>100인 ~ 300인</option>
+                                    <option>300인 이상</option>
+                                </select>
+                            </div>
                             <div className="form-group">
                                 <label className="field-label">희망 도입 파트 및 세부 항목 선택 (대분류 클릭 후 세부 선택)</label>
                                 <div className="proposal-module-group" style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '10px' }}>
@@ -1112,6 +1274,10 @@ export default function Home() {
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div className="form-group">
+                                <label className="field-label">주요 문의사항</label>
+                                <textarea className="form-control" name="inquiry" value={inquiryText} onChange={(e) => setInquiryText(e.target.value)} placeholder="도입 목적이나 불편사항을 남겨주시면 더욱 정확한 제안이 가능합니다." style={{ minHeight: '100px' }} />
                             </div>
                             <button type="submit" className="form-submit-btn">선택한 파트로 제안서 요청하기</button>
                         </form>
