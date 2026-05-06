@@ -14,8 +14,8 @@
 **기술 스택:**
 - Backend: FastAPI + Python 3.11
 - Frontend: Next.js 14 + TypeScript
-- Database: Supabase (PostgreSQL)
 - AI: Claude API (Anthropic)
+- Database: Supabase (PostgreSQL)
 - Styling: Tailwind CSS
 - Deployment: Vercel (Frontend) + Railway/Fly.io (Backend)
 

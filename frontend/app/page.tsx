@@ -740,7 +740,10 @@ export default function Home() {
                                         <div className="media-thumb" style={{ backgroundImage: media.thumbnail_url ? `url(${media.thumbnail_url})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                                             {!media.thumbnail_url && "기사 썸네일 이미지"}
                                         </div>
-                                        <div className="media-title">{media.title}</div>
+                                        <div className="media-title">
+                                            <div style={{ fontSize: '11px', color: '#2b8a3e', fontWeight: 'bold', marginBottom: '5px', opacity: 0.8 }}>{media.published_at ? media.published_at.split('T')[0] : ''}</div>
+                                            {media.title}
+                                        </div>
                                     </a>
                                 ))
                             ) : (
@@ -825,7 +828,7 @@ export default function Home() {
                         <div className="service-grid">
                             <div className="smart-card reveal" onClick={() => openModal('modal1')}>
                                 <div className="smart-card-top">
-                                    <div className="smart-card-img">AI 스캐닝 이미지</div>
+                                    <div className="smart-card-img" style={{ backgroundImage: 'url(/images/eap/ai_scanning.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
                                     <div className="smart-card-body">
                                         <span className="gateway-badge">PART 1. 진단</span>
                                         <h3>스마트 Ai 체형분석</h3>
@@ -835,7 +838,7 @@ export default function Home() {
                             </div>
                             <div className="smart-card reveal delay-1" onClick={() => openModal('modal2')}>
                                 <div className="smart-card-top">
-                                    <div className="smart-card-img">전문가 케어 이미지</div>
+                                    <div className="smart-card-img" style={{ backgroundImage: 'url(/images/eap/manual_care.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
                                     <div className="smart-card-body">
                                         <span className="gateway-badge">PART 2. 케어</span>
                                         <h3>1:1 피지컬 케어</h3>
@@ -845,7 +848,7 @@ export default function Home() {
                             </div>
                             <div className="smart-card reveal delay-2" onClick={() => openModal('modal4')}>
                                 <div className="smart-card-top">
-                                    <div className="smart-card-img">단체 운동 이미지</div>
+                                    <div className="smart-card-img" style={{ backgroundImage: 'url(/images/eap/group_exercise.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
                                     <div className="smart-card-body">
                                         <span className="gateway-badge">PART 3. 실습</span>
                                         <h3>단체 운동 프로그램</h3>
@@ -855,7 +858,7 @@ export default function Home() {
                             </div>
                             <div className="smart-card reveal delay-3" onClick={() => openModal('modal3')}>
                                 <div className="smart-card-top">
-                                    <div className="smart-card-img">강의 진행 이미지</div>
+                                    <div className="smart-card-img" style={{ backgroundImage: 'url(/images/eap/lecture.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
                                     <div className="smart-card-body">
                                         <span className="gateway-badge">PART 4. 교육</span>
                                         <h3>강의 프로그램</h3>
