@@ -209,19 +209,19 @@ export default function Home() {
         });
     }, [activePage, activePhysicalSub]);
 
-    // 돋보기 X-ray 효과
+    // 돋보기 X-ray 효과 (모바일 터치 지원 추가)
     useEffect(() => {
-        if (activePage !== 'page-home' || window.innerWidth <= 768) return;
+        if (activePage !== 'page-home') return;
 
         const container = document.querySelector('.magnify-container') as HTMLElement;
         if (!container) return;
 
         const glass = container.querySelector('.magnify-glass') as HTMLElement;
 
-        const handleMouseMove = (e: globalThis.MouseEvent) => {
+        const updatePosition = (clientX: number, clientY: number) => {
             const rect = container.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+            const x = clientX - rect.left;
+            const y = clientY - rect.top;
 
             const tiltX = ((y / rect.height) - 0.5) * -12;
             const tiltY = ((x / rect.width) - 0.5) * 12;
@@ -238,21 +238,35 @@ export default function Home() {
             });
         };
 
-        const handleMouseEnter = () => container.classList.add('active');
-        const handleMouseLeave = () => {
+        const handleMouseMove = (e: globalThis.MouseEvent) => updatePosition(e.clientX, e.clientY);
+        const handleTouchMove = (e: globalThis.TouchEvent) => {
+            if (e.touches.length > 0) {
+                const touch = e.touches[0];
+                updatePosition(touch.clientX, touch.clientY);
+            }
+        };
+
+        const handleEnter = () => container.classList.add('active');
+        const handleLeave = () => {
             container.classList.remove('active');
             container.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
             if (glass) glass.style.display = 'none';
         };
 
         container.addEventListener('mousemove', handleMouseMove);
-        container.addEventListener('mouseenter', handleMouseEnter);
-        container.addEventListener('mouseleave', handleMouseLeave);
+        container.addEventListener('mouseenter', handleEnter);
+        container.addEventListener('mouseleave', handleLeave);
+        container.addEventListener('touchstart', (e) => { handleEnter(); handleTouchMove(e); }, { passive: true });
+        container.addEventListener('touchmove', (e) => { handleTouchMove(e); }, { passive: true });
+        container.addEventListener('touchend', handleLeave);
 
         return () => {
             container.removeEventListener('mousemove', handleMouseMove);
-            container.removeEventListener('mouseenter', handleMouseEnter);
-            container.removeEventListener('mouseleave', handleMouseLeave);
+            container.removeEventListener('mouseenter', handleEnter);
+            container.removeEventListener('mouseleave', handleLeave);
+            container.removeEventListener('touchstart', handleTouchMove);
+            container.removeEventListener('touchmove', handleTouchMove);
+            container.removeEventListener('touchend', handleLeave);
         };
     }, [activePage]);
 
