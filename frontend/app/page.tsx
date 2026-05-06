@@ -468,20 +468,33 @@ export default function Home() {
                         <div className="hero-subtitle hero-el hero-el-1">FaWW : Family Wholesome Wellness</div>
                         <h1 className="hero-el hero-el-2"><span>건강이 함께하는 회사</span>,<br />기업복지의 원조는 <span>FaWW</span></h1>
                         <p className="hero-el hero-el-3">
-                            <strong>스마트 AI를 활용한 맞춤형 케어프로그램</strong>
+                            <strong>스마트 AI를 활용한 맞춤형 케어프로그램</strong><br />
                             근골격계 질환, 1:1 케어 프로그램을 통한 산재 예방 시스템을<br />업계 최초로 도입한 피지컬케어 전문가가 함께합니다
                         </p>
-                        <div className="hero-buttons hero-el hero-el-4" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        <div className="hero-buttons hero-el hero-el-4" style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap', marginTop: '30px' }}>
                             <button className="btn-primary" onClick={() => openModal('modal-proposal')}>맞춤 솔루션 문의하기</button>
                             <button className="btn-outline" style={{ background: 'rgba(255,255,255,0.1)', color: '#fff', border: '1px solid rgba(255,255,255,0.5)', padding: '16px 36px', borderRadius: '30px', fontWeight: 'bold' }} onClick={() => openModal('modal-quiz')}>내게 맞는 솔루션 찾기 (퀴즈)</button>
                         </div>
                     </div>
+
                     <div className="hero-stats-wrapper">
                         <div className="hero-stats reveal reveal-scale">
-                            <div className="stat-item"><h3><span className="count-up" data-target="12">0</span>년+</h3><p>피지컬케어 도입</p></div>
-                            <div className="stat-item"><h3><span className="count-up" data-target="120">0</span>+</h3><p>파트너 기업 및 학교</p></div>
-                            <div className="stat-item"><h3><span className="count-up" data-target="99">0</span>%</h3><p>고객 만족도</p></div>
-                            <div className="stat-item"><h3><span className="count-up" data-target="20000" data-format="true">0</span>+</h3><p>관리 임직원 수</p></div>
+                            <div className="stat-item">
+                                <div className="stat-num"><span className="count-up" data-target="12">0</span>년+</div>
+                                <div className="stat-label">피지컬케어 도입</div>
+                            </div>
+                            <div className="stat-item">
+                                <div className="stat-num"><span className="count-up" data-target="120">0</span>+</div>
+                                <div className="stat-label">파트너 기업 및 학교</div>
+                            </div>
+                            <div className="stat-item">
+                                <div className="stat-num"><span className="count-up" data-target="99">0</span>%</div>
+                                <div className="stat-label">고객 만족도</div>
+                            </div>
+                            <div className="stat-item">
+                                <div className="stat-num"><span className="count-up" data-target="20000" data-format="true">0</span>+</div>
+                                <div className="stat-label">관리 임직원 수</div>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -763,14 +776,28 @@ export default function Home() {
                 <section className="partners reveal">
                     <div className="container">
                         <h2 className="section-title">대한민국 일류 기업과 학교들이 FaWW와 함께합니다</h2>
-                        <div className="swiper partnerSwiper" style={{ marginTop: '40px', padding: '10px 0' }}>
-                            <div className="swiper-wrapper">
-                                <div className="swiper-slide"><div className="partner-logo">삼성 계열사</div></div>
-                                <div className="swiper-slide"><div className="partner-logo">현대 계열사</div></div>
-                                <div className="swiper-slide"><div className="partner-logo">네이버/카카오</div></div>
-                                <div className="swiper-slide"><div className="partner-logo">주요 금융권</div></div>
-                                <div className="swiper-slide"><div className="partner-logo">전국 주요 초중고</div></div>
-                                <div className="swiper-slide"><div className="partner-logo">공공기관</div></div>
+                        <div className="marquee-wrapper" style={{ marginTop: '60px' }}>
+                            <div className="marquee-container">
+                                {[...Array(2)].map((_, i) => (
+                                    <React.Fragment key={i}>
+                                        {[
+                                            'ㄴ.png', 'ㅇ.jpg', '그림10.jpg', '그림11.png', '그림12.jpg', '그림13.jpg', 
+                                            '그림14.png', '그림15.jpg', '그림16.jpg', '그림17.png', '그림18.png', '그림19.png', 
+                                            '그림2.png', '그림20.jpg', '그림21.jpg', '그림22.png', '그림23.jpg', '그림24.png', 
+                                            '그림25.jpg', '그림26.jpg', '그림27.png', '그림28.png', '그림29.png', '그림3.jpg', 
+                                            '그림30.png', '그림31.png', '그림32.png', '그림33.png', '그림34.png', '그림35.png', 
+                                            '그림36.png', '그림37.png', '그림38.png', '그림39.png', '그림4.png', '그림40.png', 
+                                            '그림41.png', '그림42.png', '그림43.png', '그림44.png', '그림45.png', '그림46.png', 
+                                            '그림47.png', '그림48.png', '그림49.png', '그림5.jpg', '그림50.png', '그림51.png', 
+                                            '그림52.png', '그림53.png', '그림54.png', '그림55.png', '그림56.png', '그림57.png', 
+                                            '그림58.png', '그림59.png', '그림6.png', '그림7.jpg', '그림8.png', '그림9.jpg'
+                                        ].map((logo, idx) => (
+                                            <div key={`${i}-${idx}`} className="partner-logo">
+                                                <img src={`/images/partners/${logo}`} alt="Partner" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                                            </div>
+                                        ))}
+                                    </React.Fragment>
+                                ))}
                             </div>
                         </div>
                     </div>
