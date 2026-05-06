@@ -259,11 +259,35 @@ export default function Home() {
         }
     }, [activePage]);
 
+    // 브라우저 뒤로가기 대응을 위한 History API 연동
+    useEffect(() => {
+        const handlePopState = (event: PopStateEvent) => {
+            if (event.state && event.state.page) {
+                setActivePage(event.state.page);
+                setActivePhysicalSub(null);
+            } else {
+                setActivePage('page-home');
+            }
+        };
+
+        window.addEventListener('popstate', handlePopState);
+        // 초기 상태 설정
+        if (!window.history.state) {
+            window.history.replaceState({ page: 'page-home' }, '', '');
+        }
+
+        return () => window.removeEventListener('popstate', handlePopState);
+    }, []);
+
     // 기능 함수 모음
     const switchPage = (pageId: string) => {
         setActivePage(pageId);
         setActivePhysicalSub(null);
         setIsMobileMenuOpen(false);
+
+        // 브라우저 히스토리에 상태 추가
+        window.history.pushState({ page: pageId }, '', '');
+
         if (pageId !== 'page-physical') window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -342,7 +366,7 @@ export default function Home() {
             showToast('⚠️ 희망 도입 파트(세부 항목)를 최소 1개 이상 체크해 주세요.');
             return;
         }
-        
+
         if (emailError) {
             showToast('⚠️ 올바른 이메일 주소를 입력해 주세요.');
             return;
@@ -371,7 +395,7 @@ export default function Home() {
                 return;
             }
 
-            showToast('✅ 제안서 요청이 성공적으로 접수되었습니다.<br><span style="font-size:13px; color:#aaa; font-weight:normal; margin-top:5px; display:inline-block;">(admin.html 파일에서 접수 내역을 확인해 보세요!)</span>');
+            showToast('✅ 제안서 요청이 성공적으로 접수되었습니다. <br /> 전문가가 확인 후 빠르게 연락드리겠습니다.');
             closeModal();
             form.reset();
         } catch (err) {
@@ -391,7 +415,7 @@ export default function Home() {
         else if (type === 'eap3') { title = "오피스 단체 스트레칭 + 특강"; desc = "사무실 의자를 활용한 실습과 거북목 교정 특강을 통해 다함께 참여하는 건강 문화를 만듭니다."; }
         else if (type === 'sch1') { title = "학교 전용 3D AI 체형 검진 시스템"; desc = "모아레 및 척추 분석 기능을 통해 학생들의 성장 밸런스를 측정하고 학부모용 상세 리포트를 제공합니다."; }
         else if (type === 'sch2') { title = "학생 기능성 그룹 트레이닝"; desc = "체형 분석을 기반으로 성장기 학생들에게 꼭 필요한 맞춤형 교정 운동과 스트레칭을 지도합니다."; }
-        
+
         setQuizResultTitle(title);
         setQuizResultDesc(desc);
         setInquiryText(`[맞춤 솔루션 퀴즈 매칭 결과]\n관심 프로그램: ${title}\n기대 효과: ${desc}\n\n`);
@@ -442,7 +466,7 @@ export default function Home() {
 
                     <div className="container" style={{ position: 'relative', zIndex: 2 }}>
                         <div className="hero-subtitle hero-el hero-el-1">FaWW : Family Wholesome Wellness</div>
-                        <h1 className="hero-el hero-el-2"><span>산재 예방</span>은 근로자의 <span>건강</span>으로부터 나옵니다</h1>
+                        <h1 className="hero-el hero-el-2"><span>건강이 함께하는 회사</span>,<br />기업복지의 원조는 <span>FaWW</span></h1>
                         <p className="hero-el hero-el-3">
                             <strong>스마트 AI를 활용한 맞춤형 케어프로그램</strong>
                             근골격계 질환, 1:1 케어 프로그램을 통한 산재 예방 시스템을<br />업계 최초로 도입한 피지컬케어 전문가가 함께합니다
@@ -552,7 +576,11 @@ export default function Home() {
 
                         <div className="expert-banner reveal">
                             <h4>⚠️ 자격증 없는 무자격 플랫폼 업체를 주의하십시오.</h4>
-                            <p>단순 외부 강사들을 매칭해주는 타 플랫폼과 비교를 거부합니다. FaWW는 <strong>12년 이상의 독보적 임상 노하우</strong>를 바탕으로 &apos;피지컬케어관리사&apos; 자격증을 창시한 <strong>대한민국 &apos;원조(Original)&apos;</strong> 그룹입니다.<br />검증되지 않은 1회성 휴식이 아닌, 뼈와 근막을 완벽히 이해하는 진짜 전문가의 개입만이 실질적인 지표 변화를 만듭니다.</p>
+                            <p>단순 외부 강사들을 매칭해주는 타 플랫폼과 비교를 거부합니다.<br />
+                               FaWW는 12년 이상의 독보적 임상 노하우를 바탕으로 &apos;피지컬케어관리사&apos; 자격증을 창시한<br />
+                               대한민국 <strong>&apos;원조(Original)&apos;</strong> 그룹입니다.<br /><br />
+                               검증되지 않은 1회성 휴식이 아닌, 뼈와 근막을 완벽히 이해하는<br />
+                               진짜 전문가의 개입만이 실질적인 지표 변화를 만듭니다.</p>
                         </div>
 
                         <div className="expert-features">
@@ -575,6 +603,11 @@ export default function Home() {
                                     <div className="agenda-icon">🏅</div>
                                     <h3>&apos;원조&apos; 피지컬케어 전문가 100% 검증 파견</h3>
                                     <p>외부 강사를 대충 고용하여 단순 파견하지 않습니다. <br />12년 노하우가 담긴 자체 아카데미의 <strong>피지컬케어 자격 인증(PCM, PTS)을 완벽히 통과한 최상위 전문가</strong>만을 육성 및 파견합니다. </p>
+                                    <div className="badge-row" style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '20px' }}>
+                                        <div className="mini-badge" style={{ fontSize: '12px', background: '#f8f9fa', padding: '5px 12px', borderRadius: '20px', border: '1px solid #eee', color: '#666', fontWeight: 'bold' }}>✓ 100% 검증</div>
+                                        <div className="mini-badge" style={{ fontSize: '12px', background: '#f8f9fa', padding: '5px 12px', borderRadius: '20px', border: '1px solid #eee', color: '#666', fontWeight: 'bold' }}>✓ PCM 자격</div>
+                                        <div className="mini-badge" style={{ fontSize: '12px', background: '#f8f9fa', padding: '5px 12px', borderRadius: '20px', border: '1px solid #eee', color: '#666', fontWeight: 'bold' }}>✓ PTS 자격</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -625,33 +658,46 @@ export default function Home() {
                             <p className="section-desc">FaWW의 3가지 비즈니스로 여러분의 조직과 일상에 건강을 선물하세요.</p>
                         </div>
                         <div className="gateway-grid">
-                            <div className="gateway-card reveal" onClick={() => switchPage('page-ai')}>
-                                <div className="gateway-img scan-wrapper" style={{ backgroundColor: '#e8f5e9', color: '#2b8a3e' }}>
+                            <div className="gateway-card reveal" onClick={() => switchPage('page-ai')} style={{ padding: 0, overflow: 'hidden' }}>
+                                <div className="gateway-img" style={{ height: '200px', position: 'relative', overflow: 'hidden', background: '#f0f0f0' }}>
+                                    <img src="/images/gateway/ai_scanning.png" alt="AI Scanning" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                     <div className="scan-line"></div>
-                                    B2B / 학교 솔루션 화면
                                 </div>
-                                <div className="gateway-content">
+                                <div className="gateway-content" style={{ padding: '30px' }}>
                                     <div className="tags-wrap"><span className="hash-tag">#임직원_통증관리</span><span className="hash-tag">#학생_체형검진</span></div>
-                                    <h2>스마트 AI 체형분석 솔루션</h2>
-                                    <p>기업의 업무 효율을 높이는 <br /> EAP 복지 프로그램부터 학교 <br /> 단체 검진까지, 데이터 기반의 <br /> 정확한 리포트를 제공합니다.</p>
+                                    <h2>스마트 AI 체형분석 <br /> 솔루션</h2>
+                                    <p>기업의 업무 효율을 높이는 <br />
+                                       EAP 복지 프로그램부터 학교 <br />
+                                       단체 검진까지, 데이터 기반의 <br />
+                                       정확한 리포트를 제공합니다.</p>
                                     <div className="gateway-btn">조직 맞춤 솔루션 보기</div>
                                 </div>
                             </div>
-                            <div className="gateway-card reveal delay-1" onClick={() => switchPage('page-physical')}>
-                                <div className="gateway-img">피지컬케어 센터/아카데미 화면</div>
-                                <div className="gateway-content">
+                            <div className="gateway-card reveal delay-1" onClick={() => switchPage('page-physical')} style={{ padding: 0, overflow: 'hidden' }}>
+                                <div className="gateway-img" style={{ height: '200px', background: '#f0f0f0' }}>
+                                    <img src="/images/gateway/physical_care.jpg" alt="Physical Care" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                </div>
+                                <div className="gateway-content" style={{ padding: '30px' }}>
                                     <div className="tags-wrap"><span className="hash-tag">#로컬센터</span><span className="hash-tag">#전문가양성</span></div>
-                                    <h2>FaWW 피지컬케어</h2>
-                                    <p>전국 주요 오프라인 거점 센터를 통한 <br />개인 맞춤 관리와, 압도적인 전문가를 양성하는 아카데미 교육 과정을 운영합니다.</p>
+                                    <h2>FaWW <br /> 피지컬케어</h2>
+                                    <p>전국 주요 오프라인 거점 센터를 통한 <br />
+                                       개인 맞춤 관리와, 압도적인 전문가를 <br />
+                                       양성하는 아카데미 교육 과정을 <br />
+                                       운영합니다.</p>
                                     <div className="gateway-btn">피지컬케어 자세히 보기</div>
                                 </div>
                             </div>
-                            <div className="gateway-card reveal delay-2" onClick={() => switchPage('page-mall')}>
-                                <div className="gateway-img">교구몰 쇼핑 화면</div>
-                                <div className="gateway-content">
+                            <div className="gateway-card reveal delay-2" onClick={() => switchPage('page-mall')} style={{ padding: 0, overflow: 'hidden' }}>
+                                <div className="gateway-img" style={{ height: '200px', background: '#f0f0f0' }}>
+                                    <img src="/images/gateway/mall.jpg" alt="Wellness Mall" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                </div>
+                                <div className="gateway-content" style={{ padding: '30px' }}>
                                     <div className="tags-wrap"><span className="hash-tag">#홈케어교구</span><span className="hash-tag">#복지포인트</span></div>
-                                    <h2>피지컬케어 Mall</h2>
-                                    <p>전문가가 직접 검증한 릴렉싱 및 트레이닝 교구. 기업 복지 포인트 차감 및 안전한 <br />셀프 홈케어를 완벽 지원합니다.</p>
+                                    <h2>피지컬케어 <br /> Mall</h2>
+                                    <p>전문가가 직접 검증한 릴렉싱 및 <br />
+                                       트레이닝 교구. 기업 복지 포인트 <br />
+                                       차감 및 안전한 셀프 홈케어를 <br />
+                                       완벽 지원합니다.</p>
                                     <div className="gateway-btn">검증 교구 쇼핑하기</div>
                                 </div>
                             </div>
@@ -696,19 +742,19 @@ export default function Home() {
                         <div className="map-wrapper">
                             <div className="map-marker" style={{ top: '25%', left: '35%' }}>
                                 <div className="marker-btn">서울/경기 230곳</div>
-                                <div className="marker-detail"><ul><li>삼성 계열사</li><li>현대 계열사</li><li>네이버/카카오</li></ul></div>
+                                <div className="marker-detail"><ul><li>대법원</li><li>국민건강보험공단</li><li>서울중부발전</li></ul></div>
                             </div>
                             <div className="map-marker" style={{ top: '40%', left: '60%' }}>
                                 <div className="marker-btn">충청권 85곳</div>
-                                <div className="marker-detail"><ul><li>SK하이닉스</li><li>주요 공공기관</li></ul></div>
+                                <div className="marker-detail"><ul><li>히타치코리아</li><li>보령 한전kdn</li></ul></div>
                             </div>
                             <div className="map-marker" style={{ top: '75%', left: '75%' }}>
                                 <div className="marker-btn">부산/경남 110곳</div>
-                                <div className="marker-detail"><ul><li>현대자동차</li><li>주요 초중고교</li></ul></div>
+                                <div className="marker-detail"><ul><li>창원지방법원</li><li>한국청소년활동진흥원</li><li>한울원자력발전소</li></ul></div>
                             </div>
                             <div className="map-marker" style={{ top: '60%', left: '40%' }}>
                                 <div className="marker-btn">전라권 65곳</div>
-                                <div className="marker-detail"><ul><li>LG화학</li><li>주요 협력업체</li></ul></div>
+                                <div className="marker-detail"><ul><li>나주 한전 kps</li><li>국가독성과학연구소</li></ul></div>
                             </div>
                         </div>
                     </div>
@@ -808,7 +854,7 @@ export default function Home() {
                 <section className="hero-brand hero-brand-sub hero-premium reveal">
                     <div className="container" style={{ position: 'relative', zIndex: 2 }}>
                         <div style={{ textAlign: 'left', marginBottom: '20px' }}><span className="back-btn" style={{ color: '#aaa', cursor: 'pointer', fontSize: '14px', border: '1px solid #555', padding: '8px 16px', borderRadius: '20px' }} onClick={() => switchPage('page-ai')}>← 타겟 선택으로 돌아가기</span></div>
-                        
+
                         <div className="hero-subtitle hero-el hero-el-1">FaWW EAP Solution</div>
                         <h1 className="hero-el hero-el-2"><span>건강이 함께하는 회사</span>,<br />기업복지의 원조는 <span>FaWW</span></h1>
                         <p className="hero-el hero-el-3">
@@ -828,7 +874,9 @@ export default function Home() {
                         <div className="service-grid">
                             <div className="smart-card reveal" onClick={() => openModal('modal1')}>
                                 <div className="smart-card-top">
-                                    <div className="smart-card-img" style={{ backgroundImage: 'url(/images/eap/ai_scanning.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+                                    <div className="smart-card-img" style={{ background: '#f0f0f0', overflow: 'hidden' }}>
+                                        <img src="/images/gateway/ai_scanning.png" alt="AI Scanning" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    </div>
                                     <div className="smart-card-body">
                                         <span className="gateway-badge">PART 1. 진단</span>
                                         <h3>스마트 Ai 체형분석</h3>
@@ -1144,9 +1192,9 @@ export default function Home() {
                         </div>
                     </div>
                     <div>
-                        <p style={{ margin: '0 0 5px 0' }}>(주)파우코리아 | 대표이사: 홍길동 | 사업자등록번호: 123-45-67890</p>
-                        <p style={{ margin: '0 0 5px 0' }}>주소: 서울특별시 강남구 테헤란로 123, 4층 | 고객센터: 1588-0000</p>
-                        <p style={{ margin: '0' }}>이메일: contact@faww.co.kr | 통신판매업신고: 제2026-서울강남-0000호</p>
+                        <p style={{ margin: '0 0 5px 0' }}>주식회사 파우(FaWW) | 대표이사: 김은주 | 사업자등록번호: 107-88-12047</p>
+                        <p style={{ margin: '0 0 5px 0' }}>주소: 서울특별시 영등포구 도신로 143, 대원빌딩 301호 | 고객센터: 02-6482-9003</p>
+                        <p style={{ margin: '0' }}>이메일: contact@faww.co.kr</p>
                     </div>
                     <div style={{ marginTop: '10px', color: '#555' }}>
                         © {new Date().getFullYear()} FaWW Korea. All rights reserved.
