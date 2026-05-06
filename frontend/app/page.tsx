@@ -90,6 +90,30 @@ export default function Home() {
         }, { threshold: 0.15 });
         document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
+        // 💡 [추가] 히어로 섹션 수치 카운트업 즉시 실행
+        const heroStats = document.querySelector('.hero-stats');
+        if (heroStats) {
+            const counters = heroStats.querySelectorAll('.count-up');
+            counters.forEach(counter => {
+                const target = +(counter.getAttribute('data-target') || 0);
+                const isFormat = counter.getAttribute('data-format') === 'true';
+                let count = 0;
+                const speed = 2000 / 60;
+                const increment = target / speed;
+
+                const updateCount = () => {
+                    count += increment;
+                    if (count < target) {
+                        counter.textContent = Math.ceil(count).toLocaleString(isFormat ? 'en-US' : undefined);
+                        setTimeout(updateCount, 1);
+                    } else {
+                        counter.textContent = target.toLocaleString(isFormat ? 'en-US' : undefined);
+                    }
+                };
+                updateCount();
+            });
+        }
+
         const countObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -478,7 +502,7 @@ export default function Home() {
                     </div>
 
                     <div className="hero-stats-wrapper">
-                        <div className="hero-stats reveal reveal-scale">
+                        <div className="hero-stats">
                             <div className="stat-item">
                                 <div className="stat-num"><span className="count-up" data-target="12">0</span>년+</div>
                                 <div className="stat-label">피지컬케어 도입</div>
@@ -501,11 +525,11 @@ export default function Home() {
 
                 <section className="teaser-section reveal">
                     <div className="container text-center">
-                        <div className="teaser-text step-1">담당자님,</div>
-                        <div className="teaser-text step-2"> <span style={{ color: '#2b8a3e' }}>사고 없는 현장</span>과 <span style={{ color: '#2b8a3e' }}>건강한 사무환경</span>을 만드는<br />산업안전보건의 파트너를 찾으시나요?</div>
-                        <div className="teaser-text step-3"> 파우(FaWW)가 함께 하겠습니다.</div>
-                        <div className="teaser-text step-4">&quot;피지컬케어 원조&quot;로서 증명해온 결과를 보여드리겠습니다.</div>
-                        <div className="teaser-text step-5">지금부터 파우(FaWW)를 소개합니다. ▼</div>
+                        <div className="teaser-text step-1 reveal reveal-left">담당자님,</div>
+                        <div className="teaser-text step-2 reveal reveal-left delay-2" style={{ fontSize: '52px' }}> <span style={{ color: '#2b8a3e' }}>사고 없는 현장</span>과 <span style={{ color: '#2b8a3e' }}>건강한 사무환경</span>을 만드는<br />산업안전보건의 파트너를 찾으시나요?</div>
+                        <div className="teaser-text step-3 reveal reveal-scale delay-3" style={{ fontSize: '42px' }}> 파우(FaWW)가 함께 하겠습니다.</div>
+                        <div className="teaser-text step-4 reveal reveal-scale delay-4" style={{ fontSize: '26px' }}>&quot;피지컬케어 원조&quot;로서 증명해온 결과를 보여드리겠습니다.</div>
+                        <div className="teaser-text step-5 reveal reveal-scale delay-5">지금부터 파우(FaWW)를 소개합니다. ▼</div>
                     </div>
                 </section>
 
@@ -570,30 +594,30 @@ export default function Home() {
                             <p>단순한 복지를 넘어 산업재해, 저출산, 멘탈케어까지. 국가와 기업의 핵심 과제를 해결합니다.</p>
                         </div>
                         <div className="agenda-grid">
-                            <div className="agenda-card reveal">
+                            <div className="agenda-card reveal reveal-left">
                                 <div className="agenda-icon">🚨</div>
-                                <h3>건강한 몸이 곧<br />산재의 예방입니다</h3>
-                                <p>눈에 보이지 않는 신체의 피로와 통증은 예고 없이 찾아오는 산재의 씨앗입니다. 근골격계 질환을 선제적으로 예방하여 <br />법적 리스크를 낮추고 조직의 생산성을 극대화하십시오.</p>
+                                <h3 style={{ fontSize: '28px', lineHeight: '1.3' }}>건강한 몸이 곧<br />산재의 예방입니다</h3>
+                                <p style={{ fontSize: '18px' }}>눈에 보이지 않는 신체의 피로와 통증은 예고 없이 찾아오는 산재의 씨앗입니다. 근골격계 질환을 선제적으로 예방하여 <br />법적 리스크를 낮추고 조직의 생산성을 극대화하십시오.</p>
                             </div>
-                            <div className="agenda-card reveal delay-1">
+                            <div className="agenda-card reveal reveal-scale delay-2">
                                 <div className="agenda-icon">👶</div>
-                                <h3>산모의 건강이<br />성공적 복직의 시작입니다 </h3>
-                                <p>출산 친화적 조직문화, 이제는 신체의 근본적인 건강에서 출발해야 합니다. 전문가의 섬세한 피지컬케어로 출산 전후의 신체 회복을 돕고, 일과 가정이 양립하는 건강한 환경을 완성합니다.</p>
+                                <h3 style={{ fontSize: '28px', lineHeight: '1.3' }}>산모의 건강이<br />성공적 복직의 키 입니다 </h3>
+                                <p style={{ fontSize: '18px' }}>출산 친화적 조직문화, 이제는 신체의 근본적인 건강에서 출발해야 합니다. 전문가의 섬세한 피지컬케어로 출산 전후의 신체 회복을 돕고, 일과 가정이 양립하는 건강한 환경을 완성합니다.</p>
                             </div>
-                            <div className="agenda-card reveal delay-2">
+                            <div className="agenda-card reveal reveal-right delay-3">
                                 <div className="agenda-icon">🧠</div>
-                                <h3>신체가 건강해야<br />마음도 건강해집니다</h3>
-                                <p>굳어있는 몸의 긴장은 곧 우울감과 번아웃으로 이어집니다. 전문가의 직접적인 피지컬케어로 신체의 활력을 되찾아주고, 마음의 병과 극단적인 선택을 예방하는 새로운 EAP를 제시합니다.</p>
+                                <h3 style={{ fontSize: '28px', lineHeight: '1.3' }}>신체가 건강해야<br />마음도 건강해집니다</h3>
+                                <p style={{ fontSize: '18px' }}>굳어있는 몸의 긴장은 곧 우울감과 번아웃으로 이어집니다. 전문가의 직접적인 피지컬케어로 신체의 활력을 되찾아주고, 마음의 병과 극단적인 선택을 예방하는 새로운 EAP를 제시합니다.</p>
                             </div>
                         </div>
 
                         <div className="expert-banner reveal">
                             <h4>⚠️ 자격증 없는 무자격 플랫폼 업체를 주의하십시오.</h4>
                             <p>단순 외부 강사들을 매칭해주는 타 플랫폼과 비교를 거부합니다.<br />
-                               FaWW는 12년 이상의 독보적 임상 노하우를 바탕으로 &apos;피지컬케어관리사&apos; 자격증을 창시한<br />
-                               대한민국 <strong>&apos;원조(Original)&apos;</strong> 그룹입니다.<br /><br />
-                               검증되지 않은 1회성 휴식이 아닌, 뼈와 근막을 완벽히 이해하는<br />
-                               진짜 전문가의 개입만이 실질적인 지표 변화를 만듭니다.</p>
+                                FaWW는 12년 이상의 독보적 임상 노하우를 바탕으로 &apos;피지컬케어관리사&apos; 자격증을 창시한<br />
+                                대한민국 <strong>&apos;원조(Original)&apos;</strong> 그룹입니다.<br /><br />
+                                검증되지 않은 1회성 휴식이 아닌, 뼈와 근막을 완벽히 이해하는<br />
+                                진짜 전문가의 개입만이 실질적인 지표 변화를 만듭니다.</p>
                         </div>
 
                         <div className="expert-features">
@@ -680,9 +704,9 @@ export default function Home() {
                                     <div className="tags-wrap"><span className="hash-tag">#임직원_통증관리</span><span className="hash-tag">#학생_체형검진</span></div>
                                     <h2>스마트 AI 체형분석 <br /> 솔루션</h2>
                                     <p>기업의 업무 효율을 높이는 <br />
-                                       EAP 복지 프로그램부터 학교 <br />
-                                       단체 검진까지, 데이터 기반의 <br />
-                                       정확한 리포트를 제공합니다.</p>
+                                        EAP 복지 프로그램부터 학교 <br />
+                                        단체 검진까지, 데이터 기반의 <br />
+                                        정확한 리포트를 제공합니다.</p>
                                     <div className="gateway-btn">조직 맞춤 솔루션 보기</div>
                                 </div>
                             </div>
@@ -694,9 +718,9 @@ export default function Home() {
                                     <div className="tags-wrap"><span className="hash-tag">#로컬센터</span><span className="hash-tag">#전문가양성</span></div>
                                     <h2>FaWW <br /> 피지컬케어</h2>
                                     <p>전국 주요 오프라인 거점 센터를 통한 <br />
-                                       개인 맞춤 관리와, 압도적인 전문가를 <br />
-                                       양성하는 아카데미 교육 과정을 <br />
-                                       운영합니다.</p>
+                                        개인 맞춤 관리와, 압도적인 전문가를 <br />
+                                        양성하는 아카데미 교육 과정을 <br />
+                                        운영합니다.</p>
                                     <div className="gateway-btn">피지컬케어 자세히 보기</div>
                                 </div>
                             </div>
@@ -708,9 +732,9 @@ export default function Home() {
                                     <div className="tags-wrap"><span className="hash-tag">#홈케어교구</span><span className="hash-tag">#복지포인트</span></div>
                                     <h2>피지컬케어 <br /> Mall</h2>
                                     <p>전문가가 직접 검증한 릴렉싱 및 <br />
-                                       트레이닝 교구. 기업 복지 포인트 <br />
-                                       차감 및 안전한 셀프 홈케어를 <br />
-                                       완벽 지원합니다.</p>
+                                        트레이닝 교구. 기업 복지 포인트 <br />
+                                        차감 및 안전한 셀프 홈케어를 <br />
+                                        완벽 지원합니다.</p>
                                     <div className="gateway-btn">검증 교구 쇼핑하기</div>
                                 </div>
                             </div>
@@ -781,15 +805,15 @@ export default function Home() {
                                 {[...Array(2)].map((_, i) => (
                                     <React.Fragment key={i}>
                                         {[
-                                            'ㄴ.png', 'ㅇ.jpg', '그림10.jpg', '그림11.png', '그림12.jpg', '그림13.jpg', 
-                                            '그림14.png', '그림15.jpg', '그림16.jpg', '그림17.png', '그림18.png', '그림19.png', 
-                                            '그림2.png', '그림20.jpg', '그림21.jpg', '그림22.png', '그림23.jpg', '그림24.png', 
-                                            '그림25.jpg', '그림26.jpg', '그림27.png', '그림28.png', '그림29.png', '그림3.jpg', 
-                                            '그림30.png', '그림31.png', '그림32.png', '그림33.png', '그림34.png', '그림35.png', 
-                                            '그림36.png', '그림37.png', '그림38.png', '그림39.png', '그림4.png', '그림40.png', 
-                                            '그림41.png', '그림42.png', '그림43.png', '그림44.png', '그림45.png', '그림46.png', 
-                                            '그림47.png', '그림48.png', '그림49.png', '그림5.jpg', '그림50.png', '그림51.png', 
-                                            '그림52.png', '그림53.png', '그림54.png', '그림55.png', '그림56.png', '그림57.png', 
+                                            'ㄴ.png', 'ㅇ.jpg', '그림10.jpg', '그림11.png', '그림12.jpg', '그림13.jpg',
+                                            '그림14.png', '그림15.jpg', '그림16.jpg', '그림17.png', '그림18.png', '그림19.png',
+                                            '그림2.png', '그림20.jpg', '그림21.jpg', '그림22.png', '그림23.jpg', '그림24.png',
+                                            '그림25.jpg', '그림26.jpg', '그림27.png', '그림28.png', '그림29.png', '그림3.jpg',
+                                            '그림30.png', '그림31.png', '그림32.png', '그림33.png', '그림34.png', '그림35.png',
+                                            '그림36.png', '그림37.png', '그림38.png', '그림39.png', '그림4.png', '그림40.png',
+                                            '그림41.png', '그림42.png', '그림43.png', '그림44.png', '그림45.png', '그림46.png',
+                                            '그림47.png', '그림48.png', '그림49.png', '그림5.jpg', '그림50.png', '그림51.png',
+                                            '그림52.png', '그림53.png', '그림54.png', '그림55.png', '그림56.png', '그림57.png',
                                             '그림58.png', '그림59.png', '그림6.png', '그림7.jpg', '그림8.png', '그림9.jpg'
                                         ].map((logo, idx) => (
                                             <div key={`${i}-${idx}`} className="partner-logo">
@@ -874,6 +898,33 @@ export default function Home() {
                         </div>
                     </div>
                 </section>
+                <section className="cta-footer reveal">
+                    <div className="container">
+                        <h2>FaWW와 함께 건강한 조직을 구축하세요</h2>
+                        <p style={{ marginBottom: '30px' }}>우리 학교 및 기업 환경에 알맞는 건강 복지 프로그램을 맞춤 설계해 드립니다.</p>
+                        <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>맞춤 제안서 및 견적 받기</button>
+                    </div>
+                </section>
+
+                <footer style={{ backgroundColor: '#111', color: '#888', padding: '60px 20px', fontSize: '14px', lineHeight: '1.6' }}>
+                    <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px', borderBottom: '1px solid #333', paddingBottom: '20px' }}>
+                            <div style={{ fontSize: '24px', fontWeight: '900', color: '#fff', letterSpacing: '-1px' }}>FaWW</div>
+                            <div style={{ display: 'flex', gap: '20px' }}>
+                                <a href="#" style={{ color: '#ccc', textDecoration: 'none' }}>이용약관</a>
+                                <a href="#" style={{ color: '#ccc', textDecoration: 'none', fontWeight: 'bold' }}>개인정보처리방침</a>
+                            </div>
+                        </div>
+                        <div>
+                            <p style={{ margin: '0 0 5px 0' }}>주식회사 파우(FaWW) | 대표이사: 김은주 | 사업자등록번호: 107-88-12047</p>
+                            <p style={{ margin: '0 0 5px 0' }}>주소: 서울특별시 영등포구 도신로 143, 대원빌딩 301호 | 고객센터: 02-6482-9003</p>
+                            <p style={{ margin: '0' }}>이메일: contact@faww.co.kr</p>
+                        </div>
+                        <div style={{ marginTop: '10px', color: '#555' }}>
+                            © {new Date().getFullYear()} FaWW Korea. All rights reserved.
+                        </div>
+                    </div>
+                </footer>
             </main>
 
             {/* MAIN 3: 기업 EAP */}
@@ -991,6 +1042,33 @@ export default function Home() {
                         </div>
                     </div>
                 </section>
+                <section className="cta-footer reveal">
+                    <div className="container">
+                        <h2>FaWW와 함께 건강한 조직을 구축하세요</h2>
+                        <p style={{ marginBottom: '30px' }}>우리 학교 및 기업 환경에 알맞는 건강 복지 프로그램을 맞춤 설계해 드립니다.</p>
+                        <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>맞춤 제안서 및 견적 받기</button>
+                    </div>
+                </section>
+
+                <footer style={{ backgroundColor: '#111', color: '#888', padding: '60px 20px', fontSize: '14px', lineHeight: '1.6' }}>
+                    <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px', borderBottom: '1px solid #333', paddingBottom: '20px' }}>
+                            <div style={{ fontSize: '24px', fontWeight: '900', color: '#fff', letterSpacing: '-1px' }}>FaWW</div>
+                            <div style={{ display: 'flex', gap: '20px' }}>
+                                <a href="#" style={{ color: '#ccc', textDecoration: 'none' }}>이용약관</a>
+                                <a href="#" style={{ color: '#ccc', textDecoration: 'none', fontWeight: 'bold' }}>개인정보처리방침</a>
+                            </div>
+                        </div>
+                        <div>
+                            <p style={{ margin: '0 0 5px 0' }}>주식회사 파우(FaWW) | 대표이사: 김은주 | 사업자등록번호: 107-88-12047</p>
+                            <p style={{ margin: '0 0 5px 0' }}>주소: 서울특별시 영등포구 도신로 143, 대원빌딩 301호 | 고객센터: 02-6482-9003</p>
+                            <p style={{ margin: '0' }}>이메일: contact@faww.co.kr</p>
+                        </div>
+                        <div style={{ marginTop: '10px', color: '#555' }}>
+                            © {new Date().getFullYear()} FaWW Korea. All rights reserved.
+                        </div>
+                    </div>
+                </footer>
             </main>
 
             {/* MAIN 4: 학교 */}
@@ -1080,6 +1158,33 @@ export default function Home() {
                         </div>
                     </div>
                 </section>
+                <section className="cta-footer reveal">
+                    <div className="container">
+                        <h2>FaWW와 함께 건강한 조직을 구축하세요</h2>
+                        <p style={{ marginBottom: '30px' }}>우리 학교 및 기업 환경에 알맞는 건강 복지 프로그램을 맞춤 설계해 드립니다.</p>
+                        <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>맞춤 제안서 및 견적 받기</button>
+                    </div>
+                </section>
+
+                <footer style={{ backgroundColor: '#111', color: '#888', padding: '60px 20px', fontSize: '14px', lineHeight: '1.6' }}>
+                    <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px', borderBottom: '1px solid #333', paddingBottom: '20px' }}>
+                            <div style={{ fontSize: '24px', fontWeight: '900', color: '#fff', letterSpacing: '-1px' }}>FaWW</div>
+                            <div style={{ display: 'flex', gap: '20px' }}>
+                                <a href="#" style={{ color: '#ccc', textDecoration: 'none' }}>이용약관</a>
+                                <a href="#" style={{ color: '#ccc', textDecoration: 'none', fontWeight: 'bold' }}>개인정보처리방침</a>
+                            </div>
+                        </div>
+                        <div>
+                            <p style={{ margin: '0 0 5px 0' }}>주식회사 파우(FaWW) | 대표이사: 김은주 | 사업자등록번호: 107-88-12047</p>
+                            <p style={{ margin: '0 0 5px 0' }}>주소: 서울특별시 영등포구 도신로 143, 대원빌딩 301호 | 고객센터: 02-6482-9003</p>
+                            <p style={{ margin: '0' }}>이메일: contact@faww.co.kr</p>
+                        </div>
+                        <div style={{ marginTop: '10px', color: '#555' }}>
+                            © {new Date().getFullYear()} FaWW Korea. All rights reserved.
+                        </div>
+                    </div>
+                </footer>
             </main>
 
             {/* MAIN 5: 피지컬케어 */}
@@ -1175,6 +1280,33 @@ export default function Home() {
                         </div>
                     </section>
                 </div>
+                <section className="cta-footer reveal">
+                    <div className="container">
+                        <h2>FaWW와 함께 건강한 조직을 구축하세요</h2>
+                        <p style={{ marginBottom: '30px' }}>우리 학교 및 기업 환경에 알맞는 건강 복지 프로그램을 맞춤 설계해 드립니다.</p>
+                        <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>맞춤 제안서 및 견적 받기</button>
+                    </div>
+                </section>
+
+                <footer style={{ backgroundColor: '#111', color: '#888', padding: '60px 20px', fontSize: '14px', lineHeight: '1.6' }}>
+                    <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px', borderBottom: '1px solid #333', paddingBottom: '20px' }}>
+                            <div style={{ fontSize: '24px', fontWeight: '900', color: '#fff', letterSpacing: '-1px' }}>FaWW</div>
+                            <div style={{ display: 'flex', gap: '20px' }}>
+                                <a href="#" style={{ color: '#ccc', textDecoration: 'none' }}>이용약관</a>
+                                <a href="#" style={{ color: '#ccc', textDecoration: 'none', fontWeight: 'bold' }}>개인정보처리방침</a>
+                            </div>
+                        </div>
+                        <div>
+                            <p style={{ margin: '0 0 5px 0' }}>주식회사 파우(FaWW) | 대표이사: 김은주 | 사업자등록번호: 107-88-12047</p>
+                            <p style={{ margin: '0 0 5px 0' }}>주소: 서울특별시 영등포구 도신로 143, 대원빌딩 301호 | 고객센터: 02-6482-9003</p>
+                            <p style={{ margin: '0' }}>이메일: contact@faww.co.kr</p>
+                        </div>
+                        <div style={{ marginTop: '10px', color: '#555' }}>
+                            © {new Date().getFullYear()} FaWW Korea. All rights reserved.
+                        </div>
+                    </div>
+                </footer>
             </main>
 
             {/* MAIN 6: MALL */}
@@ -1199,35 +1331,34 @@ export default function Home() {
                         </div>
                     </div>
                 </section>
-            </main>
+                <section className="cta-footer reveal">
+                    <div className="container">
+                        <h2>FaWW와 함께 건강한 조직을 구축하세요</h2>
+                        <p style={{ marginBottom: '30px' }}>우리 학교 및 기업 환경에 알맞는 건강 복지 프로그램을 맞춤 설계해 드립니다.</p>
+                        <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>맞춤 제안서 및 견적 받기</button>
+                    </div>
+                </section>
 
-            <section className="cta-footer reveal">
-                <div className="container">
-                    <h2>FaWW와 함께 건강한 조직을 구축하세요</h2>
-                    <p style={{ marginBottom: '30px' }}>우리 학교 및 기업 환경에 알맞는 건강 복지 프로그램을 맞춤 설계해 드립니다.</p>
-                    <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>맞춤 제안서 및 견적 받기</button>
-                </div>
-            </section>
-
-            <footer style={{ backgroundColor: '#111', color: '#888', padding: '40px 20px', fontSize: '14px', lineHeight: '1.6' }}>
-                <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px', borderBottom: '1px solid #333', paddingBottom: '20px' }}>
-                        <div style={{ fontSize: '24px', fontWeight: '900', color: '#fff', letterSpacing: '-1px' }}>FaWW</div>
-                        <div style={{ display: 'flex', gap: '20px' }}>
-                            <a href="#" style={{ color: '#ccc', textDecoration: 'none' }}>이용약관</a>
-                            <a href="#" style={{ color: '#ccc', textDecoration: 'none', fontWeight: 'bold' }}>개인정보처리방침</a>
+                <footer style={{ backgroundColor: '#111', color: '#888', padding: '60px 20px', fontSize: '14px', lineHeight: '1.6', scrollSnapAlign: 'end' }}>
+                    <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px', borderBottom: '1px solid #333', paddingBottom: '20px' }}>
+                            <div style={{ fontSize: '24px', fontWeight: '900', color: '#fff', letterSpacing: '-1px' }}>FaWW</div>
+                            <div style={{ display: 'flex', gap: '20px' }}>
+                                <a href="#" style={{ color: '#ccc', textDecoration: 'none' }}>이용약관</a>
+                                <a href="#" style={{ color: '#ccc', textDecoration: 'none', fontWeight: 'bold' }}>개인정보처리방침</a>
+                            </div>
+                        </div>
+                        <div>
+                            <p style={{ margin: '0 0 5px 0' }}>주식회사 파우(FaWW) | 대표이사: 김은주 | 사업자등록번호: 107-88-12047</p>
+                            <p style={{ margin: '0 0 5px 0' }}>주소: 서울특별시 영등포구 도신로 143, 대원빌딩 301호 | 고객센터: 02-6482-9003</p>
+                            <p style={{ margin: '0' }}>이메일: contact@faww.co.kr</p>
+                        </div>
+                        <div style={{ marginTop: '10px', color: '#555' }}>
+                            © {new Date().getFullYear()} FaWW Korea. All rights reserved.
                         </div>
                     </div>
-                    <div>
-                        <p style={{ margin: '0 0 5px 0' }}>주식회사 파우(FaWW) | 대표이사: 김은주 | 사업자등록번호: 107-88-12047</p>
-                        <p style={{ margin: '0 0 5px 0' }}>주소: 서울특별시 영등포구 도신로 143, 대원빌딩 301호 | 고객센터: 02-6482-9003</p>
-                        <p style={{ margin: '0' }}>이메일: contact@faww.co.kr</p>
-                    </div>
-                    <div style={{ marginTop: '10px', color: '#555' }}>
-                        © {new Date().getFullYear()} FaWW Korea. All rights reserved.
-                    </div>
-                </div>
-            </footer>
+                </footer>
+            </main>
 
             {/* 💡 모달 모음 - 원본 이모지 레이아웃 완벽 이식 */}
             {activeModal === 'modal-chat' && (
