@@ -547,27 +547,26 @@ export default function Home() {
                     </div>
                 </section>
 
-                {/* 💡 신규 추가: 돋보기 X-ray 인터랙션 섹션 💡 */}
                 <section className="magnify-section reveal">
                     <div className="container text-center">
-                        <span className="section-kicker">AI-POWERED ANALYSIS</span>
-                        <h2 className="section-title">커서를 올려 AI 분석을 체험해보세요</h2>
-                        <p className="section-desc">FaWW의 스마트 AI 기술은 신체 불균형을 정밀하게 측정하여<br />눈에 보이지 않는 통증의 원인을 찾아냅니다.</p>
-                        <div className="magnify-container">
+                        <span className="section-kicker reveal delay-1">AI-POWERED ANALYSIS</span>
+                        <h2 className="section-title reveal delay-2">커서를 올려 AI 분석을 체험해보세요</h2>
+                        <p className="section-desc reveal delay-3">FaWW의 스마트 AI 기술은 신체 불균형을 정밀하게 측정하여<br />눈에 보이지 않는 통증의 원인을 찾아냅니다.</p>
+                        <div className="magnify-container reveal delay-4">
                             <div className="magnify-skeleton" style={{ backgroundImage: "url('/images/skeleton.png')" }}></div>
                             <div className="magnify-human" style={{ backgroundImage: "url('/images/human.png')" }}></div>
                             <div className="magnify-glass"></div>
                         </div>
-                        <p style={{ marginTop: '20px', fontSize: '14px', color: '#888' }}>* 위 이미지는 이해를 돕기 위한 연출이며, 실제 분석은 전문 장비로 진행됩니다.</p>
+                        <p className="reveal delay-5" style={{ marginTop: '20px', fontSize: '14px', color: '#888' }}>* 위 이미지는 이해를 돕기 위한 연출이며, 실제 분석은 전문 장비로 진행됩니다.</p>
                     </div>
                 </section>
 
                 <section className="jelly-chart-section reveal" style={{ padding: '80px 0', backgroundColor: '#f8f9fa', borderTop: '1px solid #eee' }}>
                     <div className="container text-center" style={{ overflow: 'visible' }}>
-                        <h2 className="section-title">FaWW 피지컬케어 종합 만족도</h2>
-                        <p className="section-desc" style={{ marginBottom: '60px' }}>2만 건 이상의 데이터가 증명하는 트렌디한 결과</p>
+                        <h2 className="section-title reveal delay-1">FaWW 피지컬케어 종합 만족도</h2>
+                        <p className="section-desc reveal delay-2" style={{ marginBottom: '60px' }}>2만 건 이상의 데이터가 증명하는 트렌디한 결과</p>
 
-                        <div className="jelly-pie-wrapper">
+                        <div className="jelly-pie-wrapper reveal delay-3">
                             <div className="jelly-pie-scene">
                                 <div className="jelly-shadow"></div>
                                 <div className="jelly-layer bottom"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" className="j-bg" /><circle cx="16" cy="16" r="8" className="j-fg" pathLength="100" /></svg></div>
@@ -591,7 +590,7 @@ export default function Home() {
                             </div>
                         </div>
 
-                        <div className="pie-legend">
+                        <div className="pie-legend reveal delay-4">
                             <span className="legend-item"><span className="legend-color" style={{ background: 'rgba(43, 138, 62, 0.8)' }}></span>매우 만족 99%</span>
                             <span className="legend-item"><span className="legend-color" style={{ background: 'rgba(232, 245, 233, 0.8)' }}></span>만족 1%</span>
                             <span className="legend-item"><span className="legend-color" style={{ background: '#888' }}></span>보통 0%</span>
@@ -758,8 +757,8 @@ export default function Home() {
 
                 <section className="testimonials reveal">
                     <div className="container">
-                        <h2 className="section-title">담당자가 99%만족한 FaWW의 솔루션</h2>
-                        <div className="review-filter-wrapper" style={{ textAlign: 'center', marginBottom: '20px' }}>
+                        <h2 className="section-title reveal delay-1">담당자가 99%만족한 FaWW의 솔루션</h2>
+                        <div className="review-filter-wrapper reveal delay-2" style={{ textAlign: 'center', marginBottom: '20px' }}>
                             <button className={`review-filter-btn ${reviewFilter === 'all' ? 'active' : ''}`} onClick={() => setReviewFilter('all')}>전체 보기</button>
                             <button className={`review-filter-btn ${reviewFilter === 'b2b' ? 'active' : ''}`} onClick={() => setReviewFilter('b2b')}>🏢 기업/HR 담당자</button>
                             <button className={`review-filter-btn ${reviewFilter === 'school' ? 'active' : ''}`} onClick={() => setReviewFilter('school')}>🏫 학교/보건교사</button>
@@ -788,9 +787,9 @@ export default function Home() {
 
                 <section className="map-section reveal">
                     <div className="container">
-                        <h2 className="section-title">전국 어디든, FaWW가 찾아갑니다</h2>
-                        <p className="section-desc" style={{ marginBottom: '50px' }}>전국 주요 기업 및 학교 500곳 이상 누적 방문 달성</p>
-                        <div className="map-wrapper">
+                        <h2 className="section-title reveal delay-1">전국 어디든, FaWW가 찾아갑니다</h2>
+                        <p className="section-desc reveal delay-2" style={{ marginBottom: '50px' }}>전국 주요 기업 및 학교 500곳 이상 누적 방문 달성</p>
+                        <div className="map-wrapper reveal delay-3">
                             <div className="map-marker" style={{ top: '25%', left: '35%' }}>
                                 <div className="marker-btn">서울/경기 230곳</div>
                                 <div className="marker-detail"><ul><li>대법원</li><li>국민건강보험공단</li><li>서울중부발전</li></ul></div>
@@ -813,8 +812,8 @@ export default function Home() {
 
                 <section className="partners reveal">
                     <div className="container">
-                        <h2 className="section-title">대한민국 일류 기업과 학교들이 FaWW와 함께합니다</h2>
-                        <div className="marquee-wrapper" style={{ marginTop: '60px' }}>
+                        <h2 className="section-title reveal delay-1">대한민국 일류 기업과 학교들이 FaWW와 함께합니다</h2>
+                        <div className="marquee-wrapper reveal delay-2" style={{ marginTop: '60px' }}>
                             <div className="marquee-container">
                                 {[...Array(2)].map((_, i) => (
                                     <React.Fragment key={i}>
@@ -843,8 +842,8 @@ export default function Home() {
 
                 <section className="media reveal" style={{ background: '#f8f9fa' }}>
                     <div className="container">
-                        <h2 className="section-title">FaWW 미디어 보도</h2>
-                        <div className="media-grid">
+                        <h2 className="section-title reveal delay-1">FaWW 미디어 보도</h2>
+                        <div className="media-grid reveal delay-2">
                             {mediaReports.length > 0 ? (
                                 mediaReports.map((media) => (
                                     <a key={media.id} href={media.url} target="_blank" rel="noopener noreferrer" className="media-item" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
