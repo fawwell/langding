@@ -42,53 +42,37 @@ header { display: flex; justify-content: space-between; align-items: center; pad
 .consult-btn:hover { background-color: #333; transform: scale(1.05); }
 
 /* ==========================================================================
-   🔮 홀로그램 시퀀스 애니메이션 (Hologram Reveal)
+   🚀 고성능 트랜지션 시스템 (High-Performance Reveal)
    ========================================================================== */
-@keyframes hologramIn {
-    0% { opacity: 0; transform: translateY(40px) scale(0.97); filter: blur(12px) brightness(4) saturate(0); }
-    40% { opacity: 0.6; transform: translateY(-8px) scale(1.02); filter: blur(4px) brightness(2) saturate(1.5); }
-    60% { opacity: 0.8; transform: translateY(4px) scale(0.99); filter: blur(1px) brightness(1.3); }
-    100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0) brightness(1) saturate(1); }
-}
-
-@keyframes scanGlow {
-    0% { transform: scaleX(0); opacity: 0; }
-    50% { transform: scaleX(1.1); opacity: 0.6; }
-    100% { transform: scaleX(1); opacity: 0; }
-}
-
 .reveal { 
     opacity: 0; 
-    transform: translateY(40px);
+    transform: translateY(25px);
+    transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+                transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: opacity, transform;
 }
 
 .reveal.active { 
-    animation: hologramIn 1.1s cubic-bezier(0.15, 0.85, 0.15, 1) forwards;
-    position: relative;
+    opacity: 1;
+    transform: translateY(0);
 }
 
-/* 홀로그램 하단 스캔 라인 이펙트 */
-.reveal.active::after {
-    content: '';
-    position: absolute;
-    bottom: -8px; left: 0; width: 100%; height: 2px;
-    background: linear-gradient(90deg, transparent, #2b8a3e, #8ce99a, #2b8a3e, transparent);
-    animation: scanGlow 0.8s ease-out forwards;
-    pointer-events: none;
-    z-index: 5;
-}
+/* 방향성 변주 */
+.reveal-left { transform: translateX(-30px); }
+.reveal-right { transform: translateX(30px); }
+.reveal-scale { transform: scale(0.95) translateY(25px); }
 
-/* 방향성 애니메이션 (홀로그램 컨셉 유지) */
-.reveal-left.active, .reveal-right.active, .reveal-scale.active { animation-name: hologramIn; }
+.reveal-left.active, .reveal-right.active { transform: translateX(0); }
+.reveal-scale.active { transform: scale(1) translateY(0); }
 
-/* ⏱️ 시퀀스 딜레이 (Hologram Sequence Delay) */
-.delay-1 { animation-delay: 0.1s !important; }
-.delay-2 { animation-delay: 0.25s !important; }
-.delay-3 { animation-delay: 0.4s !important; }
-.delay-4 { animation-delay: 0.55s !important; }
-.delay-5 { animation-delay: 0.7s !important; }
-.delay-6 { animation-delay: 0.85s !important; }
-.delay-7 { animation-delay: 1.0s !important; }
+/* ⏱️ 시퀀스 딜레이 (0.3s 간격) */
+.delay-1 { transition-delay: 0.1s !important; }
+.delay-2 { transition-delay: 0.4s !important; }
+.delay-3 { transition-delay: 0.7s !important; }
+.delay-4 { transition-delay: 1.0s !important; }
+.delay-5 { transition-delay: 1.3s !important; }
+.delay-6 { transition-delay: 1.6s !important; }
+.delay-7 { transition-delay: 1.9s !important; }
 
 /* 페이지 레이아웃 및 스크롤 시스템 복구 */
 .page-content, .sub-page-content { display: none; height: auto; overflow-y: visible; }
@@ -122,15 +106,20 @@ header { display: flex; justify-content: space-between; align-items: center; pad
 .hero-brand p strong { display: block; font-size: 24px; color: #fff; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.5px; text-shadow: 0 3px 10px rgba(0,0,0,0.6); }
 .hero-buttons { display: flex; justify-content: center; gap: 15px; margin-bottom: 60px; }
 
-/* 서브페이지 전용 히어로 (100vh 해제 및 슬림하게 조정) */
-.hero-brand-sub { height: auto !important; min-height: 250px !important; padding: 100px 20px 40px 20px !important; display: flex; align-items: center; justify-content: center; text-align: center; }
-.hero-brand-sub .container { text-align: center; width: 100%; }
+/* 🚀 히어로 섹션 텍스트 개별 요소 애니메이션 */
+.hero-el { opacity: 0; transform: translateY(20px); transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.reveal.active .hero-el-1 { opacity: 1; transform: translateY(0); transition-delay: 0.2s; }
+.reveal.active .hero-el-2 { opacity: 1; transform: translateY(0); transition-delay: 0.5s; }
+.reveal.active .hero-el-3 { opacity: 1; transform: translateY(0); transition-delay: 0.8s; }
+.reveal.active .hero-el-4 { opacity: 1; transform: translateY(0); transition-delay: 1.1s; }
 
-.hero-el { opacity: 0; transform: translateY(30px); }
-.reveal.active .hero-el-1 { animation: hologramIn 1.1s cubic-bezier(0.15, 0.85, 0.15, 1) forwards; animation-delay: 0.1s; }
-.reveal.active .hero-el-2 { animation: hologramIn 1.1s cubic-bezier(0.15, 0.85, 0.15, 1) forwards; animation-delay: 0.35s; }
-.reveal.active .hero-el-3 { animation: hologramIn 1.1s cubic-bezier(0.15, 0.85, 0.15, 1) forwards; animation-delay: 0.6s; }
-.reveal.active .hero-el-4 { animation: hologramIn 1.1s cubic-bezier(0.15, 0.85, 0.15, 1) forwards; animation-delay: 0.85s; }
+/* 📊 히어로 통계 카드 복구 */
+.hero-stats-wrapper { position: absolute; bottom: 50px; left: 0; width: 100%; display: flex; justify-content: center; padding: 0 20px; z-index: 40; }
+.hero-stats { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: #fff; width: 100%; max-width: 1050px; padding: 25px 20px; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.12); border: 1px solid rgba(0,0,0,0.05); }
+.hero-stats .stat-item { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; text-align: center; border-right: 1px solid #f0f0f0; }
+.hero-stats .stat-item:last-child { border-right: none; }
+.hero-stats .stat-num { font-size: 32px; color: #2b8a3e; margin-bottom: 4px; font-weight: 800; line-height: 1.1; }
+.hero-stats .stat-label { font-size: 14px; color: #666; font-weight: 700; white-space: nowrap; line-height: 1.2; }
 
 .hero-stats-wrapper { position: absolute; bottom: 50px; left: 0; width: 100%; display: flex; justify-content: center; padding: 0 20px; z-index: 40; }
 .hero-stats { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: #fff; width: 100%; max-width: 1050px; padding: 25px 20px; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.12); border: 1px solid rgba(0,0,0,0.05); }
@@ -572,81 +561,72 @@ header { display: flex; justify-content: space-between; align-items: center; pad
 }
 
 /* ==========================================================================
-   📱 반응형 모바일 심화 최적화 (768px 이하)
+   📱 반응형 모바일 심화 최적화 (768px 이하) - 잘림 현상 방지 집중
    ========================================================================== */
 @media (max-width: 768px) {
-    /* 1. 레이아웃 안정화 (끊김 방지) */
-    html, body { overflow-x: hidden; width: 100%; position: relative; }
+    /* 1. 레이아웃 안정화 (잘림 및 끊김 완전 방지) */
+    html, body { overflow-x: hidden; width: 100%; height: auto !important; position: relative; }
     
     #page-home.page-content.active {
-        height: auto;
-        overflow-y: visible;
-        scroll-snap-type: none;
-        display: block; /* 끊김 방지 */
+        height: auto !important; /* 고정 높이 완전 해제 */
+        overflow-y: visible !important;
+        scroll-snap-type: none !important;
+        display: block;
     }
     
     #page-home section {
-        min-height: auto;
-        height: auto !important;
-        scroll-snap-align: none;
-        padding: 80px 20px; /* 여백 확대하여 겹침 방지 */
-        position: relative;
+        min-height: auto !important;
+        height: auto !important; /* 고정 높이 완전 해제 */
+        scroll-snap-align: none !important;
+        padding: 80px 20px !important;
+        margin: 0 !important;
+        display: block !important; /* Flexbox로 인한 세로 정렬 잘림 방지 */
     }
 
     /* 2. 네비게이션 최적화 */
-    .nav-links { top: 60px; }
-    .nav-links li a { padding: 12px 0; font-size: 16px; }
+    .nav-links { top: 60px; height: calc(100vh - 60px); overflow-y: auto; }
 
-    /* 3. 히어로 섹션 & 통계 카드 겹침 방지 */
-    .hero-brand { padding-top: 100px !important; padding-bottom: 40px !important; height: auto !important; min-height: 100vh !important; display: flex; flex-direction: column; justify-content: center; }
-    .hero-brand h1 { font-size: 32px; margin-bottom: 20px; }
-    .hero-brand p { font-size: 15px; line-height: 1.6; margin-bottom: 30px; }
+    /* 3. 히어로 섹션 (스크롤 가능하도록) */
+    .hero-brand { 
+        height: auto !important; 
+        min-height: 100vh !important; 
+        padding-top: 120px !important; 
+        padding-bottom: 60px !important;
+    }
+    .hero-brand h1 { font-size: 32px !important; }
     
     .hero-stats-wrapper { 
-        position: relative !important; /* absolute 해제하여 겹침 방지 */
-        bottom: auto !important;
-        left: auto !important;
-        transform: none !important;
-        width: 100% !important;
-        margin-top: 40px !important;
-        padding: 0 !important;
+        position: relative !important; 
+        margin-top: 50px !important;
     }
-    .hero-stats { 
-        grid-template-columns: 1fr 1fr; 
-        gap: 10px; 
-        background: rgba(255,255,255,0.05); 
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 15px;
-        padding: 15px;
-    }
-    .hero-stats .stat-item { padding: 15px 5px; border: none; background: rgba(255,255,255,0.03); border-radius: 10px; }
-    .hero-stats .stat-value { font-size: 24px; }
-    .hero-stats .stat-label { font-size: 12px; }
 
-    /* 4. 그리드 시스템 강화 (겹침 방지) */
+    /* 4. 그리드 시스템 (가독성 중심 세로 배치) */
     .agenda-grid, .card-grid, .service-grid, .school-process-grid, .product-grid, .grid-2x2, .grid-vertical {
         grid-template-columns: 1fr !important;
-        gap: 25px !important;
-        padding: 10px 0;
+        gap: 30px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
     }
     
-    /* 5. AI 분석 섹션 (터치 최적화) */
-    .magnify-container { 
-        height: 480px; 
-        max-width: 95%; 
-        margin: 30px auto; 
-        touch-action: none; /* 브라우저 기본 스크롤 간섭 방지 */
+    .agenda-card, .gateway-card, .info-card, .smart-card {
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
     }
-    .magnify-glass { width: 160px; height: 160px; } /* 모바일용 크기 조절 */
 
-    /* 6. 티저 섹션 텍스트 최적화 */
-    .teaser-text.step-2 { font-size: 28px !important; word-break: keep-all; line-height: 1.3; }
-    .teaser-text.step-3 { font-size: 24px !important; }
+    /* 5. 텍스트 스케일링 (잘림 방지) */
+    #page-home .section-title { font-size: 32px !important; word-break: keep-all; line-height: 1.3; }
+    #page-home .section-desc { font-size: 16px !important; margin-bottom: 40px !important; }
     
-    /* 7. 푸터 및 기타 */
-    .cta-footer { padding: 60px 20px; }
-    .cta-footer h2 { font-size: 24px; }
+    .teaser-text.step-2 { font-size: 28px !important; }
+    .teaser-text.step-3 { font-size: 24px !important; }
+
+    /* 6. 기타 요소 */
+    .magnify-container { height: 400px !important; }
+    .marquee-wrapper { margin-top: 30px !important; }
 }
+
 
 /* 태블릿 최적화 */
 @media (min-width: 769px) and (max-width: 1100px) {
