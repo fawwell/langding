@@ -112,7 +112,9 @@ export default function ReviewAdmin() {
       text: review.text,
       reviewer: review.reviewer
     });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 
   if (loading) return <div style={{ padding: '100px', textAlign: 'center' }}>로딩 중...</div>;
