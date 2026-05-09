@@ -1,20 +1,18 @@
 import { createClient } from '@supabase/supabase-js'
 
-// 💡 런타임에 환경 변수를 안전하게 가져오는 헬퍼 함수
-const getSupabaseClient = () => {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || '';
-  
-  if (!url || !key) return null;
-  return createClient(url, key);
-};
+// 💡 더 직접적이고 강력한 초기화 방식
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
-export const supabase = getSupabaseClient() as any;
+// 값이 없어도 일단 빈 문자열로라도 생성 (빌드 크래시 방지)
+export const supabase = createClient(
+  supabaseUrl || 'https://placeholder.supabase.co',
+  supabaseAnonKey || 'placeholder'
+);
 
-// 어드민용 클라이언트 (서버사이드 전용 권장)
-export const supabaseAdmin = (() => {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-  const key = process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY || '';
-  if (!url || !key) return null;
-  return createClient(url, key);
-})() as any;
+// 어드민용
+const supabaseServiceKey = process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY;
+export const supabaseAdmin = createClient(
+  supabaseUrl || 'https://placeholder.supabase.co',
+  supabaseServiceKey || 'placeholder'
+);
