@@ -617,22 +617,17 @@ export default function Home() {
 
     useEffect(() => {
         const fetchReviews = async () => {
-            const { data, error } = await supabase
-                .from('client_reviews')
-                .select('*')
-                .order('created_at', { ascending: false });
-            
-            if (data && !error && data.length > 0) {
-                setReviewsData(data);
-            } else {
-                // 데이터가 없을 경우 기본값 세팅
-                setReviewsData([
-                    { type: 'b2b', stars: '★★★★★', text: '"수업 끝나고 사무실로 복귀할 때 벌써 변화를 체감합니다. 발바닥, 종아리, 허벅지 움직임부터가 다르네요. 최고입니다!"', reviewer: 'S사 운영팀' },
-                    { type: 'b2b', stars: '★★★★★', text: '"늘어나는 산재 발생이 큰 고민이었는데 업무 시작 전 사고를 예방하는 프로그램을 진행하면서 눈에 띄게 줄었어요."', reviewer: 'H사 안전환경팀' },
-                    { type: 'school', stars: '★★★★☆', text: '"모든 학생이 형평성 있게 검진을 이용할 수 있다는 점이 좋았어요. 체계적인 데이터 리포트 덕분에 학부모님들 만족도도 높습니다."', reviewer: 'OO고등학교 보건교사' },
-                    { type: 'b2b', stars: '★★★★★', text: '"직원들의 거북목이 확실히 좋아지는게 보입니다. 정기적으로 계속 도입할 예정입니다."', reviewer: 'N사 복지담당자' },
-                    { type: 'school', stars: '★★★★★', text: '"아이들이 바른 자세에 대해 스스로 인지하게 된 것이 가장 큰 성과입니다. 정기적으로 계속 도입할 예정입니다."', reviewer: 'XX중학교 체육교사' }
-                ]);
+            try {
+                const { data, error } = await supabase
+                    .from('client_reviews')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (data && !error) {
+                    setReviewsData(data);
+                }
+            } catch (err) {
+                console.error('Reviews fetch error:', err);
             }
         };
         fetchReviews();
