@@ -32,6 +32,11 @@ export default function ReviewAdmin() {
   }, []);
 
   async function fetchReviews() {
+    if (!supabase || !supabase.from) {
+      setMessage('오류: Supabase 설정(환경 변수)이 누락되었습니다. 레일웨이 설정을 확인해 주세요.');
+      setLoading(false);
+      return;
+    }
     try {
       setLoading(true);
       const { data, error } = await supabase
@@ -41,7 +46,7 @@ export default function ReviewAdmin() {
 
       if (error) {
         if (error.code === 'PGRST116' || error.message.includes('relation "client_reviews" does not exist')) {
-          setMessage('테이블이 존재하지 않습니다. 먼저 "client_reviews" 테이블을 생성해 주세요.');
+          setMessage('테이블이 존재하지 않습니다. SQL을 실행해 주세요.');
           return;
         }
         throw error;
@@ -62,6 +67,10 @@ export default function ReviewAdmin() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!supabase || !supabase.from) {
+      alert('데이터베이스 연결 설정이 되어 있지 않습니다.');
+      return;
+    }
     try {
       if (editingId) {
         const { error } = await supabase

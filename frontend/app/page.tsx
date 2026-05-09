@@ -938,20 +938,26 @@ export default function Home() {
                         </div>
 
                         {/* 💡 리뷰 Swiper 필터 로직 완벽 복구 (swiper-slide 클래스 토글링) */}
-                        <div className="swiper reviewSwiper" style={{ marginTop: '40px', padding: '20px 0' }}>
+                        <div className="swiper reviewSwiper" key={reviewsData.length} style={{ marginTop: '40px', padding: '20px 0' }}>
                             <div className="swiper-wrapper" id="review-wrapper">
-                                {reviewsData.map((rev, index) => {
-                                    const isVisible = reviewFilter === 'all' || reviewFilter === rev.type;
-                                    return (
-                                        <div key={index} className={isVisible ? "swiper-slide" : ""} style={{ display: isVisible ? 'block' : 'none' }}>
-                                            <div className="testimonial-card">
-                                                <div className="stars">{rev.stars}</div>
-                                                <p className="review-text">{rev.text}</p>
-                                                <div className="reviewer-info"><div className="reviewer-avatar"></div><span>{rev.reviewer}</span></div>
+                                {reviewsData.length > 0 ? (
+                                    reviewsData.map((rev, index) => {
+                                        const isVisible = reviewFilter === 'all' || reviewFilter === rev.type;
+                                        return (
+                                            <div key={index} className={isVisible ? "swiper-slide" : ""} style={{ display: isVisible ? 'block' : 'none' }}>
+                                                <div className="testimonial-card">
+                                                    <div className="stars">{rev.stars}</div>
+                                                    <p className="review-text">{rev.text}</p>
+                                                    <div className="reviewer-info"><div className="reviewer-avatar"></div><span>{rev.reviewer}</span></div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    );
-                                })}
+                                        );
+                                    })
+                                ) : (
+                                    <div style={{ textAlign: 'center', padding: '40px', color: '#999', width: '100%' }}>
+                                        등록된 고객 후기가 없습니다. 관리자 페이지에서 등록해 주세요.
+                                    </div>
+                                )}
                             </div>
                             <div className="swiper-pagination"></div>
                         </div>
