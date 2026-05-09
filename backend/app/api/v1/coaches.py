@@ -2,21 +2,11 @@
 
 from fastapi import APIRouter, status
 
+from app.core.deps import get_supabase_client
 from app.models.coach import Coach, CoachCreate, CoachUpdate
 from app.models.common import APIResponse
 
 router = APIRouter(prefix="/coaches", tags=["coaches"])
-
-# 임시 mock 데이터
-_MOCK_COACH = Coach(
-    id="coach-001",
-    name="김철수",
-    photo_url=None,
-    specialty="수영",
-    bio="수영 전문 지도사입니다.",
-    experience_years=10,
-    certifications=["생활체육지도사 2급", "수상안전강사"],
-)
 
 
 @router.get(
@@ -26,11 +16,19 @@ _MOCK_COACH = Coach(
 )
 async def list_coaches() -> APIResponse[list[Coach]]:
     """등록된 지도사 목록을 반환합니다."""
-    return APIResponse(
-        success=True,
-        data=[_MOCK_COACH],
-        message="지도사 목록 조회 성공",
-    )
+    supabase = get_supabase_client()
+    try:
+        result = supabase.table("coaches").select("*").order("name").execute()
+        return APIResponse(
+            success=True,
+            data=result.data,
+            message="지도사 목록 조회 성공",
+        )
+    except Exception as e:
+        return APIResponse(
+            success=False,
+            message=f"지도사 목록 조회 실패: {str(e)}",
+        )
 
 
 @router.get(
@@ -40,11 +38,19 @@ async def list_coaches() -> APIResponse[list[Coach]]:
 )
 async def get_coach(coach_id: str) -> APIResponse[Coach]:
     """특정 지도사의 상세 정보를 반환합니다."""
-    return APIResponse(
-        success=True,
-        data=_MOCK_COACH,
-        message="지도사 조회 성공",
-    )
+    supabase = get_supabase_client()
+    try:
+        result = supabase.table("coaches").select("*").eq("id", coach_id).single().execute()
+        return APIResponse(
+            success=True,
+            data=result.data,
+            message="지도사 조회 성공",
+        )
+    except Exception as e:
+        return APIResponse(
+            success=False,
+            message=f"지도사 조회 실패: {str(e)}",
+        )
 
 
 @router.post(
@@ -55,13 +61,19 @@ async def get_coach(coach_id: str) -> APIResponse[Coach]:
 )
 async def create_coach(body: CoachCreate) -> APIResponse[Coach]:
     """새 지도사를 등록합니다."""
-    # 불변 패턴: body를 변경하지 않고 새 객체 생성
-    created = Coach(id="coach-new", **body.model_dump())
-    return APIResponse(
-        success=True,
-        data=created,
-        message="지도사 등록 성공",
-    )
+    supabase = get_supabase_client()
+    try:
+        result = supabase.table("coaches").insert(body.model_dump()).execute()
+        return APIResponse(
+            success=True,
+            data=result.data[0],
+            message="지도사 등록 성공",
+        )
+    except Exception as e:
+        return APIResponse(
+            success=False,
+            message=f"지도사 등록 실패: {str(e)}",
+        )
 
 
 @router.put(
@@ -71,12 +83,39 @@ async def create_coach(body: CoachCreate) -> APIResponse[Coach]:
 )
 async def update_coach(coach_id: str, body: CoachUpdate) -> APIResponse[Coach]:
     """지도사 정보를 수정합니다."""
-    # 불변 패턴: 기존 데이터와 업데이트를 병합해서 새 객체 생성
-    updates = body.model_dump(exclude_unset=True)
-    merged = {**_MOCK_COACH.model_dump(), **updates}
-    updated = Coach(**merged)
-    return APIResponse(
-        success=True,
-        data=updated,
-        message="지도사 정보 수정 성공",
-    )
+    supabase = get_supabase_client()
+    try:
+        updates = body.model_dump(exclude_unset=True)
+        result = supabase.table("coaches").update(updates).eq("id", coach_id).execute()
+        return APIResponse(
+            success=True,
+            data=result.data[0],
+            message="지도사 정보 수정 성공",
+        )
+    except Exception as e:
+        return APIResponse(
+            success=False,
+            message=f"지도사 정보 수정 실패: {str(e)}",
+        )
+
+
+@router.delete(
+    "/{coach_id}",
+    response_model=APIResponse[None],
+    summary="지도사 삭제",
+)
+async def delete_coach(coach_id: str) -> APIResponse[None]:
+    """지도사를 삭제합니다."""
+    supabase = get_supabase_client()
+    try:
+        supabase.table("coaches").delete().eq("id", coach_id).execute()
+        return APIResponse(
+            success=True,
+            data=None,
+            message="지도사 삭제 성공",
+        )
+    except Exception as e:
+        return APIResponse(
+            success=False,
+            message=f"지도사 삭제 실패: {str(e)}",
+        )

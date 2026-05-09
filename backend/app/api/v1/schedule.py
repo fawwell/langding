@@ -1,24 +1,12 @@
 """스케줄(Schedule) API 엔드포인트."""
 
-from datetime import datetime
-
 from fastapi import APIRouter, status
 
+from app.core.deps import get_supabase_client
 from app.models.common import APIResponse
 from app.models.schedule import Schedule, ScheduleCreate, ScheduleUpdate
 
 router = APIRouter(prefix="/schedules", tags=["schedules"])
-
-# 임시 mock 데이터
-_MOCK_SCHEDULE = Schedule(
-    id="schedule-001",
-    coach_id="coach-001",
-    title="초급 수영 A반",
-    start_time=datetime(2026, 3, 20, 10, 0, 0),
-    end_time=datetime(2026, 3, 20, 11, 0, 0),
-    recurring=True,
-    location="올림픽수영장 3레인",
-)
 
 
 @router.get(
@@ -26,13 +14,33 @@ _MOCK_SCHEDULE = Schedule(
     response_model=APIResponse[list[Schedule]],
     summary="스케줄 목록 조회",
 )
-async def list_schedules() -> APIResponse[list[Schedule]]:
+async def list_schedules(
+    coach_id: str | None = None,
+    start_date: str | None = None,
+    end_date: str | None = None
+) -> APIResponse[list[Schedule]]:
     """등록된 스케줄 목록을 반환합니다."""
-    return APIResponse(
-        success=True,
-        data=[_MOCK_SCHEDULE],
-        message="스케줄 목록 조회 성공",
-    )
+    supabase = get_supabase_client()
+    try:
+        query = supabase.table("schedules").select("*").order("start_time")
+        if coach_id:
+            query = query.eq("coach_id", coach_id)
+        if start_date:
+            query = query.gte("start_time", start_date)
+        if end_date:
+            query = query.lte("start_time", end_date)
+        
+        result = query.execute()
+        return APIResponse(
+            success=True,
+            data=result.data,
+            message="스케줄 목록 조회 성공",
+        )
+    except Exception as e:
+        return APIResponse(
+            success=False,
+            message=f"스케줄 목록 조회 실패: {str(e)}",
+        )
 
 
 @router.post(
@@ -43,12 +51,19 @@ async def list_schedules() -> APIResponse[list[Schedule]]:
 )
 async def create_schedule(body: ScheduleCreate) -> APIResponse[Schedule]:
     """새 스케줄을 등록합니다."""
-    created = Schedule(id="schedule-new", **body.model_dump())
-    return APIResponse(
-        success=True,
-        data=created,
-        message="스케줄 등록 성공",
-    )
+    supabase = get_supabase_client()
+    try:
+        result = supabase.table("schedules").insert(body.model_dump()).execute()
+        return APIResponse(
+            success=True,
+            data=result.data[0],
+            message="스케줄 등록 성공",
+        )
+    except Exception as e:
+        return APIResponse(
+            success=False,
+            message=f"스케줄 등록 실패: {str(e)}",
+        )
 
 
 @router.put(
@@ -60,14 +75,20 @@ async def update_schedule(
     schedule_id: str, body: ScheduleUpdate
 ) -> APIResponse[Schedule]:
     """스케줄 정보를 수정합니다."""
-    updates = body.model_dump(exclude_unset=True)
-    merged = {**_MOCK_SCHEDULE.model_dump(), **updates}
-    updated = Schedule(**merged)
-    return APIResponse(
-        success=True,
-        data=updated,
-        message="스케줄 수정 성공",
-    )
+    supabase = get_supabase_client()
+    try:
+        updates = body.model_dump(exclude_unset=True)
+        result = supabase.table("schedules").update(updates).eq("id", schedule_id).execute()
+        return APIResponse(
+            success=True,
+            data=result.data[0],
+            message="스케줄 수정 성공",
+        )
+    except Exception as e:
+        return APIResponse(
+            success=False,
+            message=f"스케줄 수정 실패: {str(e)}",
+        )
 
 
 @router.delete(
@@ -77,8 +98,16 @@ async def update_schedule(
 )
 async def delete_schedule(schedule_id: str) -> APIResponse[None]:
     """스케줄을 삭제합니다."""
-    return APIResponse(
-        success=True,
-        data=None,
-        message="스케줄 삭제 성공",
-    )
+    supabase = get_supabase_client()
+    try:
+        supabase.table("schedules").delete().eq("id", schedule_id).execute()
+        return APIResponse(
+            success=True,
+            data=None,
+            message="스케줄 삭제 성공",
+        )
+    except Exception as e:
+        return APIResponse(
+            success=False,
+            message=f"스케줄 삭제 실패: {str(e)}",
+        )

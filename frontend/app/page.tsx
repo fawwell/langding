@@ -67,87 +67,169 @@ export default function Home() {
         }
     }, [reviewFilter]);
 
-    // 스크롤 감지 및 숫자가운트 다운 로직
+    // 텍스트를 글자 단위로 쪼개는 로직 (HTML 태그 보존형 V3)
     useEffect(() => {
-        // [안전장치] 페이지 로드 시 0.5초 후 Reveal 무조건 강제 실행 (원본 HTML 하단 script.js 안전장치 이식)
-        const safetyTimer = setTimeout(() => {
-            document.querySelectorAll('.reveal').forEach((el) => {
-                const htmlEl = el as HTMLElement;
-                if (window.getComputedStyle(htmlEl).opacity === '0') {
-                    htmlEl.style.opacity = '1';
-                    htmlEl.style.transform = 'translateY(0)';
-                    htmlEl.style.transition = 'opacity 0.5s ease';
+        const targets = document.querySelectorAll('.section-kicker, .section-title, .section-desc, .hero-brand h1, .hero-brand p, .teaser-text');
+        
+        targets.forEach(el => {
+            if (el.querySelector('.char') || el.classList.contains('typing-ready')) return;
+            
+            let charIndex = 0;
+            const originalHTML = el.innerHTML;
+            
+            // 재귀적으로 텍스트 노드만 찾아 쪼개는 함수
+            const processNode = (node: Node) => {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const text = node.textContent || '';
+                    const fragment = document.createDocumentFragment();
+                    [...text].forEach(char => {
+                        const span = document.createElement('span');
+                        span.textContent = char === ' ' ? '\u00A0' : char;
+                        span.className = 'char';
+                        span.style.setProperty('--char-index', charIndex.toString());
+                        fragment.appendChild(span);
+                        charIndex++;
+                    });
+                    node.parentNode?.replaceChild(fragment, node);
+                } else if (node.nodeType === Node.ELEMENT_NODE) {
+                    // <br> 태그는 건너뛰고 다른 요소는 내부 탐색
+                    if ((node as Element).tagName !== 'BR') {
+                        Array.from(node.childNodes).forEach(child => processNode(child));
+                    }
+                }
+            };
+
+            processNode(el);
+            el.classList.add('typing-ready');
+        });
+    }, [activePage]);
+
+    // 👁️ 스크롤 감지 및 애니메이션 통합 시스템 (최적화 버전 V3)
+    useEffect(() => {
+        // 1. [만족도 차트 전용] 360도 회전 + 채우기
+        const chartObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    const countEl = entry.target.querySelector('.count-up') as HTMLElement;
+                    const svgs = entry.target.querySelectorAll('.jelly-layer svg');
+                    const circles = entry.target.querySelectorAll('.j-fg');
+                    
+                    if (countEl) {
+                        // 0점 강제 세팅 (확실하게 비워둠)
+                        countEl.innerText = "0";
+                        svgs.forEach(svg => (svg as HTMLElement).style.transform = `rotate(-90deg)`);
+                        circles.forEach(circle => (circle as HTMLElement).style.strokeDashoffset = "100");
+
+                        const target = 99;
+                        const duration = 2800; 
+                        const startTime = performance.now();
+                        const animate = (currentTime: number) => {
+                            const elapsed = currentTime - startTime;
+                            const progress = Math.min(elapsed / duration, 1);
+                            
+                            // 💡 슬로우 스타트 Easing (Ease-In-Out) - 시작이 천천히 보여야 0부터 오르는 게 보임
+                            const ease = progress < 0.5 
+                                ? 2 * progress * progress 
+                                : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+                            countEl.innerText = Math.floor(ease * target).toString();
+                            
+                            // 🔄 360도 한 바퀴 회전
+                            const rotation = (ease * 360) - 90;
+                            svgs.forEach(svg => { (svg as HTMLElement).style.transform = `rotate(${rotation}deg)`; });
+                            
+                            // 🌊 시계 방향으로 색 채우기
+                            const offset = 100 - (ease * 99);
+                            circles.forEach(circle => { (circle as HTMLElement).style.strokeDashoffset = offset.toString(); });
+
+                            if (progress < 1) requestAnimationFrame(animate);
+                        };
+                        // 0.2초 대기 후 시작하여 사용자가 눈을 맞출 시간을 줌
+                        setTimeout(() => requestAnimationFrame(animate), 200);
+                    }
+                    chartObserver.unobserve(entry.target);
                 }
             });
-        }, 500);
+        }, { threshold: 0.7 }); 
 
+        // 2. [일반 섹션] 페이드인 효과
         const revealObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
+                    revealObserver.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.15 });
-        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+        }, { threshold: 0.1 });
 
-        // 💡 [추가] 히어로 섹션 수치 카운트업 즉시 실행
-        const heroStats = document.querySelector('.hero-stats');
-        if (heroStats) {
-            const counters = heroStats.querySelectorAll('.count-up');
-            counters.forEach(counter => {
-                const target = +(counter.getAttribute('data-target') || 0);
-                const isFormat = counter.getAttribute('data-format') === 'true';
-                let count = 0;
-                const speed = 2000 / 60;
-                const increment = target / speed;
-
-                const updateCount = () => {
-                    count += increment;
-                    if (count < target) {
-                        counter.textContent = Math.ceil(count).toLocaleString(isFormat ? 'en-US' : undefined);
-                        setTimeout(updateCount, 1);
-                    } else {
-                        counter.textContent = target.toLocaleString(isFormat ? 'en-US' : undefined);
-                    }
-                };
-                updateCount();
-            });
-        }
-
+        // 3. [기타 통계 수치] 일반 카운트업
         const countObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const counters = entry.target.querySelectorAll('.count-up');
                     counters.forEach(counter => {
+                        if (counter.parentElement?.classList.contains('jelly-text-float')) return; // 차트 수치는 제외
+                        if (counter.classList.contains('counted')) return; // 중복 실행 방지
+                        
                         const target = +(counter.getAttribute('data-target') || 0);
                         const isFormat = counter.getAttribute('data-format') === 'true';
-                        const increment = target / (2000 / 16);
                         let current = 0;
-                        const updateCounter = () => {
-                            current += increment;
-                            if (current < target) {
-                                counter.textContent = isFormat ? Math.ceil(current).toLocaleString() : Math.ceil(current).toString();
-                                requestAnimationFrame(updateCounter);
+                        const duration = 1200; // 1.2초간 실행 (속도 향상)
+                        const startTime = performance.now();
+
+                        const update = (currentTime: number) => {
+                            const elapsed = currentTime - startTime;
+                            const progress = Math.min(elapsed / duration, 1);
+                            
+                            // EaseOutExpo 효과
+                            const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+                            current = target * easeProgress;
+
+                            counter.textContent = Math.ceil(current).toLocaleString(isFormat ? 'en-US' : undefined);
+                            
+                            if (progress < 1) {
+                                requestAnimationFrame(update);
                             } else {
-                                counter.textContent = isFormat ? target.toLocaleString() : target.toString();
+                                counter.textContent = target.toLocaleString(isFormat ? 'en-US' : undefined);
+                                counter.classList.add('counted');
                             }
                         };
-                        updateCounter();
+                        requestAnimationFrame(update);
                     });
-
-                    if (entry.target.classList.contains('jelly-chart-section')) {
-                        const pieScene = entry.target.querySelector('.jelly-pie-scene');
-                        if (pieScene) pieScene.classList.add('animate');
-                    }
                     observer.unobserve(entry.target);
                 }
             });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('.hero-stats, .school-stats, .jelly-chart-section').forEach(el => countObserver.observe(el));
+        // 초기화 및 실행
+        const satisfactionChart = document.getElementById('satisfaction-chart');
+        if (satisfactionChart) {
+            const countEl = satisfactionChart.querySelector('.count-up') as HTMLElement;
+            if (countEl) countEl.innerText = "0";
+            chartObserver.observe(satisfactionChart);
+        }
+
+        const timer = setTimeout(() => {
+            // 현재 활성화된 페이지 컨테이너 내의 히어로 섹션만 정밀 타겟팅
+            const activePageContainer = document.querySelector(`.page-content.active`);
+            if (activePageContainer) {
+                const hero = activePageContainer.querySelector('.hero-brand, .hero-premium');
+                if (hero) hero.classList.add('active');
+            }
+
+            document.querySelectorAll('.reveal').forEach(el => {
+                if (el.id !== 'satisfaction-chart' && !el.classList.contains('hero-brand') && !el.classList.contains('hero-premium')) {
+                    revealObserver.observe(el);
+                }
+            });
+            // 통계 카드 관찰 시작
+            document.querySelectorAll('.hero-stats, .school-stats').forEach(el => countObserver.observe(el));
+        }, 300);
 
         return () => {
-            clearTimeout(safetyTimer);
+            clearTimeout(timer);
+            chartObserver.disconnect();
             revealObserver.disconnect();
             countObserver.disconnect();
         };
@@ -229,11 +311,32 @@ export default function Home() {
             requestAnimationFrame(() => {
                 container.style.setProperty('--x', `${x}px`);
                 container.style.setProperty('--y', `${y}px`);
-                container.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+                
+                // 1. 컨테이너 전체 기울기 및 그림자 (Shadow)
+                container.style.transform = `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+                container.style.boxShadow = `${-tiltY * 3}px ${tiltX * 3}px 50px rgba(0,0,0,0.6), 0 0 20px rgba(0, 255, 255, 0.1)`;
+                
+                // 2. 레이어별 파라락스 (입체감)
+                const human = container.querySelector('.magnify-human') as HTMLElement;
+                const skeleton = container.querySelector('.magnify-skeleton') as HTMLElement;
+                const shine = container.querySelector('.magnify-shine') as HTMLElement;
+
+                if (human) human.style.transform = `translate3d(${-tiltY * 0.5}px, ${tiltX * 0.5}px, 20px)`;
+                if (skeleton) skeleton.style.transform = `translate3d(${tiltY * 0.3}px, ${-tiltX * 0.3}px, -30px) scale(1.05)`;
+
+                // 3. 광택 (Shine) 위치 조정
+                if (shine) {
+                    shine.style.backgroundPosition = `${50 + tiltY * 2}% ${50 + tiltX * 2}%`;
+                }
+
                 if (glass) {
                     glass.style.left = `${x}px`;
                     glass.style.top = `${y}px`;
                     glass.style.display = 'block';
+                    
+                    const angle = Math.abs(Math.floor(tiltY * 2 + 15));
+                    const score = 90 + Math.floor(Math.random() * 10);
+                    glass.setAttribute('data-info', `ANGLE: ${angle}°\nSCORE: ${score}%`);
                 }
             });
         };
@@ -246,9 +349,9 @@ export default function Home() {
             }
         };
 
-        const handleEnter = () => container.classList.add('active');
+        const handleEnter = () => container.classList.add('magnify-hover');
         const handleLeave = () => {
-            container.classList.remove('active');
+            container.classList.remove('magnify-hover');
             container.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
             if (glass) glass.style.display = 'none';
         };
@@ -267,6 +370,48 @@ export default function Home() {
             container.removeEventListener('touchstart', handleTouchMove);
             container.removeEventListener('touchmove', handleTouchMove);
             container.removeEventListener('touchend', handleLeave);
+        };
+    }, [activePage]);
+
+    // 📊 만족도 차트 3D 틸트 시스템
+    useEffect(() => {
+        const chart = document.getElementById('satisfaction-chart');
+        if (!chart || activePage !== 'page-home') return;
+
+        const handleMouseMove = (e: MouseEvent) => {
+            const rect = chart.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (centerY - y) / 10;
+            const rotateY = (x - centerX) / 10;
+
+            const scene = chart.querySelector('.jelly-pie-scene') as HTMLElement;
+            if (scene) {
+                scene.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                
+                // 그림자 역방향 이동으로 입체감 극대화
+                const shadow = scene.querySelector('.jelly-shadow') as HTMLElement;
+                if (shadow) {
+                    shadow.style.transform = `translateZ(-50px) translateX(${-rotateY * 2}px) translateY(${rotateX * 2}px)`;
+                }
+            }
+        };
+
+        const handleMouseLeave = () => {
+            const scene = chart.querySelector('.jelly-pie-scene') as HTMLElement;
+            if (scene) {
+                scene.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+            }
+        };
+
+        chart.addEventListener('mousemove', handleMouseMove);
+        chart.addEventListener('mouseleave', handleMouseLeave);
+        return () => {
+            chart.removeEventListener('mousemove', handleMouseMove);
+            chart.removeEventListener('mouseleave', handleMouseLeave);
         };
     }, [activePage]);
 
@@ -465,14 +610,31 @@ export default function Home() {
         setQuizStep(1);
     };
 
-    // 리뷰 데이터 - 필터용
-    const reviewsData = [
-        { type: 'b2b', stars: '★★★★★', text: '"수업 끝나고 사무실로 복귀할 때 벌써 변화를 체감합니다. 발바닥, 종아리, 허벅지 움직임부터가 다르네요. 최고입니다!"', reviewer: 'S사 운영팀' },
-        { type: 'b2b', stars: '★★★★★', text: '"늘어나는 산재 발생이 큰 고민이었는데 업무 시작 전 사고를 예방하는 프로그램을 진행하면서 눈에 띄게 줄었어요."', reviewer: 'H사 안전환경팀' },
-        { type: 'school', stars: '★★★★☆', text: '"모든 학생이 형평성 있게 검진을 이용할 수 있다는 점이 좋았어요. 체계적인 데이터 리포트 덕분에 학부모님들 만족도도 높습니다."', reviewer: 'OO고등학교 보건교사' },
-        { type: 'b2b', stars: '★★★★★', text: '"직원들의 거북목이 확실히 좋아지는게 보입니다. 정기적으로 계속 도입할 예정입니다."', reviewer: 'N사 복지담당자' },
-        { type: 'school', stars: '★★★★★', text: '"아이들이 바른 자세에 대해 스스로 인지하게 된 것이 가장 큰 성과입니다. 정기적으로 계속 도입할 예정입니다."', reviewer: 'XX중학교 체육교사' }
-    ];
+    // 리뷰 데이터 - DB 연동
+    const [reviewsData, setReviewsData] = useState<any[]>([]);
+
+    useEffect(() => {
+        const fetchReviews = async () => {
+            const { data, error } = await supabase
+                .from('client_reviews')
+                .select('*')
+                .order('created_at', { ascending: false });
+            
+            if (data && !error && data.length > 0) {
+                setReviewsData(data);
+            } else {
+                // 데이터가 없을 경우 기본값 세팅
+                setReviewsData([
+                    { type: 'b2b', stars: '★★★★★', text: '"수업 끝나고 사무실로 복귀할 때 벌써 변화를 체감합니다. 발바닥, 종아리, 허벅지 움직임부터가 다르네요. 최고입니다!"', reviewer: 'S사 운영팀' },
+                    { type: 'b2b', stars: '★★★★★', text: '"늘어나는 산재 발생이 큰 고민이었는데 업무 시작 전 사고를 예방하는 프로그램을 진행하면서 눈에 띄게 줄었어요."', reviewer: 'H사 안전환경팀' },
+                    { type: 'school', stars: '★★★★☆', text: '"모든 학생이 형평성 있게 검진을 이용할 수 있다는 점이 좋았어요. 체계적인 데이터 리포트 덕분에 학부모님들 만족도도 높습니다."', reviewer: 'OO고등학교 보건교사' },
+                    { type: 'b2b', stars: '★★★★★', text: '"직원들의 거북목이 확실히 좋아지는게 보입니다. 정기적으로 계속 도입할 예정입니다."', reviewer: 'N사 복지담당자' },
+                    { type: 'school', stars: '★★★★★', text: '"아이들이 바른 자세에 대해 스스로 인지하게 된 것이 가장 큰 성과입니다. 정기적으로 계속 도입할 예정입니다."', reviewer: 'XX중학교 체육교사' }
+                ]);
+            }
+        };
+        fetchReviews();
+    }, []);
 
     return (
         <>
@@ -504,7 +666,10 @@ export default function Home() {
 
                     <div className="container" style={{ position: 'relative', zIndex: 2 }}>
                         <div className="hero-subtitle hero-el hero-el-1">FaWW : Family Wholesome Wellness</div>
-                        <h1 className="hero-el hero-el-2"><span>건강이 함께하는 회사</span>,<br />기업복지의 원조는 <span>FaWW</span></h1>
+                        <h1 className="hero-el hero-el-2">
+                            <span className="text-highlight">건강</span>이 함께하는 <span className="text-highlight">회사</span>,<br />
+                            <span className="text-highlight">기업복지</span>의 원조는 <span className="text-highlight">FaWW</span>
+                        </h1>
                         <p className="hero-el hero-el-3">
                             <strong>스마트 AI를 활용한 맞춤형 케어프로그램</strong><br />
                             근골격계 질환, 1:1 케어 프로그램을 통한 산재 예방 시스템을<br />업계 최초로 도입한 피지컬케어 전문가가 함께합니다
@@ -553,6 +718,9 @@ export default function Home() {
                         <h2 className="section-title reveal delay-2">커서를 올려 AI 분석을 체험해보세요</h2>
                         <p className="section-desc reveal delay-3">FaWW의 스마트 AI 기술은 신체 불균형을 정밀하게 측정하여<br />눈에 보이지 않는 통증의 원인을 찾아냅니다.</p>
                         <div className="magnify-container reveal delay-4">
+                            {/* 동적 광택 레이어 */}
+                            <div className="magnify-shine"></div>
+
                             <div className="magnify-skeleton" style={{ backgroundImage: "url('/images/skeleton.png')" }}></div>
                             <div className="magnify-human" style={{ backgroundImage: "url('/images/human.png')" }}></div>
                             <div className="magnify-glass"></div>
@@ -561,32 +729,40 @@ export default function Home() {
                     </div>
                 </section>
 
-                <section className="jelly-chart-section reveal" style={{ padding: '80px 0', backgroundColor: '#f8f9fa', borderTop: '1px solid #eee' }}>
+                <section className="jelly-chart-section reveal" style={{ padding: '100px 0', backgroundColor: '#f8f9fa', borderTop: '1px solid #eee', overflow: 'hidden' }}>
                     <div className="container text-center" style={{ overflow: 'visible' }}>
-                        <h2 className="section-title reveal delay-1">FaWW 피지컬케어 종합 만족도</h2>
-                        <p className="section-desc reveal delay-2" style={{ marginBottom: '60px' }}>2만 건 이상의 데이터가 증명하는 트렌디한 결과</p>
+                        <h2 className="section-title reveal delay-1">FaWW <span className="text-highlight">피지컬케어 종합 만족도</span></h2>
+                        <p className="section-desc reveal delay-2" style={{ marginBottom: '80px' }}>2만 건 이상의 데이터가 증명하는 압도적인 결과</p>
 
-                        <div className="jelly-pie-wrapper reveal delay-3">
-                            <div className="jelly-pie-scene">
-                                <div className="jelly-shadow"></div>
-                                <div className="jelly-layer bottom"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" className="j-bg" /><circle cx="16" cy="16" r="8" className="j-fg" pathLength="100" /></svg></div>
-                                <div className="jelly-layer mid1"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" className="j-bg" /><circle cx="16" cy="16" r="8" className="j-fg" pathLength="100" /></svg></div>
-                                <div className="jelly-layer mid2"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" className="j-bg" /><circle cx="16" cy="16" r="8" className="j-fg" pathLength="100" /></svg></div>
-                                <div className="jelly-layer top">
-                                    <svg viewBox="0 0 32 32">
-                                        <circle cx="16" cy="16" r="8" className="j-bg" pathLength="100" />
-                                        <circle cx="16" cy="16" r="8" className="j-fg count-up-circle" pathLength="100" />
-                                    </svg>
-                                    <div className="jelly-gloss"></div>
-                                </div>
-                            </div>
+                        <div className="jelly-chart-container reveal delay-3" id="satisfaction-chart">
+                            <div className="jelly-pie-wrapper">
+                                <div className="jelly-pie-scene">
+                                    {/* 차트 그림자 */}
+                                    <div className="jelly-shadow"></div>
+                                    
+                                    {/* 3D 실린더 두께 레이어 (여러 겹으로 부피감 형성) */}
+                                    <div className="jelly-extrusion"></div>
+                                    <div className="jelly-layer bottom"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" className="j-bg" /><circle cx="16" cy="16" r="8" className="j-fg" pathLength="100" /></svg></div>
+                                    <div className="jelly-layer mid"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="8" className="j-bg" /><circle cx="16" cy="16" r="8" className="j-fg" pathLength="100" /></svg></div>
+                                    
+                                    {/* 최상단 면 (광택 및 수치) */}
+                                    <div className="jelly-layer top">
+                                        <svg viewBox="0 0 32 32">
+                                            <circle cx="16" cy="16" r="8" className="j-bg" pathLength="100" />
+                                            <circle cx="16" cy="16" r="8" className="j-fg count-up-circle" pathLength="100" />
+                                        </svg>
+                                        <div className="jelly-gloss"></div>
+                                    </div>
 
-                            <div className="jelly-text-float">
-                                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center' }}>
-                                    <span className="jelly-percent count-up" data-target="99">0</span>
-                                    <span className="jelly-sign">%</span>
+                                    {/* 공중에 뜬 수치 데이터 */}
+                                    <div className="jelly-text-float">
+                                        <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center' }}>
+                                            <span className="jelly-percent count-up neon-text" data-target="99">0</span>
+                                            <span className="jelly-sign">%</span>
+                                        </div>
+                                        <span className="jelly-label">매우 만족</span>
+                                    </div>
                                 </div>
-                                <span className="jelly-label">매우 만족</span>
                             </div>
                         </div>
 
@@ -602,9 +778,9 @@ export default function Home() {
                 <section className="agenda-section reveal">
                     <div className="container">
                         <div className="agenda-header">
-                            <span className="section-kicker">CORE AGENDA</span>
-                            <h2>조직의 가장 큰 고민,<br /><span>&apos;피지컬케어(Physical Care)&apos;</span>에서 해답을 찾다</h2>
-                            <p>단순한 복지를 넘어 산업재해, 저출산, 멘탈케어까지. 국가와 기업의 핵심 과제를 해결합니다.</p>
+                            <span className="section-kicker reveal">CORE AGENDA</span>
+                            <h2 className="section-title reveal">조직의 가장 큰 고민,<br /><span>&apos;피지컬케어(Physical Care)&apos;</span>에서 해답을 찾다</h2>
+                            <p className="section-desc reveal delay-1">단순한 복지를 넘어 산업재해, 저출산, 멘탈케어까지. 국가와 기업의 핵심 과제를 해결합니다.</p>
                         </div>
                         <div className="agenda-grid">
                             <div className="agenda-card reveal reveal-left">
@@ -635,8 +811,8 @@ export default function Home() {
 
                         <div className="expert-features">
                             <div style={{ textAlign: 'center', marginBottom: '40px' }} className="reveal">
-                                <span className="section-kicker">EAP SYSTEM</span>
-                                <h2 className="section-title" style={{ marginBottom: 0 }}>FaWW만의 독보적 EAP 운영 시스템</h2>
+                                <span className="section-kicker reveal">EAP SYSTEM</span>
+                                <h2 className="section-title reveal" style={{ marginBottom: 0 }}>FaWW만의 독보적 EAP 운영 시스템</h2>
                             </div>
                             <div className="expert-grid">
                                 <div className="agenda-card reveal" style={{ border: '2px solid #2b8a3e', boxShadow: '0 10px 30px rgba(43, 138, 62, 0.08)' }}>
@@ -666,9 +842,9 @@ export default function Home() {
 
                 <section className="comparison-section reveal" style={{ padding: '60px 0', background: '#fff', borderTop: '1px solid #eee' }}>
                     <div className="container" style={{ textAlign: 'center' }}>
-                        <span className="section-kicker">DIFFERENCE</span>
-                        <h2 className="section-title">품의서가 통과되는 압도적 차이</h2>
-                        <p className="section-desc">단순 매칭 플랫폼과 피지컬케어 원조 그룹의 본질적인 차이를 확인하세요.</p>
+                        <span className="section-kicker reveal">DIFFERENCE</span>
+                        <h2 className="section-title reveal">품의서가 통과되는 압도적 차이</h2>
+                        <p className="section-desc reveal delay-1">단순 매칭 플랫폼과 피지컬케어 원조 그룹의 본질적인 차이를 확인하세요.</p>
                         <div className="compare-table-wrapper" style={{ maxWidth: '900px', margin: '30px auto 0', border: '1px solid #eaeaea', borderRadius: '12px', overflow: 'hidden' }}>
                             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'center' }}>
                                 <thead>
@@ -703,9 +879,9 @@ export default function Home() {
                 <section className="gateway-section reveal">
                     <div className="container">
                         <div style={{ textAlign: 'center', marginBottom: '50px' }}>
-                            <span className="section-kicker">OUR BUSINESS</span>
-                            <h2 className="section-title">지속가능한 웰니스 솔루션</h2>
-                            <p className="section-desc">FaWW의 3가지 비즈니스로 여러분의 조직과 일상에 건강을 선물하세요.</p>
+                            <span className="section-kicker reveal">OUR BUSINESS</span>
+                            <h2 className="section-title reveal">지속가능한 웰니스 솔루션</h2>
+                            <p className="section-desc reveal delay-1">FaWW의 3가지 비즈니스로 여러분의 조직과 일상에 건강을 선물하세요.</p>
                         </div>
                         <div className="gateway-grid">
                             <div className="gateway-card reveal" onClick={() => switchPage('page-ai')} style={{ padding: 0, overflow: 'hidden' }}>

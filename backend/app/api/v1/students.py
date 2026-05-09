@@ -1,25 +1,13 @@
 """수강생(Student) API 엔드포인트."""
 
 from datetime import datetime
-
 from fastapi import APIRouter, status
 
+from app.core.deps import get_supabase_client
 from app.models.common import APIResponse
 from app.models.student import Student, StudentCreate, StudentUpdate
 
 router = APIRouter(prefix="/students", tags=["students"])
-
-# 임시 mock 데이터
-_MOCK_STUDENT = Student(
-    id="student-001",
-    name="이영희",
-    phone="010-1234-5678",
-    email="younghee@example.com",
-    birth_date="2000-05-15",
-    coach_id="coach-001",
-    enrolled_at=datetime(2025, 1, 10, 9, 0, 0),
-    status="active",
-)
 
 
 @router.get(
@@ -27,13 +15,24 @@ _MOCK_STUDENT = Student(
     response_model=APIResponse[list[Student]],
     summary="수강생 목록 조회",
 )
-async def list_students() -> APIResponse[list[Student]]:
+async def list_students(coach_id: str | None = None) -> APIResponse[list[Student]]:
     """등록된 수강생 목록을 반환합니다."""
-    return APIResponse(
-        success=True,
-        data=[_MOCK_STUDENT],
-        message="수강생 목록 조회 성공",
-    )
+    supabase = get_supabase_client()
+    try:
+        query = supabase.table("students").select("*").order("name")
+        if coach_id:
+            query = query.eq("coach_id", coach_id)
+        result = query.execute()
+        return APIResponse(
+            success=True,
+            data=result.data,
+            message="수강생 목록 조회 성공",
+        )
+    except Exception as e:
+        return APIResponse(
+            success=False,
+            message=f"수강생 목록 조회 실패: {str(e)}",
+        )
 
 
 @router.get(
@@ -43,11 +42,19 @@ async def list_students() -> APIResponse[list[Student]]:
 )
 async def get_student(student_id: str) -> APIResponse[Student]:
     """특정 수강생의 상세 정보를 반환합니다."""
-    return APIResponse(
-        success=True,
-        data=_MOCK_STUDENT,
-        message="수강생 조회 성공",
-    )
+    supabase = get_supabase_client()
+    try:
+        result = supabase.table("students").select("*").eq("id", student_id).single().execute()
+        return APIResponse(
+            success=True,
+            data=result.data,
+            message="수강생 조회 성공",
+        )
+    except Exception as e:
+        return APIResponse(
+            success=False,
+            message=f"수강생 조회 실패: {str(e)}",
+        )
 
 
 @router.post(
@@ -58,16 +65,21 @@ async def get_student(student_id: str) -> APIResponse[Student]:
 )
 async def create_student(body: StudentCreate) -> APIResponse[Student]:
     """새 수강생을 등록합니다."""
-    created = Student(
-        id="student-new",
-        enrolled_at=datetime.now(),
-        **body.model_dump(),
-    )
-    return APIResponse(
-        success=True,
-        data=created,
-        message="수강생 등록 성공",
-    )
+    supabase = get_supabase_client()
+    try:
+        data = body.model_dump()
+        data["enrolled_at"] = datetime.now().isoformat()
+        result = supabase.table("students").insert(data).execute()
+        return APIResponse(
+            success=True,
+            data=result.data[0],
+            message="수강생 등록 성공",
+        )
+    except Exception as e:
+        return APIResponse(
+            success=False,
+            message=f"수강생 등록 실패: {str(e)}",
+        )
 
 
 @router.put(
@@ -79,14 +91,20 @@ async def update_student(
     student_id: str, body: StudentUpdate
 ) -> APIResponse[Student]:
     """수강생 정보를 수정합니다."""
-    updates = body.model_dump(exclude_unset=True)
-    merged = {**_MOCK_STUDENT.model_dump(), **updates}
-    updated = Student(**merged)
-    return APIResponse(
-        success=True,
-        data=updated,
-        message="수강생 정보 수정 성공",
-    )
+    supabase = get_supabase_client()
+    try:
+        updates = body.model_dump(exclude_unset=True)
+        result = supabase.table("students").update(updates).eq("id", student_id).execute()
+        return APIResponse(
+            success=True,
+            data=result.data[0],
+            message="수강생 정보 수정 성공",
+        )
+    except Exception as e:
+        return APIResponse(
+            success=False,
+            message=f"수강생 정보 수정 실패: {str(e)}",
+        )
 
 
 @router.delete(
@@ -96,8 +114,16 @@ async def update_student(
 )
 async def delete_student(student_id: str) -> APIResponse[None]:
     """수강생을 삭제합니다."""
-    return APIResponse(
-        success=True,
-        data=None,
-        message="수강생 삭제 성공",
-    )
+    supabase = get_supabase_client()
+    try:
+        supabase.table("students").delete().eq("id", student_id).execute()
+        return APIResponse(
+            success=True,
+            data=None,
+            message="수강생 삭제 성공",
+        )
+    except Exception as e:
+        return APIResponse(
+            success=False,
+            message=f"수강생 삭제 실패: {str(e)}",
+        )
