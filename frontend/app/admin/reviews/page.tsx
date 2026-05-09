@@ -134,6 +134,13 @@ export default function ReviewAdmin() {
     <div style={{ padding: '60px 40px', maxWidth: '1000px', margin: '0 auto', fontFamily: 'sans-serif' }}>
       <Link href="/admin" style={{ color: '#666', textDecoration: 'none', fontSize: '14px' }}>← 관리자 홈으로</Link>
       <h1 style={{ marginTop: '20px', marginBottom: '40px', fontSize: '28px', fontWeight: '800' }}>⭐ 고객 만족도 후기 관리</h1>
+      
+      {/* 🛠️ 진단용 디버그 정보 (배포 후 삭제 예정) */}
+      <div style={{ fontSize: '12px', color: '#999', marginBottom: '20px', padding: '10px', background: '#f8f9fa', borderRadius: '8px' }}>
+        연결 상태: {supabase ? '✅ 연결됨' : '❌ 연결 안됨'} | 
+        URL 존재: {process.env.NEXT_PUBLIC_SUPABASE_URL ? 'YES' : 'NO'} | 
+        KEY 존재: {process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ? 'YES' : 'NO'}
+      </div>
 
       {/* 입력 폼 */}
       <div style={{ background: '#fff', padding: '30px', borderRadius: '16px', border: '1px solid #eee', boxShadow: '0 10px 25px rgba(0,0,0,0.05)', marginBottom: '50px' }}>
