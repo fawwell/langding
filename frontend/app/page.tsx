@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import React, { useState, useEffect, MouseEvent, FormEvent } from 'react';
 import './v2_style.css';
 import { supabase } from '@/lib/supabase';
