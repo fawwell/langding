@@ -26,7 +26,7 @@ export default function AdminMediaPage() {
 
   const fetchMedia = async () => {
     try {
-      const res = await fetch('http://localhost:8000/api/v1/media/');
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/media/`);
       const json = await res.json();
       if (json.success) setMediaList(json.data);
     } catch (e) {
@@ -54,8 +54,8 @@ export default function AdminMediaPage() {
     setLoading(true);
     
     const url = editId 
-      ? `http://localhost:8000/api/v1/media/${editId}`
-      : 'http://localhost:8000/api/v1/media/';
+      ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/media/${editId}`
+      : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/media/`;
     
     const method = editId ? 'PUT' : 'POST';
 
@@ -94,7 +94,7 @@ export default function AdminMediaPage() {
   const handleDelete = async (id: string) => {
     if (!confirm('정말 삭제하시겠습니까?')) return;
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/media/${id}`, { method: 'DELETE' });
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/media/${id}`, { method: 'DELETE' });
       if (res.ok) fetchMedia();
       else alert('삭제 실패');
     } catch (e) {

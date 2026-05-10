@@ -12,7 +12,7 @@ export default function Home() {
     useEffect(() => {
         const fetchMedia = async () => {
             try {
-                const res = await fetch('http://localhost:8000/api/v1/media/');
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/media/`);
                 const json = await res.json();
                 if (json.success) setMediaReports(json.data);
             } catch (e) {
@@ -568,7 +568,7 @@ export default function Home() {
         };
 
         try {
-            const res = await fetch('http://localhost:8000/api/v1/proposals/', {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/proposals/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)

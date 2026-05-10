@@ -26,7 +26,7 @@ export default function AdminProposalsPage() {
 
   const fetchProposals = async () => {
     try {
-      const res = await fetch('http://localhost:8000/api/v1/proposals/');
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/proposals/`);
       const json = await res.json();
       if (json.success) setProposals(json.data);
     } catch (e) {
