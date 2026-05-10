@@ -915,7 +915,7 @@ header { display: flex; justify-content: space-between; align-items: center; pad
     justify-content: center;
     border-radius: 24px; /* 개별 패널 라운딩 */
     box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-    border: 1px solid rgba(255,255,255,0.05);
+    border: 1.5px solid rgba(255,255,255,0.2); /* 더 선명한 테두리 */
 }
 
 .gateway-panels-container:hover .gateway-panel:not(:hover) {
@@ -927,7 +927,8 @@ header { display: flex; justify-content: space-between; align-items: center; pad
 .gateway-panel:hover {
     flex: 1.6;
     box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-    border-color: rgba(43, 138, 62, 0.3);
+    border: 2px solid #2b8a3e; /* 호버 시 테두리 강화 및 색상 변경 */
+    box-shadow: 0 0 30px rgba(43, 138, 62, 0.4);
     z-index: 10;
 }
 

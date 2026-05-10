@@ -1115,13 +1115,13 @@ export default function Home() {
                     </div>
                 </section>
 
-                <section className="category-section reveal" style={{ padding: '80px 0' }}>
+                <section className="category-section reveal" style={{ padding: '20px 0 80px 0' }}>
                     <div className="container" style={{ textAlign: 'center' }}>
                         <h2 className="section-title">해당되는 카테고리를 골라주세요</h2>
-                        <div className="gateway-panels-container">
+                        <div className="gateway-panels-container" style={{ marginTop: '20px' }}>
                             {/* 기업용 패널 */}
                             <div className="gateway-panel" onClick={() => switchPage('page-eap')}>
-                                <div className="panel-bg" style={{ backgroundImage: 'url("/images/gateway/ai_scanning.png")' }}></div>
+                                <div className="panel-bg" style={{ backgroundImage: 'url("/images/gateway/corporate_dx.png")' }}></div>
                                 <div className="panel-overlay"></div>
                                 <div className="panel-content">
                                      <span className="panel-icon">🏢</span>
@@ -1133,7 +1133,7 @@ export default function Home() {
 
                             {/* 학교용 패널 */}
                             <div className="gateway-panel" onClick={() => switchPage('page-school')}>
-                                <div className="panel-bg" style={{ backgroundImage: 'url("/images/articles/9.png")' }}></div>
+                                <div className="panel-bg" style={{ backgroundImage: 'url("/images/gateway/school_dx.png")' }}></div>
                                 <div className="panel-overlay"></div>
                                 <div className="panel-content">
                                     <span className="panel-icon">🏫</span>
@@ -1145,7 +1145,7 @@ export default function Home() {
 
                             {/* 개인용 패널 */}
                             <div className="gateway-panel" onClick={() => { switchPage('page-physical'); openPhysicalSub('sub-center'); }}>
-                                <div className="panel-bg" style={{ backgroundImage: 'url("/images/physical-care/001.jpg")' }}></div>
+                                <div className="panel-bg" style={{ backgroundImage: 'url("/images/gateway/individual_dx.png")' }}></div>
                                 <div className="panel-overlay"></div>
                                 <div className="panel-content">
                                     <span className="panel-icon">👤</span>
