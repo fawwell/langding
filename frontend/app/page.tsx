@@ -556,10 +556,6 @@ export default function Home() {
         }
     };
 
-    // 🛡️ 보안: 속도 제한 (60초 쿨타임) 및 입력값 정화 로직 추가
-    const [lastSubmitTime, setLastSubmitTime] = useState(0);
-
-
 
     const submitProposalForm = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
