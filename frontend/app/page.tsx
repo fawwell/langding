@@ -3,8 +3,11 @@
 export const dynamic = 'force-dynamic';
 
 import React, { useState, useEffect, MouseEvent, FormEvent } from 'react';
+import next_dynamic from 'next/dynamic';
 import './v2_style.css';
 import { supabase } from '@/lib/supabase';
+
+const CinematicScroll = next_dynamic(() => import('./components/CinematicScroll'), { ssr: false });
 
 export default function Home() {
     const [mediaReports, setMediaReports] = useState<any[]>([]);
@@ -747,6 +750,8 @@ export default function Home() {
                         </div>
                     </div>
                 </section>
+
+                <CinematicScroll />
 
                 <section className="teaser-section reveal">
                     <div className="container text-center">
