@@ -417,19 +417,34 @@ export default function Home() {
         };
     }, [activePage]);
 
-    // Swiper 마운트
+    // Swiper 마운트 (데이터나 필터가 바뀔 때마다 재시동)
     useEffect(() => {
         const initSwipers = () => {
             if (typeof (window as any).Swiper !== 'undefined') {
+                // 기존 인스턴스가 있다면 파괴하고 새로 생성 (중복 방지)
+                if ((window as any).reviewSwiperInstance) {
+                    (window as any).reviewSwiperInstance.destroy(true, true);
+                }
+
                 (window as any).reviewSwiperInstance = new (window as any).Swiper(".reviewSwiper", {
-                    slidesPerView: 1, spaceBetween: 20, observer: true, observeParents: true,
+                    slidesPerView: 1, 
+                    spaceBetween: 20, 
+                    observer: true, 
+                    observeParents: true,
                     pagination: { el: ".swiper-pagination", clickable: true },
-                    breakpoints: { 768: { slidesPerView: 2, spaceBetween: 20 }, 1024: { slidesPerView: 3, spaceBetween: 30 } }
+                    breakpoints: { 
+                        768: { slidesPerView: 2, spaceBetween: 20 }, 
+                        1024: { slidesPerView: 3, spaceBetween: 30 } 
+                    }
                 });
-                new (window as any).Swiper(".partnerSwiper", {
-                    slidesPerView: 2, spaceBetween: 15, loop: true, autoplay: { delay: 2000, disableOnInteraction: false },
-                    breakpoints: { 640: { slidesPerView: 3, spaceBetween: 20 }, 1024: { slidesPerView: 5, spaceBetween: 30 } }
-                });
+
+                // 파트너 슬라이더는 한 번만 실행
+                if (!(window as any).partnerSwiperInstance) {
+                    (window as any).partnerSwiperInstance = new (window as any).Swiper(".partnerSwiper", {
+                        slidesPerView: 2, spaceBetween: 15, loop: true, autoplay: { delay: 2000, disableOnInteraction: false },
+                        breakpoints: { 640: { slidesPerView: 3, spaceBetween: 20 }, 1024: { slidesPerView: 5, spaceBetween: 30 } }
+                    });
+                }
             }
         };
 
@@ -440,9 +455,11 @@ export default function Home() {
             script.onload = initSwipers;
             document.body.appendChild(script);
         } else {
-            initSwipers();
+            // 이미 스크립트가 있다면 데이터 로딩 후 약간의 지연시간을 주고 초기화
+            const timer = setTimeout(initSwipers, 100);
+            return () => clearTimeout(timer);
         }
-    }, [activePage]);
+    }, [activePage, reviewsData, reviewFilter]); // 💡 감지 대상에 데이터와 필터 추가!
 
     // 브라우저 뒤로가기 대응을 위한 History API 연동
     useEffect(() => {
