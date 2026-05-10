@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import * as THREE from 'three';
 
 const BodyExplorer = () => {
@@ -31,16 +31,25 @@ const BodyExplorer = () => {
     };
 
     useEffect(() => {
-        if (!canvasRef.current) return;
+        if (!canvasRef.current) {
+            console.log("3D Canvas ref not found yet.");
+            return;
+        }
 
-        // 1. Scene Setup
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, canvasRef.current.clientWidth / canvasRef.current.clientHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        console.log("Initializing 3D Body Explorer...");
+        let renderer: THREE.WebGLRenderer;
         
-        renderer.setSize(canvasRef.current.clientWidth, canvasRef.current.clientHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        canvasRef.current.appendChild(renderer.domElement);
+        try {
+            // 1. Scene Setup
+            const scene = new THREE.Scene();
+            const width = canvasRef.current.clientWidth || 500;
+            const height = canvasRef.current.clientHeight || 600;
+            const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            canvasRef.current.appendChild(renderer.domElement);
 
         // 2. Lights
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
@@ -163,16 +172,24 @@ const BodyExplorer = () => {
         };
         window.addEventListener('resize', handleResize);
 
+        } catch (error) {
+            console.error("Three.js initialization failed:", error);
+        }
+
         return () => {
             window.removeEventListener('click', onMouseClick);
             window.removeEventListener('resize', handleResize);
-            cancelAnimationFrame(frameId);
-            if (canvasRef.current) canvasRef.current.removeChild(renderer.domElement);
+            if (frameId) cancelAnimationFrame(frameId);
+            if (canvasRef.current && renderer) {
+                try {
+                    canvasRef.current.removeChild(renderer.domElement);
+                } catch (e) {}
+            }
         };
     }, []);
 
     return (
-        <section className="body-explorer-section reveal" style={{ padding: '120px 0', background: '#0b0c10', overflow: 'hidden', position: 'relative' }}>
+        <section className="body-explorer-section reveal active" style={{ padding: '120px 0', background: '#0b0c10', overflow: 'hidden', position: 'relative', opacity: 1, visibility: 'visible' }}>
             <div className="container" style={{ display: 'flex', alignItems: 'center', gap: '40px', flexWrap: 'wrap' }}>
                 
                 {/* 3D Canvas Area */}
