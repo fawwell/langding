@@ -30,10 +30,21 @@ export default function Error({
       <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>
         서버와 연결 중 잠시 문제가 발생했습니다.
       </h2>
-      <p style={{ color: '#666', marginBottom: '30px', maxWidth: '400px', lineHeight: '1.6' }}>
-        시스템 보호를 위해 상세 정보를 제한하고 있습니다. <br />
-        잠시 후 다시 시도해 주시거나 메인 페이지로 돌아가 주세요.
-      </p>
+      <div style={{ 
+        background: '#fff0f0', 
+        padding: '15px', 
+        borderRadius: '8px', 
+        color: '#d32f2f', 
+        fontSize: '14px', 
+        marginBottom: '20px',
+        textAlign: 'left',
+        maxWidth: '600px',
+        overflow: 'auto'
+      }}>
+        <strong>[ERROR INFO]</strong><br />
+        {error.message} <br />
+        {error.stack?.substring(0, 300)}...
+      </div>
       <div style={{ display: 'flex', gap: '15px' }}>
         <button
           onClick={() => reset()}
