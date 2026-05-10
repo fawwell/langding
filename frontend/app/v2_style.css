@@ -889,3 +889,147 @@ header { display: flex; justify-content: space-between; align-items: center; pad
     .hero-brand h1 { font-size: 42px; }
     .agenda-grid, .service-grid { grid-template-columns: 1fr 1fr; }
 }
+}
+
+/* ==========================================================================
+   🌌 퓨처리스틱 게이트웨이 패널 (AI Scanning Page 전용)
+   ========================================================================== */
+.gateway-panels-container {
+    display: flex;
+    width: 100%;
+    height: 70vh;
+    min-height: 600px;
+    background: #000;
+    overflow: hidden;
+    margin-top: 40px;
+    border-radius: 24px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+}
+
+.gateway-panel {
+    position: relative;
+    flex: 1;
+    height: 100%;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.7s cubic-bezier(0.165, 0.84, 0.44, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid rgba(255,255,255,0.1);
+}
+
+.gateway-panel:last-child { border-right: none; }
+
+.gateway-panel:hover {
+    flex: 1.8;
+}
+
+.panel-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 1s ease, filter 0.5s ease;
+    filter: brightness(0.4) grayscale(0.5);
+    z-index: 1;
+}
+
+.gateway-panel:hover .panel-bg {
+    transform: scale(1.1);
+    filter: brightness(0.6) grayscale(0);
+}
+
+.panel-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 100%);
+    z-index: 2;
+}
+
+.panel-content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    padding: 40px;
+    width: 100%;
+    transition: transform 0.5s ease;
+}
+
+.gateway-panel:hover .panel-content {
+    transform: translateY(-20px);
+}
+
+.panel-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+    display: block;
+    filter: drop-shadow(0 0 10px rgba(0,255,0,0.5));
+}
+
+.panel-title {
+    font-size: 32px;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 15px;
+    letter-spacing: -1px;
+}
+
+.panel-desc {
+    font-size: 16px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.6;
+    max-width: 280px;
+    margin: 0 auto 30px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease 0.2s;
+}
+
+.gateway-panel:hover .panel-desc {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.panel-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    border-radius: 30px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 13px;
+    transition: all 0.3s ease;
+}
+
+.gateway-panel:hover .panel-btn {
+    background: #2b8a3e;
+    border-color: #2b8a3e;
+    box-shadow: 0 0 20px rgba(43, 138, 62, 0.4);
+}
+
+@media (max-width: 768px) {
+    .gateway-panels-container {
+        flex-direction: column;
+        height: auto;
+    }
+    .gateway-panel {
+        height: 300px;
+        flex: none;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .gateway-panel:hover { flex: none; }
+    .panel-desc { opacity: 1; transform: none; font-size: 14px; }
+    .panel-title { font-size: 24px; }
+}

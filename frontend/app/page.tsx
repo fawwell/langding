@@ -3,11 +3,8 @@
 export const dynamic = 'force-dynamic';
 
 import React, { useState, useEffect, MouseEvent, FormEvent } from 'react';
-import next_dynamic from 'next/dynamic';
 import './v2_style.css';
 import { supabase } from '@/lib/supabase';
-
-const CinematicScroll = next_dynamic(() => import('./components/CinematicScroll'), { ssr: false });
 
 export default function Home() {
     const [mediaReports, setMediaReports] = useState<any[]>([]);
@@ -751,8 +748,6 @@ export default function Home() {
                     </div>
                 </section>
 
-                <CinematicScroll />
-
                 <section className="teaser-section reveal">
                     <div className="container text-center">
                         <div className="teaser-text step-1 reveal reveal-left">담당자님,</div>
@@ -1120,27 +1115,44 @@ export default function Home() {
                     </div>
                 </section>
 
-                <section className="category-section reveal">
+                <section className="category-section reveal" style={{ padding: '80px 0' }}>
                     <div className="container" style={{ textAlign: 'center' }}>
                         <h2 className="section-title">해당되는 카테고리를 골라주세요</h2>
-                        <div className="card-grid">
-                            <div className="info-card reveal" onClick={() => switchPage('page-eap')} style={{ borderColor: '#2b8a3e', boxShadow: '0 10px 30px rgba(43, 138, 62, 0.1)' }}>
-                                <div className="card-icon" style={{ background: '#2b8a3e', color: 'white' }}>01</div>
-                                <h3>기업</h3>
-                                <p>임직원의 근골격계 질환을 예방하고 <br />업무 효율을 높이는 B2B 전용 <br />체형분석 솔루션입니다.</p>
-                                <div className="view-details-btn">기업 EAP 상세 보기</div>
+                        <div className="gateway-panels-container">
+                            {/* 기업용 패널 */}
+                            <div className="gateway-panel" onClick={() => switchPage('page-eap')}>
+                                <div className="panel-bg" style={{ backgroundImage: 'url("/images/gateway/ai_scanning.png")' }}></div>
+                                <div className="panel-overlay"></div>
+                                <div className="panel-content">
+                                    <span className="panel-icon">🏢</span>
+                                    <h3 className="panel-title">기업용 DX</h3>
+                                    <p className="panel-desc">임직원 근골격계 질환 예방 및 업무 효율 증대를 위한 솔루션입니다.</p>
+                                    <span className="panel-btn">자세히 보기</span>
+                                </div>
                             </div>
-                            <div className="info-card reveal delay-1" onClick={() => switchPage('page-school')} style={{ borderColor: '#004d40', boxShadow: '0 10px 30px rgba(0,77,64,0.1)' }}>
-                                <div className="card-icon" style={{ background: '#004d40', color: 'white' }}>02</div>
-                                <h3>학교</h3>
-                                <p>성장기 학생들의 체형 검진과 더불어 스트레칭, 그룹운동 및 상세 통계 리포트를 제공합니다.</p>
-                                <div className="view-details-btn" style={{ color: '#004d40' }}>학교 프로그램 상세 보기</div>
+
+                            {/* 학교용 패널 */}
+                            <div className="gateway-panel" onClick={() => switchPage('page-school')}>
+                                <div className="panel-bg" style={{ backgroundImage: 'url("/images/gateway/physical_care.jpg")' }}></div>
+                                <div className="panel-overlay"></div>
+                                <div className="panel-content">
+                                    <span className="panel-icon">🏫</span>
+                                    <h3 className="panel-title">학교용 DX</h3>
+                                    <p className="panel-desc">성장기 학생들의 체형 검진과 맞춤형 리포트를 제공합니다.</p>
+                                    <span className="panel-btn">자세히 보기</span>
+                                </div>
                             </div>
-                            <div className="info-card reveal delay-2" onClick={() => { switchPage('page-physical'); openPhysicalSub('sub-center'); }}>
-                                <div className="card-icon" style={{ color: '#111' }}>03</div>
-                                <h3>개인</h3>
-                                <p>개인 맞춤형 체형 분석 및 근본적인 신체 개선을 원하신다면 가까운 피지컬케어 센터를 방문해 보세요.</p>
-                                <div className="view-details-btn" style={{ color: '#111' }}>가까운 센터 찾기</div>
+
+                            {/* 개인용 패널 */}
+                            <div className="gateway-panel" onClick={() => { switchPage('page-physical'); openPhysicalSub('sub-center'); }}>
+                                <div className="panel-bg" style={{ backgroundImage: 'url("/images/gateway/mall.jpg")' }}></div>
+                                <div className="panel-overlay"></div>
+                                <div className="panel-content">
+                                    <span className="panel-icon">👤</span>
+                                    <h3 className="panel-title">개인용 DX</h3>
+                                    <p className="panel-desc">1:1 정밀 분석과 맞춤형 피지컬케어 솔루션을 경험하세요.</p>
+                                    <span className="panel-btn">자세히 보기</span>
+                                </div>
                             </div>
                         </div>
                     </div>
