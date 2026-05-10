@@ -889,7 +889,6 @@ header { display: flex; justify-content: space-between; align-items: center; pad
     .hero-brand h1 { font-size: 42px; }
     .agenda-grid, .service-grid { grid-template-columns: 1fr 1fr; }
 }
-}
 
 /* ==========================================================================
    🌌 퓨처리스틱 게이트웨이 패널 (AI Scanning Page 전용)
