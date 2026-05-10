@@ -134,14 +134,6 @@ export default function ReviewAdmin() {
     <div style={{ padding: '60px 40px', maxWidth: '1000px', margin: '0 auto', fontFamily: 'sans-serif' }}>
       <Link href="/admin" style={{ color: '#666', textDecoration: 'none', fontSize: '14px' }}>← 관리자 홈으로</Link>
       <h1 style={{ marginTop: '20px', marginBottom: '40px', fontSize: '28px', fontWeight: '800' }}>⭐ 고객 만족도 후기 관리</h1>
-      
-      {/* 🛠️ 최종 진단 도구 (배포 후 삭제) */}
-      <div style={{ fontSize: '12px', color: '#666', marginBottom: '20px', padding: '15px', background: '#fff5f5', border: '1px solid #ffc9c9', borderRadius: '8px' }}>
-        <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>🚀 시스템 진단 모드</div>
-        • URL 감지: {process.env.NEXT_PUBLIC_SUPABASE_URL ? `YES (${process.env.NEXT_PUBLIC_SUPABASE_URL.substring(0, 10)}...)` : '❌ NO (완전 비어있음)'} <br />
-        • KEY 감지: {process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ? 'YES (데이터 존재)' : '❌ NO (완전 비어있음)'} <br />
-        • 현재 환경: {process.env.NODE_ENV}
-      </div>
 
       {/* 입력 폼 */}
       <div style={{ background: '#fff', padding: '30px', borderRadius: '16px', border: '1px solid #eee', boxShadow: '0 10px 25px rgba(0,0,0,0.05)', marginBottom: '50px' }}>
