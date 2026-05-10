@@ -41,6 +41,16 @@ export default function Home() {
     const [phoneValue, setPhoneValue] = useState('');
     const [emailError, setEmailError] = useState('');
 
+    // 🛡️ 보안: 속도 제한 (60초 쿨타임) 및 입력값 정화 로직 추가
+    const [lastSubmitTime, setLastSubmitTime] = useState(0);
+
+    // 리뷰 데이터 - DB 연동 (위로 이동)
+    const [reviewsData, setReviewsData] = useState<any[]>([]);
+
+    const sanitize = (text: string) => {
+        return text.replace(/<[^>]*>?/gm, '').trim(); // HTML 태그 제거
+    };
+
     const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         let val = e.target.value.replace(/[^0-9]/g, '');
         if (val.length > 3 && val.length <= 7) {
@@ -549,9 +559,7 @@ export default function Home() {
     // 🛡️ 보안: 속도 제한 (60초 쿨타임) 및 입력값 정화 로직 추가
     const [lastSubmitTime, setLastSubmitTime] = useState(0);
 
-    const sanitize = (text: string) => {
-        return text.replace(/<[^>]*>?/gm, '').trim(); // HTML 태그 제거
-    };
+
 
     const submitProposalForm = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -650,8 +658,6 @@ export default function Home() {
         setQuizStep(1);
     };
 
-    // 리뷰 데이터 - DB 연동
-    const [reviewsData, setReviewsData] = useState<any[]>([]);
 
     useEffect(() => {
         const fetchReviews = async () => {
