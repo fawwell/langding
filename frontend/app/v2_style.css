@@ -896,11 +896,11 @@ header { display: flex; justify-content: space-between; align-items: center; pad
 .gateway-panels-container {
     display: flex;
     width: 100%;
-    height: 65vh;
-    min-height: 550px;
-    gap: 25px; /* 패널 사이 간격 추가 */
+    height: 45vh; /* 높이 축소 */
+    min-height: 380px; /* 최소 높이 축소 */
+    gap: 25px; 
     overflow: visible;
-    margin-top: 40px;
+    margin-top: 20px;
 }
 
 .gateway-panel {
@@ -943,10 +943,11 @@ header { display: flex; justify-content: space-between; align-items: center; pad
     transition: transform 1.2s ease, filter 0.5s ease;
     filter: brightness(0.5);
     z-index: 1;
+    image-rendering: -webkit-optimize-contrast; /* 이미지 선명도 향상 */
 }
 
 .gateway-panel:hover .panel-bg {
-    transform: scale(1.1);
+    transform: scale(1.05); /* 확대 배율 축소 (1.1 -> 1.05) */
     filter: brightness(0.6) grayscale(0);
 }
 
