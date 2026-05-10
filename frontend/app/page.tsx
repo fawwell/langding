@@ -1124,16 +1124,16 @@ export default function Home() {
                                 <div className="panel-bg" style={{ backgroundImage: 'url("/images/gateway/ai_scanning.png")' }}></div>
                                 <div className="panel-overlay"></div>
                                 <div className="panel-content">
-                                    <span className="panel-icon">🏢</span>
-                                    <h3 className="panel-title">기업용 DX</h3>
-                                    <p className="panel-desc">임직원 근골격계 질환 예방 및 업무 효율 증대를 위한 솔루션입니다.</p>
-                                    <span className="panel-btn">자세히 보기</span>
+                                     <span className="panel-icon">🏢</span>
+                                     <h3 className="panel-title">기업용 DX</h3>
+                                     <p className="panel-desc">임직원 근골격계 질환 예방 및 업무 효율 증대를 위한 솔루션입니다.</p>
+                                     <span className="panel-btn">자세히 보기</span>
                                 </div>
                             </div>
 
                             {/* 학교용 패널 */}
                             <div className="gateway-panel" onClick={() => switchPage('page-school')}>
-                                <div className="panel-bg" style={{ backgroundImage: 'url("/images/gateway/physical_care.jpg")' }}></div>
+                                <div className="panel-bg" style={{ backgroundImage: 'url("/images/articles/9.png")' }}></div>
                                 <div className="panel-overlay"></div>
                                 <div className="panel-content">
                                     <span className="panel-icon">🏫</span>
@@ -1145,7 +1145,7 @@ export default function Home() {
 
                             {/* 개인용 패널 */}
                             <div className="gateway-panel" onClick={() => { switchPage('page-physical'); openPhysicalSub('sub-center'); }}>
-                                <div className="panel-bg" style={{ backgroundImage: 'url("/images/gateway/mall.jpg")' }}></div>
+                                <div className="panel-bg" style={{ backgroundImage: 'url("/images/physical-care/001.jpg")' }}></div>
                                 <div className="panel-overlay"></div>
                                 <div className="panel-content">
                                     <span className="panel-icon">👤</span>
