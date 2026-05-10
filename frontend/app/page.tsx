@@ -3,11 +3,8 @@
 export const dynamic = 'force-dynamic';
 
 import React, { useState, useEffect, MouseEvent, FormEvent } from 'react';
-import next_dynamic from 'next/dynamic';
 import './v2_style.css';
 import { supabase } from '@/lib/supabase';
-
-const BodyExplorer = next_dynamic(() => import('./components/BodyExplorer'), { ssr: false });
 
 export default function Home() {
     const [mediaReports, setMediaReports] = useState<any[]>([]);
@@ -777,8 +774,6 @@ export default function Home() {
                         <p className="reveal delay-5" style={{ marginTop: '20px', fontSize: '14px', color: '#888' }}>* 위 이미지는 이해를 돕기 위한 연출이며, 실제 분석은 전문 장비로 진행됩니다.</p>
                     </div>
                 </section>
-
-                <BodyExplorer />
 
                 <section className="jelly-chart-section reveal" style={{ padding: '100px 0', backgroundColor: '#f8f9fa', borderTop: '1px solid #eee', overflow: 'hidden' }}>
                     <div className="container text-center" style={{ overflow: 'visible' }}>
