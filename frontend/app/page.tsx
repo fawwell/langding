@@ -548,6 +548,11 @@ export default function Home() {
         document.body.style.overflow = 'auto';
     };
 
+    const openKakaoChat = () => {
+        const kakaoChannelId = "_HwxiXn"; 
+        window.open(`https://pf.kakao.com/${kakaoChannelId}/chat`, '_blank');
+    };
+
     const showToast = (message: string) => {
         const existingToast = document.querySelector('.custom-toast');
         if (existingToast) existingToast.remove();
@@ -716,6 +721,14 @@ export default function Home() {
                     <li><a href="#" className={activePage === 'page-ai' ? 'active-nav' : ''} onClick={(e) => { e.preventDefault(); switchPage('page-ai'); }}>스마트 AI 체형분석</a></li>
                     <li><a href="#" className={activePage === 'page-physical' ? 'active-nav' : ''} onClick={(e) => { e.preventDefault(); switchPage('page-physical'); }}>피지컬케어</a></li>
                     <li><a href="#" className={activePage === 'page-mall' ? 'active-nav' : ''} onClick={(e) => { e.preventDefault(); switchPage('page-mall'); }}>피지컬케어 mall</a></li>
+                    <li className="nav-sns">
+                        <a href="#">SNS ▼</a>
+                        <ul className="sns-dropdown">
+                            <li><a href="https://blog.naver.com/fawwceo" target="_blank" rel="noopener noreferrer">블로그 (Blog)</a></li>
+                            <li><a href="https://www.instagram.com/physicalcare_ydp/" target="_blank" rel="noopener noreferrer">인스타그램 (Insta)</a></li>
+                            <li><a href="https://cafe.naver.com/physicalcare" target="_blank" rel="noopener noreferrer">네이버 카페 (Cafe)</a></li>
+                        </ul>
+                    </li>
                 </ul>
                 <div className={`nav-actions ${isMobileMenuOpen ? 'show' : ''}`}>
                     <button className="btn-outline" style={{ padding: '8px 16px', marginRight: '10px', fontSize: '13px', borderColor: '#eee', color: '#555', background: '#fff' }} onClick={() => openModal('modal-download')}>📥 소개서 다운로드</button>
@@ -724,7 +737,7 @@ export default function Home() {
             </header>
 
             <div className="fab-container">
-                <div className="chatbot-badge" onClick={() => openModal('modal-chat')}>💬 실시간 챗봇 문의</div>
+                <div className="chatbot-badge" onClick={openKakaoChat}>💬 실시간 챗봇 문의</div>
             </div>
 
             <main id="page-home" className={`page-content ${activePage === 'page-home' ? 'active' : ''}`}>
@@ -1320,73 +1333,38 @@ export default function Home() {
                         </div>
                     </div>
                 </section>
-                
-                {/* 📋 섹션 1.5: 우리 기업 맞춤형 FaWW 프로그램 (복구) */}
+
+                {/* 📋 섹션 1.5: 우리 기업 맞춤형 FaWW 프로그램 */}
                 <section className="category-section reveal" style={{ backgroundColor: '#f8f9fa', paddingTop: '80px', paddingBottom: '80px' }}>
                     <div className="container">
                         <div className="school-header-wrap" style={{ textAlign: 'center' }}>
-                            <span className="section-tag">CORE PROGRAMS</span>
-                            <h2 className="section-title reveal">우리 기업 맞춤형 <span>FaWW 프로그램</span></h2>
-                            <p className="section-desc reveal">진단부터 사후 케어까지, 빈틈없는 4단계 프로세스로 운영됩니다.</p>
+                            <span className="section-tag reveal delay-1">CORE PROGRAMS</span>
+                            <h2 className="section-title reveal delay-2">우리 기업 맞춤형 <span>FaWW 프로그램</span></h2>
+                            <p className="section-desc reveal delay-3">진단부터 사후 케어까지, 빈틈없는 4단계 프로세스로 운영됩니다.</p>
                         </div>
                         
                         <div className="service-grid">
-                            <div className="smart-card reveal" onClick={() => openModal('modal1')}>
-                                <div className="smart-card-top">
-                                    <div className="smart-card-img" style={{ 
-                                        backgroundImage: "linear-gradient(rgba(0,0,0,0.05), rgba(0,0,0,0.2)), url('/images/eap/ai_scanning.jpg')",
-                                        backgroundSize: 'cover',
-                                        backgroundPosition: 'center'
-                                    }}></div>
-                                    <div className="smart-card-body">
-                                        <span className="gateway-badge">진단</span>
-                                        <h3>스마트 AI 체형분석</h3>
-                                        <p>3D 스캐닝을 통해 임직원의 신체 불균형과 근골격계 위험도를 정밀 측정합니다.</p>
+                            {[
+                                { id: 'modal1', tag: '진단', title: '스마트 AI 체형분석', desc: '3D 스캐닝을 통해 임직원의 신체 불균형과 근골격계 위험도를 정밀 측정합니다.', img: '/images/eap/ai_scanning.jpg', color: '#e3f2fd', text: '#1565c0' },
+                                { id: 'modal2', tag: '케어', title: '1:1 맞춤 피지컬케어', desc: '전문가가 직접 파견되어 통증 부위를 즉각적으로 관리하고 이완하는 시그니처 프로그램입니다.', img: '/images/eap/manual_care.jpg', color: '#e8f5e9', text: '#2b8a3e' },
+                                { id: 'modal4', tag: '실습', title: '단체 운동 프로그램', desc: '오피스 스트레칭, 소도구 운동 등 현장에서 바로 실천 가능한 기능성 트레이닝을 진행합니다.', img: '/images/eap/group_exercise.jpg', color: '#fff3e0', text: '#e65100' },
+                                { id: 'modal3', tag: '강의', title: '건강 복지 특강', desc: '직무별 맞춤 질환 예방 교육 및 올바른 생활 습관 가이드를 전문가의 강연으로 제공합니다.', img: '/images/eap/lecture.jpg', color: '#e3f2fd', text: '#1565c0' }
+                            ].map((s, i) => (
+                                <div key={i} className={`smart-card reveal delay-${i + 4}`} onClick={() => openModal(s.id)}>
+                                    <div className="smart-card-top">
+                                        <div className="smart-card-img" style={{ 
+                                            backgroundImage: `linear-gradient(rgba(0,0,0,0.05), rgba(0,0,0,0.2)), url('${s.img}')`,
+                                            backgroundSize: 'cover',
+                                            backgroundPosition: 'center'
+                                        }}></div>
+                                        <div className="smart-card-body">
+                                            <span className="gateway-badge" style={{ background: s.color, color: s.text }}>{s.tag}</span>
+                                            <h3>{s.title}</h3>
+                                            <p>{s.desc}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="smart-card reveal delay-1" onClick={() => openModal('modal2')}>
-                                <div className="smart-card-top">
-                                    <div className="smart-card-img" style={{ 
-                                        backgroundImage: "linear-gradient(rgba(0,0,0,0.05), rgba(0,0,0,0.2)), url('/images/eap/manual_care.jpg')",
-                                        backgroundSize: 'cover',
-                                        backgroundPosition: 'center'
-                                    }}></div>
-                                    <div className="smart-card-body">
-                                        <span className="gateway-badge" style={{ background: '#e8f5e9', color: '#2b8a3e' }}>케어</span>
-                                        <h3>1:1 맞춤 피지컬케어</h3>
-                                        <p>전문가가 직접 파견되어 통증 부위를 즉각적으로 관리하고 이완하는 시그니처 프로그램입니다.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="smart-card reveal delay-2" onClick={() => openModal('modal4')}>
-                                <div className="smart-card-top">
-                                    <div className="smart-card-img" style={{ 
-                                        backgroundImage: "linear-gradient(rgba(0,0,0,0.05), rgba(0,0,0,0.2)), url('/images/eap/group_exercise.jpg')",
-                                        backgroundSize: 'cover',
-                                        backgroundPosition: 'center'
-                                    }}></div>
-                                    <div className="smart-card-body">
-                                        <span className="gateway-badge" style={{ background: '#fff3e0', color: '#e65100' }}>실습</span>
-                                        <h3>단체 운동 프로그램</h3>
-                                        <p>오피스 스트레칭, 소도구 운동 등 현장에서 바로 실천 가능한 기능성 트레이닝을 진행합니다.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="smart-card reveal delay-3" onClick={() => openModal('modal3')}>
-                                <div className="smart-card-top">
-                                    <div className="smart-card-img" style={{ 
-                                        backgroundImage: "linear-gradient(rgba(0,0,0,0.05), rgba(0,0,0,0.2)), url('/images/eap/lecture.jpg')",
-                                        backgroundSize: 'cover',
-                                        backgroundPosition: 'center'
-                                    }}></div>
-                                    <div className="smart-card-body">
-                                        <span className="gateway-badge" style={{ background: '#e3f2fd', color: '#1565c0' }}>강의</span>
-                                        <h3>건강 복지 특강</h3>
-                                        <p>직무별 맞춤 질환 예방 교육 및 올바른 생활 습관 가이드를 전문가의 강연으로 제공합니다.</p>
-                                    </div>
-                                </div>
-                            </div>
+                            ))}
                         </div>
                     </div>
                 </section>
@@ -1427,16 +1405,16 @@ export default function Home() {
                 <section className="budget-section reveal">
                     <div className="container">
                         <div className="school-header-wrap" style={{ textAlign: 'center' }}>
-                            <span className="section-tag">BUDGET STRATEGY</span>
-                            <h2 className="section-title reveal" style={{ color: '#fff' }}>기업 예산 집행, <span>스마트하게 해결</span>하세요</h2>
-                            <p className="section-desc reveal" style={{ color: 'rgba(255,255,255,0.6)' }}>행정 편의와 지역 상생, 두 마리 토끼를 동시에 잡는 FaWW만의 결제 솔루션</p>
+                            <span className="section-tag reveal delay-1">BUDGET STRATEGY</span>
+                            <h2 className="section-title reveal delay-2" style={{ color: '#fff' }}>기업 예산 집행, <span>스마트하게 해결</span>하세요</h2>
+                            <p className="section-desc reveal delay-3" style={{ color: 'rgba(255,255,255,0.6)' }}>행정 편의와 지역 상생, 두 마리 토끼를 동시에 잡는 FaWW만의 결제 솔루션</p>
                         </div>
 
-                        <div className="pay-logo-group">
-                            <div className="pay-logo-item reveal">
+                        <div className="pay-logo-group reveal delay-4">
+                            <div className="pay-logo-item reveal delay-5">
                                 <span className="pay-name">서울페이 (Seoul Pay)</span>
                             </div>
-                            <div className="pay-logo-item reveal delay-1">
+                            <div className="pay-logo-item reveal delay-6">
                                 <span className="pay-name">경기페이 (Gyeonggi Pay)</span>
                             </div>
                         </div>
@@ -1455,42 +1433,25 @@ export default function Home() {
                             <p>운동부터 강연, 콘텐츠까지 맞춤 프로그램으로 해결해 드립니다.</p>
                         </div>
                         <div className="faq-list grid-2x2" style={{ alignItems: 'flex-start' }}>
-                            <div className="faq-item" onClick={toggleFaq}>
-                                <div className="faq-title-wrap"><div className="faq-title"><span className="q-mark">Q.</span> 우리 회사는 인원이 많은데, 하루에 몇 명이나 케어를 받을 수 있나요?</div><div className="faq-icon">+</div></div>
-                                <div className="faq-content"><span className="a-mark">A.</span> 투입되는 전문가 인원에 따라 유연하게 운영됩니다. 보통 전문가 1인당 하루(8시간 기준) 약 6~10명의 1:1 집중 케어가 가능하며, 단체 운동이나 강의 프로그램과 병행할 경우 하루 수백 명까지 참여 인원을 확대할 수 있습니다.</div>
-                            </div>
-                            <div className="faq-item" onClick={toggleFaq}>
-                                <div className="faq-title-wrap"><div className="faq-title"><span className="q-mark">Q.</span> 사내에 별도의 공간이 필요한가요? 공간이 협소해도 진행이 가능한지 궁금합니다.</div><div className="faq-icon">+</div></div>
-                                <div className="faq-content"><span className="a-mark">A.</span> 네, 회의실이나 휴게실 정도의 유휴 공간만 있으면 충분합니다. 1:1 케어에 필요한 이동식 베드와 AI 체형 분석 장비는 저희가 직접 지참하며, 공간 크기에 맞춰 최적화된 동선으로 세팅해 드립니다.</div>
-                            </div>
-                            <div className="faq-item" onClick={toggleFaq}>
-                                <div className="faq-title-wrap"><div className="faq-title"><span className="q-mark">Q.</span> 서비스 이용 예약은 어떤 방식으로 이루어지나요? 인사팀에서 일일이 명단을 취합해야 하나요?</div><div className="faq-icon">+</div></div>
-                                <div className="faq-content"><span className="a-mark">A.</span> 담당자님의 업무 부담을 줄이기 위해 자체 온라인 예약 시스템을 제공합니다. 임직원이 직접 원하는 시간에 접속해 예약하고 알림톡을 받을 수 있어, 별도의 명단 관리 없이 최종 확정 리스트만 확인하시면 됩니다.</div>
-                            </div>
-                            <div className="faq-item" onClick={toggleFaq}>
-                                <div className="faq-title-wrap"><div className="faq-title"><span className="q-mark">Q.</span> &apos;스마트 AI 체형분석&apos; 결과 리포트는 개인에게 별도로 제공되나요?</div><div className="faq-icon">+</div></div>
-                                <div className="faq-content"><span className="a-mark">A.</span> 네, 분석 즉시 모바일 리포트가 개별 전송됩니다. 현재 나의 불균형 상태, 위험도 점수, 그리고 일상에서 실천할 수 있는 맞춤형 운동 처방이 포함되어 있어 구성원들의 만족도가 매우 높습니다.</div>
-                            </div>
-                            <div className="faq-item" onClick={toggleFaq}>
-                                <div className="faq-title-wrap"><div className="faq-title"><span className="q-mark">Q.</span> 1:1 케어에서 진행되는 &apos;MCT&apos;나 &apos;수기치료&apos;가 통증 완화에 즉각적인 효과가 있나요?</div><div className="faq-icon">+</div></div>
-                                <div className="faq-content"><span className="a-mark">A.</span> 단순 마사지가 아닌 근막 이완(MCT)과 기능적 가동술을 결합한 전문 테라피입니다. 업무 중 발생하는 목, 어깨, 허리의 급성 통증과 근육 긴장을 즉각적으로 해소하여 업무 효율을 높이는 데 중점을 둡니다.</div>
-                            </div>
-                            <div className="faq-item" onClick={toggleFaq}>
-                                <div className="faq-title-wrap"><div className="faq-title"><span className="q-mark">Q.</span> 우리 직무 특성(예: 장시간 서 있는 업무)에 맞춘 커스터마이징이 가능한가요?</div><div className="faq-icon">+</div></div>
-                                <div className="faq-content"><span className="a-mark">A.</span> 물론입니다. 사전 상담을 통해 해당 기업의 주된 업무 환경(데스크 워크, 현장직 등)을 분석하고, 그에 가장 빈번하게 발생하는 근골격계 질환 위주로 강의와 케어 루틴을 재구성하여 진행합니다.</div>
-                            </div>
-                            <div className="faq-item" onClick={toggleFaq}>
-                                <div className="faq-title-wrap"><div className="faq-title"><span className="q-mark">Q.</span> 4가지 파트를 반드시 패키지로 도입해야 하나요? 필요한 파트만 선택할 수 있나요?</div><div className="faq-icon">+</div></div>
-                                <div className="faq-content"><span className="a-mark">A.</span> 전 사원 대상인 &apos;강의&apos;와 &apos;진단&apos;만 선택하시거나, 고위험군을 위한 &apos;1:1 케어&apos;만 집중 운영하는 등 기업의 예산과 필요에 따라 자유롭게 조합하여 설계할 수 있습니다.</div>
-                            </div>
-                            <div className="faq-item" onClick={toggleFaq}>
-                                <div className="faq-title-wrap"><div className="faq-title"><span className="q-mark">Q.</span> 서비스 도입 후 임직원 만족도 조사나 결과 보고서를 제공해 주시나요?</div><div className="faq-icon">+</div></div>
-                                <div className="faq-content"><span className="a-mark">A.</span> 네, 프로그램 종료 후 참여도, 만족도 조사 결과, AI 분석 데이터 통계(익명 처리)를 포함한 성과 결과 보고서를 제공합니다. 이는 인사팀의 KPI 달성 증빙 및 차기 복지 예산 확보 자료로 활용하실 수 있습니다.</div>
-                            </div>
-                            <div className="faq-item" onClick={toggleFaq}>
-                                <div className="faq-title-wrap"><div className="faq-title"><span className="q-mark">Q.</span> AI 체형 분석 시 수집되는 개인정보나 신체 데이터는 어떻게 관리되나요?</div><div className="faq-icon">+</div></div>
-                                <div className="faq-content"><span className="a-mark">A.</span> 수집된 모든 데이터는 암호화되어 안전하게 관리되며, 개인정보보호법을 준수합니다. 기업 측에는 개인의 세부 정보가 아닌 조직 전체의 건강 통계 지표만 제공되므로 안심하셔도 됩니다.</div>
-                            </div>
+                            {[
+                                { q: "우리 회사는 인원이 많은데, 하루에 몇 명이나 케어를 받을 수 있나요?", a: "투입되는 전문가 인원에 따라 유연하게 운영됩니다. 보통 전문가 1인당 하루(8시간 기준) 약 6~10명의 1:1 집중 케어가 가능하며, 단체 운동이나 강의 프로그램과 병행할 경우 하루 수백 명까지 참여 인원을 확대할 수 있습니다." },
+                                { q: "사내에 별도의 공간이 필요한가요? 공간이 협소해도 진행이 가능한지 궁금합니다.", a: "네, 회의실이나 휴게실 정도의 유휴 공간만 있으면 충분합니다. 1:1 케어에 필요한 이동식 베드와 AI 체형 분석 장비는 저희가 직접 지참하며, 공간 크기에 맞춰 최적화된 동선으로 세팅해 드립니다." },
+                                { q: "서비스 이용 예약은 어떤 방식으로 이루어지나요? 인사팀에서 일일이 명단을 취합해야 하나요?", a: "담당자님의 업무 부담을 줄이기 위해 자체 온라인 예약 시스템을 제공합니다. 임직원이 직접 원하는 시간에 접속해 예약하고 알림톡을 받을 수 있어, 별도의 명단 관리 없이 최종 확정 리스트만 확인하시면 됩니다." },
+                                { q: "&apos;스마트 AI 체형분석&apos; 결과 리포트는 개인에게 별도로 제공되나요?", a: "네, 분석 즉시 모바일 리포트가 개별 전송됩니다. 현재 나의 불균형 상태, 위험도 점수, 그리고 일상에서 실천할 수 있는 맞춤형 운동 처방이 포함되어 있어 구성원들의 만족도가 매우 높습니다." },
+                                { q: "1:1 케어에서 진행되는 &apos;MCT&apos;나 &apos;수기치료&apos;가 통증 완화에 즉각적인 효과가 있나요?", a: "단순 마사지가 아닌 근막 이완(MCT)과 기능적 가동술을 결합한 전문 테라피입니다. 업무 중 발생하는 목, 어깨, 허리의 급성 통증과 근육 긴장을 즉각적으로 해소하여 업무 효율을 높이는 데 중점을 둡니다." },
+                                { q: "우리 직무 특성(예: 장시간 서 있는 업무)에 맞춘 커스터마이징이 가능한가요?", a: "물론입니다. 사전 상담을 통해 해당 기업의 주된 업무 환경(데스크 워크, 현장직 등)을 분석하고, 그에 가장 빈번하게 발생하는 근골격계 질환 위주로 강의와 케어 루틴을 재구성하여 진행합니다." },
+                                { q: "4가지 파트를 반드시 패키지로 도입해야 하나요? 필요한 파트만 선택할 수 있나요?", a: "전 사원 대상인 &apos;강의&apos;와 &apos;진단&apos;만 선택하시거나, 고위험군을 위한 &apos;1:1 케어&apos;만 집중 운영하는 등 기업의 예산과 필요에 따라 자유롭게 조합하여 설계할 수 있습니다." },
+                                { q: "서비스 도입 후 임직원 만족도 조사나 결과 보고서를 제공해 주시나요?", a: "네, 프로그램 종료 후 참여도, 만족도 조사 결과, AI 분석 데이터 통계(익명 처리)를 포함한 성과 결과 보고서를 제공합니다. 이는 인사팀의 KPI 달성 증빙 및 차기 복지 예산 확보 자료로 활용하실 수 있습니다." },
+                                { q: "AI 체형 분석 시 수집되는 개인정보나 신체 데이터는 어떻게 관리되나요?", a: "수집된 모든 데이터는 암호화되어 안전하게 관리되며, 개인정보보호법을 준수합니다. 기업 측에는 개인의 세부 정보가 아닌 조직 전체의 건강 통계 지표만 제공되므로 안심하셔도 됩니다." }
+                            ].map((item, idx) => (
+                                <div key={idx} className={`faq-item reveal delay-${idx % 4 + 1}`} onClick={toggleFaq}>
+                                    <div className="faq-title-wrap">
+                                        <div className="faq-title"><span className="q-mark">Q.</span> {item.q}</div>
+                                        <div className="faq-icon">+</div>
+                                    </div>
+                                    <div className="faq-content"><span className="a-mark">A.</span> {item.a}</div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </section>
@@ -1771,7 +1732,7 @@ export default function Home() {
                     <div className="container">
                         <h2>FaWW와 함께 통증 없는 일상을 시작하세요</h2>
                         <p style={{ marginBottom: '30px' }}>내 몸에 딱 맞는 프리미엄 케어 프로그램 상담 및 첫 방문 혜택 가이드를 무상으로 제공해 드립니다.</p>
-                        <button className="cta-btn-white" onClick={() => openModal('modal-chat')}>실시간 프로그램 상담하기</button>
+                        <button className="cta-btn-white" onClick={openKakaoChat}>실시간 프로그램 상담하기</button>
                     </div>
                 </section>
 
@@ -1897,35 +1858,6 @@ export default function Home() {
             </main>
 
             {/* 💡 모달 모음 - 원본 이모지 레이아웃 완벽 이식 */}
-            {activeModal === 'modal-chat' && (
-                <div className="modal active">
-                    <div className="modal-content chat-modal-content">
-                        <div className="chat-header-bg">
-                            <div className="chat-top-bar"><button className="chat-close-btn" onClick={closeModal}>&times;</button></div>
-                            <div className="chat-profile-sec">
-                                <div className="chat-profile-img">FW</div>
-                                <div className="chat-profile-info"><h3>FaWW</h3><p>⚡ 24시간 빠른 답변 대기중</p></div>
-                            </div>
-                        </div>
-                        <div className="chat-body-sec">
-                            <div className="chat-main-card">
-                                <div className="chat-main-card-header"><span className="sm-logo">FW</span><span>FaWW</span></div>
-                                <h4>압도적 건강복지의 시작! 💚</h4>
-                                <p>No.1 피지컬케어 솔루션 FaWW와 함께하면<br />임직원과 학생이 건강해지고, 조직이 성장합니다.</p>
-                                <button className="chat-inquire-btn" onClick={() => { showToast('📝 제안서 요청 폼으로 연결됩니다.'); closeModal(); openModal('modal-proposal'); }}>문의하기 ▼</button>
-                                <div className="chat-reply-time"><span>👩‍💻</span> 몇 분 내 답변 받으실 수 있어요</div>
-                            </div>
-                            <div className="chat-alt-card">
-                                <span>다른 방법으로 문의</span>
-                                <div className="chat-alt-icons">
-                                    <button className="chat-icon-btn chat-icon-kakao" title="카카오톡 문의" onClick={() => showToast('💬 카카오톡 채널로 이동합니다.')}>💬</button>
-                                    <button className="chat-icon-btn chat-icon-phone" title="전화 문의" onClick={() => showToast('📞 고객센터: 1588-0000')}>📞</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
 
             {activeModal === 'modal1' && (
                 <div className="modal active">

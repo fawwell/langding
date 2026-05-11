@@ -151,13 +151,16 @@ header { display: flex; justify-content: space-between; align-items: center; pad
 }
 
 /* ⏱️ 시네마틱 딜레이 시스템 (글자 단위 애니메이션에 베이스 딜레이 주입) */
-.delay-1 { --base-delay: 0.2s; transition-delay: 0.2s !important; }
-.delay-2 { --base-delay: 0.7s; transition-delay: 0.7s !important; }
-.delay-3 { --base-delay: 1.2s; transition-delay: 1.2s !important; }
-.delay-4 { --base-delay: 1.7s; transition-delay: 1.7s !important; }
-.delay-5 { --base-delay: 2.2s; transition-delay: 2.2s !important; }
-.delay-6 { --base-delay: 2.7s; transition-delay: 2.7s !important; }
-.delay-7 { --base-delay: 3.2s; transition-delay: 3.2s !important; }
+.delay-1 { --base-delay: 0.1s; transition-delay: 0.1s !important; }
+.delay-2 { --base-delay: 0.2s; transition-delay: 0.2s !important; }
+.delay-3 { --base-delay: 0.3s; transition-delay: 0.3s !important; }
+.delay-4 { --base-delay: 0.4s; transition-delay: 0.4s !important; }
+.delay-5 { --base-delay: 0.5s; transition-delay: 0.5s !important; }
+.delay-6 { --base-delay: 0.6s; transition-delay: 0.6s !important; }
+.delay-7 { --base-delay: 0.7s; transition-delay: 0.7s !important; }
+.delay-8 { --base-delay: 0.8s; transition-delay: 0.8s !important; }
+.delay-9 { --base-delay: 0.9s; transition-delay: 0.9s !important; }
+.delay-10 { --base-delay: 1.0s; transition-delay: 1.0s !important; }
 
 /* 페이지 레이아웃 및 스크롤 시스템 복구 */
 .page-content, .sub-page-content { display: none; height: auto; overflow-y: visible; }
@@ -251,6 +254,75 @@ header { display: flex; justify-content: space-between; align-items: center; pad
 .teaser-text { opacity: 0; transform: translateY(15px); transition: all 0.6s ease-out; margin-bottom: 15px; word-break: keep-all; text-wrap: balance; text-wrap: pretty; text-wrap: balance; }
 .teaser-text.step-1 { font-size: 22px; color: #666; font-weight: bold; }
 .teaser-text.step-2 { font-size: 46px; color: #111; font-weight: 900; letter-spacing: -1px; margin-bottom: 30px; }
+header ul li { margin: 0 15px; position: relative; }
+header ul li a { text-decoration: none; color: #333; font-weight: 500; font-size: 15px; transition: color 0.3s; padding: 10px 0; display: block; }
+header ul li a:hover, header ul li a.active-nav { color: #2b8a3e; font-weight: 700; }
+
+/* 📱 SNS Dropdown Style */
+.nav-sns { position: relative; }
+.sns-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: #fff;
+    min-width: 160px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    padding: 10px 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: 1000;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.nav-sns:hover .sns-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.sns-dropdown li {
+    margin: 0 !important;
+    list-style: none;
+}
+
+.sns-dropdown li a {
+    padding: 12px 20px !important;
+    font-size: 14px !important;
+    color: #555 !important;
+    transition: all 0.2s !important;
+    display: block;
+    text-align: center;
+}
+
+.sns-dropdown li a:hover {
+    background: #f8f9fa;
+    color: #2b8a3e !important;
+}
+
+/* Mobile SNS Adjustment */
+@media (max-width: 1024px) {
+    .sns-dropdown {
+        position: static;
+        transform: none;
+        opacity: 1;
+        visibility: visible;
+        box-shadow: none;
+        background: #f8f9fa;
+        width: 100%;
+        margin-top: 10px;
+        padding: 0;
+        border: none;
+    }
+    .nav-sns:hover .sns-dropdown {
+        transform: none;
+    }
+    .sns-dropdown li a {
+        padding: 10px 0 !important;
+    }
+}
 .teaser-text.step-3 { font-size: 36px; color: #333; font-weight: 800; letter-spacing: -1px; margin-bottom: 30px; }
 .teaser-text.step-4 { font-size: 22px; color: #2b8a3e; font-weight: bold; background: #e8f5e9; display: inline-block; padding: 15px 35px; border-radius: 50px; margin-bottom: 60px; border: 1px solid #c8e6c9;}
 .teaser-text.step-5 { font-size: 16px; color: #888; font-weight: 600; letter-spacing: 1px;}
@@ -1985,9 +2057,9 @@ header { display: flex; justify-content: space-between; align-items: center; pad
 
 .risk-reveal-wrapper.has-reveal:hover .risk-type-card {
     transform: scale(1.15) translateY(-15px);
-    box-shadow: 0 50px 100px rgba(0,0,0,0.18);
+    box-shadow: 0 50px 100px rgba(43, 138, 62, 0.15);
     z-index: 1000;
-    border-color: #1e293b;
+    border-color: #2b8a3e;
 }
 
 /* 🟢 Front View */
@@ -2005,7 +2077,7 @@ header { display: flex; justify-content: space-between; align-items: center; pad
 .risk-type-card .card-back {
     position: absolute;
     inset: 0;
-    background: #1e293b; /* Sophisticated Deep Slate Navy */
+    background: #2b8a3e; /* FaWW Signature Green */
     color: #fff !important;
     padding: 30px;
     display: flex;
