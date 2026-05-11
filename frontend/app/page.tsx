@@ -1359,10 +1359,10 @@ export default function Home() {
                         
                         <div className="service-grid">
                             {[
-                                { id: 'modal1', tag: '진단', title: '스마트 AI 체형분석', desc: '3D 스캐닝을 통해 임직원의 신체 불균형과 근골격계 위험도를 정밀 측정합니다.', img: '/images/eap/ai_scanning.jpg', color: '#e3f2fd', text: '#1565c0' },
-                                { id: 'modal2', tag: '케어', title: '1:1 맞춤 피지컬케어', desc: '전문가가 직접 파견되어 통증 부위를 즉각적으로 관리하고 이완하는 시그니처 프로그램입니다.', img: '/images/eap/manual_care.jpg', color: '#e8f5e9', text: '#2b8a3e' },
-                                { id: 'modal4', tag: '실습', title: '단체 운동 프로그램', desc: '오피스 스트레칭, 소도구 운동 등 현장에서 바로 실천 가능한 기능성 트레이닝을 진행합니다.', img: '/images/eap/group_exercise.jpg', color: '#fff3e0', text: '#e65100' },
-                                { id: 'modal3', tag: '강의', title: '건강 복지 특강', desc: '직무별 맞춤 질환 예방 교육 및 올바른 생활 습관 가이드를 전문가의 강연으로 제공합니다.', img: '/images/eap/lecture.jpg', color: '#e3f2fd', text: '#1565c0' }
+                                { id: 'modal1', tag: '진단', title: '스마트 AI 체형분석', desc: '3D 스캐닝을 통해 임직원의 신체 불균형과 근골격계 위험도를 정밀 측정합니다.', img: '/images/eap/ai_scanning.jpg', color: '#e3f2fd', text: '#1565c0', hashtags: ['#3D스캔', '#불균형측정', '#근골격계케어'] },
+                                { id: 'modal2', tag: '케어', title: '1:1 맞춤 피지컬케어', desc: '전문가가 직접 파견되어 통증 부위를 즉각적으로 관리하고 이완하는 시그니처 프로그램입니다.', img: '/images/eap/manual_care.jpg', color: '#e8f5e9', text: '#2b8a3e', hashtags: ['#통증완화', '#직접파견', '#1:1시그니처'] },
+                                { id: 'modal4', tag: '실습', title: '단체 운동 프로그램', desc: '오피스 스트레칭, 소도구 운동 등 현장에서 바로 실천 가능한 기능성 트레이닝을 진행합니다.', img: '/images/eap/group_exercise.jpg', color: '#fff3e0', text: '#e65100', hashtags: ['#오피스스트레칭', '#기능성트레이닝', '#활력증진'] },
+                                { id: 'modal3', tag: '강의', title: '건강 복지 특강', desc: '직무별 맞춤 질환 예방 교육 및 올바른 생활 습관 가이드를 전문가의 강연으로 제공합니다.', img: '/images/eap/lecture.jpg', color: '#e3f2fd', text: '#1565c0', hashtags: ['#직무별예방교육', '#전문가강연', '#올바른습관'] }
                             ].map((s, i) => (
                                 <div key={i} className={`smart-card reveal delay-${i + 4}`} onClick={() => openModal(s.id)}>
                                     <div className="smart-card-top">
@@ -1375,6 +1375,11 @@ export default function Home() {
                                             <span className="gateway-badge" style={{ background: s.color, color: s.text }}>{s.tag}</span>
                                             <h3>{s.title}</h3>
                                             <p>{s.desc}</p>
+                                            <div className="smart-card-hashtags" style={{ marginTop: '15px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                                                {s.hashtags.map((tag, ti) => (
+                                                    <span key={ti} style={{ fontSize: '13px', color: '#868e96', fontWeight: '500', opacity: 0.8 }}>{tag}</span>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
