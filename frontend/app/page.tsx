@@ -71,8 +71,6 @@ export default function Home() {
         }
     ];
 
-    const openModal = (id: string) => setActiveModal(id);
-    const closeModal = () => setActiveModal(null);
 
     const openCenterModal = (centerId: string) => {
         const center = centerData.find(c => c.id === centerId);
@@ -1668,7 +1666,7 @@ export default function Home() {
                             <div className="product-card-premium">
                                 <div className="product-tag-premium">PREMIUM</div>
                                 <div className="product-img-wrapper">
-                                    <span style={{ fontSize: '100px' }}>🎗️</span>
+                                    <img src="/images/mall/sports_band.png" alt="스포츠밴드" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                                 </div>
                                 <div className="product-info-premium">
                                     <h3 className="product-name-premium">스포츠밴드</h3>
