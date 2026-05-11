@@ -3,29 +3,31 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
+import os
+
 class Settings(BaseSettings):
     """환경변수에서 로드하는 앱 설정."""
 
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
-        case_sensitive=False, # 대소문자 구분 안 함 (실수 방지)
+        case_sensitive=False,
         extra="ignore"
     )
 
     # 앱 기본 설정
-    APP_NAME: str = "SportCoach API"
-    DEBUG: bool = False
+    APP_NAME: str = os.getenv("APP_NAME", "SportCoach API")
+    DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
 
     # CORS 허용 오리진 (쉼표 구분)
-    CORS_ORIGINS: str = "http://localhost:3000"
+    CORS_ORIGINS: str = os.getenv("CORS_ORIGINS", "http://localhost:3000")
 
     # Supabase 연결
-    SUPABASE_URL: str = ""
-    SUPABASE_KEY: str = ""
+    SUPABASE_URL: str = os.getenv("SUPABASE_URL", "")
+    SUPABASE_KEY: str = os.getenv("SUPABASE_KEY", "")
 
     # 보안
-    SECRET_KEY: str = "change-me-in-production"
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "change-me-in-production")
 
     @property
     def cors_origins_list(self) -> list[str]:
