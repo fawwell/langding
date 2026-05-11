@@ -228,7 +228,7 @@ header { display: flex; justify-content: space-between; align-items: center; pad
 .hero-buttons { display: flex; justify-content: center; gap: 15px; margin-bottom: 60px; }
 
 /* 🌊 서브페이지 전용 히어로 (슬림하게 고정) */
-.hero-brand-sub { height: auto !important; min-height: 300px !important; padding: 120px 20px 10px 20px !important; display: flex; align-items: center; justify-content: center; text-align: center; }
+.hero-brand-sub { height: auto !important; min-height: 300px !important; padding: 120px 20px 80px 20px !important; display: flex; align-items: center; justify-content: center; text-align: center; }
 .hero-brand-sub .container { text-align: center; width: 100%; }
 .hero-brand-sub h1 { font-size: 42px !important; margin-bottom: 15px !important; }
 .hero-brand-sub p { font-size: 17px !important; margin-bottom: 0 !important; }
