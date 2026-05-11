@@ -279,7 +279,7 @@ header ul li a:hover, header ul li a.active-nav {
     left: 50%;
     transform: translateX(-50%) translateY(10px);
     background: #fff;
-    min-width: 160px;
+    min-width: max-content; /* Automatically fit content in one line */
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     padding: 10px 0;
@@ -302,14 +302,15 @@ header ul li a:hover, header ul li a.active-nav {
 }
 
 .sns-dropdown li a {
-    padding: 14px 24px !important;
+    padding: 14px 30px !important;
     font-size: 15px !important;
     font-weight: 600 !important;
     color: #444 !important;
     transition: all 0.2s !important;
     display: block;
-    text-align: center;
+    text-align: left; /* Align left for better readability on long text */
     letter-spacing: -0.3px;
+    white-space: nowrap; /* Force one line */
 }
 
 .sns-dropdown li a:hover {
