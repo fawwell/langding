@@ -718,11 +718,25 @@ export default function Home() {
                 <button className="hamburger-btn" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>☰</button>
                 <ul className={`nav-links ${isMobileMenuOpen ? 'show' : ''}`}>
                     <li><a href="#" className={activePage === 'page-home' ? 'active-nav' : ''} onClick={(e) => { e.preventDefault(); switchPage('page-home'); }}>파우 소개</a></li>
-                    <li><a href="#" className={activePage === 'page-ai' ? 'active-nav' : ''} onClick={(e) => { e.preventDefault(); switchPage('page-ai'); }}>스마트 AI 체형분석</a></li>
-                    <li><a href="#" className={activePage === 'page-physical' ? 'active-nav' : ''} onClick={(e) => { e.preventDefault(); switchPage('page-physical'); }}>피지컬케어</a></li>
+                    <li className="nav-dropdown-item">
+                        <a href="#" className={activePage === 'page-ai' ? 'active-nav' : ''} onClick={(e) => { e.preventDefault(); switchPage('page-ai'); }}>스마트 AI 체형분석</a>
+                        <ul className="sns-dropdown">
+                            <li><a href="#" onClick={(e) => { e.preventDefault(); switchPage('page-eap'); }}>기업용 DX</a></li>
+                            <li><a href="#" onClick={(e) => { e.preventDefault(); switchPage('page-school'); }}>학교용 DX</a></li>
+                            <li><a href="#" onClick={(e) => { e.preventDefault(); setActivePage('page-physical'); setActivePhysicalSub('sub-center'); window.scrollTo(0, 0); }}>개인용 DX</a></li>
+                        </ul>
+                    </li>
+                    <li className="nav-dropdown-item">
+                        <a href="#" className={activePage === 'page-physical' ? 'active-nav' : ''} onClick={(e) => { e.preventDefault(); switchPage('page-physical'); }}>피지컬케어</a>
+                        <ul className="sns-dropdown">
+                            <li><a href="#" onClick={(e) => { e.preventDefault(); switchPage('page-eap'); }}>피지컬케어 (기업용DX)</a></li>
+                            <li><a href="#" onClick={(e) => { e.preventDefault(); setActivePage('page-physical'); setActivePhysicalSub('sub-academy'); window.scrollTo(0, 0); }}>자격증</a></li>
+                            <li><a href="#" onClick={(e) => { e.preventDefault(); setActivePage('page-physical'); setActivePhysicalSub('sub-center'); window.scrollTo(0, 0); }}>센터</a></li>
+                        </ul>
+                    </li>
                     <li><a href="#" className={activePage === 'page-mall' ? 'active-nav' : ''} onClick={(e) => { e.preventDefault(); switchPage('page-mall'); }}>피지컬케어 mall</a></li>
                     <li className="nav-sns">
-                        <a href="#">SNS ▼</a>
+                        <a href="#">SNS</a>
                         <ul className="sns-dropdown">
                             <li><a href="https://blog.naver.com/fawwceo" target="_blank" rel="noopener noreferrer">블로그 (Blog)</a></li>
                             <li><a href="https://www.instagram.com/physicalcare_ydp/" target="_blank" rel="noopener noreferrer">인스타그램 (Insta)</a></li>
@@ -1631,7 +1645,7 @@ export default function Home() {
                     </div>
                 </section>
 
-                <div id="physical-gateway" className={`container-fluid reveal ${!activePhysicalSub ? 'active' : ''}`} style={{ padding: '100px 0', display: !activePhysicalSub ? 'block' : 'none', backgroundColor: '#f9f9f9' }}>
+                <div id="physical-gateway" className={`container-fluid reveal ${!activePhysicalSub ? 'active' : ''}`} style={{ padding: '10px 0 100px', display: !activePhysicalSub ? 'block' : 'none', backgroundColor: '#f9f9f9' }}>
                     <div className="container">
                         <div className="premium-gateway-grid">
                         <div className="gateway-card reveal" onClick={() => switchPage('page-eap')}>

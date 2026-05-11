@@ -228,7 +228,7 @@ header { display: flex; justify-content: space-between; align-items: center; pad
 .hero-buttons { display: flex; justify-content: center; gap: 15px; margin-bottom: 60px; }
 
 /* 🌊 서브페이지 전용 히어로 (슬림하게 고정) */
-.hero-brand-sub { height: auto !important; min-height: 300px !important; padding: 120px 20px 60px 20px !important; display: flex; align-items: center; justify-content: center; text-align: center; }
+.hero-brand-sub { height: auto !important; min-height: 300px !important; padding: 120px 20px 10px 20px !important; display: flex; align-items: center; justify-content: center; text-align: center; }
 .hero-brand-sub .container { text-align: center; width: 100%; }
 .hero-brand-sub h1 { font-size: 42px !important; margin-bottom: 15px !important; }
 .hero-brand-sub p { font-size: 17px !important; margin-bottom: 0 !important; }
@@ -271,8 +271,8 @@ header ul li a:hover, header ul li a.active-nav {
     transform: translateY(-1px);
 }
 
-/* 📱 SNS Dropdown Style */
-.nav-sns { position: relative; }
+/* 📱 SNS & Menu Dropdown Style */
+.nav-sns, .nav-dropdown-item { position: relative; }
 .sns-dropdown {
     position: absolute;
     top: 100%;
@@ -290,7 +290,8 @@ header ul li a:hover, header ul li a.active-nav {
     border: 1px solid rgba(0,0,0,0.05);
 }
 
-.nav-sns:hover .sns-dropdown {
+.nav-sns:hover .sns-dropdown, 
+.nav-dropdown-item:hover .sns-dropdown {
     opacity: 1;
     visibility: visible;
     transform: translateX(-50%) translateY(0);
@@ -318,7 +319,7 @@ header ul li a:hover, header ul li a.active-nav {
     color: #2b8a3e !important;
 }
 
-/* Mobile SNS Adjustment */
+/* Mobile Dropdown Adjustment */
 @media (max-width: 1024px) {
     .sns-dropdown {
         position: static;
@@ -332,7 +333,8 @@ header ul li a:hover, header ul li a.active-nav {
         padding: 0;
         border: none;
     }
-    .nav-sns:hover .sns-dropdown {
+    .nav-sns:hover .sns-dropdown,
+    .nav-dropdown-item:hover .sns-dropdown {
         transform: none;
     }
     .sns-dropdown li a {
