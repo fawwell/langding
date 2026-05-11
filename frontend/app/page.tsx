@@ -49,6 +49,7 @@ export default function Home() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeModal, setActiveModal] = useState<string | null>(null);
     const [activeCenter, setActiveCenter] = useState<any | null>(null); // 활성화된 센터 데이터
+    const [hoveredCenterId, setHoveredCenterId] = useState<string | null>(null); // 마우스 호버된 센터 ID
 
     const [centerData, setCenterData] = useState<any[]>([]);
     const [clientReviews, setClientReviews] = useState<any[]>([]);
@@ -812,8 +813,20 @@ export default function Home() {
                 <section className="magnify-section reveal">
                     <div className="container text-center">
                         <span className="section-kicker reveal delay-1">AI-POWERED ANALYSIS</span>
-                        <h2 className="section-title reveal delay-2">커서를 올려 AI 분석을 체험해보세요</h2>
-                        <p className="section-desc reveal delay-3">FaWW의 스마트 AI 기술은 신체 불균형을 정밀하게 측정하여<br />눈에 보이지 않는 통증의 원인을 찾아냅니다.</p>
+                        <h2 className="section-title reveal delay-2" style={{ 
+                            color: '#fff', 
+                            textShadow: '0 0 10px rgba(255,255,255,0.3), 0 0 20px rgba(125,185,255,0.2)',
+                            fontSize: '46px',
+                            fontWeight: '700',
+                            marginBottom: '20px'
+                        }}>커서를 올려 AI 분석을 체험해보세요</h2>
+                        <p className="section-desc reveal delay-3" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '18px', lineHeight: '1.6' }}>
+                            FaWW의 <span style={{ 
+                                color: '#00ff88', 
+                                fontWeight: 'bold', 
+                                textShadow: '0 0 8px rgba(0,255,136,0.6), 0 0 20px rgba(0,255,136,0.3)' 
+                            }}>스마트 AI 기술</span>은 신체 불균형을 정밀하게 측정하여<br />눈에 보이지 않는 통증의 원인을 찾아냅니다.
+                        </p>
                         <div className="magnify-container reveal delay-4">
                             {/* 동적 광택 레이어 */}
                             <div className="magnify-shine"></div>
@@ -1607,6 +1620,7 @@ export default function Home() {
                         </div>
                     </div>
                 </section>
+
                 <section className="cta-footer reveal">
                     <div className="container">
                         <h2>FaWW와 함께 스마트한 교육 환경을 구축하세요</h2>
@@ -1658,32 +1672,32 @@ export default function Home() {
                 <div id="physical-gateway" className={`container-fluid reveal ${!activePhysicalSub ? 'active' : ''}`} style={{ padding: '10px 0 100px', display: !activePhysicalSub ? 'block' : 'none', backgroundColor: '#f9f9f9' }}>
                     <div className="container">
                         <div className="premium-gateway-grid">
-                        <div className="gateway-card reveal" onClick={() => switchPage('page-eap')}>
-                            <div className="gateway-bg-text">PC</div>
-                            <div className="gateway-icon-box" style={{ fontSize: '14px', fontWeight: 'bold' }}>PC</div>
-                            <h3>피지컬케어</h3>
-                            <p>기업 임직원을 위한 맞춤형 방문 솔루션. 인간공학적 분석과 1:1 케어를 결합한 독보적 프로그램입니다.</p>
-                            <div className="gateway-arrow">→</div>
-                        </div>
+                            <div className="gateway-card reveal" onClick={() => switchPage('page-eap')}>
+                                <div className="gateway-bg-text">PC</div>
+                                <div className="gateway-icon-box" style={{ fontSize: '14px', fontWeight: 'bold' }}>PC</div>
+                                <h3>피지컬케어</h3>
+                                <p>기업 임직원을 위한 맞춤형 방문 솔루션. 인간공학적 분석과 1:1 케어를 결합한 독보적 프로그램입니다.</p>
+                                <div className="gateway-arrow">→</div>
+                            </div>
 
-                        <div className="gateway-card reveal delay-1" onClick={() => openPhysicalSub('sub-academy')}>
-                            <div className="gateway-bg-text">CL</div>
-                            <div className="gateway-icon-box" style={{ fontSize: '14px', fontWeight: 'bold' }}>CL</div>
-                            <h3>자격증</h3>
-                            <p>FaWW 오리지널 피지컬케어 전문가 양성 과정. 이론부터 실무까지 이어지는 고도화된 교육 커리큘럼.</p>
-                            <div className="gateway-arrow">→</div>
-                        </div>
+                            <div className="gateway-card reveal delay-1" onClick={() => openPhysicalSub('sub-academy')}>
+                                <div className="gateway-bg-text">CL</div>
+                                <div className="gateway-icon-box" style={{ fontSize: '14px', fontWeight: 'bold' }}>CL</div>
+                                <h3>자격증</h3>
+                                <p>FaWW 오리지널 피지컬케어 전문가 양성 과정. 이론부터 실무까지 이어지는 고도화된 교육 커리큘럼.</p>
+                                <div className="gateway-arrow">→</div>
+                            </div>
 
-                        <div className="gateway-card reveal delay-2" onClick={() => openPhysicalSub('sub-center')}>
-                            <div className="gateway-bg-text">CT</div>
-                            <div className="gateway-icon-box" style={{ fontSize: '14px', fontWeight: 'bold' }}>CT</div>
-                            <h3>센터</h3>
-                            <p>가까운 직영 센터에서 만나는 1:1 맞춤형 피지컬케어. 최첨단 장비와 베테랑 전문가의 정밀한 솔루션.</p>
-                            <div className="gateway-arrow">→</div>
+                            <div className="gateway-card reveal delay-2" onClick={() => openPhysicalSub('sub-center')}>
+                                <div className="gateway-bg-text">CT</div>
+                                <div className="gateway-icon-box" style={{ fontSize: '14px', fontWeight: 'bold' }}>CT</div>
+                                <h3>센터</h3>
+                                <p>가까운 직영 센터에서 만나는 1:1 맞춤형 피지컬케어. 최첨단 장비와 베테랑 전문가의 정밀한 솔루션.</p>
+                                <div className="gateway-arrow">→</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
                 <div id="sub-academy" className={`sub-page-content ${activePhysicalSub === 'sub-academy' ? 'active' : ''}`}>
                     <section className="category-section reveal" style={{ backgroundColor: '#f8f9fa', paddingTop: '40px' }}>
@@ -1729,25 +1743,114 @@ export default function Home() {
 
                 <div id="sub-center" className={`sub-page-content ${activePhysicalSub === 'sub-center' ? 'active' : ''}`}>
                     <section className="category-section reveal" style={{ backgroundColor: '#fff', paddingTop: '40px' }}>
-                        <div className="container">
+                        <div className="container" style={{ maxWidth: '1200px' }}>
                             <div style={{ textAlign: 'left' }}><span className="back-btn-light" onClick={showPhysicalGateway}>← 카테고리 선택으로 돌아가기</span></div>
                             <h2 className="section-title">센터 (로컬) 소개</h2>
-                            <div className="grid-vertical">
-                                {centerData.length > 0 ? centerData.map((center, idx) => (
-                                    <div 
-                                        key={center.id} 
-                                        className={`center-row-card reveal ${idx > 0 ? `delay-${idx}` : ''}`} 
-                                        onClick={() => openCenterModal(center.id)}
-                                    >
-                                        <div>
-                                            <span className="gateway-badge">Center 0{idx + 1}</span>
-                                            <h3>{center.name}</h3>
+                            
+                            <div className="center-split-view">
+                                {/* 왼쪽: 센터 리스트 */}
+                                <div className="center-list-column grid-vertical">
+                                    {centerData.length > 0 ? centerData.map((center, idx) => (
+                                        <div 
+                                            key={center.id} 
+                                            className={`center-row-card reveal active ${hoveredCenterId === center.id ? 'highlighted' : ''}`} 
+                                            onClick={() => openCenterModal(center.id)}
+                                            onMouseEnter={() => setHoveredCenterId(center.id)}
+                                            onMouseLeave={() => setHoveredCenterId(null)}
+                                        >
+                                            <div>
+                                                <span className="center-num-badge">CENTER 0{idx + 1}</span>
+                                                <h3>{center.name}</h3>
+                                            </div>
+                                            <div className="card-arrow" style={{ color: '#2b8a3e', fontSize: '24px', opacity: 0.5 }}>→</div>
                                         </div>
-                                        <div style={{ color: '#2b8a3e', fontSize: '24px' }}>→</div>
+                                    )) : (
+                                        <p style={{ color: '#888', textAlign: 'center' }}>센터 정보를 불러오는 중입니다...</p>
+                                    )}
+                                </div>
+
+                                {/* 오른쪽: 수도권 지도 인터랙션 */}
+                                <div className="center-map-column reveal active">
+                                    <div style={{ marginBottom: '20px', textAlign: 'center' }}>
+                                        <h4 style={{ margin: 0, color: '#111' }}>FaWW 수도권 실시간 정밀 네트워크 [REAL MAP]</h4>
+                                        <p style={{ fontSize: '13px', color: '#2b8a3e', fontWeight: 'bold', margin: '5px 0 0 0' }}>※ 브라우저를 새로고침(Ctrl+F5)하여 최신 정밀 지형을 확인하세요.</p>
                                     </div>
-                                )) : (
-                                    <p style={{ color: '#888', textAlign: 'center' }}>센터 정보를 불러오는 중입니다...</p>
-                                )}
+                                    <div className="center-map-wrapper" style={{ background: '#f8f9fa', height: '650px', border: '1px solid #d1d5da', overflow: 'hidden', borderRadius: '12px', boxShadow: 'inset 0 0 40px rgba(0,0,0,0.05)' }}>
+                                        <svg viewBox="1700 6300 2500 2800" className="seoul-map-svg" style={{ padding: '0', width: '100%', height: '100%' }}>
+                                            <defs>
+                                                <pattern id="mapGrid" width="150" height="150" patternUnits="userSpaceOnUse">
+                                                    <path d="M 150 0 L 0 0 0 150" fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth="1" />
+                                                </pattern>
+                                                <filter id="mapShadow" x="-20%" y="-20%" width="140%" height="140%">
+                                                    <feDropShadow dx="0" dy="30" stdDeviation="40" floodOpacity="0.15" />
+                                                </filter>
+                                            </defs>
+                                            <rect x="1700" y="6300" width="2500" height="2800" fill="url(#mapGrid)" />
+                                            
+                                            {/* 🗺️ [REAL GIS DATA] 수도권 전체 정밀 실루엣 (Seoul + Incheon + Gyeonggi) */}
+                                            <path d="M2697,6425L2761,6470L2773,6519L2752,6548L2826,6577L2831,6600L2734,6575L2719,6555L2722,6492L2673,6467L2619,6476L2557,6514L2501,6572L2480,6626L2577,6634L2556,6662L2620,6646L2578,6758L2591,6811L2558,6801L2537,6702L2444,6697L2371,6721L2369,6826L2412,6889L2465,6911L2550,6921L2553,6979L2496,6940L2460,6954L2453,6994L2383,6954L2324,6894L2290,6876L2264,6906L2298,6957L2236,6952L2241,7000L2300,7027L2315,7060L2258,7064L2225,7138L2308,7151L2375,7123L2400,7134L2399,7090L2439,7071L2456,7133L2484,7173L2567,7158L2550,7187L2491,7215L2398,7223L2348,7240L2279,7294L2276,7318L2330,7383L2414,7420L2455,7513L2414,7556L2399,7643L2307,7736L2152,7734L2086,7853L2065,7984L2046,8150L2075,8181L2162,8147L2235,8166L2263,8128L2251,7979L2299,7937L2399,7906L2279,8007L2317,8120L2296,8182L2308,8310L2268,8292L2261,8465L2271,8513L2361,8543L2426,8592L2567,8796L2684,8899L2741,9031L2761,9056L2871,8987L2942,8864L2942,8864L2962,8867L3033,8797L3090,8769L3112,8800L3113,8867L3130,8900L3149,8853L3217,8836L3217,8836L3274,8895L3310,8885L3281,8823L3282,8785L3331,8746L3391,8730L3458,8753L3517,8744L3542,8687L3548,8592L3567,8539L3607,8508L3680,8507L3702,8448L3762,8427L3799,8369L3789,8287L3656,8191L3649,8100L3668,8027L3621,7973L3639,7948L3682,7961L3673,7881L3653,7815L3688,7784L3775,7789L3944,7694L4075,7666L4117,7615L4016,7494L4012,7404L3910,7195L3836,7021L3746,6861L3696,6802L3599,6628L3558,6600L3518,6620L3458,6535L3390,6490L3374,6431L3251,6382L3178,6363L3102,6374L3041,6428L2971,6461L2836,6406Z" 
+                                                fill="#fff" stroke="#adb5bd" strokeWidth="6" filter="url(#mapShadow)" />
+                                            
+                                            {/* 🏛️ [REAL GIS DATA] 서울특별시 정밀 실루엣 */}
+                                            <path d="M2972,7718L3087,7730L3093,7671L3046,7644L3059,7593L3015,7530L2879,7474L2861,7517L2723,7477L2654,7481L2609,7544L2531,7580L2524,7638L2456,7731L2482,7782L2526,7778L2577,7746L2650,7778L2663,7844L2735,7849L2796,7942L2829,7976L2879,7987L2937,7981L2963,7933L2988,7824L2988,7775Z" 
+                                                fill="#f1f3f5" stroke="#495057" strokeWidth="8" />
+                                            
+                                            {/* 📍 [Layer 1] 모든 센터 마커 (먼저 렌더링) */}
+                                            {centerData.map((center) => {
+                                                const getInfo = (name: string) => {
+                                                    if (name.includes('영등포')) return { x: 2650, y: 7650 };
+                                                    if (name.includes('여의도')) return { x: 2800, y: 7600 };
+                                                    if (name.includes('강남')) return { x: 3000, y: 7750 };
+                                                    if (name.includes('동탄')) return { x: 3100, y: 8650 };
+                                                    return { x: 2750, y: 7700 };
+                                                };
+                                                const info = getInfo(center.name);
+                                                const isActive = hoveredCenterId === center.id;
+                                                
+                                                return (
+                                                    <g key={`marker-${center.id}`} className={`map-point ${isActive ? 'active' : ''}`} 
+                                                        onClick={() => openCenterModal(center.id)} 
+                                                        onMouseEnter={() => setHoveredCenterId(center.id)} 
+                                                        onMouseLeave={() => setHoveredCenterId(null)}
+                                                        style={{ cursor: 'pointer' }}>
+                                                        <circle cx={info.x} cy={info.y} r={isActive ? 80 : 0} 
+                                                            fill={isActive ? 'rgba(43, 138, 62, 0.2)' : 'transparent'} 
+                                                            style={{ transition: 'all 0.4s ease' }} />
+                                                        <circle cx={info.x} cy={info.y} r={isActive ? 35 : 25} style={{ 
+                                                            fill: isActive ? '#2b8a3e' : '#ced4da',
+                                                            stroke: '#fff',
+                                                            strokeWidth: isActive ? 10 : 6,
+                                                            transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+                                                        }} />
+                                                    </g>
+                                                );
+                                            })}
+
+                                            {/* 🏷️ [Layer 2] 활성화된 주소 툴팁 (가장 마지막에 렌더링하여 가림 방지) */}
+                                            {hoveredCenterId && centerData.map((center) => {
+                                                if (center.id !== hoveredCenterId) return null;
+                                                const getInfo = (name: string) => {
+                                                    if (name.includes('영등포')) return { x: 2650, y: 7650, addr: '서울특별시 영등포구 도신로 232' };
+                                                    if (name.includes('여의도')) return { x: 2800, y: 7600, addr: '서울특별시 영등포구 국제금융로 10' };
+                                                    if (name.includes('강남')) return { x: 3000, y: 7750, addr: '서울특별시 강남구 강남대로 364' };
+                                                    if (name.includes('동탄')) return { x: 3100, y: 8650, addr: '경기도 화성시 동탄대로 537' };
+                                                    return { x: 2750, y: 7700, addr: '주소 정보 확인 중' };
+                                                };
+                                                const info = getInfo(center.name);
+                                                
+                                                return (
+                                                    <g key={`tooltip-${center.id}`} style={{ pointerEvents: 'none' }} transform={`translate(${info.x}, ${info.y - 150})`}>
+                                                        <rect x="-425" y="-220" width="850" height="260" rx="50" fill="#212529" filter="url(#mapShadow)" />
+                                                        <path d="M0,80 L-40,30 L40,30 Z" fill="#212529" />
+                                                        <text y="-135" textAnchor="middle" fill="#00ff88" fontSize="64" fontWeight="800">{center.name}</text>
+                                                        <text y="-45" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="42" fontWeight="400">{info.addr}</text>
+                                                    </g>
+                                                );
+                                            })}
+                                            <text x="2750" y="7700" textAnchor="middle" fill="#212529" fontSize="180" fontWeight="900" opacity="0.05" style={{ pointerEvents: 'none', letterSpacing: '30px' }}>SEOUL</text>
+                                        </svg>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </section>
