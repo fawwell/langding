@@ -9,7 +9,8 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
-        case_sensitive=True,
+        case_sensitive=False, # 대소문자 구분 안 함 (실수 방지)
+        extra="ignore"
     )
 
     # 앱 기본 설정

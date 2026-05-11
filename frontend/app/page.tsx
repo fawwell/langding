@@ -1396,19 +1396,19 @@ export default function Home() {
                             <div className="comp-box others reveal">
                                 <h3>일반 안전보건 기관</h3>
                                 <ul className="comp-list">
-                                    <li><span className="comp-icon">❌</span> 단순 서류 작업 및 제본 위주</li>
-                                    <li><span className="comp-icon">❌</span> 일회성 조사 및 결과 통보</li>
-                                    <li><span className="comp-icon">❌</span> 아날로그식 수기 조사 (시간 소요)</li>
-                                    <li><span className="comp-icon">❌</span> 개선 대책의 실효성 부족</li>
+                                    <li><span className="comp-icon">—</span> 단순 서류 작업 및 제본 위주</li>
+                                    <li><span className="comp-icon">—</span> 일회성 조사 및 결과 통보</li>
+                                    <li><span className="comp-icon">—</span> 아날로그식 수기 조사 (시간 소요)</li>
+                                    <li><span className="comp-icon">—</span> 개선 대책의 실효성 부족</li>
                                 </ul>
                             </div>
                             <div className="comp-box faww reveal delay-1">
                                 <h3>FaWW Professional</h3>
                                 <ul className="comp-list">
-                                    <li><span className="comp-icon">✅</span> 인간공학적 분석 + 실질적 개선 대책</li>
-                                    <li><span className="comp-icon">✅</span> 즉각적인 1:1 피지컬케어 사후 관리</li>
-                                    <li><span className="comp-icon">✅</span> 웹/모바일 기반 신속한 증상 조사</li>
-                                    <li><span className="comp-icon">✅</span> AI 빅데이터 기반의 정밀 분석 리포트</li>
+                                    <li><span className="comp-icon">✓</span> 인간공학적 분석 + 실질적 개선 대책</li>
+                                    <li><span className="comp-icon">✓</span> 즉각적인 1:1 피지컬케어 사후 관리</li>
+                                    <li><span className="comp-icon">✓</span> 웹/모바일 기반 신속한 증상 조사</li>
+                                    <li><span className="comp-icon">✓</span> AI 빅데이터 기반의 정밀 분석 리포트</li>
                                 </ul>
                             </div>
                         </div>
@@ -1460,10 +1460,15 @@ export default function Home() {
                             ].map((item, idx) => (
                                 <div key={idx} className={`faq-item reveal delay-${idx % 4 + 1}`} onClick={toggleFaq}>
                                     <div className="faq-title-wrap">
-                                        <div className="faq-title"><span className="q-mark">Q.</span> {item.q}</div>
+                                        <div className="faq-title"><span className="q-mark">Q.</span> <span>{item.q}</span></div>
                                         <div className="faq-icon">+</div>
                                     </div>
-                                    <div className="faq-content"><span className="a-mark">A.</span> {item.a}</div>
+                                    <div className="faq-content-wrapper">
+                                        <div className="faq-content">
+                                            <span className="a-mark">A.</span>
+                                            <span>{item.a}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             ))}
                         </div>
