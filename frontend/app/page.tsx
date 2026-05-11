@@ -25,6 +25,61 @@ export default function Home() {
     const [activePage, setActivePage] = useState('page-home');
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeModal, setActiveModal] = useState<string | null>(null);
+    const [activeCenter, setActiveCenter] = useState<any | null>(null); // 활성화된 센터 데이터
+
+    // 센터 데이터 정의
+    const centerData = [
+        {
+            id: 'center-1',
+            name: '영등포점 (본점)',
+            tagline: 'THE ORIGINAL CLINIC',
+            philosophy: 'FaWW의 철학이 시작된 곳입니다. 수천 건의 임상 데이터를 보유한 베테랑 전문가들이 당신의 신체 밸런스를 완벽하게 찾아드립니다.',
+            image: '/images/physical-care/001.jpg',
+            experts: ['김파우 원장', '이교정 팀장'],
+            mapUrl: 'https://map.naver.com',
+            reserveUrl: 'https://booking.naver.com'
+        },
+        {
+            id: 'center-2',
+            name: '동탄점 (2호점)',
+            tagline: 'ADVANCED TECH CENTER',
+            philosophy: '가장 최신의 AI 스캐닝 장비와 프리미엄 시설을 갖추고 있습니다. 정밀한 데이터 분석을 통해 스마트한 통증 관리 솔루션을 제공합니다.',
+            image: '/images/physical-care/002.jpg',
+            experts: ['최첨단 실장', '박재활 프로'],
+            mapUrl: 'https://map.naver.com',
+            reserveUrl: 'https://booking.naver.com'
+        },
+        {
+            id: 'center-3',
+            name: '강남점 (3호점)',
+            tagline: 'ELITE PERFORMANCE',
+            philosophy: '바쁜 직장인들을 위한 맞춤형 퀵 리커버리 시스템을 운영합니다. 강남 도심 속에서 경험하는 최상의 신체 컨디셔닝을 약속합니다.',
+            image: '/images/physical-care/001.jpg', // 임시 이미지
+            experts: ['정강남 원장', '한도심 프로'],
+            mapUrl: 'https://map.naver.com',
+            reserveUrl: 'https://booking.naver.com'
+        },
+        {
+            id: 'center-4',
+            name: '여의도점 (4호점)',
+            tagline: 'VIP WELLNESS CARE',
+            philosophy: '프라이빗한 1:1 집중 케어에 특화된 공간입니다. 당신만을 위한 완벽하게 독립된 환경에서 신체의 근본적인 회복에만 집중하세요.',
+            image: '/images/physical-care/002.jpg', // 임시 이미지
+            experts: ['고여의 실장', '남금융 프로'],
+            mapUrl: 'https://map.naver.com',
+            reserveUrl: 'https://booking.naver.com'
+        }
+    ];
+
+    const openModal = (id: string) => setActiveModal(id);
+    const closeModal = () => setActiveModal(null);
+
+    const openCenterModal = (centerId: string) => {
+        const center = centerData.find(c => c.id === centerId);
+        setActiveCenter(center);
+    };
+
+    const closeCenterModal = () => setActiveCenter(null);
     const [activePhysicalSub, setActivePhysicalSub] = useState<string | null>(null);
 
     // 퀴즈 관련 State
@@ -1531,10 +1586,10 @@ export default function Home() {
                             <div style={{ textAlign: 'left' }}><span className="back-btn-light" onClick={showPhysicalGateway}>← 카테고리 선택으로 돌아가기</span></div>
                             <h2 className="section-title">센터 (로컬) 소개</h2>
                             <div className="grid-vertical">
-                                <div className="center-row-card reveal"><div><span className="gateway-badge">Center 01</span><h3>영등포점 (본점)</h3></div><div style={{ color: '#2b8a3e', fontSize: '24px' }}>→</div></div>
-                                <div className="center-row-card reveal delay-1"><div><span className="gateway-badge">Center 02</span><h3>동탄점 (2호점)</h3></div><div style={{ color: '#2b8a3e', fontSize: '24px' }}>→</div></div>
-                                <div className="center-row-card reveal delay-2"><div><span className="gateway-badge">Center 03</span><h3>강남점 (3호점)</h3></div><div style={{ color: '#2b8a3e', fontSize: '24px' }}>→</div></div>
-                                <div className="center-row-card reveal delay-3"><div><span className="gateway-badge">Center 04</span><h3>여의도점 (4호점)</h3></div><div style={{ color: '#2b8a3e', fontSize: '24px' }}>→</div></div>
+                                <div className="center-row-card reveal" onClick={() => openCenterModal('center-1')}><div><span className="gateway-badge">Center 01</span><h3>영등포점 (본점)</h3></div><div style={{ color: '#2b8a3e', fontSize: '24px' }}>→</div></div>
+                                <div className="center-row-card reveal delay-1" onClick={() => openCenterModal('center-2')}><div><span className="gateway-badge">Center 02</span><h3>동탄점 (2호점)</h3></div><div style={{ color: '#2b8a3e', fontSize: '24px' }}>→</div></div>
+                                <div className="center-row-card reveal delay-2" onClick={() => openCenterModal('center-3')}><div><span className="gateway-badge">Center 03</span><h3>강남점 (3호점)</h3></div><div style={{ color: '#2b8a3e', fontSize: '24px' }}>→</div></div>
+                                <div className="center-row-card reveal delay-3" onClick={() => openCenterModal('center-4')}><div><span className="gateway-badge">Center 04</span><h3>여의도점 (4호점)</h3></div><div style={{ color: '#2b8a3e', fontSize: '24px' }}>→</div></div>
                             </div>
                         </div>
                     </section>
@@ -1580,13 +1635,60 @@ export default function Home() {
                         </p>
                     </div>
                 </section>
-                <section className="category-section reveal" style={{ backgroundColor: '#f8f9fa' }}>
+                <section className="floating-gallery reveal">
                     <div className="container">
-                        <div className="product-grid">
-                            <div className="product-card reveal"><div className="product-img">블랙테라</div><div className="product-info"><div className="product-title">블랙테라</div><button className="buy-btn">도입 문의</button></div></div>
-                            <div className="product-card reveal delay-1"><div className="product-img">마사지스틱</div><div className="product-info"><div className="product-title">마사지스틱</div><button className="buy-btn">도입 문의</button></div></div>
-                            <div className="product-card reveal delay-2"><div className="product-img">스포츠밴드</div><div className="product-info"><div className="product-title">스포츠밴드</div><button className="buy-btn">도입 문의</button></div></div>
-                            <div className="product-card reveal delay-3"><div className="product-img">스트랩</div><div className="product-info"><div className="product-title">스트랩</div><button className="buy-btn">도입 문의</button></div></div>
+                        <div className="product-grid-premium">
+                            {/* 제품 1: 블랙테라 */}
+                            <div className="product-card-premium">
+                                <div className="product-tag-premium">BEST</div>
+                                <div className="product-img-wrapper">
+                                    <span style={{ fontSize: '100px' }}>📦</span>
+                                </div>
+                                <div className="product-info-premium">
+                                    <h3 className="product-name-premium">블랙테라</h3>
+                                    <p className="product-price-premium">도입가 별도문의</p>
+                                    <button className="buy-btn-premium">제품 상세 보기</button>
+                                </div>
+                            </div>
+
+                            {/* 제품 2: 마사지스틱 */}
+                            <div className="product-card-premium">
+                                <div className="product-tag-premium">NEW</div>
+                                <div className="product-img-wrapper">
+                                    <span style={{ fontSize: '100px' }}>🏒</span>
+                                </div>
+                                <div className="product-info-premium">
+                                    <h3 className="product-name-premium">마사지스틱</h3>
+                                    <p className="product-price-premium">도입가 별도문의</p>
+                                    <button className="buy-btn-premium">제품 상세 보기</button>
+                                </div>
+                            </div>
+
+                            {/* 제품 3: 스포츠밴드 */}
+                            <div className="product-card-premium">
+                                <div className="product-tag-premium">PREMIUM</div>
+                                <div className="product-img-wrapper">
+                                    <span style={{ fontSize: '100px' }}>🎗️</span>
+                                </div>
+                                <div className="product-info-premium">
+                                    <h3 className="product-name-premium">스포츠밴드</h3>
+                                    <p className="product-price-premium">도입가 별도문의</p>
+                                    <button className="buy-btn-premium">제품 상세 보기</button>
+                                </div>
+                            </div>
+
+                            {/* 제품 4: 스마트 스트랩 */}
+                            <div className="product-card-premium">
+                                <div className="product-tag-premium">IOT</div>
+                                <div className="product-img-wrapper">
+                                    <span style={{ fontSize: '100px' }}>⌚</span>
+                                </div>
+                                <div className="product-info-premium">
+                                    <h3 className="product-name-premium">스마트 스트랩</h3>
+                                    <p className="product-price-premium">도입가 별도문의</p>
+                                    <button className="buy-btn-premium">제품 상세 보기</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -1799,6 +1901,45 @@ export default function Home() {
                                 <button className="btn-outline" style={{ width: '100%', marginTop: '10px', padding: '14px 28px', borderRadius: '8px', fontWeight: 'bold', background: '#fff', color: '#2b8a3e', border: '1px solid #2b8a3e', cursor: 'pointer' }} onClick={resetQuiz}>다시 하기</button>
                             </div>
                         )}
+                    </div>
+                </div>
+            )}
+
+            {/* 🏛️ 프리미엄 센터 상세 모달 */}
+            {activeCenter && (
+                <div className={`center-modal-overlay active`} onClick={closeCenterModal}>
+                    <div className="center-modal-content" onClick={(e) => e.stopPropagation()}>
+                        <button className="center-modal-close" onClick={closeCenterModal}>&times;</button>
+                        
+                        {/* 좌측 비주얼 (임시 이미지 배경) */}
+                        <div className="center-modal-visual" style={{ backgroundImage: `url('https://images.unsplash.com/photo-1540555700478-4be289fbecee?q=80&w=2070&auto=format&fit=crop')` }}>
+                        </div>
+
+                        {/* 우측 정보 */}
+                        <div className="center-modal-info">
+                            <div className="center-modal-header">
+                                <span className="center-modal-tag">{activeCenter.tagline}</span>
+                                <h2 className="center-modal-title">{activeCenter.name}</h2>
+                                <p className="center-modal-philosophy">{activeCenter.philosophy}</p>
+                            </div>
+
+                            <div className="center-expert-section">
+                                <h4 style={{ color: '#fff', marginBottom: '15px' }}>상주 전문가</h4>
+                                <div className="expert-list-mini">
+                                    {activeCenter.experts.map((exp: string, idx: number) => (
+                                        <div key={idx} className="expert-item-mini">
+                                            <div className="expert-avatar-sm">{exp.charAt(0)}</div>
+                                            <span style={{ color: '#ccc', fontSize: '14px' }}>{exp}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="center-modal-actions">
+                                <a href={activeCenter.mapUrl} target="_blank" rel="noopener noreferrer" className="action-btn-naver btn-map">네이버 지도보기</a>
+                                <a href={activeCenter.reserveUrl} target="_blank" rel="noopener noreferrer" className="action-btn-naver btn-reserve">실시간 예약하기</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}
