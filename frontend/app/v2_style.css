@@ -254,9 +254,22 @@ header { display: flex; justify-content: space-between; align-items: center; pad
 .teaser-text { opacity: 0; transform: translateY(15px); transition: all 0.6s ease-out; margin-bottom: 15px; word-break: keep-all; text-wrap: balance; text-wrap: pretty; text-wrap: balance; }
 .teaser-text.step-1 { font-size: 22px; color: #666; font-weight: bold; }
 .teaser-text.step-2 { font-size: 46px; color: #111; font-weight: 900; letter-spacing: -1px; margin-bottom: 30px; }
-header ul li { margin: 0 15px; position: relative; }
-header ul li a { text-decoration: none; color: #333; font-weight: 500; font-size: 15px; transition: color 0.3s; padding: 10px 0; display: block; }
-header ul li a:hover, header ul li a.active-nav { color: #2b8a3e; font-weight: 700; }
+header ul li { margin: 0 25px; position: relative; }
+header ul li a { 
+    text-decoration: none; 
+    color: #222; 
+    font-weight: 600; 
+    font-size: 17px; 
+    transition: all 0.3s ease; 
+    padding: 12px 0; 
+    display: block;
+    letter-spacing: -0.5px;
+}
+header ul li a:hover, header ul li a.active-nav { 
+    color: #2b8a3e; 
+    font-weight: 800;
+    transform: translateY(-1px);
+}
 
 /* 📱 SNS Dropdown Style */
 .nav-sns { position: relative; }
@@ -289,12 +302,14 @@ header ul li a:hover, header ul li a.active-nav { color: #2b8a3e; font-weight: 7
 }
 
 .sns-dropdown li a {
-    padding: 12px 20px !important;
-    font-size: 14px !important;
-    color: #555 !important;
+    padding: 14px 24px !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: #444 !important;
     transition: all 0.2s !important;
     display: block;
     text-align: center;
+    letter-spacing: -0.3px;
 }
 
 .sns-dropdown li a:hover {
