@@ -26,6 +26,11 @@ export default function Home() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeModal, setActiveModal] = useState<string | null>(null);
     const [activeCenter, setActiveCenter] = useState<any | null>(null); // 활성화된 센터 데이터
+    
+    // 🕊️ 마스코트 인터랙션 State
+    const [mascotPos, setMascotPos] = useState('pos-hero');
+    const [mascotImg, setMascotImg] = useState('mascot_hero.png');
+    const [mascotFlip, setMascotFlip] = useState(false);
 
     // 센터 데이터 정의
     const centerData = [
@@ -292,11 +297,57 @@ export default function Home() {
             document.querySelectorAll('.hero-stats, .school-stats').forEach(el => countObserver.observe(el));
         }, 300);
 
+        // 🕊️ 마스코트 이동 감지 전용 Observer
+        const mascotObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const section = entry.target;
+                    
+                    // 이동 중임을 나타내기 위해 비행 포즈로 먼저 전환
+                    setMascotImg('mascot_flying.png');
+
+                    setTimeout(() => {
+                        if (section.classList.contains('hero-brand')) {
+                            setMascotPos('pos-hero');
+                            setMascotImg('mascot_hero.png');
+                            setMascotFlip(false);
+                        } else if (section.id === 'satisfaction-chart') {
+                            setMascotPos('pos-analysis');
+                            setMascotImg('mascot_analyzing.png');
+                            setMascotFlip(true);
+                        } else if (section.classList.contains('partners')) {
+                            setMascotPos('pos-eap');
+                            setMascotImg('mascot_hero.png'); // 파트너 섹션은 기본 포즈
+                            setMascotFlip(false);
+                        } else if (section.classList.contains('media')) {
+                            setMascotPos('pos-academy');
+                            setMascotImg('mascot_success.png'); // 미디어 섹션은 축하 포즈
+                            setMascotFlip(true);
+                        }
+                    }, 300); // 0.3초 뒤에 안착 포즈로 변경
+                }
+            });
+        }, { threshold: 0.3 });
+
+        // 마스코트 관찰 대상 등록 (메인 페이지만)
+        if (activePage === 'page-home') {
+            const hero = document.querySelector('.hero-brand');
+            const satisfaction = document.getElementById('satisfaction-chart');
+            const partners = document.querySelector('.partners');
+            const media = document.querySelector('.media');
+
+            if (hero) mascotObserver.observe(hero);
+            if (satisfaction) mascotObserver.observe(satisfaction);
+            if (partners) mascotObserver.observe(partners);
+            if (media) mascotObserver.observe(media);
+        }
+
         return () => {
             clearTimeout(timer);
             chartObserver.disconnect();
             revealObserver.disconnect();
             countObserver.disconnect();
+            mascotObserver.disconnect();
         };
     }, [activePage, activePhysicalSub]);
 
@@ -1939,6 +1990,21 @@ export default function Home() {
                             </div>
                         </div>
                     </div>
+                </div>
+            )}
+
+            {/* 🕊️ 날아다니는 마스코트 가이드 */}
+            {activePage === 'page-home' && (
+                <div className={`mascot-companion ${mascotPos} ${mascotFlip ? 'flip-h' : ''}`}>
+                    <img 
+                        src={`/images/mascot/${mascotImg}`}
+                        alt="FaWW Mascot" 
+                        className="mascot-image"
+                        onError={(e) => {
+                            // 이미지 로딩 실패 시 기존 원본 이미지로 폴백
+                            (e.target as HTMLImageElement).src = "/images/KakaoTalk_20260511_111006824.png";
+                        }}
+                    />
                 </div>
             )}
         </>
