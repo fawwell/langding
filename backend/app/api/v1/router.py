@@ -8,6 +8,7 @@ from app.api.v1.schedule import router as schedule_router
 from app.api.v1.students import router as students_router
 from app.api.v1.proposals import router as proposals_router
 from app.api.v1.media import router as media_router
+from app.api.v1.centers import router as centers_router
 
 router = APIRouter()
 
@@ -17,3 +18,4 @@ router.include_router(students_router)
 router.include_router(schedule_router)
 router.include_router(proposals_router)
 router.include_router(media_router)
+router.include_router(centers_router)
