@@ -10,7 +10,7 @@ export default function Home() {
     const [mediaReports, setMediaReports] = useState<any[]>([]);
 
     useEffect(() => {
-        const fetchMedia = async () => {
+        const fetchData = async () => {
             try {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/media/`);
                 const json = await res.json();
@@ -18,8 +18,31 @@ export default function Home() {
             } catch (e) {
                 console.error("Failed to fetch media", e);
             }
+            // 2. Fetch Client Reviews (출장/기업 케어 우선 순위)
+            try {
+                const { data: revData } = await supabase
+                    .from('client_reviews')
+                    .select('*')
+                    .eq('type', 'b2b') // 기업형(출장) 리뷰 우선
+                    .order('created_at', { ascending: false })
+                    .limit(3);
+                
+                if (revData && revData.length > 0) {
+                    setClientReviews(revData);
+                } else {
+                    // 데이터가 부족할 경우 전체에서 가져옴
+                    const { data: allData } = await supabase
+                        .from('client_reviews')
+                        .select('*')
+                        .order('created_at', { ascending: false })
+                        .limit(3);
+                    setClientReviews(allData || []);
+                }
+            } catch (err) {
+                console.error('Error fetching reviews:', err);
+            }
         };
-        fetchMedia();
+        fetchData();
     }, []);
 
     const [activePage, setActivePage] = useState('page-home');
@@ -28,6 +51,7 @@ export default function Home() {
     const [activeCenter, setActiveCenter] = useState<any | null>(null); // 활성화된 센터 데이터
 
     const [centerData, setCenterData] = useState<any[]>([]);
+    const [clientReviews, setClientReviews] = useState<any[]>([]);
 
     useEffect(() => {
         const fetchCenters = async () => {
@@ -271,6 +295,22 @@ export default function Home() {
         };
     }, [activePage, activePhysicalSub]);
 
+    // 💎 만족도 카드 등장 애니메이션 관찰
+    useEffect(() => {
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        const cards = document.querySelectorAll('.stat-floating-card');
+        cards.forEach(card => revealObserver.observe(card));
+
+        return () => revealObserver.disconnect();
+    }, [clientReviews]);
+
     // 모바일 슬라이더 (원본 script.js)
     useEffect(() => {
         if (typeof window === 'undefined' || window.innerWidth > 768) return;
@@ -409,47 +449,7 @@ export default function Home() {
         };
     }, [activePage]);
 
-    // 📊 만족도 차트 3D 틸트 시스템
-    useEffect(() => {
-        const chart = document.getElementById('satisfaction-chart');
-        if (!chart || activePage !== 'page-home') return;
 
-        const handleMouseMove = (e: MouseEvent) => {
-            const rect = chart.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            const rotateX = (centerY - y) / 10;
-            const rotateY = (x - centerX) / 10;
-
-            const scene = chart.querySelector('.jelly-pie-scene') as HTMLElement;
-            if (scene) {
-                scene.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                
-                // 그림자 역방향 이동으로 입체감 극대화
-                const shadow = scene.querySelector('.jelly-shadow') as HTMLElement;
-                if (shadow) {
-                    shadow.style.transform = `translateZ(-50px) translateX(${-rotateY * 2}px) translateY(${rotateX * 2}px)`;
-                }
-            }
-        };
-
-        const handleMouseLeave = () => {
-            const scene = chart.querySelector('.jelly-pie-scene') as HTMLElement;
-            if (scene) {
-                scene.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
-            }
-        };
-
-        chart.addEventListener('mousemove', handleMouseMove);
-        chart.addEventListener('mouseleave', handleMouseLeave);
-        return () => {
-            chart.removeEventListener('mousemove', handleMouseMove);
-            chart.removeEventListener('mouseleave', handleMouseLeave);
-        };
-    }, [activePage]);
 
     // Swiper 마운트 (데이터나 필터가 바뀔 때마다 재시동)
     useEffect(() => {
@@ -799,10 +799,10 @@ export default function Home() {
                     </div>
                 </section>
 
-                <section className="jelly-chart-section reveal" style={{ padding: '100px 0', backgroundColor: '#f8f9fa', borderTop: '1px solid #eee', overflow: 'hidden' }}>
+                <section className="jelly-chart-section reveal" style={{ padding: '40px 0 60px', backgroundColor: '#f8f9fa', borderTop: '1px solid #eee', overflow: 'visible' }}>
                     <div className="container text-center" style={{ overflow: 'visible' }}>
-                        <h2 className="section-title reveal delay-1">FaWW <span className="text-highlight">피지컬케어 종합 만족도</span></h2>
-                        <p className="section-desc reveal delay-2" style={{ marginBottom: '80px' }}>2만 건 이상의 데이터가 증명하는 압도적인 결과</p>
+                        <h2 className="section-title reveal delay-1" style={{ marginBottom: '10px' }}>FaWW <span className="text-highlight">피지컬케어 종합 만족도</span></h2>
+                        <p className="section-desc reveal delay-2" style={{ marginBottom: '40px' }}>2만 건 이상의 데이터가 증명하는 압도적인 결과</p>
 
                         <div className="jelly-chart-container reveal delay-3" id="satisfaction-chart">
                             <div className="jelly-pie-wrapper">
@@ -830,10 +830,43 @@ export default function Home() {
                                             <span className="jelly-percent count-up neon-text" data-target="99">0</span>
                                             <span className="jelly-sign">%</span>
                                         </div>
-                                        <span className="jelly-label">매우 만족</span>
+                                        <span className="jelly-label">종합 만족도</span>
                                     </div>
                                 </div>
                             </div>
+
+                            {/* 💎 부유하는 만족도 카드들 (실제 DB 연동 + PTS 제외 필터) */}
+                            {reviewsData.filter(r => r.type === 'b2b' && !r.reviewer.includes('PTS') && !r.text.includes('PTS')).length > 0 ? (
+                                reviewsData.filter(r => r.type === 'b2b' && !r.reviewer.includes('PTS') && !r.text.includes('PTS')).slice(0, 3).map((rev, idx) => (
+                                    <div key={idx} className={`stat-floating-card card-${idx + 1} reveal delay-${idx + 4}`}>
+                                        <div className="stat-card-badge">CORPORATE</div>
+                                        <h4>{rev.reviewer}</h4>
+                                        <p className="rev-text">{rev.text}</p>
+                                        <div style={{ color: '#fab005', fontSize: '12px', marginTop: '8px' }}>{rev.stars}</div>
+                                    </div>
+                                ))
+                            ) : (
+                                <>
+                                    <div className="stat-floating-card card-1 reveal delay-4">
+                                        <div className="stat-card-badge">CORPORATE</div>
+                                        <h4>LG 디스플레이 임직원</h4>
+                                        <p className="rev-text">"사내로 직접 찾아오시는 출장 케어 덕분에 업무 중 짬을 내어 고질적인 거북목 통증을 해결할 수 있었습니다. 전문가의 손길이 확실히 다르네요."</p>
+                                        <div style={{ color: '#fab005', fontSize: '12px', marginTop: '8px' }}>★★★★★</div>
+                                    </div>
+                                    <div className="stat-floating-card card-2 reveal delay-5">
+                                        <div className="stat-card-badge">FIELD CARE</div>
+                                        <h4>현대자동차 생산라인</h4>
+                                        <p className="rev-text">"현장 근로자들의 신체적 특성을 정확히 이해하고 계십니다. 1:1 맞춤형 체형 분석과 스트레칭 교육이 실제 피로도 감소에 큰 도움이 되었습니다."</p>
+                                        <div style={{ color: '#fab005', fontSize: '12px', marginTop: '8px' }}>★★★★★</div>
+                                    </div>
+                                    <div className="stat-floating-card card-3 reveal delay-6">
+                                        <div className="stat-card-badge">OFFICE CARE</div>
+                                        <h4>네이버 인사팀장</h4>
+                                        <p className="rev-text">"임직원 복지 차원에서 도입했는데 만족도가 기대 이상입니다. 정기적인 방문 케어 이후 사내 분위기가 훨씬 밝아지고 업무 집중도가 높아졌습니다."</p>
+                                        <div style={{ color: '#fab005', fontSize: '12px', marginTop: '8px' }}>★★★★★</div>
+                                    </div>
+                                </>
+                            )}
                         </div>
 
                         <div className="pie-legend reveal delay-4">
@@ -1148,7 +1181,7 @@ export default function Home() {
                                 <div className="panel-bg" style={{ backgroundImage: 'url("/images/gateway/corporate_dx.png")' }}></div>
                                 <div className="panel-overlay"></div>
                                 <div className="panel-content">
-                                     <span className="panel-icon">🏢</span>
+                                     <span className="panel-icon-text">CORP</span>
                                      <h3 className="panel-title">기업용 DX</h3>
                                      <p className="panel-desc">임직원 근골격계 질환 예방 및 업무 효율 증대를 위한 솔루션입니다.</p>
                                      <span className="panel-btn">자세히 보기</span>
@@ -1160,7 +1193,7 @@ export default function Home() {
                                 <div className="panel-bg" style={{ backgroundImage: 'url("/images/gateway/school_dx.png")' }}></div>
                                 <div className="panel-overlay"></div>
                                 <div className="panel-content">
-                                    <span className="panel-icon">🏫</span>
+                                    <span className="panel-icon-text">EDU</span>
                                     <h3 className="panel-title">학교용 DX</h3>
                                     <p className="panel-desc">성장기 학생들의 체형 검진과 맞춤형 리포트를 제공합니다.</p>
                                     <span className="panel-btn">자세히 보기</span>
@@ -1172,7 +1205,7 @@ export default function Home() {
                                 <div className="panel-bg" style={{ backgroundImage: 'url("/images/gateway/individual_dx.png")' }}></div>
                                 <div className="panel-overlay"></div>
                                 <div className="panel-content">
-                                    <span className="panel-icon">👤</span>
+                                    <span className="panel-icon-text">USER</span>
                                     <h3 className="panel-title">개인용 DX</h3>
                                     <p className="panel-desc">1:1 정밀 분석과 맞춤형 피지컬케어 솔루션을 경험하세요.</p>
                                     <span className="panel-btn">자세히 보기</span>
@@ -1242,12 +1275,12 @@ export default function Home() {
                             <div className="risk-info-card reveal">
                                 <span className="law">산업안전보건법 제168조</span>
                                 <h4>유해요인조사 미실시</h4>
-                                <p className="penalty">⚠️ 5년 이하의 징역 또는 5,000만 원 이하의 벌금</p>
+                                <p className="penalty"><span>NOTICE</span> 5년 이하의 징역 또는 5,000만 원 이하의 벌금</p>
                             </div>
                             <div className="risk-info-card reveal delay-1">
                                 <span className="law">산업안전보건법 제39조</span>
                                 <h4>보건조치 미이행</h4>
-                                <p className="penalty">⚠️ 위반 시 벌칙 상동<br />(산재 발생 시 중대재해처벌법 연계 리스크)</p>
+                                <p className="penalty"><span>NOTICE</span> 위반 시 벌칙 상동<br />(산재 발생 시 중대재해처벌법 연계 리스크)</p>
                             </div>
                         </div>
 
@@ -1259,21 +1292,29 @@ export default function Home() {
 
                         <div className="risk-grid-11">
                             {[
-                                { num: '01', title: '하루 4시간 이상 키보드·마우스 조작' },
-                                { num: '02', title: '하루 2시간 이상 반복적 팔/손목 동작' },
-                                { num: '03', title: '하루 2시간 이상 어깨 위 작업' },
-                                { num: '04', title: '하루 2시간 이상 목·허리 굴곡/트위스트' },
-                                { num: '05', title: '하루 2시간 이상 쪼그려 앉기/무릎 굽히기' },
-                                { num: '06', title: '하루 2시간 이상 1kg 이상 물체 쥐기' },
-                                { num: '07', title: '하루 10회 이상 25kg 이상 물체 들기' },
-                                { num: '08', title: '하루 25회 이상 10kg 이상 반복 들기' },
-                                { num: '09', title: '하루 2시간 이상 신체 특정 부위 충격' },
-                                { num: '10', title: '하루 2시간 이상 진동 공구 사용' },
-                                { num: '11', title: '그 외 인체에 과도한 부담을 주는 작업' }
+                                { num: '01', title: '하루 4시간 이상 키보드·마우스 조작', desc: '손목터널증후군 및 VDT 증후군 위험, 손목·손가락 만성 통증' },
+                                { num: '02', title: '하루 2시간 이상 반복적 팔/손목 동작', desc: '테니스 엘보 및 건초염 유발, 팔꿈치 주변 인대 손상' },
+                                { num: '03', title: '하루 2시간 이상 어깨 위 작업', desc: '회전근개 파열 및 석회성 건염 위험, 어깨 가동 범위 제한' },
+                                { num: '04', title: '하루 2시간 이상 목·허리 굴곡/트위스트', desc: '디스크 탈출증 및 거북목 가속화, 척추 신경 압박' },
+                                { num: '05', title: '하루 2시간 이상 쪼그려 앉기/무릎 굽히기', desc: '퇴행성 관절염 및 반월상 연골판 파열, 무릎 관절 변형' },
+                                { num: '06', title: '하루 2시간 이상 1kg 이상 물체 쥐기', desc: '방아쇠 수지 및 손가락 관절염, 악력 저하 및 신경 손상' },
+                                { num: '07', title: '하루 10회 이상 25kg 이상 물체 들기', desc: '급성 요추 염좌 및 척추 압박 골절, 탈장 위험성 증가' },
+                                { num: '08', title: '하루 25회 이상 10kg 이상 반복 들기', desc: '만성 요통 및 근막통증증후군, 허리 근육 피로 누적' },
+                                { num: '09', title: '하루 2시간 이상 신체 특정 부위 충격', desc: '미세 골절 및 연부조직 손상, 만성 염증 및 신경 마비' },
+                                { num: '10', title: '하루 2시간 이상 진동 공구 사용', desc: '진동 증후군(백색 수지), 말초 혈관 및 신경 장애' },
+                                { num: '11', title: '그 외 인체에 과도한 부담을 주는 작업', desc: '전신 근골격계 피로 누적, 원인 불명의 만성 통증 체계' }
                             ].map((item, idx) => (
-                                <div key={idx} className="risk-type-card reveal">
-                                    <span className="risk-type-num">TYPE {item.num}</span>
-                                    <h4 className="risk-type-title">{item.title}</h4>
+                                <div key={idx} className={`risk-reveal-wrapper reveal delay-${idx % 4 + 1} has-reveal`}>
+                                    <div className="risk-type-card">
+                                        <div className="card-front">
+                                            <span className="risk-type-num">TYPE {item.num}</span>
+                                            <h4 className="risk-type-title">{item.title}</h4>
+                                        </div>
+                                        <div className="card-back">
+                                            <span className="impact-label">HEALTH IMPACT</span>
+                                            <p className="impact-desc">{item.desc}</p>
+                                        </div>
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -1629,25 +1670,35 @@ export default function Home() {
                     </div>
                 </section>
 
-                <div id="physical-gateway" className={`container reveal ${!activePhysicalSub ? 'active' : ''}`} style={{ padding: '60px 20px', display: !activePhysicalSub ? 'block' : 'none' }}>
-                    <div className="card-grid" style={{ gap: '30px' }}>
-                        <div className="info-card reveal" onClick={() => switchPage('page-eap')}>
-                            <div className="card-icon" style={{ background: '#2b8a3e', color: 'white' }}>EAP</div>
+                <div id="physical-gateway" className={`container-fluid reveal ${!activePhysicalSub ? 'active' : ''}`} style={{ padding: '100px 0', display: !activePhysicalSub ? 'block' : 'none', backgroundColor: '#f9f9f9' }}>
+                    <div className="container">
+                        <div className="premium-gateway-grid">
+                        <div className="gateway-card reveal" onClick={() => switchPage('page-eap')}>
+                            <div className="gateway-bg-text">PC</div>
+                            <div className="gateway-icon-box" style={{ fontSize: '14px', fontWeight: 'bold' }}>PC</div>
                             <h3>피지컬케어</h3>
-                            <p>기업 임직원을 위한 맞춤형 방문 솔루션</p>
+                            <p>기업 임직원을 위한 맞춤형 방문 솔루션. 인간공학적 분석과 1:1 케어를 결합한 독보적 프로그램입니다.</p>
+                            <div className="gateway-arrow">→</div>
                         </div>
-                        <div className="info-card reveal delay-1" onClick={() => openPhysicalSub('sub-academy')}>
-                            <div className="card-icon" style={{ color: '#111' }}>EDU</div>
+
+                        <div className="gateway-card reveal delay-1" onClick={() => openPhysicalSub('sub-academy')}>
+                            <div className="gateway-bg-text">CL</div>
+                            <div className="gateway-icon-box" style={{ fontSize: '14px', fontWeight: 'bold' }}>CL</div>
                             <h3>자격증</h3>
-                            <p>오리지널 피지컬케어 전문가 양성 과정</p>
+                            <p>FaWW 오리지널 피지컬케어 전문가 양성 과정. 이론부터 실무까지 이어지는 고도화된 교육 커리큘럼.</p>
+                            <div className="gateway-arrow">→</div>
                         </div>
-                        <div className="info-card reveal delay-2" onClick={() => openPhysicalSub('sub-center')}>
-                            <div className="card-icon" style={{ color: '#111' }}>CTR</div>
+
+                        <div className="gateway-card reveal delay-2" onClick={() => openPhysicalSub('sub-center')}>
+                            <div className="gateway-bg-text">CT</div>
+                            <div className="gateway-icon-box" style={{ fontSize: '14px', fontWeight: 'bold' }}>CT</div>
                             <h3>센터</h3>
-                            <p>가까운 직영 센터 1:1 맞춤형 피지컬케어</p>
+                            <p>가까운 직영 센터에서 만나는 1:1 맞춤형 피지컬케어. 최첨단 장비와 베테랑 전문가의 정밀한 솔루션.</p>
+                            <div className="gateway-arrow">→</div>
                         </div>
                     </div>
                 </div>
+            </div>
 
                 <div id="sub-academy" className={`sub-page-content ${activePhysicalSub === 'sub-academy' ? 'active' : ''}`}>
                     <section className="category-section reveal" style={{ backgroundColor: '#f8f9fa', paddingTop: '40px' }}>
