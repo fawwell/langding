@@ -65,6 +65,25 @@ export default function AdminDashboard() {
             <p style={{ margin: 0, color: '#666', fontSize: '14px' }}>메인 화면 만족도 카드 내용 관리</p>
           </div>
         </Link>
+
+        <Link href="/admin/centers" style={{ textDecoration: 'none' }}>
+          <div style={{ 
+            padding: '40px 20px', 
+            background: '#fff', 
+            border: '1px solid #eee', 
+            borderRadius: '16px', 
+            boxShadow: '0 10px 20px rgba(0,0,0,0.05)',
+            transition: 'transform 0.2s',
+            cursor: 'pointer'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+          onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+          >
+            <div style={{ fontSize: '40px', marginBottom: '15px' }}>🏢</div>
+            <h3 style={{ margin: '0 0 10px 0', color: '#111' }}>피지컬 센터 관리</h3>
+            <p style={{ margin: 0, color: '#666', fontSize: '14px' }}>각 지점별 정보, 철학, 전문가 목록 관리</p>
+          </div>
+        </Link>
       </div>
 
       <div style={{ marginTop: '50px' }}>

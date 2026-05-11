@@ -26,55 +26,21 @@ export default function Home() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeModal, setActiveModal] = useState<string | null>(null);
     const [activeCenter, setActiveCenter] = useState<any | null>(null); // 활성화된 센터 데이터
-    
-    // 🕊️ 마스코트 인터랙션 State
-    const [mascotPos, setMascotPos] = useState('pos-hero');
-    const [mascotImg, setMascotImg] = useState('mascot_hero.png');
-    const [mascotFlip, setMascotFlip] = useState(false);
 
-    // 센터 데이터 정의
-    const centerData = [
-        {
-            id: 'center-1',
-            name: '영등포점 (본점)',
-            tagline: 'THE ORIGINAL CLINIC',
-            philosophy: 'FaWW의 철학이 시작된 곳입니다. 수천 건의 임상 데이터를 보유한 베테랑 전문가들이 당신의 신체 밸런스를 완벽하게 찾아드립니다.',
-            image: '/images/physical-care/001.jpg',
-            experts: ['김파우 원장', '이교정 팀장'],
-            mapUrl: 'https://map.naver.com',
-            reserveUrl: 'https://booking.naver.com'
-        },
-        {
-            id: 'center-2',
-            name: '동탄점 (2호점)',
-            tagline: 'ADVANCED TECH CENTER',
-            philosophy: '가장 최신의 AI 스캐닝 장비와 프리미엄 시설을 갖추고 있습니다. 정밀한 데이터 분석을 통해 스마트한 통증 관리 솔루션을 제공합니다.',
-            image: '/images/physical-care/002.jpg',
-            experts: ['최첨단 실장', '박재활 프로'],
-            mapUrl: 'https://map.naver.com',
-            reserveUrl: 'https://booking.naver.com'
-        },
-        {
-            id: 'center-3',
-            name: '강남점 (3호점)',
-            tagline: 'ELITE PERFORMANCE',
-            philosophy: '바쁜 직장인들을 위한 맞춤형 퀵 리커버리 시스템을 운영합니다. 강남 도심 속에서 경험하는 최상의 신체 컨디셔닝을 약속합니다.',
-            image: '/images/physical-care/001.jpg', // 임시 이미지
-            experts: ['정강남 원장', '한도심 프로'],
-            mapUrl: 'https://map.naver.com',
-            reserveUrl: 'https://booking.naver.com'
-        },
-        {
-            id: 'center-4',
-            name: '여의도점 (4호점)',
-            tagline: 'VIP WELLNESS CARE',
-            philosophy: '프라이빗한 1:1 집중 케어에 특화된 공간입니다. 당신만을 위한 완벽하게 독립된 환경에서 신체의 근본적인 회복에만 집중하세요.',
-            image: '/images/physical-care/002.jpg', // 임시 이미지
-            experts: ['고여의 실장', '남금융 프로'],
-            mapUrl: 'https://map.naver.com',
-            reserveUrl: 'https://booking.naver.com'
-        }
-    ];
+    const [centerData, setCenterData] = useState<any[]>([]);
+
+    useEffect(() => {
+        const fetchCenters = async () => {
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/centers/`);
+                const json = await res.json();
+                if (json.success) setCenterData(json.data);
+            } catch (e) {
+                console.error("Failed to fetch centers", e);
+            }
+        };
+        fetchCenters();
+    }, []);
 
 
     const openCenterModal = (centerId: string) => {
@@ -297,57 +263,11 @@ export default function Home() {
             document.querySelectorAll('.hero-stats, .school-stats').forEach(el => countObserver.observe(el));
         }, 300);
 
-        // 🕊️ 마스코트 이동 감지 전용 Observer
-        const mascotObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const section = entry.target;
-                    
-                    // 이동 중임을 나타내기 위해 비행 포즈로 먼저 전환
-                    setMascotImg('mascot_flying.png');
-
-                    setTimeout(() => {
-                        if (section.classList.contains('hero-brand')) {
-                            setMascotPos('pos-hero');
-                            setMascotImg('mascot_hero.png');
-                            setMascotFlip(false);
-                        } else if (section.id === 'satisfaction-chart') {
-                            setMascotPos('pos-analysis');
-                            setMascotImg('mascot_analyzing.png');
-                            setMascotFlip(true);
-                        } else if (section.classList.contains('partners')) {
-                            setMascotPos('pos-eap');
-                            setMascotImg('mascot_hero.png'); // 파트너 섹션은 기본 포즈
-                            setMascotFlip(false);
-                        } else if (section.classList.contains('media')) {
-                            setMascotPos('pos-academy');
-                            setMascotImg('mascot_success.png'); // 미디어 섹션은 축하 포즈
-                            setMascotFlip(true);
-                        }
-                    }, 300); // 0.3초 뒤에 안착 포즈로 변경
-                }
-            });
-        }, { threshold: 0.3 });
-
-        // 마스코트 관찰 대상 등록 (메인 페이지만)
-        if (activePage === 'page-home') {
-            const hero = document.querySelector('.hero-brand');
-            const satisfaction = document.getElementById('satisfaction-chart');
-            const partners = document.querySelector('.partners');
-            const media = document.querySelector('.media');
-
-            if (hero) mascotObserver.observe(hero);
-            if (satisfaction) mascotObserver.observe(satisfaction);
-            if (partners) mascotObserver.observe(partners);
-            if (media) mascotObserver.observe(media);
-        }
-
         return () => {
             clearTimeout(timer);
             chartObserver.disconnect();
             revealObserver.disconnect();
             countObserver.disconnect();
-            mascotObserver.disconnect();
         };
     }, [activePage, activePhysicalSub]);
 
@@ -1263,9 +1183,9 @@ export default function Home() {
                 </section>
                 <section className="cta-footer reveal">
                     <div className="container">
-                        <h2>FaWW와 함께 건강한 조직을 구축하세요</h2>
-                        <p style={{ marginBottom: '30px' }}>우리 학교 및 기업 환경에 알맞는 건강 복지 프로그램을 맞춤 설계해 드립니다.</p>
-                        <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>맞춤 제안서 및 견적 받기</button>
+                        <h2>FaWW와 함께 피지컬 케어의 미래를 경험하세요</h2>
+                        <p style={{ marginBottom: '30px' }}>개인 및 기업을 위한 맞춤형 솔루션 가이드 및 브랜드 소개서를 무상으로 제공해 드립니다.</p>
+                        <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>통합 가이드 신청하기</button>
                     </div>
                 </section>
 
@@ -1284,7 +1204,8 @@ export default function Home() {
                             <p style={{ margin: '0' }}>이메일: contact@faww.co.kr</p>
                         </div>
                         <div style={{ marginTop: '10px', color: '#555' }}>
-                            © {new Date().getFullYear()} FaWW Korea. All rights reserved.
+                            © {new Date().getFullYear()} FaWW Korea. All rights reserved.<br />
+                            <span style={{ fontSize: '12px', opacity: 0.7 }}>파우(FaWW)는 기업의 안전보건 컴플라이언스 파트너로서 법령 준수를 지원합니다.</span>
                         </div>
                     </div>
                 </footer>
@@ -1308,53 +1229,180 @@ export default function Home() {
                     </div>
                 </section>
 
-                <section className="services reveal" style={{ backgroundColor: '#fff' }}>
+                {/* 🛡️ 섹션 1: Safety & Compliance (법적 의무와 리스크) */}
+                <section className="compliance-wrap reveal">
                     <div className="container">
-                        <h2 className="section-title">기업 맞춤형 EAP 솔루션</h2>
-                        <p className="section-desc">조직에 맞게 설계된 AI 기반 프로세스</p>
+                        <div className="school-header-wrap" style={{ textAlign: 'center' }}>
+                            <span className="section-tag">LEGAL COMPLIANCE</span>
+                            <h2 className="section-title reveal">산업안전보건법 제39조,<br /><span>선택이 아닌 필수</span>입니다</h2>
+                            <p className="section-desc reveal">유해요인조사 미실시 시 발생하는 리스크, FaWW가 전문적으로 해결해 드립니다.</p>
+                        </div>
+
+                        <div className="risk-info-grid">
+                            <div className="risk-info-card reveal">
+                                <span className="law">산업안전보건법 제168조</span>
+                                <h4>유해요인조사 미실시</h4>
+                                <p className="penalty">⚠️ 5년 이하의 징역 또는 5,000만 원 이하의 벌금</p>
+                            </div>
+                            <div className="risk-info-card reveal delay-1">
+                                <span className="law">산업안전보건법 제39조</span>
+                                <h4>보건조치 미이행</h4>
+                                <p className="penalty">⚠️ 위반 시 벌칙 상동<br />(산재 발생 시 중대재해처벌법 연계 리스크)</p>
+                            </div>
+                        </div>
+
+                        <div className="school-header-wrap" style={{ textAlign: 'center', marginTop: '100px' }}>
+                            <span className="section-tag">RISK FACTORS</span>
+                            <h2 className="section-title reveal">근골격계 부담작업 <span>11가지 유형</span></h2>
+                            <p className="section-desc reveal">하나라도 해당된다면, 법적 의무 조사 대상입니다.</p>
+                        </div>
+
+                        <div className="risk-grid-11">
+                            {[
+                                { num: '01', title: '하루 4시간 이상 키보드·마우스 조작' },
+                                { num: '02', title: '하루 2시간 이상 반복적 팔/손목 동작' },
+                                { num: '03', title: '하루 2시간 이상 어깨 위 작업' },
+                                { num: '04', title: '하루 2시간 이상 목·허리 굴곡/트위스트' },
+                                { num: '05', title: '하루 2시간 이상 쪼그려 앉기/무릎 굽히기' },
+                                { num: '06', title: '하루 2시간 이상 1kg 이상 물체 쥐기' },
+                                { num: '07', title: '하루 10회 이상 25kg 이상 물체 들기' },
+                                { num: '08', title: '하루 25회 이상 10kg 이상 반복 들기' },
+                                { num: '09', title: '하루 2시간 이상 신체 특정 부위 충격' },
+                                { num: '10', title: '하루 2시간 이상 진동 공구 사용' },
+                                { num: '11', title: '그 외 인체에 과도한 부담을 주는 작업' }
+                            ].map((item, idx) => (
+                                <div key={idx} className="risk-type-card reveal">
+                                    <span className="risk-type-num">TYPE {item.num}</span>
+                                    <h4 className="risk-type-title">{item.title}</h4>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+                
+                {/* 📋 섹션 1.5: 우리 기업 맞춤형 FaWW 프로그램 (복구) */}
+                <section className="category-section reveal" style={{ backgroundColor: '#f8f9fa', paddingTop: '80px', paddingBottom: '80px' }}>
+                    <div className="container">
+                        <div className="school-header-wrap" style={{ textAlign: 'center' }}>
+                            <span className="section-tag">CORE PROGRAMS</span>
+                            <h2 className="section-title reveal">우리 기업 맞춤형 <span>FaWW 프로그램</span></h2>
+                            <p className="section-desc reveal">진단부터 사후 케어까지, 빈틈없는 4단계 프로세스로 운영됩니다.</p>
+                        </div>
+                        
                         <div className="service-grid">
                             <div className="smart-card reveal" onClick={() => openModal('modal1')}>
                                 <div className="smart-card-top">
-                                    <div className="smart-card-img" style={{ background: '#f0f0f0', overflow: 'hidden' }}>
-                                        <img src="/images/gateway/ai_scanning.png" alt="AI Scanning" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                                    </div>
+                                    <div className="smart-card-img" style={{ 
+                                        backgroundImage: "linear-gradient(rgba(0,0,0,0.05), rgba(0,0,0,0.2)), url('/images/eap/ai_scanning.jpg')",
+                                        backgroundSize: 'cover',
+                                        backgroundPosition: 'center'
+                                    }}></div>
                                     <div className="smart-card-body">
-                                        <span className="gateway-badge">PART 1. 진단</span>
-                                        <h3>스마트 Ai 체형분석</h3>
-                                        <p>통증의 원인을 파악하고, 신체 불균형을 구조적으로 분석하여 정확하게 관리합니다.</p>
+                                        <span className="gateway-badge">진단</span>
+                                        <h3>스마트 AI 체형분석</h3>
+                                        <p>3D 스캐닝을 통해 임직원의 신체 불균형과 근골격계 위험도를 정밀 측정합니다.</p>
                                     </div>
                                 </div>
                             </div>
                             <div className="smart-card reveal delay-1" onClick={() => openModal('modal2')}>
                                 <div className="smart-card-top">
-                                    <div className="smart-card-img" style={{ backgroundImage: 'url(/images/eap/manual_care.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+                                    <div className="smart-card-img" style={{ 
+                                        backgroundImage: "linear-gradient(rgba(0,0,0,0.05), rgba(0,0,0,0.2)), url('/images/eap/manual_care.jpg')",
+                                        backgroundSize: 'cover',
+                                        backgroundPosition: 'center'
+                                    }}></div>
                                     <div className="smart-card-body">
-                                        <span className="gateway-badge">PART 2. 케어</span>
-                                        <h3>1:1 피지컬 케어</h3>
-                                        <p>통증 개선과 부상 예방을 위한 전문가 수기치료와 테이핑, MCT 등을 현장에서 진행합니다.</p>
+                                        <span className="gateway-badge" style={{ background: '#e8f5e9', color: '#2b8a3e' }}>케어</span>
+                                        <h3>1:1 맞춤 피지컬케어</h3>
+                                        <p>전문가가 직접 파견되어 통증 부위를 즉각적으로 관리하고 이완하는 시그니처 프로그램입니다.</p>
                                     </div>
                                 </div>
                             </div>
                             <div className="smart-card reveal delay-2" onClick={() => openModal('modal4')}>
                                 <div className="smart-card-top">
-                                    <div className="smart-card-img" style={{ backgroundImage: 'url(/images/eap/group_exercise.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+                                    <div className="smart-card-img" style={{ 
+                                        backgroundImage: "linear-gradient(rgba(0,0,0,0.05), rgba(0,0,0,0.2)), url('/images/eap/group_exercise.jpg')",
+                                        backgroundSize: 'cover',
+                                        backgroundPosition: 'center'
+                                    }}></div>
                                     <div className="smart-card-body">
-                                        <span className="gateway-badge">PART 3. 실습</span>
+                                        <span className="gateway-badge" style={{ background: '#fff3e0', color: '#e65100' }}>실습</span>
                                         <h3>단체 운동 프로그램</h3>
-                                        <p>의자나 소도구를 활용하여 업무 중에도 실천 가능한 코어 강화 및 근육 이완 루틴.</p>
+                                        <p>오피스 스트레칭, 소도구 운동 등 현장에서 바로 실천 가능한 기능성 트레이닝을 진행합니다.</p>
                                     </div>
                                 </div>
                             </div>
                             <div className="smart-card reveal delay-3" onClick={() => openModal('modal3')}>
                                 <div className="smart-card-top">
-                                    <div className="smart-card-img" style={{ backgroundImage: 'url(/images/eap/lecture.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+                                    <div className="smart-card-img" style={{ 
+                                        backgroundImage: "linear-gradient(rgba(0,0,0,0.05), rgba(0,0,0,0.2)), url('/images/eap/lecture.jpg')",
+                                        backgroundSize: 'cover',
+                                        backgroundPosition: 'center'
+                                    }}></div>
                                     <div className="smart-card-body">
-                                        <span className="gateway-badge">PART 4. 교육</span>
-                                        <h3>강의 프로그램</h3>
-                                        <p>거북목 교정, 대사증후군 예방, 식습관 개선 등 맞춤형 건강 특강을 제공합니다.</p>
+                                        <span className="gateway-badge" style={{ background: '#e3f2fd', color: '#1565c0' }}>강의</span>
+                                        <h3>건강 복지 특강</h3>
+                                        <p>직무별 맞춤 질환 예방 교육 및 올바른 생활 습관 가이드를 전문가의 강연으로 제공합니다.</p>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* 💡 섹션 2: Solution & Differentiation (차별화 전략) */}
+                <section className="services reveal" style={{ backgroundColor: '#fff', paddingBottom: '80px' }}>
+                    <div className="container">
+                        <div className="school-header-wrap" style={{ textAlign: 'center' }}>
+                            <span className="section-tag">DIFFERENTIATION</span>
+                            <h2 className="section-title reveal">왜 <span>FaWW</span>여야만 하는가?</h2>
+                            <p className="section-desc reveal">단순 서류 대행을 넘어 실질적인 사후 관리 솔루션을 제공합니다.</p>
+                        </div>
+
+                        <div className="comparison-container">
+                            <div className="comp-box others reveal">
+                                <h3>일반 안전보건 기관</h3>
+                                <ul className="comp-list">
+                                    <li><span className="comp-icon">❌</span> 단순 서류 작업 및 제본 위주</li>
+                                    <li><span className="comp-icon">❌</span> 일회성 조사 및 결과 통보</li>
+                                    <li><span className="comp-icon">❌</span> 아날로그식 수기 조사 (시간 소요)</li>
+                                    <li><span className="comp-icon">❌</span> 개선 대책의 실효성 부족</li>
+                                </ul>
+                            </div>
+                            <div className="comp-box faww reveal delay-1">
+                                <h3>FaWW Professional</h3>
+                                <ul className="comp-list">
+                                    <li><span className="comp-icon">✅</span> 인간공학적 분석 + 실질적 개선 대책</li>
+                                    <li><span className="comp-icon">✅</span> 즉각적인 1:1 피지컬케어 사후 관리</li>
+                                    <li><span className="comp-icon">✅</span> 웹/모바일 기반 신속한 증상 조사</li>
+                                    <li><span className="comp-icon">✅</span> AI 빅데이터 기반의 정밀 분석 리포트</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* 💳 섹션 3: B2B 특화 결제 및 예산 (Local Pay & ESG) */}
+                <section className="budget-section reveal">
+                    <div className="container">
+                        <div className="school-header-wrap" style={{ textAlign: 'center' }}>
+                            <span className="section-tag">BUDGET STRATEGY</span>
+                            <h2 className="section-title reveal" style={{ color: '#fff' }}>기업 예산 집행, <span>스마트하게 해결</span>하세요</h2>
+                            <p className="section-desc reveal" style={{ color: 'rgba(255,255,255,0.6)' }}>행정 편의와 지역 상생, 두 마리 토끼를 동시에 잡는 FaWW만의 결제 솔루션</p>
+                        </div>
+
+                        <div className="pay-logo-group">
+                            <div className="pay-logo-item reveal">
+                                <span className="pay-name">서울페이 (Seoul Pay)</span>
+                            </div>
+                            <div className="pay-logo-item reveal delay-1">
+                                <span className="pay-name">경기페이 (Gyeonggi Pay)</span>
+                            </div>
+                        </div>
+
+                        <div className="esg-score-box">
+                            💡 시설관리공단 등 공공기관의 실제 집행 모델 도입!<br />
+                            지역 상권 상생 기여를 통한 ESG 경영 평가 점수 확보에 절대적으로 유리합니다.
                         </div>
                     </div>
                 </section>
@@ -1408,8 +1456,8 @@ export default function Home() {
                 <section className="cta-footer reveal">
                     <div className="container">
                         <h2>FaWW와 함께 건강한 조직을 구축하세요</h2>
-                        <p style={{ marginBottom: '30px' }}>우리 학교 및 기업 환경에 알맞는 건강 복지 프로그램을 맞춤 설계해 드립니다.</p>
-                        <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>맞춤 제안서 및 견적 받기</button>
+                        <p style={{ marginBottom: '30px' }}>기업 담당자를 위한 예산 활용 가이드 및 법적 의무 이행 리포트를 무상으로 제공해 드립니다.</p>
+                        <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>무료 상담 및 가이드 신청</button>
                     </div>
                 </section>
 
@@ -1428,7 +1476,8 @@ export default function Home() {
                             <p style={{ margin: '0' }}>이메일: contact@faww.co.kr</p>
                         </div>
                         <div style={{ marginTop: '10px', color: '#555' }}>
-                            © {new Date().getFullYear()} FaWW Korea. All rights reserved.
+                            © {new Date().getFullYear()} FaWW Korea. All rights reserved.<br />
+                            <span style={{ fontSize: '12px', opacity: 0.7 }}>파우(FaWW)는 기업의 안전보건 컴플라이언스 파트너로서 법령 준수를 지원합니다.</span>
                         </div>
                     </div>
                 </footer>
@@ -1447,10 +1496,10 @@ export default function Home() {
 
                 <section className="category-section reveal" style={{ backgroundColor: '#f8f9fa' }}>
                     <div className="container">
-                        <div className="school-header-wrap">
-                            <span className="school-tag">SCHOOL PROGRAM</span>
-                            <h2>학교사업 ㅡ 학생 체형분석 솔루션</h2>
-                            <p>성장기 학생들의 체형 데이터를 과학적으로 분석하고, 맞춤형 운동 프로그램을 제공합니다. 학교 현장에 최적화된 프로세스로 효율적인 건강관리를 지원합니다.</p>
+                        <div className="school-header-wrap" style={{ textAlign: 'center' }}>
+                            <span className="section-tag">SCHOOL SOLUTION</span>
+                            <h2 className="section-title reveal">우리 아이 바른 성장,<br /><span>FaWW 학생 체형분석</span></h2>
+                            <p className="section-desc reveal">성장기 학생들의 체형 데이터를 과학적으로 분석하고, 맞춤형 운동 프로그램을 제공합니다. 학교 현장에 최적화된 프로세스로 효율적인 건강관리를 지원합니다.</p>
                         </div>
 
                         <div className="school-process-grid">
@@ -1495,25 +1544,36 @@ export default function Home() {
 
                 <section className="services reveal" style={{ backgroundColor: '#fff', paddingTop: '80px' }}>
                     <div className="container">
-                        <h2 className="section-title">주요 프로그램 종류</h2>
-                        <p className="section-desc">단순한 검진을 넘어 체계적인 교육과 관리를 동반합니다.</p>
+                        <div className="school-header-wrap" style={{ textAlign: 'center' }}>
+                            <span className="section-tag">PROGRAM CATEGORY</span>
+                            <h2 className="section-title reveal">학교 맞춤형 <span>핵심 프로그램</span></h2>
+                            <p className="section-desc reveal">단순한 검진을 넘어 체계적인 교육과 관리를 동반합니다.</p>
+                        </div>
                         <div className="service-grid">
-                            <div className="smart-card">
-                                <div className="smart-card-top" style={{ flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-                                    <div className="smart-card-img" style={{ width: '100%', height: '160px', background: '#e0f2f1', color: '#004d40' }}>스캐닝 진행 화면</div>
-                                    <div className="smart-card-body" style={{ textAlign: 'center', marginTop: '20px' }}>
-                                        <span className="gateway-badge" style={{ background: '#e0f2f1', color: '#004d40' }}>PROGRAM 1</span>
-                                        <h3>스마트 AI 체형 분석 프로그램</h3>
+                            <div className="smart-card reveal" onClick={() => openModal('modal1')}>
+                                <div className="smart-card-top">
+                                    <div className="smart-card-img" style={{ 
+                                        backgroundImage: "linear-gradient(rgba(0,0,0,0.05), rgba(0,0,0,0.2)), url('/images/gateway/school_dx.png')",
+                                        backgroundSize: 'cover',
+                                        backgroundPosition: 'center'
+                                    }}></div>
+                                    <div className="smart-card-body">
+                                        <span className="gateway-badge" style={{ background: '#e0f2f1', color: '#004d40' }}>진단</span>
+                                        <h3>스마트 AI 체형분석</h3>
                                         <p>정밀 카메라와 AI 솔루션을 활용해 학생들의 근골격계 상태와 성장 밸런스를 측정하고 평가합니다.</p>
                                     </div>
                                 </div>
                             </div>
-                            <div className="smart-card">
-                                <div className="smart-card-top" style={{ flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-                                    <div className="smart-card-img" style={{ width: '100%', height: '160px', background: '#e0f2f1', color: '#004d40' }}>그룹 운동 진행 화면</div>
-                                    <div className="smart-card-body" style={{ textAlign: 'center', marginTop: '20px' }}>
-                                        <span className="gateway-badge" style={{ background: '#e0f2f1', color: '#004d40' }}>PROGRAM 2</span>
-                                        <h3>그룹 운동</h3>
+                            <div className="smart-card reveal delay-1" onClick={() => openModal('modal4')}>
+                                <div className="smart-card-top">
+                                    <div className="smart-card-img" style={{ 
+                                        backgroundImage: "linear-gradient(rgba(0,0,0,0.05), rgba(0,0,0,0.2)), url('/images/eap/group_exercise.jpg')",
+                                        backgroundSize: 'cover',
+                                        backgroundPosition: 'center'
+                                    }}></div>
+                                    <div className="smart-card-body">
+                                        <span className="gateway-badge" style={{ background: '#e8f5e9', color: '#2b8a3e' }}>실습</span>
+                                        <h3>그룹 맞춤 운동</h3>
                                         <p>스트레칭 및 자세교정을 위한 기능성 트레이닝. 성장기 학생들에게 꼭 필요한 맞춤형 운동 처방을 제공합니다.</p>
                                     </div>
                                 </div>
@@ -1523,9 +1583,9 @@ export default function Home() {
                 </section>
                 <section className="cta-footer reveal">
                     <div className="container">
-                        <h2>FaWW와 함께 건강한 조직을 구축하세요</h2>
-                        <p style={{ marginBottom: '30px' }}>우리 학교 및 기업 환경에 알맞는 건강 복지 프로그램을 맞춤 설계해 드립니다.</p>
-                        <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>맞춤 제안서 및 견적 받기</button>
+                        <h2>FaWW와 함께 스마트한 교육 환경을 구축하세요</h2>
+                        <p style={{ marginBottom: '30px' }}>학교 보건 담당자를 위한 학생 체형 데이터 분석 샘플 및 학교 보건 예산 활용 가이드를 무상으로 제공해 드립니다.</p>
+                        <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>학교 맞춤 상담 및 가이드 신청</button>
                     </div>
                 </section>
 
@@ -1544,7 +1604,8 @@ export default function Home() {
                             <p style={{ margin: '0' }}>이메일: contact@faww.co.kr</p>
                         </div>
                         <div style={{ marginTop: '10px', color: '#555' }}>
-                            © {new Date().getFullYear()} FaWW Korea. All rights reserved.
+                            © {new Date().getFullYear()} FaWW Korea. All rights reserved.<br />
+                            <span style={{ fontSize: '12px', opacity: 0.7 }}>파우(FaWW)는 기업의 안전보건 컴플라이언스 파트너로서 법령 준수를 지원합니다.</span>
                         </div>
                     </div>
                 </footer>
@@ -1558,10 +1619,11 @@ export default function Home() {
                     </video>
                     <div className="hero-overlay"></div>
                     <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+                        <div style={{ textAlign: 'left', marginBottom: '20px' }}><span className="back-btn" style={{ color: '#aaa', cursor: 'pointer', fontSize: '14px', border: '1px solid #555', padding: '8px 16px', borderRadius: '20px' }} onClick={() => switchPage('page-ai')}>← 타겟 선택으로 돌아가기</span></div>
                         <div className="hero-subtitle hero-el hero-el-1">FaWW Physical Care</div>
-                        <h1 className="hero-el hero-el-2">현장과 실무를 잇는 <span>FaWW 피지컬케어</span></h1>
+                        <h1 className="hero-el hero-el-2">현장과 실무를 잇는<br /><span>FaWW 피지컬케어</span></h1>
                         <p className="hero-el hero-el-3">
-                            <strong>대한민국 최고 전문가 양성 및 파견</strong>
+                            <strong>대한민국 최고 전문가 양성 및 파견</strong><br />
                             기업의 생산성 향상부터 개인의 삶의 질 회복까지,<br />근골격계 전문 관리로 완벽하게 아우릅니다
                         </p>
                     </div>
@@ -1635,19 +1697,30 @@ export default function Home() {
                             <div style={{ textAlign: 'left' }}><span className="back-btn-light" onClick={showPhysicalGateway}>← 카테고리 선택으로 돌아가기</span></div>
                             <h2 className="section-title">센터 (로컬) 소개</h2>
                             <div className="grid-vertical">
-                                <div className="center-row-card reveal" onClick={() => openCenterModal('center-1')}><div><span className="gateway-badge">Center 01</span><h3>영등포점 (본점)</h3></div><div style={{ color: '#2b8a3e', fontSize: '24px' }}>→</div></div>
-                                <div className="center-row-card reveal delay-1" onClick={() => openCenterModal('center-2')}><div><span className="gateway-badge">Center 02</span><h3>동탄점 (2호점)</h3></div><div style={{ color: '#2b8a3e', fontSize: '24px' }}>→</div></div>
-                                <div className="center-row-card reveal delay-2" onClick={() => openCenterModal('center-3')}><div><span className="gateway-badge">Center 03</span><h3>강남점 (3호점)</h3></div><div style={{ color: '#2b8a3e', fontSize: '24px' }}>→</div></div>
-                                <div className="center-row-card reveal delay-3" onClick={() => openCenterModal('center-4')}><div><span className="gateway-badge">Center 04</span><h3>여의도점 (4호점)</h3></div><div style={{ color: '#2b8a3e', fontSize: '24px' }}>→</div></div>
+                                {centerData.length > 0 ? centerData.map((center, idx) => (
+                                    <div 
+                                        key={center.id} 
+                                        className={`center-row-card reveal ${idx > 0 ? `delay-${idx}` : ''}`} 
+                                        onClick={() => openCenterModal(center.id)}
+                                    >
+                                        <div>
+                                            <span className="gateway-badge">Center 0{idx + 1}</span>
+                                            <h3>{center.name}</h3>
+                                        </div>
+                                        <div style={{ color: '#2b8a3e', fontSize: '24px' }}>→</div>
+                                    </div>
+                                )) : (
+                                    <p style={{ color: '#888', textAlign: 'center' }}>센터 정보를 불러오는 중입니다...</p>
+                                )}
                             </div>
                         </div>
                     </section>
                 </div>
                 <section className="cta-footer reveal">
                     <div className="container">
-                        <h2>FaWW와 함께 건강한 조직을 구축하세요</h2>
-                        <p style={{ marginBottom: '30px' }}>우리 학교 및 기업 환경에 알맞는 건강 복지 프로그램을 맞춤 설계해 드립니다.</p>
-                        <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>맞춤 제안서 및 견적 받기</button>
+                        <h2>FaWW와 함께 통증 없는 일상을 시작하세요</h2>
+                        <p style={{ marginBottom: '30px' }}>내 몸에 딱 맞는 프리미엄 케어 프로그램 상담 및 첫 방문 혜택 가이드를 무상으로 제공해 드립니다.</p>
+                        <button className="cta-btn-white" onClick={() => openModal('modal-chat')}>실시간 프로그램 상담하기</button>
                     </div>
                 </section>
 
@@ -1666,7 +1739,8 @@ export default function Home() {
                             <p style={{ margin: '0' }}>이메일: contact@faww.co.kr</p>
                         </div>
                         <div style={{ marginTop: '10px', color: '#555' }}>
-                            © {new Date().getFullYear()} FaWW Korea. All rights reserved.
+                            © {new Date().getFullYear()} FaWW Korea. All rights reserved.<br />
+                            <span style={{ fontSize: '12px', opacity: 0.7 }}>파우(FaWW)는 기업의 안전보건 컴플라이언스 파트너로서 법령 준수를 지원합니다.</span>
                         </div>
                     </div>
                 </footer>
@@ -1743,9 +1817,9 @@ export default function Home() {
                 </section>
                 <section className="cta-footer reveal">
                     <div className="container">
-                        <h2>FaWW와 함께 건강한 조직을 구축하세요</h2>
-                        <p style={{ marginBottom: '30px' }}>우리 학교 및 기업 환경에 알맞는 건강 복지 프로그램을 맞춤 설계해 드립니다.</p>
-                        <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>맞춤 제안서 및 견적 받기</button>
+                        <h2>FaWW가 엄선한 프리미엄 교구를 만나보세요</h2>
+                        <p style={{ marginBottom: '30px' }}>기업 복지 포인트 도입을 위한 교구 대량 구매 견적 및 제품 상세 소개서를 제공해 드립니다.</p>
+                        <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>도입 문의 및 견적 신청</button>
                     </div>
                 </section>
 
@@ -1764,7 +1838,8 @@ export default function Home() {
                             <p style={{ margin: '0' }}>이메일: contact@faww.co.kr</p>
                         </div>
                         <div style={{ marginTop: '10px', color: '#555' }}>
-                            © {new Date().getFullYear()} FaWW Korea. All rights reserved.
+                            © {new Date().getFullYear()} FaWW Korea. All rights reserved.<br />
+                            <span style={{ fontSize: '12px', opacity: 0.7 }}>파우(FaWW)는 기업의 안전보건 컴플라이언스 파트너로서 법령 준수를 지원합니다.</span>
                         </div>
                     </div>
                 </footer>
@@ -1960,8 +2035,12 @@ export default function Home() {
                     <div className="center-modal-content" onClick={(e) => e.stopPropagation()}>
                         <button className="center-modal-close" onClick={closeCenterModal}>&times;</button>
                         
-                        {/* 좌측 비주얼 (임시 이미지 배경) */}
-                        <div className="center-modal-visual" style={{ backgroundImage: `url('https://images.unsplash.com/photo-1540555700478-4be289fbecee?q=80&w=2070&auto=format&fit=crop')` }}>
+                        {/* 좌측 비주얼 (DB에서 가져온 이미지 적용) */}
+                        <div className="center-modal-visual" style={{ 
+                            backgroundImage: `url('${activeCenter.image_url || '/images/physical-care/001.jpg'}')`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center'
+                        }}>
                         </div>
 
                         {/* 우측 정보 */}
@@ -1975,7 +2054,7 @@ export default function Home() {
                             <div className="center-expert-section">
                                 <h4 style={{ color: '#fff', marginBottom: '15px' }}>상주 전문가</h4>
                                 <div className="expert-list-mini">
-                                    {activeCenter.experts.map((exp: string, idx: number) => (
+                                    {activeCenter.experts && activeCenter.experts.map((exp: string, idx: number) => (
                                         <div key={idx} className="expert-item-mini">
                                             <div className="expert-avatar-sm">{exp.charAt(0)}</div>
                                             <span style={{ color: '#ccc', fontSize: '14px' }}>{exp}</span>
@@ -1985,28 +2064,14 @@ export default function Home() {
                             </div>
 
                             <div className="center-modal-actions">
-                                <a href={activeCenter.mapUrl} target="_blank" rel="noopener noreferrer" className="action-btn-naver btn-map">네이버 지도보기</a>
-                                <a href={activeCenter.reserveUrl} target="_blank" rel="noopener noreferrer" className="action-btn-naver btn-reserve">실시간 예약하기</a>
+                                <a href={activeCenter.map_url} target="_blank" rel="noopener noreferrer" className="action-btn-naver btn-map">네이버 지도보기</a>
+                                <a href={activeCenter.reserve_url} target="_blank" rel="noopener noreferrer" className="action-btn-naver btn-reserve">실시간 예약하기</a>
                             </div>
                         </div>
                     </div>
                 </div>
             )}
 
-            {/* 🕊️ 날아다니는 마스코트 가이드 */}
-            {activePage === 'page-home' && (
-                <div className={`mascot-companion ${mascotPos} ${mascotFlip ? 'flip-h' : ''}`}>
-                    <img 
-                        src={`/images/mascot/${mascotImg}`}
-                        alt="FaWW Mascot" 
-                        className="mascot-image"
-                        onError={(e) => {
-                            // 이미지 로딩 실패 시 기존 원본 이미지로 폴백
-                            (e.target as HTMLImageElement).src = "/images/KakaoTalk_20260511_111006824.png";
-                        }}
-                    />
-                </div>
-            )}
         </>
     );
 }
