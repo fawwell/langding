@@ -6,67 +6,141 @@ import React, { useState, useEffect, MouseEvent, FormEvent } from 'react';
 import './v2_style.css';
 import { supabase } from '@/lib/supabase';
 
+const B2B_QUESTIONS = [
+    "우리 팀원들은 무거운 물건을 나르거나, 똑같은 동작을 계속 반복하는 육체 노동 비중이 높다.",
+    "일하다 보면 '어깨 아프다', '허리 아프다', '손목 시큰거린다'고 호소하는 직원들이 꽤 많다.",
+    "현장에서 크고 작은 신체 부상이나 안전사고가 일어날 위험이 있어서 늘 조심해야 하는 환경이다.",
+    "우리 직원들은 하루 일과의 80% 이상을 모니터 앞 의자에 꼼짝 않고 앉아서 보낸다.",
+    "사무실을 둘러보면 거북목이나 라운드숄더처럼 자세가 구부정한 직원들이 흔하게 보인다.",
+    "일하다가 중간에 자리에서 일어나 가볍게 스트레칭을 하거나 몸을 풀 만한 분위기나 여유가 부족하다.",
+    "최근 부서 분위기가 전체적으로 좀 가라앉아 있고, 다들 피곤하고 지쳐 보일 때가 많다.",
+    "업무 스트레스나 감정 노동, 혹은 교대 근무 때문에 번아웃을 호소하는 직원들이 종종 있다.",
+    "다 같이 모여서 머리를 식히고, 몸을 움직이면서 스트레스도 풀고 팀워크를 다질 수 있는 활동이 절실하다.",
+    "조직 내 중장년층 비율이 높거나, 건강검진에서 혈압·혈당 수치가 높게 나오는 직원들이 꽤 있다.",
+    "부서 회식이 잦거나, 야근하며 야식을 자주 먹는 등 직원들의 평소 식습관이나 음주 패턴이 불규칙하다.",
+    "최근 들어 유독 뱃살(복부 비만)이 나오거나 체력이 급격히 떨어져서 힘들어하는 직원들이 눈에 띈다."
+];
+
+const B2C_QUESTIONS = [
+    "몸 어딘가가 뻐근하고 아프면, 신경이 쓰여서 하던 일에 집중하기가 힘들다.",
+    "평소와 다르게 몸이 불편한 느낌이 들면, 원인을 찾거나 신경 쓰느라 다른 일을 제때 못 한 적이 있다.",
+    "내 몸의 아픈 곳이 갑자기 더 안 좋아질까 봐 자주 불안하거나 걱정된다.",
+    "하루를 돌아보면, 잠자는 시간 외에는 대부분 의자에 앉아 있거나 누워서 보낸다.",
+    "최근 일주일 동안 땀이 날 정도의 운동이나 근력 운동을 한 날이 하루 이하(0~1일)다.",
+    "평소에 목이나 어깨, 허리가 자주 뻣뻣하게 굳는 느낌이 들고, 자세가 구부정해진다.",
+    "유튜브 쇼츠, 인스타그램 릴스 같은 짧은 영상을 한 번 보면 시간 가는 줄 모르고 계속 보게 된다.",
+    "예전보다 일상이나 업무에서 재미를 느끼기 어렵고, 자주 피곤하거나 만사가 귀찮아진다.",
+    "스트레스를 받거나 헛헛할 때, 무심코 스마트폰을 들여다보거나 맵고 짠 음식, 단것(야식)을 찾게 된다.",
+    "나 혹은 직계 가족 중에 혈압이나 혈당이 높거나, 심혈관 질환을 겪은 분이 있다.",
+    "현재 담배를 피우고 있거나, 일주일에 2~3회 이상 술자리를 갖는 편이다.",
+    "20대 시절과 비교했을 때 체중이 10kg 이상 늘었거나, 최근 뱃살(복부 비만)이 부쩍 고민이다."
+];
+
 export default function Home() {
     const [mediaReports, setMediaReports] = useState<any[]>([]);
+    const [centerData, setCenterData] = useState<any[]>([]);
+    const [clientReviews, setClientReviews] = useState<any[]>([]);
+    const [activePage, setActivePage] = useState('page-home');
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [activeModal, setActiveModal] = useState<string | null>(null);
+    const [activeCenter, setActiveCenter] = useState<any | null>(null);
+    const [hoveredCenterId, setHoveredCenterId] = useState<string | null>(null);
+    const [activePhysicalSub, setActivePhysicalSub] = useState<string | null>(null);
+    const [quizStep, setQuizStep] = useState(1);
+    const [quizTarget, setQuizTarget] = useState('');
+    const [quizResultTitle, setQuizResultTitle] = useState('');
+    const [quizResultDesc, setQuizResultDesc] = useState('');
+    const [quizAnswers, setQuizAnswers] = useState<number[]>(Array(12).fill(-1));
+    const [reviewFilter, setReviewFilter] = useState('all');
+    const [inquiryText, setInquiryText] = useState('');
+    const [phoneValue, setPhoneValue] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [lastSubmitTime, setLastSubmitTime] = useState(0);
+    const [reviewsData, setReviewsData] = useState<any[]>([]);
+
+    const DEFAULT_CENTERS = [
+        { 
+            id: 'center-ydp', name: '피지컬케어 영등포 센터', tagline: '영등포 정밀 체형분석 센터', philosophy: '최첨단 장비를 활용한 정밀 분석', image_url: '', experts: ['전문의 A', '전문가 B'], map_url: '', reserve_url: '', address: '서울특별시 영등포구 도신로 232',
+            stats: { visits: '3,284', scans: '1,492', satisfaction: '94.2%' },
+            equipments: ['3D AI Body Scanner', 'Infrared Thermography', 'EMS Physical Care System']
+        },
+        { 
+            id: 'center-yyd', name: '피지컬케어 여의도 센터', tagline: '여의도 오피스 케어 지점', philosophy: '직장인 맞춤형 솔루션', image_url: '', experts: ['전문가 C'], map_url: '', reserve_url: '', address: '서울특별시 영등포구 국제금융로 10',
+            stats: { visits: '2,150', scans: '842', satisfaction: '92.8%' },
+            equipments: ['AI Mobility Analysis', 'Posture Correction Bed', 'Stress Relief Therapy']
+        },
+        { 
+            id: 'center-gn', name: '피지컬케어 강남 센터', tagline: '강남 프리미엄 프라이빗 센터', philosophy: '1:1 VIP 케어', image_url: '', experts: ['전문의 D', '전문가 E'], map_url: '', reserve_url: '', address: '서울특별시 강남구 강남대로 364',
+            stats: { visits: '4,582', scans: '2,104', satisfaction: '96.5%' },
+            equipments: ['Premium 3D Scan V2', 'Private Care Suite', 'Neuro-Muscular Reactivator']
+        },
+        { 
+            id: 'center-dt', name: '피지컬케어 동탄 센터', tagline: '동탄 에듀-케어 센터', philosophy: '성장기 학생 맞춤 프로그램', image_url: '', experts: ['전문가 F'], map_url: '', reserve_url: '', address: '경기도 화성시 동탄대로 537',
+            stats: { visits: '1,840', scans: '742', satisfaction: '91.5%' },
+            equipments: ['Growth Growth Analysis', 'Balance Training Gear', 'Pediatric Correction Tool']
+        }
+    ];
 
     useEffect(() => {
         const fetchData = async () => {
+            // 1. Fetch Media Reports
             try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/media/`);
-                const json = await res.json();
-                if (json.success) setMediaReports(json.data);
-            } catch (e) {
-                console.error("Failed to fetch media", e);
-            }
-            // 2. Fetch Client Reviews (출장/기업 케어 우선 순위)
+                const { data } = await supabase
+                    .from('media_reports')
+                    .select('*')
+                    .order('published_at', { ascending: false });
+                if (data && data.length > 0) setMediaReports(data);
+            } catch (e) { console.error("Media fetch error", e); }
+
+            // 2. Fetch Client Reviews
             try {
                 const { data: revData } = await supabase
                     .from('client_reviews')
                     .select('*')
-                    .eq('type', 'b2b') // 기업형(출장) 리뷰 우선
+                    .eq('type', 'b2b')
                     .order('created_at', { ascending: false })
                     .limit(3);
-                
-                if (revData && revData.length > 0) {
-                    setClientReviews(revData);
+                if (revData && revData.length > 0) setClientReviews(revData);
+            } catch (e) { console.error("Reviews fetch error", e); }
+
+            // 3. Fetch Centers
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/centers/`);
+                if (res.ok) {
+                    const json = await res.json();
+                    console.log("✅ Centers API connected. Data:", json);
+                    
+                    const rawList = json.data || (Array.isArray(json) ? json : []);
+                    
+                    if (rawList.length > 0) {
+                        const normalizedData = rawList.map((c: any) => ({
+                            ...c,
+                            id: c.id?.toString() || Math.random().toString(),
+                            name: c.name || c.title || 'FaWW 센터',
+                            tagline: c.tagline || '공식 인증 피지컬 케어 센터',
+                            address: c.address || c.location || '주소 정보가 등록되지 않았습니다.',
+                            philosophy: c.philosophy || c.description || '전문적인 맞춤형 피지컬 케어 솔루션을 제공합니다.',
+                            image_url: c.image_url || '',
+                            map_url: c.map_url || '#',
+                            reserve_url: c.reserve_url || '#',
+                            experts: Array.isArray(c.experts) ? c.experts : (typeof c.experts === 'string' ? c.experts.split(',').map((s:string)=>s.trim()) : []),
+                            programs: Array.isArray(c.programs) ? c.programs : (typeof c.programs === 'string' ? c.programs.split(',').map((s:string)=>s.trim()) : [])
+                        }));
+                        setCenterData(normalizedData);
+                    } else {
+                        setCenterData(DEFAULT_CENTERS);
+                    }
                 } else {
-                    // 데이터가 부족할 경우 전체에서 가져옴
-                    const { data: allData } = await supabase
-                        .from('client_reviews')
-                        .select('*')
-                        .order('created_at', { ascending: false })
-                        .limit(3);
-                    setClientReviews(allData || []);
+                    console.warn("⚠️ Centers API response not ok. Falling back to default.");
+                    setCenterData(DEFAULT_CENTERS);
                 }
-            } catch (err) {
-                console.error('Error fetching reviews:', err);
+            } catch (e) {
+                console.error("❌ Centers fetch error (Server might be down):", e);
+                setCenterData(DEFAULT_CENTERS);
             }
         };
         fetchData();
     }, []);
-
-    const [activePage, setActivePage] = useState('page-home');
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [activeModal, setActiveModal] = useState<string | null>(null);
-    const [activeCenter, setActiveCenter] = useState<any | null>(null); // 활성화된 센터 데이터
-    const [hoveredCenterId, setHoveredCenterId] = useState<string | null>(null); // 마우스 호버된 센터 ID
-
-    const [centerData, setCenterData] = useState<any[]>([]);
-    const [clientReviews, setClientReviews] = useState<any[]>([]);
-
-    useEffect(() => {
-        const fetchCenters = async () => {
-            try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/centers/`);
-                const json = await res.json();
-                if (json.success) setCenterData(json.data);
-            } catch (e) {
-                console.error("Failed to fetch centers", e);
-            }
-        };
-        fetchCenters();
-    }, []);
-
 
     const openCenterModal = (centerId: string) => {
         const center = centerData.find(c => c.id === centerId);
@@ -74,27 +148,6 @@ export default function Home() {
     };
 
     const closeCenterModal = () => setActiveCenter(null);
-    const [activePhysicalSub, setActivePhysicalSub] = useState<string | null>(null);
-
-    // 퀴즈 관련 State
-    const [quizStep, setQuizStep] = useState(1);
-    const [quizTarget, setQuizTarget] = useState('');
-    const [quizResultTitle, setQuizResultTitle] = useState('');
-    const [quizResultDesc, setQuizResultDesc] = useState('');
-
-    // 리뷰 필터 State
-    const [reviewFilter, setReviewFilter] = useState('all');
-
-    // 폼 입력 검증 및 연동 State
-    const [inquiryText, setInquiryText] = useState('');
-    const [phoneValue, setPhoneValue] = useState('');
-    const [emailError, setEmailError] = useState('');
-
-    // 🛡️ 보안: 속도 제한 (60초 쿨타임) 및 입력값 정화 로직 추가
-    const [lastSubmitTime, setLastSubmitTime] = useState(0);
-
-    // 리뷰 데이터 - DB 연동 (위로 이동)
-    const [reviewsData, setReviewsData] = useState<any[]>([]);
 
     const sanitize = (text: string) => {
         return text.replace(/<[^>]*>?/gm, '').trim(); // HTML 태그 제거
@@ -569,7 +622,7 @@ export default function Home() {
     };
 
     const toggleFaq = (e: MouseEvent<HTMLDivElement>) => {
-        e.currentTarget.classList.toggle('active');
+        e.currentTarget.classList.toggle('open');
     };
 
     const toggleSubModulesList = (e: MouseEvent<HTMLDivElement>) => {
@@ -665,23 +718,65 @@ export default function Home() {
         setQuizStep(step);
     };
 
-    const showQuizResult = (type: string) => {
-        let title = ""; let desc = "";
-        if (type === 'eap1') { title = "스마트 AI 스캐닝 + 1:1 수기 케어"; desc = "근골격계 질환의 원인을 정확히 찾고, 원조 전문가가 현장에서 직접 케어하여 즉각적인 업무 효율을 높입니다."; }
-        else if (type === 'eap2') { title = "1:1 프리미엄 릴렉싱 케어"; desc = "신체의 굳은 긴장을 이완시켜 교감신경을 안정화하고 정신적 번아웃을 예방하는 최적의 솔루션입니다."; }
-        else if (type === 'eap3') { title = "오피스 단체 스트레칭 + 특강"; desc = "사무실 의자를 활용한 실습과 거북목 교정 특강을 통해 다함께 참여하는 건강 문화를 만듭니다."; }
-        else if (type === 'sch1') { title = "학교 전용 3D AI 체형 검진 시스템"; desc = "모아레 및 척추 분석 기능을 통해 학생들의 성장 밸런스를 측정하고 학부모용 상세 리포트를 제공합니다."; }
-        else if (type === 'sch2') { title = "학생 기능성 그룹 트레이닝"; desc = "체형 분석을 기반으로 성장기 학생들에게 꼭 필요한 맞춤형 교정 운동과 스트레칭을 지도합니다."; }
+    const handleQuizAnswer = (index: number, answer: number) => {
+        const newAnswers = [...quizAnswers];
+        newAnswers[index] = answer;
+        setQuizAnswers(newAnswers);
+    };
+
+    const submitQuiz = () => {
+        if (quizAnswers.includes(-1)) {
+            showToast("모든 문항에 응답해주세요.");
+            return;
+        }
+
+        let A=0, B=0, C=0, D=0;
+        if (quizTarget === 'b2b') {
+            A = quizAnswers[0] + quizAnswers[1] + quizAnswers[2];
+            B = quizAnswers[3] + quizAnswers[4] + quizAnswers[5] + quizAnswers[6];
+            C = quizAnswers[7] + quizAnswers[8];
+            D = quizAnswers[9] + quizAnswers[10] + quizAnswers[11];
+        } else {
+            A = quizAnswers[0] + quizAnswers[1] + quizAnswers[2];
+            B = quizAnswers[3] + quizAnswers[4] + quizAnswers[5];
+            C = quizAnswers[6] + quizAnswers[7] + quizAnswers[8];
+            D = quizAnswers[9] + quizAnswers[10] + quizAnswers[11];
+        }
+
+        const scores = [
+            { type: 'D', score: D },
+            { type: 'A', score: A },
+            { type: 'C', score: C },
+            { type: 'B', score: B }
+        ];
+
+        scores.sort((a, b) => b.score - a.score);
+        const topType = scores[0].type;
+
+        let title = '';
+        let desc = '';
+        if (quizTarget === 'b2b') {
+            if (topType === 'A') { title = "근골격 및 산재 위험형"; desc = "AI 체형평가 및 현장 1:1 케어 등 통증/안전사고 예방 프로그램이 우선 권장됩니다."; }
+            else if (topType === 'B') { title = "VDT 및 거북목 집중형"; desc = "오피스 요가, 필라테스 및 바른 자세 만들기 등 사무실 맞춤 프로그램이 필요합니다."; }
+            else if (topType === 'C') { title = "활력 저하 및 번아웃형"; desc = "팀워크 강화를 위한 그룹 플로우 필라테스, 멘탈 회복 프로그램이 가장 시급합니다."; }
+            else if (topType === 'D') { title = "대사증후군 및 생활습관형"; desc = "돌연사를 막는 심혈관 질환 예방 전문 강의 및 식습관 코칭이 추천됩니다."; }
+        } else {
+            if (topType === 'A') { title = "직무 몰입을 방해하는 통증 스트레스형"; desc = "근골격계 통증을 즉각적으로 해소하는 1:1 피지컬케어와 셀프 테이핑 관리가 필요합니다."; }
+            else if (topType === 'B') { title = "체형 불균형을 부르는 운동 부족형"; desc = "굳은 몸을 풀고 올바른 정렬을 회복하는 바른 자세 만들기와 기초 체력 증진이 필요합니다."; }
+            else if (topType === 'C') { title = "의욕 저하 및 디지털/야식 의존형"; desc = "전사 다이어트 프로그램이나 활력 부스팅 그룹 필라테스로 멘탈 리프레시가 필요합니다."; }
+            else if (topType === 'D') { title = "생활습관 개선이 필요한 건강 적신호형"; desc = "대사증후군 예방을 위한 심혈관 전문 강의와 건강한 식습관 및 수면 관리가 최우선입니다."; }
+        }
 
         setQuizResultTitle(title);
         setQuizResultDesc(desc);
-        setInquiryText(`[맞춤 솔루션 퀴즈 매칭 결과]\n관심 프로그램: ${title}\n기대 효과: ${desc}\n\n`);
+        setInquiryText(`[맞춤 솔루션 진단 결과]\n진단 유형: ${title}\n추천 솔루션: ${desc}\n\n`);
         setQuizStep(3);
     };
 
     const resetQuiz = () => {
         setQuizTarget('');
         setQuizStep(1);
+        setQuizAnswers(Array(12).fill(-1));
     };
 
 
@@ -746,8 +841,7 @@ export default function Home() {
                     </li>
                 </ul>
                 <div className={`nav-actions ${isMobileMenuOpen ? 'show' : ''}`}>
-                    <button className="btn-outline" style={{ padding: '8px 16px', marginRight: '10px', fontSize: '13px', borderColor: '#eee', color: '#555', background: '#fff' }} onClick={() => openModal('modal-download')}>📥 소개서 다운로드</button>
-                    <button className="consult-btn" style={{ backgroundColor: '#2b8a3e' }} onClick={() => openModal('modal-proposal')}>도입 및 제휴 문의</button>
+                    <button className="consult-btn" onClick={() => openModal('modal-proposal')}>도입 및 제휴 문의</button>
                 </div>
             </header>
 
@@ -1362,7 +1456,7 @@ export default function Home() {
                 </section>
 
                 {/* 📋 섹션 1.5: 우리 기업 맞춤형 FaWW 프로그램 */}
-                <section className="category-section reveal" style={{ backgroundColor: '#f8f9fa', paddingTop: '80px', paddingBottom: '80px' }}>
+                <section className="category-section reveal" style={{ backgroundColor: '#f8f9fa' }}>
                     <div className="container">
                         <div className="school-header-wrap" style={{ textAlign: 'center' }}>
                             <span className="section-tag reveal delay-1">CORE PROGRAMS</span>
@@ -1370,7 +1464,7 @@ export default function Home() {
                             <p className="section-desc reveal delay-3">진단부터 사후 케어까지, 빈틈없는 4단계 프로세스로 운영됩니다.</p>
                         </div>
                         
-                        <div className="service-grid">
+                        <div className="service-grid grid-2x2">
                             {[
                                 { id: 'modal1', tag: '진단', title: '스마트 AI 체형분석', desc: '3D 스캐닝을 통해 임직원의 신체 불균형과 근골격계 위험도를 정밀 측정합니다.', img: '/images/eap/ai_scanning.jpg', color: '#e3f2fd', text: '#1565c0', hashtags: ['#3D스캔', '#불균형측정', '#근골격계케어'] },
                                 { id: 'modal2', tag: '케어', title: '1:1 맞춤 피지컬케어', desc: '전문가가 직접 파견되어 통증 부위를 즉각적으로 관리하고 이완하는 시그니처 프로그램입니다.', img: '/images/eap/manual_care.jpg', color: '#e8f5e9', text: '#2b8a3e', hashtags: ['#통증완화', '#직접파견', '#1:1시그니처'] },
@@ -1402,7 +1496,7 @@ export default function Home() {
                 </section>
 
                 {/* 💡 섹션 2: Solution & Differentiation (차별화 전략) */}
-                <section className="services reveal" style={{ backgroundColor: '#fff', paddingBottom: '80px' }}>
+                <section className="services reveal" style={{ backgroundColor: '#fff' }}>
                     <div className="container">
                         <div className="school-header-wrap" style={{ textAlign: 'center' }}>
                             <span className="section-tag">DIFFERENTIATION</span>
@@ -1771,84 +1865,53 @@ export default function Home() {
 
                                 {/* 오른쪽: 수도권 지도 인터랙션 */}
                                 <div className="center-map-column reveal active">
-                                    <div style={{ marginBottom: '20px', textAlign: 'center' }}>
-                                        <h4 style={{ margin: 0, color: '#111' }}>FaWW 수도권 실시간 정밀 네트워크 [REAL MAP]</h4>
-                                        <p style={{ fontSize: '13px', color: '#2b8a3e', fontWeight: 'bold', margin: '5px 0 0 0' }}>※ 브라우저를 새로고침(Ctrl+F5)하여 최신 정밀 지형을 확인하세요.</p>
-                                    </div>
-                                    <div className="center-map-wrapper" style={{ background: '#f8f9fa', height: '650px', border: '1px solid #d1d5da', overflow: 'hidden', borderRadius: '12px', boxShadow: 'inset 0 0 40px rgba(0,0,0,0.05)' }}>
-                                        <svg viewBox="1700 6300 2500 2800" className="seoul-map-svg" style={{ padding: '0', width: '100%', height: '100%' }}>
-                                            <defs>
-                                                <pattern id="mapGrid" width="150" height="150" patternUnits="userSpaceOnUse">
-                                                    <path d="M 150 0 L 0 0 0 150" fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth="1" />
-                                                </pattern>
-                                                <filter id="mapShadow" x="-20%" y="-20%" width="140%" height="140%">
-                                                    <feDropShadow dx="0" dy="30" stdDeviation="40" floodOpacity="0.15" />
-                                                </filter>
-                                            </defs>
-                                            <rect x="1700" y="6300" width="2500" height="2800" fill="url(#mapGrid)" />
-                                            
-                                            {/* 🗺️ [REAL GIS DATA] 수도권 전체 정밀 실루엣 (Seoul + Incheon + Gyeonggi) */}
-                                            <path d="M2697,6425L2761,6470L2773,6519L2752,6548L2826,6577L2831,6600L2734,6575L2719,6555L2722,6492L2673,6467L2619,6476L2557,6514L2501,6572L2480,6626L2577,6634L2556,6662L2620,6646L2578,6758L2591,6811L2558,6801L2537,6702L2444,6697L2371,6721L2369,6826L2412,6889L2465,6911L2550,6921L2553,6979L2496,6940L2460,6954L2453,6994L2383,6954L2324,6894L2290,6876L2264,6906L2298,6957L2236,6952L2241,7000L2300,7027L2315,7060L2258,7064L2225,7138L2308,7151L2375,7123L2400,7134L2399,7090L2439,7071L2456,7133L2484,7173L2567,7158L2550,7187L2491,7215L2398,7223L2348,7240L2279,7294L2276,7318L2330,7383L2414,7420L2455,7513L2414,7556L2399,7643L2307,7736L2152,7734L2086,7853L2065,7984L2046,8150L2075,8181L2162,8147L2235,8166L2263,8128L2251,7979L2299,7937L2399,7906L2279,8007L2317,8120L2296,8182L2308,8310L2268,8292L2261,8465L2271,8513L2361,8543L2426,8592L2567,8796L2684,8899L2741,9031L2761,9056L2871,8987L2942,8864L2942,8864L2962,8867L3033,8797L3090,8769L3112,8800L3113,8867L3130,8900L3149,8853L3217,8836L3217,8836L3274,8895L3310,8885L3281,8823L3282,8785L3331,8746L3391,8730L3458,8753L3517,8744L3542,8687L3548,8592L3567,8539L3607,8508L3680,8507L3702,8448L3762,8427L3799,8369L3789,8287L3656,8191L3649,8100L3668,8027L3621,7973L3639,7948L3682,7961L3673,7881L3653,7815L3688,7784L3775,7789L3944,7694L4075,7666L4117,7615L4016,7494L4012,7404L3910,7195L3836,7021L3746,6861L3696,6802L3599,6628L3558,6600L3518,6620L3458,6535L3390,6490L3374,6431L3251,6382L3178,6363L3102,6374L3041,6428L2971,6461L2836,6406Z" 
-                                                fill="#fff" stroke="#adb5bd" strokeWidth="6" filter="url(#mapShadow)" />
-                                            
-                                            {/* 🏛️ [REAL GIS DATA] 서울특별시 정밀 실루엣 */}
-                                            <path d="M2972,7718L3087,7730L3093,7671L3046,7644L3059,7593L3015,7530L2879,7474L2861,7517L2723,7477L2654,7481L2609,7544L2531,7580L2524,7638L2456,7731L2482,7782L2526,7778L2577,7746L2650,7778L2663,7844L2735,7849L2796,7942L2829,7976L2879,7987L2937,7981L2963,7933L2988,7824L2988,7775Z" 
-                                                fill="#f1f3f5" stroke="#495057" strokeWidth="8" />
-                                            
-                                            {/* 📍 [Layer 1] 모든 센터 마커 (먼저 렌더링) */}
-                                            {centerData.map((center) => {
-                                                const getInfo = (name: string) => {
-                                                    if (name.includes('영등포')) return { x: 2650, y: 7650 };
-                                                    if (name.includes('여의도')) return { x: 2800, y: 7600 };
-                                                    if (name.includes('강남')) return { x: 3000, y: 7750 };
-                                                    if (name.includes('동탄')) return { x: 3100, y: 8650 };
-                                                    return { x: 2750, y: 7700 };
-                                                };
-                                                const info = getInfo(center.name);
-                                                const isActive = hoveredCenterId === center.id;
-                                                
-                                                return (
-                                                    <g key={`marker-${center.id}`} className={`map-point ${isActive ? 'active' : ''}`} 
-                                                        onClick={() => openCenterModal(center.id)} 
-                                                        onMouseEnter={() => setHoveredCenterId(center.id)} 
-                                                        onMouseLeave={() => setHoveredCenterId(null)}
-                                                        style={{ cursor: 'pointer' }}>
-                                                        <circle cx={info.x} cy={info.y} r={isActive ? 80 : 0} 
-                                                            fill={isActive ? 'rgba(43, 138, 62, 0.2)' : 'transparent'} 
-                                                            style={{ transition: 'all 0.4s ease' }} />
-                                                        <circle cx={info.x} cy={info.y} r={isActive ? 35 : 25} style={{ 
-                                                            fill: isActive ? '#2b8a3e' : '#ced4da',
-                                                            stroke: '#fff',
-                                                            strokeWidth: isActive ? 10 : 6,
-                                                            transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
-                                                        }} />
-                                                    </g>
-                                                );
-                                            })}
+                                    <div className="center-dashboard-wrapper">
+                                        {(() => {
+                                            const currentCenter = centerData.find(c => c.id === hoveredCenterId) || centerData[0];
+                                            if (!currentCenter) return null;
+                                            return (
+                                                <div className="dashboard-content" key={currentCenter.id}>
+                                                    <div className="dashboard-header">
+                                                        <span className="live-badge">SYSTEM STATUS: OPERATIONAL</span>
+                                                        <h2>{currentCenter.name}</h2>
+                                                        <p className="dashboard-addr">{currentCenter.address}</p>
+                                                    </div>
+                                                    
+                                                    {/* 지점 설명(Philosophy) 섹션 제거 - 사용자 요청 */}
+                                                    <div style={{ marginBottom: '20px' }}></div>
 
-                                            {/* 🏷️ [Layer 2] 활성화된 주소 툴팁 (가장 마지막에 렌더링하여 가림 방지) */}
-                                            {hoveredCenterId && centerData.map((center) => {
-                                                if (center.id !== hoveredCenterId) return null;
-                                                const getInfo = (name: string) => {
-                                                    if (name.includes('영등포')) return { x: 2650, y: 7650, addr: '서울특별시 영등포구 도신로 232' };
-                                                    if (name.includes('여의도')) return { x: 2800, y: 7600, addr: '서울특별시 영등포구 국제금융로 10' };
-                                                    if (name.includes('강남')) return { x: 3000, y: 7750, addr: '서울특별시 강남구 강남대로 364' };
-                                                    if (name.includes('동탄')) return { x: 3100, y: 8650, addr: '경기도 화성시 동탄대로 537' };
-                                                    return { x: 2750, y: 7700, addr: '주소 정보 확인 중' };
-                                                };
-                                                const info = getInfo(center.name);
-                                                
-                                                return (
-                                                    <g key={`tooltip-${center.id}`} style={{ pointerEvents: 'none' }} transform={`translate(${info.x}, ${info.y - 150})`}>
-                                                        <rect x="-425" y="-220" width="850" height="260" rx="50" fill="#212529" filter="url(#mapShadow)" />
-                                                        <path d="M0,80 L-40,30 L40,30 Z" fill="#212529" />
-                                                        <text y="-135" textAnchor="middle" fill="#00ff88" fontSize="64" fontWeight="800">{center.name}</text>
-                                                        <text y="-45" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="42" fontWeight="400">{info.addr}</text>
-                                                    </g>
-                                                );
-                                            })}
-                                            <text x="2750" y="7700" textAnchor="middle" fill="#212529" fontSize="180" fontWeight="900" opacity="0.05" style={{ pointerEvents: 'none', letterSpacing: '30px' }}>SEOUL</text>
-                                        </svg>
+                                                    <div className="programs-section">
+                                                        <h4 className="sub-title">CORE PROGRAMS</h4>
+                                                        <ul className="program-list">
+                                                            {(currentCenter.programs && currentCenter.programs.length > 0) ? (
+                                                                currentCenter.programs.map((prog: string, i: number) => (
+                                                                    <li key={i}>• {prog.trim()}</li>
+                                                                ))
+                                                            ) : (
+                                                                <>
+                                                                    <li>• 개인별 맞춤형 정밀 체형 분석</li>
+                                                                    <li>• 근골격계 통증 완화 케어</li>
+                                                                    <li>• 올바른 자세 회복 및 기능 강화</li>
+                                                                </>
+                                                            )}
+                                                        </ul>
+                                                    </div>
+
+                                                    <div className="equipment-section">
+                                                        <h4 className="sub-title">TECHNOLOGY & EQUIPMENT</h4>
+                                                        <div className="equipment-tags">
+                                                            {(currentCenter.equipments || ['3D AI 스캐너', '정밀 체형 분석기']).map((eq, i) => (
+                                                                <span key={i} className="eq-tag">{eq}</span>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="dashboard-footer">
+                                                        <button className="dashboard-btn" onClick={() => openCenterModal(currentCenter.id)}>지점 상세 솔루션 보기</button>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })()}
                                     </div>
                                 </div>
                             </div>
@@ -2007,19 +2070,6 @@ export default function Home() {
                 </div>
             )}
 
-            {activeModal === 'modal-download' && (
-                <div className="modal active">
-                    <div className="modal-content" style={{ maxWidth: '550px' }}>
-                        <button className="modal-close" onClick={closeModal}>&times;</button>
-                        <div className="modal-header"><h2>소개서 다운로드</h2><p>필요한 분야의 소개서를 선택하여 다운로드하세요.</p></div>
-                        <div className="hero-buttons" style={{ flexDirection: 'column', gap: '15px', marginBottom: 0 }}>
-                            <a href="/파우 제안서(기업).pdf" download="파우_기업용_제안서.pdf" className="btn-primary" style={{ width: '100%', textAlign: 'center', boxSizing: 'border-box' }} onClick={() => { showToast('📥 기업용 소개서가 다운로드됩니다.'); closeModal(); }}>🏢 기업용 소개서</a>
-                            <a href="/파우 제안서(학교).pdf" download="파우_학교용_제안서.pdf" className="btn-primary" style={{ width: '100%', backgroundColor: '#004d40', textAlign: 'center', boxSizing: 'border-box' }} onClick={() => { showToast('📥 학교용 소개서가 다운로드됩니다.'); closeModal(); }}>🏫 학교용 소개서</a>
-                            <a href="/AI체형측정 제안서(기업).pdf" download="FaWW_AI체형측정_제안서.pdf" className="btn-primary" style={{ width: '100%', backgroundColor: '#111', textAlign: 'center', boxSizing: 'border-box' }} onClick={() => { showToast('📥 AI 체형분석 소개서가 다운로드됩니다.'); closeModal(); }}>🤖 AI 체형분석 소개서</a>
-                        </div>
-                    </div>
-                </div>
-            )}
 
             {activeModal === 'modal-proposal' && (
                 <div className="modal active">
@@ -2096,31 +2146,31 @@ export default function Home() {
                         {quizStep === 1 && (
                             <div id="quiz-step-1" className="quiz-step active">
                                 <span className="gateway-badge" style={{ background: '#e8f5e9', color: '#2b8a3e', padding: '4px 10px', borderRadius: '12px', fontWeight: 'bold', fontSize: '12px' }}>STEP 1</span>
-                                <h2 style={{ fontSize: '24px', fontWeight: 800, margin: '15px 0' }}>어떤 조직의 담당자이신가요?</h2>
+                                <h2 style={{ fontSize: '24px', fontWeight: 800, margin: '15px 0' }}>어떤 분이신가요?</h2>
                                 <div className="quiz-options" style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '30px' }}>
-                                    <button className="quiz-btn" onClick={() => nextQuizStep(2, 'b2b')}>🏢 일반 기업 (HR/복지 담당)</button>
-                                    <button className="quiz-btn" onClick={() => nextQuizStep(2, 'school')}>🏫 학교 (보건/체육교사)</button>
+                                    <button className="quiz-btn" onClick={() => nextQuizStep(2, 'b2b')}>🏢 조직을 이끄는 HR/관리자 (조직 진단)</button>
+                                    <button className="quiz-btn" onClick={() => nextQuizStep(2, 'b2c')}>👤 내 몸 상태가 궁금한 직장인 (개인 자가진단)</button>
                                 </div>
                             </div>
                         )}
                         {quizStep === 2 && (
-                            <div id="quiz-step-2" className="quiz-step active">
+                            <div id="quiz-step-2" className="quiz-step active" style={{ textAlign: 'left' }}>
                                 <span className="gateway-badge" style={{ background: '#e8f5e9', color: '#2b8a3e', padding: '4px 10px', borderRadius: '12px', fontWeight: 'bold', fontSize: '12px' }}>STEP 2</span>
-                                <h2 style={{ fontSize: '24px', fontWeight: 800, margin: '15px 0' }}>가장 큰 고민(목적)은 무엇인가요?</h2>
-                                <div className="quiz-options" style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '30px' }}>
-                                    {quizTarget === 'b2b' ? (
-                                        <>
-                                            <button className="quiz-btn" onClick={() => showQuizResult('eap1')}>🤕 임직원 거북목 등 통증/산재 예방</button>
-                                            <button className="quiz-btn" onClick={() => showQuizResult('eap2')}>🤯 직무 스트레스 및 번아웃 케어</button>
-                                            <button className="quiz-btn" onClick={() => showQuizResult('eap3')}>🧘‍♀️ 사내 웰니스(운동) 문화 조성</button>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <button className="quiz-btn" onClick={() => showQuizResult('sch1')}>📊 전교생 스마트 체형 검진 (데이터화)</button>
-                                            <button className="quiz-btn" onClick={() => showQuizResult('sch2')}>🏃 성장기 체형 교정 그룹 운동</button>
-                                        </>
-                                    )}
+                                <h2 style={{ fontSize: '24px', fontWeight: 800, margin: '15px 0' }}>{quizTarget === 'b2b' ? "우리 조직 진단 (12문항)" : "내 몸 상태 자가진단 (12문항)"}</h2>
+                                <p style={{ color: '#666', fontSize: '14px', marginBottom: '20px' }}>각 문항을 읽고 직관적으로 예/아니오를 선택해 주세요.</p>
+                                <div className="quiz-questions-wrap" style={{ maxHeight: '50vh', overflowY: 'auto', paddingRight: '10px', marginBottom: '20px' }}>
+                                    {(quizTarget === 'b2b' ? B2B_QUESTIONS : B2C_QUESTIONS).map((q, idx) => (
+                                        <div key={idx} className="quiz-question-box" style={{ background: '#f8f9fa', padding: '15px', borderRadius: '10px', marginBottom: '10px', border: '1px solid #eee' }}>
+                                            <div style={{ fontWeight: 'bold', color: '#2b8a3e', marginBottom: '8px' }}>Q{idx + 1}.</div>
+                                            <div style={{ fontSize: '15px', color: '#333', marginBottom: '12px', lineHeight: '1.4' }}>{q}</div>
+                                            <div style={{ display: 'flex', gap: '10px' }}>
+                                                <button onClick={() => handleQuizAnswer(idx, 1)} style={{ flex: 1, padding: '10px', borderRadius: '6px', border: quizAnswers[idx] === 1 ? '1px solid #2b8a3e' : '1px solid #ddd', background: quizAnswers[idx] === 1 ? '#e8f5e9' : '#fff', color: quizAnswers[idx] === 1 ? '#2b8a3e' : '#555', fontWeight: quizAnswers[idx] === 1 ? 'bold' : 'normal', cursor: 'pointer', transition: 'all 0.2s' }}>예</button>
+                                                <button onClick={() => handleQuizAnswer(idx, 0)} style={{ flex: 1, padding: '10px', borderRadius: '6px', border: quizAnswers[idx] === 0 ? '1px solid #d32f2f' : '1px solid #ddd', background: quizAnswers[idx] === 0 ? '#fce4e4' : '#fff', color: quizAnswers[idx] === 0 ? '#d32f2f' : '#555', fontWeight: quizAnswers[idx] === 0 ? 'bold' : 'normal', cursor: 'pointer', transition: 'all 0.2s' }}>아니오</button>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
+                                <button className="form-submit-btn" style={{ width: '100%', padding: '18px', backgroundColor: '#2b8a3e', color: 'white', border: 'none', borderRadius: '8px', fontSize: '18px', fontWeight: 800, cursor: 'pointer' }} onClick={submitQuiz}>결과 보기</button>
                             </div>
                         )}
                         {quizStep === 3 && (
@@ -2158,6 +2208,9 @@ export default function Home() {
                             <div className="center-modal-header">
                                 <span className="center-modal-tag">{activeCenter.tagline}</span>
                                 <h2 className="center-modal-title">{activeCenter.name}</h2>
+                                <p className="center-modal-address" style={{ color: '#0ff', fontSize: '14px', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                    <span style={{ fontSize: '16px' }}>📍</span> {activeCenter.address}
+                                </p>
                                 <p className="center-modal-philosophy">{activeCenter.philosophy}</p>
                             </div>
 
