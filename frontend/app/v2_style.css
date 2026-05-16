@@ -48,6 +48,61 @@ section { margin-top: 30px; margin-bottom: 30px; }
 .section-desc { text-wrap: balance !important; text-wrap: pretty !important; letter-spacing: -0.5px; text-align: center; color: #666; margin-bottom: 40px; font-size: 17px; max-width: 700px; margin-left: auto; margin-right: auto; word-break: keep-all; text-wrap: balance; text-wrap: pretty; text-wrap: balance; line-height: 1.6; }
 
 /* 📱 모바일 공통 타이포 조정 */
+.skeleton-base {
+    background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.mb-2 { margin-bottom: 8px; }
+.mb-4 { margin-bottom: 16px; }
+
+/* 🛸 Ultimate Quiz Luxury Styles */
+.quiz-premium-header { margin-bottom: 40px; }
+.premium-badge-v2 { background: #e8f5e9; color: #2b8a3e; padding: 8px 16px; border-radius: 50px; font-weight: 900; font-size: 12px; letter-spacing: 2px; }
+.quiz-title-v2 { font-size: 32px; font-weight: 900; color: #111; margin: 20px 0 10px; letter-spacing: -1.5px; }
+.quiz-subtitle-v2 { color: #888; font-size: 16px; }
+
+.quiz-cards-container-v2 { display: flex; flex-direction: column; gap: 20px; }
+.quiz-luxury-card { 
+    position: relative; 
+    border-radius: 24px; 
+    overflow: hidden; 
+    cursor: pointer; 
+    transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border: 1px solid rgba(0,0,0,0.05);
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.quiz-luxury-card:hover { 
+    transform: translateY(-8px) scale(1.01); 
+    box-shadow: 0 20px 50px rgba(43, 138, 62, 0.15);
+    border-color: rgba(43, 138, 62, 0.3);
+}
+
+.quiz-card-main { position: relative; z-index: 2; padding: 30px; display: flex; align-items: center; gap: 25px; }
+.luxury-icon-box { font-size: 44px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.1)); }
+.luxury-text-box { flex: 1; text-align: left; }
+.luxury-tag { font-size: 10px; font-weight: 900; color: #2b8a3e; letter-spacing: 1.5px; margin-bottom: 6px; opacity: 0.8; }
+.luxury-title { font-size: 20px; font-weight: 900; color: #111; margin-bottom: 6px; }
+.luxury-desc { font-size: 14px; color: #666; line-height: 1.5; }
+.luxury-arrow { font-size: 24px; color: #ccc; transition: transform 0.3s ease; }
+.quiz-luxury-card:hover .luxury-arrow { transform: translateX(10px); color: #2b8a3e; }
+
+.card-glass-effect { 
+    position: absolute; 
+    inset: 0; 
+    background: linear-gradient(135deg, rgba(43, 138, 62, 0.05) 0%, transparent 100%); 
+    opacity: 0; 
+    transition: opacity 0.3s ease; 
+}
+.quiz-luxury-card:hover .card-glass-effect { opacity: 1; }
 
 /* 버튼 */
 .btn-primary { 
@@ -262,6 +317,7 @@ header {
 }
 
 /* 히어로 브랜드 섹션 */
+/* 히어로 브랜드 섹션 */
 .hero-brand { 
     position: relative; 
     height: 100vh; 
@@ -294,6 +350,9 @@ header {
     text-shadow: 0 4px 20px rgba(0,0,0,0.8); 
 }
 
+.hero-brand p { font-size: 18px; color: #ced4da; max-width: 800px; margin: 0 auto 40px auto; font-weight: 300; line-height: 1.7; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+.hero-brand p strong { display: block; font-size: 24px; color: #fff; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.5px; text-shadow: 0 3px 10px rgba(0,0,0,0.6); }
+
 /* [1] 메인 히어로 섹션 전용 강조 (밝고 전문적인 느낌) */
 .hero-brand h1 span:not(.char), 
 .text-highlight { 
@@ -305,8 +364,7 @@ header {
 }
 
 /* [2] 일반 섹션 제목/설명 강조 (더 선명하고 묵직한 느낌) */
-.section-title span:not(.char), 
-.teaser-text span:not(.char) { 
+.section-title span:not(.char) { 
     background: linear-gradient(135deg, #2b8a3e 0%, #1e5e2e 100%); /* 채도는 유지하되 더 어둡고 묵직하게 */
     -webkit-background-clip: text; 
     -webkit-text-fill-color: transparent; 
@@ -317,15 +375,28 @@ header {
 /* 강조된 부모 내의 글자들만 색상 상속 */
 .text-highlight .char, 
 .section-title span:not(.char) .char, 
-.teaser-text span:not(.char) .char, 
 .hero-brand h1 span:not(.char) .char { 
     -webkit-text-fill-color: inherit; 
     background: inherit; 
     -webkit-background-clip: inherit;
     filter: none !important; 
 }
-.hero-brand p { font-size: 18px; color: #ced4da; max-width: 800px; margin: 0 auto 40px auto; font-weight: 300; line-height: 1.7; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
-.hero-brand p strong { display: block; font-size: 24px; color: #fff; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.5px; text-shadow: 0 3px 10px rgba(0,0,0,0.6); }
+
+/* 🎭 Cinematic Soft Reveal */
+.char {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(15px);
+    filter: blur(4px);
+    transition: all 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+    will-change: transform, opacity, filter;
+}
+
+.reveal-done .char {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+}
 .hero-buttons { display: flex; justify-content: center; gap: 15px; margin-bottom: 60px; }
 
 /* 🌊 서브페이지 전용 히어로 (슬림하게 고정) */
@@ -803,7 +874,32 @@ header ul li a:hover, header ul li a.active-nav {
 .reviewer-info { font-weight: bold; font-size: 14px; color: #666; border-top: 1px solid #ddd; padding-top: 15px; display: flex; align-items: center; gap: 10px; }
 .reviewer-avatar { width: 36px; height: 36px; background-color: #ccc; border-radius: 50%; }
 .reviewSwiper .swiper-pagination { position: relative !important; margin-top: 30px !important; bottom: auto !important; }
-.partners { padding: 120px 0; background-color: #fff; border-top: 1px solid #eee; overflow: hidden; position: relative; }
+.partners { 
+    height: 600px; 
+    background-color: #fff; 
+    border-top: 1px solid #eee; 
+    overflow: hidden; 
+    position: relative; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.partner-flex-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.partner-content-group {
+    width: 100%;
+    text-align: center;
+}
+
+.marquee-wrapper {
+    margin-top: 60px;
+}
 .partners::before, .partners::after { content: ""; position: absolute; top: 0; width: 250px; height: 100%; z-index: 2; pointer-events: none; }
 .partners::before { left: 0; background: linear-gradient(to right, #fff 0%, transparent 100%); }
 .partners::after { right: 0; background: linear-gradient(to left, #fff 0%, transparent 100%); }
@@ -871,15 +967,16 @@ header ul li a:hover, header ul li a.active-nav {
 
 /* FAQ 아코디언 및 기타 서브 페이지 유지 */
 /* 센터 맵 레이아웃 */
-.center-split-view { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; margin-top: 40px; align-items: start; }
-.center-list-column { display: flex; flex-direction: column; gap: 15px; }
-.center-map-column { position: sticky; top: 120px; background: #f8f9fa; border-radius: 24px; padding: 40px; border: 1px solid #eee; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02); display: flex; flex-direction: column; align-items: center; }
+.center-split-view { display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; margin-top: 40px; align-items: start; }
+.center-list-column { display: flex; flex-direction: column; gap: 15px; width: 100%; }
+.center-map-column { position: sticky; top: 120px; background: #f8f9fa; border-radius: 24px; padding: 40px; border: 1px solid #eee; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02); display: flex; flex-direction: column; width: 100%; }
 .map-svg-container { position: relative; width: 100%; max-width: 500px; aspect-ratio: 1 / 1.1; background: url('https://raw.githubusercontent.com/southkorea/seoul-maps/master/juso/2015/json/seoul_municipalities_geo.json') no-repeat center/contain; opacity: 0.1; filter: grayscale(1); } /* 실제 지도는 SVG로 구현 */
 
 .center-dashboard-wrapper {
     background: #fff;
     border-radius: 24px;
     padding: 40px;
+    width: 100%;
     height: 100%;
     min-height: 600px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.03);
@@ -1002,6 +1099,7 @@ header ul li a:hover, header ul li a.active-nav {
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
+    width: 100%;
     padding: 35px 40px; 
     background: #fff; 
     border-radius: 24px; 
@@ -1009,6 +1107,7 @@ header ul li a:hover, header ul li a.active-nav {
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    box-sizing: border-box;
 }
 .center-row-card:hover, .center-row-card.highlighted { 
     border-color: #2b8a3e; 
@@ -1147,25 +1246,6 @@ header ul li a:hover, header ul li a.active-nav {
 }
 .ac-badge { display: inline-block; background: #e8f5e9; color: #2b8a3e; font-size: 13px; font-weight: 800; padding: 6px 14px; border-radius: 20px; margin-bottom: 15px; }
 
-/* 서브페이지 센터/몰 */
-.grid-vertical { display: flex; flex-direction: column; gap: 15px; max-width: 800px; margin: 0 auto; padding: 15px; }
-.center-row-card { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    background: #fff; 
-    padding: 30px 40px; 
-    border-radius: 12px; 
-    border: 1px solid #f0f0f0; 
-    transition: all 0.3s ease; 
-    cursor: pointer; 
-    margin-bottom:15px; 
-}
-.center-row-card:hover { 
-    transform: translateX(5px); 
-    border-color: #2b8a3e; 
-    box-shadow: 0 8px 20px rgba(43, 138, 62, 0.05); 
-}
 .info-card { 
     background: #fff; 
     border: 1px solid #f0f0f0; 
@@ -1317,15 +1397,15 @@ header ul li a:hover, header ul li a.active-nav {
     padding: 80px 0 120px 0;
     background-color: #0b0c10;
     position: relative;
-    overflow: visible !important;
+    overflow: hidden; /* 영역 밖으로 나가는 디자인 차단 */
     z-index: 10;
     scroll-snap-align: start;
 }
 .magnify-section::before {
     content: "";
     position: absolute;
-    bottom: -10%; left: -50%;
-    width: 200%; height: 60%;
+    bottom: 0; left: -50%;
+    width: 200%; height: 50%;
     background-image: 
         linear-gradient(rgba(0, 255, 255, 0.15) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0, 255, 255, 0.15) 1px, transparent 1px);
@@ -1333,6 +1413,9 @@ header ul li a:hover, header ul li a.active-nav {
     transform: perspective(600px) rotateX(70deg);
     animation: gridMove 3s linear infinite;
     z-index: 0;
+    /* 상단과 하단을 부드럽게 페이드 아웃 */
+    -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, transparent 100%);
+    mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, transparent 100%);
 }
 @keyframes gridMove { 0% { transform: perspective(600px) rotateX(70deg) translateY(0); } 100% { transform: perspective(600px) rotateX(70deg) translateY(50px); } }
 

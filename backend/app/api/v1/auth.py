@@ -12,7 +12,7 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 class SignupRequest(BaseModel):
     """회원가입 요청."""
 
-    email: EmailStr
+    email: str
     password: str = Field(..., min_length=8)
     name: str = Field(..., min_length=1, max_length=100)
 
@@ -20,7 +20,7 @@ class SignupRequest(BaseModel):
 class LoginRequest(BaseModel):
     """로그인 요청."""
 
-    email: EmailStr
+    email: str
     password: str
 
 
@@ -41,12 +41,15 @@ class TokenResponse(BaseModel):
     user: AuthUser
 
 
-# 임시 mock 사용자
+# 관리자 계정 설정
+_ADMIN_ID = "admin"
+_ADMIN_PASSWORD = "skt010203!"
+
 _MOCK_USER = AuthUser(
-    id="user-001",
-    email="coach@example.com",
-    name="김철수",
-    role="coach",
+    id="admin-001",
+    email="admin@sportcoach.com",
+    name="최고관리자",
+    role="admin",
 )
 
 
@@ -76,14 +79,21 @@ async def signup(body: SignupRequest) -> APIResponse[TokenResponse]:
 )
 async def login(body: LoginRequest) -> APIResponse[TokenResponse]:
     """로그인하여 토큰을 발급합니다."""
-    token = TokenResponse(
-        access_token="mock-token-login",
-        user=_MOCK_USER,
-    )
+    if body.email == _ADMIN_ID and body.password == _ADMIN_PASSWORD:
+        token = TokenResponse(
+            access_token="faww-admin-secure-token-2024",
+            user=_MOCK_USER,
+        )
+        return APIResponse(
+            success=True,
+            data=token,
+            message="로그인 성공",
+        )
+    
     return APIResponse(
-        success=True,
-        data=token,
-        message="로그인 성공",
+        success=False,
+        data=None,
+        message="아이디 또는 비밀번호가 올바르지 않습니다.",
     )
 
 
