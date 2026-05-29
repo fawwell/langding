@@ -1,6 +1,6 @@
 """의존성 주입 (Dependency Injection)."""
 
-from supabase import create_client, Client
+from supabase_wrapper import create_client, Client
 
 from app.core.config import Settings, settings
 

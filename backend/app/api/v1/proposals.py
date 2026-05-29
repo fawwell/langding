@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 
-from supabase import create_client, Client
+from supabase_wrapper import create_client, Client
 from postgrest.exceptions import APIError
 
 from app.core.config import settings

@@ -6,7 +6,7 @@ import sys
 sys.path.insert(0, os.path.abspath("."))
 
 from app.core.config import settings
-from supabase import create_client
+from supabase_wrapper import create_client
 
 def main():
     try:

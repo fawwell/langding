@@ -1,6 +1,6 @@
 # Smart Conditional Wrapper for Supabase SDK
-import sys
 import os
+import sys
 
 # Check if we should use the real Supabase SDK (e.g. in production / Railway)
 # We use real Supabase if SUPABASE_URL or NEXT_PUBLIC_SUPABASE_URL is set and not a placeholder
@@ -8,24 +8,11 @@ supabase_url = os.environ.get("SUPABASE_URL") or os.environ.get("NEXT_PUBLIC_SUP
 is_real_supabase = supabase_url and "placeholder" not in supabase_url
 
 if is_real_supabase:
-    # Programmatically bypass this file to import the real supabase package from pip
-    current_dir = os.path.abspath(os.path.dirname(__file__))
-    original_path = list(sys.path)
-    
-    # Temporarily remove current directory and empty/relative paths from sys.path
-    sys.path = [p for p in sys.path if p not in ('', '.', current_dir)]
-    
     try:
-        import importlib
-        real_supabase = importlib.import_module("supabase")
-        create_client = real_supabase.create_client
-        Client = real_supabase.Client
+        from supabase import create_client, Client
     except ImportError as e:
         print(f"Failed to import real supabase package: {str(e)}")
         is_real_supabase = False
-    finally:
-        # Restore original path
-        sys.path = original_path
 
 if not is_real_supabase:
     # --- Mock Supabase SDK for local development ---

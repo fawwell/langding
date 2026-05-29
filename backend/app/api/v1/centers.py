@@ -4,7 +4,7 @@ from typing import Optional, List
 from datetime import datetime
 import json
 
-from supabase import create_client, Client
+from supabase_wrapper import create_client, Client
 from postgrest.exceptions import APIError
 
 from app.core.config import settings
