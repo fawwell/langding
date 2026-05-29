@@ -1,5 +1,16 @@
+-- 기존 테이블이 존재할 경우 삭제하여 컬럼 충돌 방지
+DROP TABLE IF EXISTS class_notes CASCADE;
+DROP TABLE IF EXISTS attendances CASCADE;
+DROP TABLE IF EXISTS schedules CASCADE;
+DROP TABLE IF EXISTS students CASCADE;
+DROP TABLE IF EXISTS coaches CASCADE;
+DROP TABLE IF EXISTS proposals CASCADE;
+DROP TABLE IF EXISTS media_reports CASCADE;
+DROP TABLE IF EXISTS client_reviews CASCADE;
+DROP TABLE IF EXISTS centers CASCADE;
+
 -- 1. 피지컬케어 지점(Centers) 테이블 생성
-CREATE TABLE IF NOT EXISTS centers (
+CREATE TABLE centers (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     tagline TEXT DEFAULT '',
