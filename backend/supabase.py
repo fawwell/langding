@@ -3,8 +3,8 @@ import sys
 import os
 
 # Check if we should use the real Supabase SDK (e.g. in production / Railway)
-# We use real Supabase if SUPABASE_URL is set and not a placeholder
-supabase_url = os.environ.get("SUPABASE_URL", "")
+# We use real Supabase if SUPABASE_URL or NEXT_PUBLIC_SUPABASE_URL is set and not a placeholder
+supabase_url = os.environ.get("SUPABASE_URL") or os.environ.get("NEXT_PUBLIC_SUPABASE_URL", "")
 is_real_supabase = supabase_url and "placeholder" not in supabase_url
 
 if is_real_supabase:
