@@ -1,0 +1,26 @@
+{
+  "client_reviews_error": {
+    "message": "TypeError: fetch failed",
+    "details": "TypeError: fetch failed\n\nCaused by: Error: getaddrinfo ENOTFOUND placeholder.supabase.co (ENOTFOUND)\nError: getaddrinfo ENOTFOUND placeholder.supabase.co\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:120:26)",
+    "hint": "",
+    "code": ""
+  },
+  "media_reports_error": {
+    "message": "TypeError: fetch failed",
+    "details": "TypeError: fetch failed\n\nCaused by: Error: getaddrinfo ENOTFOUND placeholder.supabase.co (ENOTFOUND)\nError: getaddrinfo ENOTFOUND placeholder.supabase.co\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:120:26)",
+    "hint": "",
+    "code": ""
+  },
+  "centers_error": {
+    "message": "TypeError: fetch failed",
+    "details": "TypeError: fetch failed\n\nCaused by: Error: getaddrinfo ENOTFOUND placeholder.supabase.co (ENOTFOUND)\nError: getaddrinfo ENOTFOUND placeholder.supabase.co\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:120:26)",
+    "hint": "",
+    "code": ""
+  },
+  "coaches_error": {
+    "message": "TypeError: fetch failed",
+    "details": "TypeError: fetch failed\n\nCaused by: Error: getaddrinfo ENOTFOUND placeholder.supabase.co (ENOTFOUND)\nError: getaddrinfo ENOTFOUND placeholder.supabase.co\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:120:26)",
+    "hint": "",
+    "code": ""
+  }
+}
