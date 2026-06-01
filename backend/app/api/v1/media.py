@@ -3,8 +3,7 @@ from pydantic import BaseModel, HttpUrl
 from typing import Optional, List
 from datetime import datetime
 
-from supabase_wrapper import create_client, Client
-from postgrest.exceptions import APIError
+from supabase_wrapper import create_client, Client, APIError
 
 from app.core.config import settings
 

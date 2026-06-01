@@ -7,5 +7,4 @@ httpx
 pytest
 pytest-asyncio
 anyio[trio]
-supabase
 slowapi
