@@ -16,10 +16,10 @@ app = FastAPI(
     debug=settings.DEBUG,
 )
 
-# CORS 미들웨어
+# CORS 미들웨어 (다이내믹 배포 오리진 및 크로스 도메인 연동 지원)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origins_list,
+    allow_origin_regex=r"https?://.*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

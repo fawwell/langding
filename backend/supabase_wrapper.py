@@ -18,6 +18,7 @@ if not is_real_supabase:
     # --- Mock Supabase SDK for local development ---
     import uuid
     from datetime import datetime
+    import json
 
     class MockResponse:
         def __init__(self, data):
@@ -69,6 +70,7 @@ if not is_real_supabase:
                     "created_at": datetime.utcnow().isoformat()
                 }
                 self.client.data_store[self.table_name].append(item)
+                self.client.save_to_file()
                 return MockResponse([item])
 
             # 2. UPDATE 처리
@@ -83,6 +85,8 @@ if not is_real_supabase:
                     if match:
                         item.update(self._update_data)
                         updated_items.append(item)
+                if updated_items:
+                    self.client.save_to_file()
                 return MockResponse(updated_items)
 
             # 3. DELETE 처리
@@ -100,6 +104,8 @@ if not is_real_supabase:
                     else:
                         remained.append(item)
                 self.client.data_store[self.table_name] = remained
+                if deleted:
+                    self.client.save_to_file()
                 return MockResponse(deleted)
 
             # 4. SELECT (조회) 처리
@@ -122,62 +128,29 @@ if not is_real_supabase:
 
     class Client:
         def __init__(self):
+            self.file_path = os.path.join(os.path.dirname(__file__), "mock_db.json")
             self.data_store = {
                 "centers": [],
                 "coaches": [],
                 "media_reports": [],
                 "client_reviews": []
             }
-            self.data_store["centers"] = [
-                {
-                    "id": "center-ydp",
-                    "name": "피지컬케어 영등포 센터",
-                    "tagline": "영등포 정밀 체형분석 센터",
-                    "philosophy": "최첨단 장비를 활용한 정밀 분석",
-                    "image_url": "/images/physical-care/001.jpg",
-                    "experts": ["김은주 교육이사", "박서준 수석 코치"],
-                    "map_url": "",
-                    "reserve_url": "",
-                    "address": "서울특별시 영등포구 도신로 232",
-                    "created_at": "2026-05-01T00:00:00Z"
-                },
-                {
-                    "id": "center-yyd",
-                    "name": "피지컬케어 여의도 센터",
-                    "tagline": "여의도 오피스 케어 지점",
-                    "philosophy": "직장인 맞춤형 솔루션",
-                    "image_url": "",
-                    "experts": ["이민우 체형교정 전문가", "최윤아 책임 테라피스트"],
-                    "map_url": "",
-                    "reserve_url": "",
-                    "address": "서울특별시 영등포구 국제금융로 10",
-                    "created_at": "2026-05-02T00:00:00Z"
-                },
-                {
-                    "id": "center-gn",
-                    "name": "피지컬케어 강남 센터",
-                    "tagline": "강남 프리미엄 프라이빗 센터",
-                    "philosophy": "1:1 VIP 케어",
-                    "image_url": "",
-                    "experts": ["정재희 재활의학 전문의", "한지환 시니어 코치"],
-                    "map_url": "",
-                    "reserve_url": "",
-                    "address": "서울특별시 강남구 강남대로 364",
-                    "created_at": "2026-05-03T00:00:00Z"
-                },
-                {
-                    "id": "center-sc",
-                    "name": "피지컬케어 서초 센터",
-                    "tagline": "서초 전문 스포츠 재활 센터",
-                    "philosophy": "스포츠 과학 기반 케어",
-                    "image_url": "",
-                    "experts": ["송민혁 스포츠 사이언스 석사", "백지원 메디컬 트레이너"],
-                    "map_url": "",
-                    "reserve_url": "",
-                    "address": "서울특별시 서초구 서초대로 314",
-                    "created_at": "2026-05-04T00:00:00Z"
-                }
-            ]
+            self.load_from_file()
+
+        def load_from_file(self):
+            if os.path.exists(self.file_path):
+                try:
+                    with open(self.file_path, "r", encoding="utf-8") as f:
+                        self.data_store = json.load(f)
+                except Exception as e:
+                    print(f"Error loading mock_db.json: {str(e)}")
+
+        def save_to_file(self):
+            try:
+                with open(self.file_path, "w", encoding="utf-8") as f:
+                    json.dump(self.data_store, f, indent=2, ensure_ascii=False)
+            except Exception as e:
+                print(f"Error saving to mock_db.json: {str(e)}")
 
         def table(self, name):
             return MockQuery(name, self)
