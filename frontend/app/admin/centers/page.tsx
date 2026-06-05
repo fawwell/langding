@@ -19,6 +19,7 @@ interface Center {
 export default function AdminCentersPage() {
   const [centerList, setCenterList] = useState<Center[]>([]);
   const [loading, setLoading] = useState(false);
+  const [infoLoading, setInfoLoading] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [formData, setFormData] = useState({ 
     name: '', 
@@ -34,11 +35,44 @@ export default function AdminCentersPage() {
 
   const fetchCenters = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/centers/`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/centers/?t=${Date.now()}`, {
+        cache: 'no-store'
+      });
       const json = await res.json();
       if (json.success) setCenterList(json.data);
     } catch (e) {
       console.error(e);
+    }
+  };
+
+  const handleCrawl = async () => {
+    if (!formData.map_url) {
+      alert('네이버 지도 URL을 입력해주세요.');
+      return;
+    }
+    setInfoLoading(true);
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/centers/crawl`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: formData.map_url }),
+      });
+      const json = await res.json();
+      if (json.success && json.data) {
+        setFormData(prev => ({
+          ...prev,
+          name: json.data.name || prev.name,
+          address: json.data.address || prev.address,
+          map_url: json.data.map_url || prev.map_url,
+        }));
+        alert('네이버 지도 정보를 성공적으로 불러왔습니다!');
+      } else {
+        alert(json.detail || '지도 정보를 가져오는데 실패했습니다.');
+      }
+    } catch (e: any) {
+      alert(`지도 정보를 가져오는 중 오류가 발생했습니다: ${e.message}`);
+    } finally {
+      setInfoLoading(false);
     }
   };
 
@@ -215,13 +249,33 @@ export default function AdminCentersPage() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
             <div>
               <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>네이버 지도 URL</label>
-              <input 
-                type="url" 
-                placeholder="https://map.naver.com/..."
-                style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ccc' }} 
-                value={formData.map_url}
-                onChange={(e) => setFormData({...formData, map_url: e.target.value})}
-              />
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <input 
+                  type="url" 
+                  placeholder="https://map.naver.com/... 또는 naver.me/..."
+                  style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #ccc' }} 
+                  value={formData.map_url}
+                  onChange={(e) => setFormData({...formData, map_url: e.target.value})}
+                />
+                <button 
+                  type="button"
+                  disabled={infoLoading || !formData.map_url}
+                  onClick={handleCrawl}
+                  style={{ 
+                    padding: '10px 15px', 
+                    background: formData.map_url ? '#2b8a3e' : '#ccc', 
+                    color: 'white', 
+                    border: 'none', 
+                    borderRadius: '8px', 
+                    cursor: formData.map_url ? 'pointer' : 'not-allowed', 
+                    fontWeight: 'bold',
+                    fontSize: '13px',
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  {infoLoading ? '불러오는 중...' : '정보 불러오기 ⚡'}
+                </button>
+              </div>
             </div>
             <div>
               <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>네이버 예약 URL</label>

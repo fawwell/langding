@@ -874,6 +874,57 @@ header ul li a:hover, header ul li a.active-nav {
 .reviewer-info { font-weight: bold; font-size: 14px; color: #666; border-top: 1px solid #ddd; padding-top: 15px; display: flex; align-items: center; gap: 10px; }
 .reviewer-avatar { width: 36px; height: 36px; background-color: #ccc; border-radius: 50%; }
 .reviewSwiper .swiper-pagination { position: relative !important; margin-top: 30px !important; bottom: auto !important; }
+
+/* Swiper 공통 프리미엄 스타일링 (FaWW 테마) */
+.swiper-pagination-bullet {
+    background: #bbb !important;
+    opacity: 0.6 !important;
+    width: 8px !important;
+    height: 8px !important;
+    margin: 0 5px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.swiper-pagination-bullet-active {
+    background: #2b8a3e !important;
+    opacity: 1 !important;
+    width: 20px !important;
+    border-radius: 4px !important;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+    width: 44px !important;
+    height: 44px !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(0, 0, 0, 0.05) !important;
+    border-radius: 50% !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    color: #2b8a3e !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.swiper-button-prev::after,
+.swiper-button-next::after {
+    font-size: 16px !important;
+    font-weight: 900 !important;
+}
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+    background: #2b8a3e !important;
+    color: #fff !important;
+    box-shadow: 0 6px 18px rgba(43, 138, 62, 0.3) !important;
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .swiper-button-prev,
+    .swiper-button-next {
+        display: none !important;
+    }
+    .mediaSwiper, .reviewSwiper {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+}
 .partners { 
     height: 600px; 
     background-color: #fff; 
@@ -1614,7 +1665,7 @@ header ul li a:hover, header ul li a.active-nav {
     .agenda-grid, .gateway-grid, .card-grid, 
     .expert-grid, .service-grid,
     .school-process-grid, .school-feature-grid, 
-    .media-grid, .product-grid, .academy-grid,
+    .product-grid, .academy-grid,
     .info-sub-block-grid, .grid-vertical {
         display: flex !important;
         flex-direction: row !important;

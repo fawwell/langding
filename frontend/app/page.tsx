@@ -504,6 +504,26 @@ export default function Home() {
                         breakpoints: { 640: { slidesPerView: 3, spaceBetween: 20 }, 1024: { slidesPerView: 5, spaceBetween: 30 } }
                     });
                 }
+
+                // 미디어 슬라이더 연동 (8개씩 그리드로 페이징)
+                if ((window as any).mediaSwiperInstance) {
+                    (window as any).mediaSwiperInstance.destroy(true, true);
+                }
+
+                (window as any).mediaSwiperInstance = new (window as any).Swiper(".mediaSwiper", {
+                    slidesPerView: 1, 
+                    spaceBetween: 30, 
+                    observer: true, 
+                    observeParents: true,
+                    pagination: {
+                        el: ".media-swiper-pagination",
+                        clickable: true
+                    },
+                    navigation: {
+                        nextEl: ".media-swiper-button-next",
+                        prevEl: ".media-swiper-button-prev"
+                    }
+                });
             }
         };
 
@@ -518,7 +538,7 @@ export default function Home() {
             const timer = setTimeout(initSwipers, 100);
             return () => clearTimeout(timer);
         }
-    }, [activePage, reviewsData, reviewFilter]); // 💡 감지 대상에 데이터와 필터 추가!
+    }, [activePage, reviewsData, reviewFilter, mediaReports]); // 💡 감지 대상에 mediaReports 추가!
 
     // 브라우저 뒤로가기 대응을 위한 History API 연동
     useEffect(() => {
