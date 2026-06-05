@@ -11,6 +11,8 @@ interface Center {
   experts: string[];
   map_url: string;
   reserve_url: string;
+  address: string;
+  sort_order: number;
   created_at: string;
 }
 
@@ -25,7 +27,9 @@ export default function AdminCentersPage() {
     image_url: '',
     experts_str: '',
     map_url: '',
-    reserve_url: ''
+    reserve_url: '',
+    address: '',
+    sort_order: '0'
   });
 
   const fetchCenters = async () => {
@@ -50,7 +54,9 @@ export default function AdminCentersPage() {
       image_url: '',
       experts_str: '',
       map_url: '',
-      reserve_url: ''
+      reserve_url: '',
+      address: '',
+      sort_order: '0'
     });
     setEditId(null);
   };
@@ -78,7 +84,9 @@ export default function AdminCentersPage() {
             image_url: formData.image_url,
             experts: experts,
             map_url: formData.map_url,
-            reserve_url: formData.reserve_url
+            reserve_url: formData.reserve_url,
+            address: formData.address,
+            sort_order: parseInt(formData.sort_order) || 0
         }),
       });
       if (res.ok) {
@@ -104,7 +112,9 @@ export default function AdminCentersPage() {
       image_url: center.image_url || '',
       experts_str: center.experts ? center.experts.join(', ') : '',
       map_url: center.map_url || '',
-      reserve_url: center.reserve_url || ''
+      reserve_url: center.reserve_url || '',
+      address: center.address || '',
+      sort_order: String(center.sort_order ?? 0)
     });
     setEditId(center.id);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -167,6 +177,18 @@ export default function AdminCentersPage() {
             />
           </div>
 
+          <div>
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>센터 주소</label>
+            <input 
+              type="text" 
+              required
+              placeholder="예: 서울특별시 영등포구 도신로 232"
+              style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ccc' }} 
+              value={formData.address}
+              onChange={(e) => setFormData({...formData, address: e.target.value})}
+            />
+          </div>
+
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
             <div>
               <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>대표 이미지 URL</label>
@@ -213,6 +235,19 @@ export default function AdminCentersPage() {
             </div>
           </div>
 
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+            <div>
+              <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>정렬 순서 (숫자가 낮을수록 앞선 순서로 배치)</label>
+              <input 
+                type="number" 
+                placeholder="예: 1, 2, 3"
+                style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ccc' }} 
+                value={formData.sort_order}
+                onChange={(e) => setFormData({...formData, sort_order: e.target.value})}
+              />
+            </div>
+          </div>
+
           <div style={{ display: 'flex', gap: '15px', marginTop: '10px' }}>
             <button type="submit" disabled={loading} style={{ flex: 1, padding: '15px', background: '#2b8a3e', color: 'white', border: 'none', borderRadius: '10px', cursor: 'pointer', fontWeight: 'bold', fontSize: '16px' }}>
               {loading ? '처리 중...' : (editId ? '지점 정보 수정 완료' : '신규 지점 등록하기')}
@@ -243,8 +278,12 @@ export default function AdminCentersPage() {
                     )}
                   </div>
                   <div>
-                    <div style={{ fontSize: '13px', color: '#2b8a3e', fontWeight: '800', marginBottom: '5px' }}>{center.tagline}</div>
+                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '5px' }}>
+                      <span style={{ fontSize: '13px', color: '#2b8a3e', fontWeight: '800' }}>{center.tagline}</span>
+                      <span style={{ fontSize: '11px', background: '#eef6f0', color: '#2b8a3e', padding: '2px 8px', borderRadius: '4px', fontWeight: 'bold' }}>순서: {center.sort_order ?? 0}</span>
+                    </div>
                     <h3 style={{ margin: '0 0 8px 0', fontSize: '20px' }}>{center.name}</h3>
+                    <div style={{ fontSize: '13px', color: '#444', marginBottom: '8px', fontWeight: 'bold' }}>📍 {center.address || '주소 미등록'}</div>
                     <div style={{ fontSize: '14px', color: '#666', lineHeight: '1.4', maxWidth: '500px' }}>{center.philosophy}</div>
                     <div style={{ marginTop: '10px', display: 'flex', gap: '5px' }}>
                         {center.experts && center.experts.map((exp, i) => (

@@ -15,6 +15,7 @@ interface MediaReport {
 export default function AdminMediaPage() {
   const [mediaList, setMediaList] = useState<MediaReport[]>([]);
   const [loading, setLoading] = useState(false);
+  const [infoLoading, setInfoLoading] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [formData, setFormData] = useState({ 
     title: '', 
@@ -26,7 +27,9 @@ export default function AdminMediaPage() {
 
   const fetchMedia = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/media/`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/media/?t=${Date.now()}`, {
+        cache: 'no-store'
+      });
       const json = await res.json();
       if (json.success) setMediaList(json.data);
     } catch (e) {
@@ -47,6 +50,38 @@ export default function AdminMediaPage() {
       published_at: new Date().toISOString().split('T')[0]
     });
     setEditId(null);
+  };
+
+  const handleCrawl = async () => {
+    if (!formData.url) {
+      alert('기사 링크(URL)를 입력해주세요.');
+      return;
+    }
+    setInfoLoading(true);
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/media/crawl`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: formData.url }),
+      });
+      const json = await res.json();
+      if (json.success && json.data) {
+        setFormData(prev => ({
+          ...prev,
+          title: json.data.title || prev.title,
+          thumbnail_url: json.data.thumbnail_url || prev.thumbnail_url,
+          content: json.data.content || prev.content,
+          published_at: json.data.published_at || prev.published_at,
+        }));
+        alert('기사 정보를 성공적으로 불러왔습니다!');
+      } else {
+        alert(json.detail || '기사 정보를 가져오는데 실패했습니다.');
+      }
+    } catch (e) {
+      alert('기사 정보를 가져오는 중 오류가 발생했습니다.');
+    } finally {
+      setInfoLoading(false);
+    }
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -146,12 +181,32 @@ export default function AdminMediaPage() {
           </div>
           <div>
             <label style={{ display: 'block', marginBottom: '5px' }}>외부 기사 링크(URL, 선택)</label>
-            <input 
-              type="url" 
-              style={{ width: '100%', padding: '8px' }} 
-              value={formData.url}
-              onChange={(e) => setFormData({...formData, url: e.target.value})}
-            />
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <input 
+                type="url" 
+                style={{ flex: 1, padding: '8px' }} 
+                value={formData.url}
+                onChange={(e) => setFormData({...formData, url: e.target.value})}
+                placeholder="예: https://news.naver.com/..."
+              />
+              <button 
+                type="button"
+                disabled={infoLoading || !formData.url}
+                onClick={handleCrawl}
+                style={{ 
+                  padding: '8px 15px', 
+                  background: formData.url ? '#2b8a3e' : '#ccc', 
+                  color: 'white', 
+                  border: 'none', 
+                  borderRadius: '4px', 
+                  cursor: formData.url ? 'pointer' : 'not-allowed', 
+                  fontWeight: 'bold',
+                  fontSize: '13px'
+                }}
+              >
+                {infoLoading ? '불러오는 중...' : '기사 정보 불러오기 ⚡'}
+              </button>
+            </div>
           </div>
           <div>
             <label style={{ display: 'block', marginBottom: '5px' }}>썸네일 이미지(사진) 주소(URL)</label>

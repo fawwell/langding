@@ -6,7 +6,10 @@
       "tagline": "영등포 정밀 체형분석 센터",
       "philosophy": "최첨단 장비를 활용한 정밀 분석",
       "image_url": "/images/physical-care/001.jpg",
-      "experts": ["김은주 원장", "박서준 수석 코치"],
+      "experts": [
+        "김은주 원장",
+        "박서준 수석 코치"
+      ],
       "map_url": "",
       "reserve_url": "",
       "address": "서울특별시 영등포구 도신로 232",
@@ -18,7 +21,10 @@
       "tagline": "여의도 오피스 케어 지점",
       "philosophy": "직장인 맞춤형 솔루션",
       "image_url": "",
-      "experts": ["이민우 체형교정 전문가", "최윤아 책임 테라피스트"],
+      "experts": [
+        "이민우 체형교정 전문가",
+        "최윤아 책임 테라피스트"
+      ],
       "map_url": "",
       "reserve_url": "",
       "address": "서울특별시 영등포구 국제금융로 10",
@@ -30,7 +36,10 @@
       "tagline": "강남 프리미엄 프라이빗 센터",
       "philosophy": "1:1 VIP 케어",
       "image_url": "",
-      "experts": ["정재희 재활의학 전문의", "한지환 시니어 코치"],
+      "experts": [
+        "정재희 재활의학 전문의",
+        "한지환 시니어 코치"
+      ],
       "map_url": "",
       "reserve_url": "",
       "address": "서울특별시 강남구 강남대로 364",
@@ -42,7 +51,10 @@
       "tagline": "서초 전문 스포츠 재활 센터",
       "philosophy": "스포츠 과학 기반 케어",
       "image_url": "",
-      "experts": ["송민혁 스포츠 사이언스 석사", "백지원 메디컬 트레이너"],
+      "experts": [
+        "송민혁 스포츠 사이언스 석사",
+        "백지원 메디컬 트레이너"
+      ],
       "map_url": "",
       "reserve_url": "",
       "address": "서울특별시 서초구 서초대로 314",
@@ -52,5 +64,29 @@
   "coaches": [],
   "media_reports": [],
   "client_reviews": [],
-  "proposals": []
+  "proposals": [
+    {
+      "id": "b811f07f-9161-41fa-ac5d-8e0aeb886d76",
+      "company": "test_company",
+      "manager": "test_manager",
+      "phone": "010-0000-0000",
+      "email": "test@test.com",
+      "scale": "50인 미만",
+      "inquiry": "test",
+      "title": "test_company - test_manager",
+      "modules": [
+        "test module"
+      ],
+      "parts": {
+        "part1": {
+          "selected": true,
+          "sub_modules": [
+            "test module"
+          ]
+        }
+      },
+      "status": "pending",
+      "created_at": "2026-06-01T02:16:52.564313"
+    }
+  ]
 }

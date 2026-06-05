@@ -19,7 +19,7 @@ const ReviewSection = ({ reviewFilter, setReviewFilter, reviewsData }: ReviewSec
                     <button className={`review-filter-btn ${reviewFilter === 'school' ? 'active' : ''}`} onClick={() => setReviewFilter('school')}>🏫 학교/보건교사</button>
                 </div>
 
-                <div className="swiper reviewSwiper" key={`${reviewsData.length}-${reviewFilter}`} style={{ marginTop: '40px', padding: '20px 0' }}>
+                <div className="swiper reviewSwiper" key={`${reviewsData.length}-${reviewFilter}`} style={{ marginTop: '40px', padding: '20px 50px', position: 'relative' }}>
                     <div className="swiper-wrapper" id="review-wrapper">
                         {reviewsData.length > 0 ? (
                             reviewsData
@@ -42,7 +42,9 @@ const ReviewSection = ({ reviewFilter, setReviewFilter, reviewsData }: ReviewSec
                             </div>
                         )}
                     </div>
-                    <div className="swiper-pagination"></div>
+                    {/* 좌우 네비게이션 화살표 단추 */}
+                    <div className="swiper-button-prev" style={{ color: '#2b8a3e', left: '10px' }}></div>
+                    <div className="swiper-button-next" style={{ color: '#2b8a3e', right: '10px' }}></div>
                 </div>
             </div>
         </section>

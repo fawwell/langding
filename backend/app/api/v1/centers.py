@@ -18,6 +18,8 @@ class CenterCreate(BaseModel):
     experts: List[str] = []
     map_url: str = ""
     reserve_url: str = ""
+    address: str = ""
+    sort_order: int = 0
 
 def get_supabase_admin() -> Client:
     return create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
@@ -34,8 +36,10 @@ async def create_center(data: CenterCreate):
         "image_url": data.image_url,
         "experts": data.experts,
         "map_url": data.map_url,
-        "reserve_url": data.reserve_url
-    }
+        "reserve_url": data.reserve_url,
+        "address": data.address,
+        "sort_order": data.sort_order
+      }
     
     try:
         result = supabase.table("centers").insert(insert_data).execute()
@@ -50,7 +54,8 @@ async def list_centers():
     supabase = get_supabase_admin()
     
     try:
-        result = supabase.table("centers").select("*").order("created_at", desc=False).execute()
+        # sort_order 오름차순(낮은 번호가 먼저)으로 정렬하고, 같으면 created_at 오름차순 정렬
+        result = supabase.table("centers").select("*").order("sort_order", desc=False).order("created_at", desc=False).execute()
         return {"success": True, "data": result.data}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -67,7 +72,9 @@ async def update_center(center_id: str, data: CenterCreate):
         "image_url": data.image_url,
         "experts": data.experts,
         "map_url": data.map_url,
-        "reserve_url": data.reserve_url
+        "reserve_url": data.reserve_url,
+        "address": data.address,
+        "sort_order": data.sort_order
     }
     
     try:
