@@ -101,7 +101,7 @@ const MallPage = ({ activePage, openModal }: MallPageProps) => {
                         </div>
                     </div>
                     <div>
-                        <p style={{ margin: '0 0 5px 0' }}>주식회사 파우(FaWW) | 대표이사: 김은주 | 사업자등록번호: 107-88-12047</p>
+                        <p style={{ margin: '0 0 5px 0' }}>주식회사 파우(FaWW) | 대표이사: 김은주 | 사업자등록번호: 107-88-12047 | 통신판매업신고번호: 제 2014-서울영등포-1105호</p>
                         <p style={{ margin: '0 0 5px 0' }}>주소: 서울특별시 영등포구 도신로 143, 대원빌딩 301호 | 고객센터: 02-6482-9003</p>
                         <p style={{ margin: '0' }}>이메일: contact@faww.co.kr</p>
                     </div>
