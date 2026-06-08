@@ -3,6 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useUI } from '@/context/UIContext';
+import Footer from '@/components/layout/Footer';
 
 const SchoolPage = () => {
     const router = useRouter();
@@ -114,6 +115,7 @@ const SchoolPage = () => {
                     <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>학교 맞춤 상담 및 가이드 신청</button>
                 </div>
             </section>
+            <Footer />
         </main>
     );
 };

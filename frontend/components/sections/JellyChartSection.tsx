@@ -7,6 +7,21 @@ interface JellyChartSectionProps {
 }
 
 const JellyChartSection = ({ reviewsData }: JellyChartSectionProps) => {
+    React.useEffect(() => {
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        const cards = document.querySelectorAll('.stat-floating-card');
+        cards.forEach(card => revealObserver.observe(card));
+
+        return () => revealObserver.disconnect();
+    }, [reviewsData]);
+
     return (
         <section className="jelly-chart-section reveal" style={{ padding: '40px 0 60px', backgroundColor: '#f8f9fa', borderTop: '1px solid #eee', overflow: 'visible' }}>
             <div className="container text-center" style={{ overflow: 'visible' }}>

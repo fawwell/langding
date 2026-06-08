@@ -3,6 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useUI } from '@/context/UIContext';
+import Footer from '@/components/layout/Footer';
 
 const EAPPage = () => {
     const router = useRouter();
@@ -244,6 +245,7 @@ const EAPPage = () => {
                     <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>무료 상담 및 가이드 신청</button>
                 </div>
             </section>
+            <Footer />
         </main>
     );
 };

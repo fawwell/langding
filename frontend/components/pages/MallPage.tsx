@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useUI } from '@/context/UIContext';
+import Footer from '@/components/layout/Footer';
 
 const MallPage = () => {
     const { openModal } = useUI();
@@ -88,6 +89,7 @@ const MallPage = () => {
                     <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>도입 문의 및 견적 신청</button>
                 </div>
             </section>
+            <Footer />
         </main>
     );
 };

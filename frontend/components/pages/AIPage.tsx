@@ -3,6 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useUI } from '@/context/UIContext';
+import Footer from '@/components/layout/Footer';
 
 const AIPage = () => {
     const router = useRouter();
@@ -37,7 +38,7 @@ const AIPage = () => {
                                  <h3 className="panel-title">기업용 DX</h3>
                                  <p className="panel-desc">임직원 근골격계 질환 예방 및 업무 효율 증대를 위한 솔루션입니다.</p>
                                  <span className="panel-btn">자세히 보기</span>
-                            </div>
+                             </div>
                         </div>
 
                         {/* 학교용 패널 */}
@@ -74,6 +75,7 @@ const AIPage = () => {
                     <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>통합 가이드 신청하기</button>
                 </div>
             </section>
+            <Footer />
         </main>
     );
 };

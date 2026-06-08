@@ -3,6 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useUI } from '@/context/UIContext';
+import Footer from '@/components/layout/Footer';
 
 const PhysicalPage = () => {
     const router = useRouter();
@@ -200,6 +201,7 @@ const PhysicalPage = () => {
                     <button className="cta-btn-white" onClick={openKakaoChat}>실시간 프로그램 상담하기</button>
                 </div>
             </section>
+            <Footer />
         </main>
     );
 };

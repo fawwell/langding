@@ -15,6 +15,7 @@ import ReviewSection from '@/components/sections/ReviewSection';
 import MapSection from '@/components/sections/MapSection';
 import PartnerSection from '@/components/sections/PartnerSection';
 import MediaSection from '@/components/sections/MediaSection';
+import Footer from '@/components/layout/Footer';
 
 export default function Home() {
     const [reviewFilter, setReviewFilter] = useState('all');
@@ -194,6 +195,7 @@ export default function Home() {
             <MapSection />
             <PartnerSection />
             <MediaSection mediaReports={mediaReports} />
+            <Footer style={{ scrollSnapAlign: 'end' }} />
         </main>
     );
 }
