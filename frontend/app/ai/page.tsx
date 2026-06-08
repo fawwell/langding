@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     siteName: 'FaWW(파우)',
     title: 'AI 체형분석 솔루션 | FaWW(파우)',
     description: '정밀 3D 스캐닝과 스마트 AI로 임직원 근골격계 위험도 및 학생 자세 불균형을 과학적으로 분석.',
-    images: [{ url: 'https://faww.co.kr/images/og-image.png', width: 1200, height: 630, alt: 'FaWW AI 체형분석 솔루션' }],
+    images: [{ url: 'https://faww.co.kr/images/%ED%8C%8C%EC%9A%B0%EB%AF%B8.png', width: 1200, height: 630, alt: 'FaWW AI 체형분석 솔루션' }],
   },
   alternates: {
     canonical: 'https://faww.co.kr/ai',

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     siteName: 'FaWW(파우)',
     title: '학교용 AI 학생 체형분석 솔루션 | FaWW(파우)',
     description: '성장기 학생들의 올바른 자세를 지원하는 스마트 AI 단체 체형검진 프로그램.',
-    images: [{ url: 'https://faww.co.kr/images/og-image.png', width: 1200, height: 630, alt: 'FaWW 학교용 학생 체형분석' }],
+    images: [{ url: 'https://faww.co.kr/images/%ED%8C%8C%EC%9A%B0%EB%AF%B8.png', width: 1200, height: 630, alt: 'FaWW 학교용 학생 체형분석' }],
   },
   alternates: {
     canonical: 'https://faww.co.kr/school',

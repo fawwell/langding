@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     description: '거북목, 허리 통증 솔루션! 대기업·스타트업이 선택한 찾아가는 사내 임직원 건강 복지 프로그램, 데이터 기반 피지컬케어 No.1 파우.',
     images: [
       {
-        url: 'https://faww.co.kr/images/og-image.png',
+        url: 'https://faww.co.kr/images/%ED%8C%8C%EC%9A%B0%EB%AF%B8.png',
         width: 1200,
         height: 630,
         alt: 'FaWW 파우 - AI 체형분석 기반 임직원 피지컬케어',
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'FaWW(파우) | AI 체형분석 기반 임직원 근골격계 피지컬케어 EAP',
     description: '거북목, 허리 통증 솔루션! 대기업·스타트업이 선택한 찾아가는 사내 임직원 건강 복지 프로그램.',
-    images: ['https://faww.co.kr/images/og-image.png'],
+    images: ['https://faww.co.kr/images/%ED%8C%8C%EC%9A%B0%EB%AF%B8.png'],
   },
   alternates: {
     canonical: 'https://faww.co.kr',
