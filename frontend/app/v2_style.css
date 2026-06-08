@@ -601,7 +601,11 @@ header ul li a:hover, header ul li a.active-nav {
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 0 auto 40px auto;
+}
+
+.media-swiper-pagination {
+    bottom: 15px !important;
 }
 @media (max-width: 1024px) {
     .media-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1448,7 +1452,7 @@ header ul li a:hover, header ul li a.active-nav {
 }
 
 .magnify-section {
-    padding: 80px 0 120px 0;
+    padding: 80px 0 100px 0;
     background-color: #0b0c10;
     position: relative;
     overflow: hidden; /* 영역 밖으로 나가는 디자인 차단 */
@@ -1482,7 +1486,7 @@ header ul li a:hover, header ul li a.active-nav {
 .risk-reveal-wrapper.has-reveal:hover .risk-type-card { transform: rotateY(180deg) scale(1.05); }
 
 .magnify-section .container { position: relative; z-index: 1; }
-.magnify-section .section-kicker { background: rgba(0, 255, 255, 0.05); color: #0ff; border: 1px solid rgba(0, 255, 255, 0.2); box-shadow: 0 0 10px rgba(0,255,255,0.1), inset 0 0 5px rgba(0,255,255,0.05); text-shadow: none; font-weight: 500;}
+.magnify-section .section-kicker { background: rgba(0, 255, 255, 0.05); color: #0ff; border: 1px solid rgba(0, 255, 255, 0.2); box-shadow: 0 0 10px rgba(0,255,255,0.1), inset 0 0 5px rgba(0,255,255,0.05); text-shadow: none; font-weight: 500; margin-top: 20px;}
 .magnify-section .section-title { color: #f8f9fa; text-shadow: 1px 1px 0px rgba(255, 0, 255, 0.5), -1px -1px 0px rgba(0, 255, 255, 0.5), 0 0 15px rgba(0, 255, 255, 0.2); letter-spacing: -0.5px; }
 .magnify-section .section-desc { text-wrap: balance !important; text-wrap: pretty !important; letter-spacing: -0.5px; color: #a9b2c3; }
 

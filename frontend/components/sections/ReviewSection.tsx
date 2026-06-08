@@ -43,8 +43,8 @@ const ReviewSection = ({ reviewFilter, setReviewFilter, reviewsData }: ReviewSec
                         )}
                     </div>
                     {/* 좌우 네비게이션 화살표 단추 */}
-                    <div className="swiper-button-prev" style={{ color: '#2b8a3e', left: '10px' }}></div>
-                    <div className="swiper-button-next" style={{ color: '#2b8a3e', right: '10px' }}></div>
+                    <div className="swiper-button-prev review-swiper-button-prev" style={{ color: '#2b8a3e', left: '10px' }}></div>
+                    <div className="swiper-button-next review-swiper-button-next" style={{ color: '#2b8a3e', right: '10px' }}></div>
                 </div>
             </div>
         </section>

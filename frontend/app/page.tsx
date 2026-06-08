@@ -137,8 +137,8 @@ export default function Home() {
                     observer: true, 
                     observeParents: true,
                     navigation: {
-                        nextEl: ".swiper-button-next",
-                        prevEl: ".swiper-button-prev"
+                        nextEl: ".review-swiper-button-next",
+                        prevEl: ".review-swiper-button-prev"
                     },
                     breakpoints: { 
                         768: { slidesPerView: 2, spaceBetween: 20 }, 
