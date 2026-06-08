@@ -45,18 +45,155 @@ const EAPPage = () => {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
             />
 
+            <style dangerouslySetInnerHTML={{ __html: `
+                .keyword-badge-pill {
+                    font-size: 13px;
+                    padding: 6px 14px;
+                    border-radius: 30px;
+                    background: rgba(255, 255, 255, 0.05);
+                    color: #bbb;
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    font-weight: 500;
+                    letter-spacing: -0.3px;
+                    display: inline-block;
+                    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+                    cursor: default;
+                }
+                .keyword-badge-pill:hover {
+                    background: rgba(43, 138, 62, 0.15) !important;
+                    border-color: #2b8a3e !important;
+                    color: #2b8a3e !important;
+                    transform: translateY(-2px);
+                }
+                .stat-card-premium {
+                    background: #ffffff;
+                    padding: 40px 30px;
+                    border-radius: 16px;
+                    border: 1px solid #f1f3f5;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    text-align: center;
+                }
+                .stat-card-premium:hover {
+                    transform: translateY(-6px);
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+                    border-color: rgba(43, 138, 62, 0.2);
+                }
+                .partner-card-premium {
+                    background: #ffffff;
+                    padding: 30px 25px;
+                    border-radius: 12px;
+                    border: 1px solid #eef0f2;
+                    box-shadow: 0 4px 15px rgba(0,0,0,0.01);
+                    transition: all 0.3s ease;
+                }
+                .partner-card-premium:hover {
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+                    border-color: rgba(43, 138, 62, 0.3);
+                }
+                .partner-text-bullet {
+                    color: #444;
+                    font-size: 14px;
+                    line-height: 2.1;
+                    margin: 0;
+                    padding: 0;
+                    list-style: none;
+                    text-align: left;
+                    display: inline-block;
+                }
+                .partner-text-bullet li {
+                    position: relative;
+                    padding-left: 18px;
+                    margin-bottom: 8px;
+                    font-weight: 500;
+                    color: #495057;
+                }
+                .partner-text-bullet li::before {
+                    content: "•";
+                    color: #2b8a3e;
+                    font-weight: bold;
+                    position: absolute;
+                    left: 2px;
+                    top: 0;
+                    font-size: 16px;
+                }
+                #page-eap section {
+                    padding: 180px 0 !important;
+                }
+            ` }} />
+
             <section className="hero-brand hero-brand-sub hero-premium reveal">
                 <div className="container" style={{ position: 'relative', zIndex: 2 }}>
                     <div style={{ textAlign: 'left', marginBottom: '20px' }}><span className="back-btn" style={{ color: '#aaa', cursor: 'pointer', fontSize: '14px', border: '1px solid #555', padding: '8px 16px', borderRadius: '20px' }} onClick={() => router.push('/ai')}>← 타겟 선택으로 돌아가기</span></div>
 
                     <div className="hero-subtitle hero-el hero-el-1">FaWW EAP Solution</div>
                     <h1 className="hero-el hero-el-2"><span>건강이 함께하는 회사</span>,<br />기업복지의 원조는 <span>FaWW</span></h1>
-                    <p className="hero-el hero-el-3">
+                    
+                    <p className="hero-el hero-el-3" style={{ maxWidth: '750px', lineHeight: '1.7', margin: '0 auto 20px auto' }}>
                         <strong>AI 빅데이터 기반의 피지컬케어 솔루션</strong><br />
-                        임직원의 건강 증진 and 생산성 향상을 위한<br />맞춤형 복지 프로그램을 제안합니다
+                        임직원의 신체 불균형과 근골격계 위험도를 데이터로 정밀 측정하여<br />
+                        생산성을 향상하고 활력을 증진시키는 맞춤형 기업 복지 프로그램을 제공합니다.
                     </p>
-                    <div className="hero-buttons hero-el hero-el-4" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+
+                    <div className="hero-el hero-el-4" style={{ 
+                        display: 'flex', 
+                        gap: '8px 10px', 
+                        flexWrap: 'wrap', 
+                        justifyContent: 'center',
+                        marginTop: '15px', 
+                        marginBottom: '35px',
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                        maxWidth: '850px'
+                    }}>
+                        {[
+                            '#기업건강복지', '#임직원EAP', '#근골격계유해요인조사', '#사내출장통증관리',
+                            '#오피스스트레칭', '#거북목교정복지', '#직원번아웃케어', '#ESG경영복지지표'
+                        ].map((tag, idx) => (
+                            <span key={idx} className="keyword-badge-pill">
+                                {tag}
+                            </span>
+                        ))}
+                    </div>
+
+                    <div className="hero-buttons hero-el hero-el-5" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center', margin: '0 auto' }}>
                         <button className="btn-primary" onClick={() => openModal('modal-proposal')}>우리 회사 맞춤 제안서 받기</button>
+                    </div>
+                </div>
+            </section>
+
+            <section className="b2b-stats-section reveal" style={{ backgroundColor: '#f8f9fa', borderTop: '1px solid #eef0f2', borderBottom: '1px solid #eef0f2' }}>
+                <div className="container text-center">
+                    <div className="school-header-wrap" style={{ textAlign: 'center', marginBottom: '50px' }}>
+                        <span className="section-tag" style={{ color: '#2b8a3e' }}>PERFORMANCE METRICS</span>
+                        <h2 className="section-title reveal" style={{ color: '#111' }}>숫자로 증명하는 <span>압도적 신뢰</span></h2>
+                        <p className="section-desc" style={{ color: '#666' }}>수많은 대기업과 공공기관이 FaWW를 선택한 이유입니다.</p>
+                    </div>
+                    
+                    <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '35px', maxWidth: '1000px', margin: '0 auto' }}>
+                        <div className="stat-card-premium reveal">
+                            <h3 style={{ fontSize: '16px', color: '#495057', marginBottom: '15px', fontWeight: '600', letterSpacing: '-0.3px' }}>임직원 프로그램 만족도</h3>
+                            <div style={{ fontSize: '56px', fontWeight: '900', color: '#2b8a3e', display: 'flex', alignItems: 'baseline', justifyContent: 'center', fontFamily: 'Outfit, sans-serif' }}>
+                                <span className="count-up" data-target="99">0</span>
+                                <span style={{ fontSize: '28px', marginLeft: '2px', fontWeight: '700' }}>%</span>
+                            </div>
+                            <p style={{ fontSize: '14px', color: '#868e96', marginTop: '15px', fontWeight: '500' }}>도입 기업 임직원 만족도 99% 달성</p>
+                        </div>
+                        <div className="stat-card-premium reveal delay-1">
+                            <h3 style={{ fontSize: '16px', color: '#495057', marginBottom: '15px', fontWeight: '600', letterSpacing: '-0.3px' }}>누적 관리 임직원</h3>
+                            <div style={{ fontSize: '56px', fontWeight: '900', color: '#2b8a3e', display: 'flex', alignItems: 'baseline', justifyContent: 'center', fontFamily: 'Outfit, sans-serif' }}>
+                                <span className="count-up" data-target="20000" data-format="true">0</span>
+                                <span style={{ fontSize: '28px', marginLeft: '2px', fontWeight: '700' }}>명+</span>
+                            </div>
+                            <p style={{ fontSize: '14px', color: '#868e96', marginTop: '15px', fontWeight: '500' }}>누적 관리 임직원 20,000명 이상</p>
+                        </div>
+                        <div className="stat-card-premium reveal delay-2">
+                            <h3 style={{ fontSize: '16px', color: '#495057', marginBottom: '15px', fontWeight: '600', letterSpacing: '-0.3px' }}>증빙 및 리포트</h3>
+                            <div style={{ fontSize: '20px', fontWeight: '800', color: '#2b8a3e', minHeight: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 10px', lineHeight: '1.5', letterSpacing: '-0.5px' }}>
+                                케어 후 통증 개선 및<br />업무 집중도 향상 지표 리포트 제공
+                            </div>
+                            <p style={{ fontSize: '14px', color: '#868e96', marginTop: '15px', fontWeight: '500' }}>인사평가 및 산업안전보건 증빙 가능</p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -66,7 +203,9 @@ const EAPPage = () => {
                     <div className="school-header-wrap" style={{ textAlign: 'center' }}>
                         <span className="section-tag">LEGAL COMPLIANCE</span>
                         <h2 className="section-title reveal">산업안전보건법 제39조,<br /><span>선택이 아닌 필수</span>입니다</h2>
-                        <p className="section-desc reveal">유해요인조사 미실시 시 발생하는 리스크, FaWW가 전문적으로 해결해 드립니다.</p>
+                        <p className="section-desc reveal">
+                            의무 사항인 <strong>#근골격계유해요인조사</strong> 미실시 시 발생하는 리스크, <strong>#임직원EAP</strong> 전문 기업 FaWW가 완벽히 해결해 드립니다.
+                        </p>
                     </div>
 
                     <div className="risk-info-grid">
@@ -124,7 +263,9 @@ const EAPPage = () => {
                     <div className="school-header-wrap" style={{ textAlign: 'center' }}>
                         <span className="section-tag reveal delay-1">CORE PROGRAMS</span>
                         <h2 className="section-title reveal delay-2">우리 기업 맞춤형 <span>FaWW 프로그램</span></h2>
-                        <p className="section-desc reveal delay-3">진단부터 사후 케어까지, 빈틈없는 4단계 프로세스로 운영됩니다.</p>
+                        <p className="section-desc reveal delay-3">
+                            체형 정밀 분석부터 <strong>#사내출장통증관리</strong>, <strong>#오피스스트레칭</strong>, <strong>#거북목교정복지</strong> 및 <strong>#직원번아웃케어</strong>까지 인사담당자와 임직원을 모두 만족시키는 프로그램입니다.
+                        </p>
                     </div>
                     
                     <div className="service-grid grid-2x2">
@@ -210,6 +351,69 @@ const EAPPage = () => {
                         💡 시설관리공단 등 공공기관의 실제 집행 모델 도입!<br />
                         지역 상권 상생 기여를 통한 ESG 경영 평가 점수 확보에 절대적으로 유리합니다.
                     </div>
+                </div>
+            </section>
+
+            <section className="b2b-partners-section reveal" style={{ backgroundColor: '#ffffff', borderTop: '1px solid #eef0f2' }}>
+                <div className="container">
+                    <div className="school-header-wrap" style={{ textAlign: 'center', marginBottom: '50px' }}>
+                        <span className="section-tag">TRUSTED BY PARTNERS</span>
+                        <h2 className="section-title reveal"><span>120개 이상의 기관/기업</span>이 검증한 솔루션</h2>
+                        <p className="section-desc" style={{ color: '#666' }}>공공기관부터 대기업, 스타트업까지 수많은 파트너사들이 파우(FaWW)와 함께하고 있습니다.</p>
+                    </div>
+
+                    <div className="partner-text-grid" style={{ 
+                        display: 'grid', 
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+                        gap: '30px', 
+                        maxWidth: '1000px', 
+                        margin: '0 auto',
+                        justifyContent: 'center'
+                    }}>
+                        <div className="partner-card-premium">
+                            <h4 style={{ color: '#2b8a3e', fontSize: '16px', marginBottom: '20px', fontWeight: '700', letterSpacing: '-0.3px', borderBottom: '2px solid rgba(43, 138, 62, 0.1)', paddingBottom: '10px' }}>
+                                🏛️ 공공기관 / 국가 공기업
+                            </h4>
+                            <ul className="partner-text-bullet">
+                                <li>한국환경산업기술원</li>
+                                <li>한국치산기술협회</li>
+                                <li>한국재정정보원</li>
+                                <li>국민건강보험공단 / 근로복지공단</li>
+                                <li>우체국금융개발원 / 우편사업진흥원</li>
+                                <li>부산가정법원 / 수원지방법원 안산지원</li>
+                            </ul>
+                        </div>
+                        <div className="partner-card-premium">
+                            <h4 style={{ color: '#2b8a3e', fontSize: '16px', marginBottom: '20px', fontWeight: '700', letterSpacing: '-0.3px', borderBottom: '2px solid rgba(43, 138, 62, 0.1)', paddingBottom: '10px' }}>
+                                🏢 지방 공사 / 지방자치단체
+                            </h4>
+                            <ul className="partner-text-bullet">
+                                <li>서울시설공단</li>
+                                <li>경기주택도시공사 (GH)</li>
+                                <li>서울물재생시설공단 / 서울에너지공사</li>
+                                <li>용인도시공사 / 화성도시공사</li>
+                                <li>동해시청 / 계룡시청 / 고흥군청</li>
+                                <li>관악청소년센터 / 시립마포청소년센터</li>
+                            </ul>
+                        </div>
+                        <div className="partner-card-premium">
+                            <h4 style={{ color: '#2b8a3e', fontSize: '16px', marginBottom: '20px', fontWeight: '700', letterSpacing: '-0.3px', borderBottom: '2px solid rgba(43, 138, 62, 0.1)', paddingBottom: '10px' }}>
+                                ⚡ 발전사 / 대기업·테크
+                            </h4>
+                            <ul className="partner-text-bullet">
+                                <li>한국중부발전 (인천발전본부 등)</li>
+                                <li>한국서부발전 (태안발전본부 등)</li>
+                                <li>한국도로공사</li>
+                                <li>강원랜드 (주)</li>
+                                <li>kt is (케이티아이에스)</li>
+                                <li>제니엘 / 윌앤비전 / 제이앤비컨설팅</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <p style={{ textAlign: 'center', color: '#666', fontSize: '14px', marginTop: '40px', fontWeight: '500', lineHeight: '1.6', letterSpacing: '-0.3px' }}>
+                        "한국환경산업기술원, 한국치산기술협회, 한국중부발전 등 <strong>120+ 파트너가 직접 경험하고 검증한</strong><br />사내 임직원 근골격계 피지컬케어 웰니스 프로그램입니다."
+                    </p>
                 </div>
             </section>
 

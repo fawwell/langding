@@ -5,8 +5,8 @@ import { UIProvider } from '@/context/UIContext';
 import AppLayout from '@/components/layout/AppLayout';
 
 export const metadata: Metadata = {
-  title: 'FaWW - 토탈 피지컬케어 솔루션 그룹',
-  description: '조직의 가장 큰 고민, 피지컬케어에서 해답을 찾다',
+  title: 'FaWW(파우) | AI 체형분석 기반 임직원 근골격계 피지컬케어 EAP',
+  description: '거북목, 허리 통증 솔루션! 대기업·스타트업이 선택한 찾아가는 사내 임직원 건강 복지 프로그램, 데이터 기반 피지컬케어 No.1 파우.',
 };
 
 export default function RootLayout({
