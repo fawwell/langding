@@ -52,7 +52,7 @@ const organizationJsonLd = {
     availableLanguage: 'Korean',
   },
   sameAs: [
-    'https://www.instagram.com/faww_official',
+    'https://www.instagram.com/physicalcare_ydp',
   ],
 };
 
