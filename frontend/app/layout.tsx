@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   keywords: ['임직원 건강관리', 'EAP', '근골격계 케어', '사내 피지컬케어', '기업 복지 프로그램', '찾아가는 운동', 'FaWW', '파우'],
   verification: {
     google: '1CKTUnV7zTqw0YWxzXDFNN0TBw_ZG6CVQo5xci6DOK8',
+    other: {
+      'naver-site-verification': '6f25d8b13385d8c7e9828b6302a4caf9378ac6b9',
+    },
   },
   openGraph: {
     type: 'website',
