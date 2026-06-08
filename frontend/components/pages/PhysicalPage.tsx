@@ -5,6 +5,56 @@ import { useRouter } from 'next/navigation';
 import { useUI } from '@/context/UIContext';
 import Footer from '@/components/layout/Footer';
 
+interface AcademyCourse {
+  badge: string;
+  title: string;
+  desc: string;
+}
+
+interface AcademyCategory {
+  num: string;
+  title: string;
+  courses: AcademyCourse[];
+}
+
+const ACADEMY_CATEGORIES: AcademyCategory[] = [
+  {
+    num: '01',
+    title: '퍼스널 트레이닝 분야',
+    courses: [
+      { badge: 'PTS 1, 2급', title: 'Personal Training Specialist', desc: '이론과 실기 능력을 갖춘 전문 퍼스널 트레이너 양성 과정입니다. 운동, 재활, 영양, 세일즈를 종합적으로 다룹니다.' },
+      { badge: 'PYTS 전문가 과정', title: 'Personal Yoga Training Specialist', desc: '정통 요가의 본질을 과학적으로 풀어내고 통증 분석 및 체형 교정을 결합한 전문가 과정입니다.' }
+    ]
+  },
+  {
+    num: '02',
+    title: '교정 및 재활 분야',
+    courses: [
+      { badge: 'CWT 1, 2급', title: 'Corrective Weight Training', desc: '신체적 문제를 운동을 통해 해결하는 교정운동 전문가 과정입니다. 기능해부학과 생리학을 기반으로 체형 및 동작을 분석합니다.' },
+      { badge: 'KSTS 1, 2급', title: 'Korea Sports Taping Specialist', desc: '스포츠 및 생활 체육 현장에서 경기력 향상과 부상 예방을 위해 테이핑 업무를 수행하는 전문가 과정입니다.' },
+      { badge: '선수트레이너 1, 2급', title: 'Athletic Trainer', desc: '과학적 근거를 바탕으로 운동선수들의 경기력 향상과 최상의 컨디셔닝을 돕는 프로그램 구성 및 트레이닝 수료 과정입니다.' }
+    ]
+  },
+  {
+    num: '03',
+    title: '필라테스 및 골프 전문 분야',
+    courses: [
+      { badge: 'KSMP 1, 2, 3급', title: 'Pilates Instructor', desc: '기구 및 매트 운동을 활용하여 바른 체형을 위한 운동 평가, 상담 및 강사 양성 업무를 수행합니다.' },
+      { badge: '골프 컨디셔닝 1, 2, 3급', title: 'MAXQ GOLF PHYSICAL TRAINING INSTITUTE', desc: '골퍼의 경기력 향상과 컨디셔닝을 위한 운동 프로그램을 개발하고 운동역학적 스윙 분석 등을 제공합니다.' }
+    ]
+  },
+  {
+    num: '04',
+    title: '웰니스 및 맞춤형 관리 분야',
+    courses: [
+      { badge: '웰니스 코치 1, 2급', title: 'Wellness Coach', desc: '데이터 기반 분석을 통해 개인 맞춤형 처방 시스템을 운용하는 신체 건강 전문가 과정입니다.' },
+      { badge: 'PCP 1, 2급', title: 'Physical Care Professionals (피지컬케어관리사)', desc: '직장인의 직무능력 향상을 위해 근무 형태 연구 및 체력/신체 능력 평가 후 맞춤형 솔루션을 제공합니다.' },
+      { badge: 'SEP 1, 2급', title: 'Senior Exercise Professionals (노인운동사)', desc: '노인의 신체적 특징에 맞춰 낙상 예방 및 심혈관계 질환 예방을 돕는 안전한 운동 프로그램을 구성합니다.' },
+      { badge: '마인드 코칭 1, 2급', title: 'Mind Coaching', desc: '뇌파측정기 등을 활용해 스포츠 선수 및 일반인의 심리 상담과 멘탈 강화를 지도하는 과정입니다.' }
+    ]
+  }
+];
+
 const PhysicalPage = () => {
     const router = useRouter();
     const {
@@ -81,37 +131,20 @@ const PhysicalPage = () => {
                         <div style={{ textAlign: 'left' }}><span className="back-btn-light" onClick={showPhysicalGateway}>← 카테고리 선택으로 돌아가기</span></div>
                         <h2 className="section-title">자격증 교육 (아카데미)</h2>
                         <div className="academy-wrap">
-                            <div className="academy-category reveal">
-                                <h3 className="academy-cat-title"><span>01</span> 퍼스널 트레이닝 분야</h3>
-                                <div className="academy-grid">
-                                    <div className="academy-card"><div className="ac-badge">PTS 1, 2급</div><h4>Personal Training Specialist</h4><p>이론과 실기 능력을 갖춘 전문 퍼스널 트레이너 양성 과정입니다. 운동, 재활, 영양, 세일즈를 종합적으로 다룹니다.</p></div>
-                                    <div className="academy-card"><div className="ac-badge">PYTS 전문가 과정</div><h4>Personal Yoga Training Specialist</h4><p>정통 요가의 본질을 과학적으로 풀어내고 통증 분석 및 체형 교정을 결합한 전문가 과정입니다.</p></div>
+                            {ACADEMY_CATEGORIES.map((cat, idx) => (
+                                <div key={idx} className="academy-category reveal">
+                                    <h3 className="academy-cat-title"><span>{cat.num}</span> {cat.title}</h3>
+                                    <div className="academy-grid">
+                                        {cat.courses.map((course, cIdx) => (
+                                            <div key={cIdx} className="academy-card">
+                                                <div className="ac-badge">{course.badge}</div>
+                                                <h4>{course.title}</h4>
+                                                <p>{course.desc}</p>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="academy-category reveal">
-                                <h3 className="academy-cat-title"><span>02</span> 교정 및 재활 분야</h3>
-                                <div className="academy-grid">
-                                    <div className="academy-card"><div className="ac-badge">CWT 1, 2급</div><h4>Corrective Weight Training</h4><p>신체적 문제를 운동을 통해 해결하는 교정운동 전문가 과정입니다. 기능해부학과 생리학을 기반으로 체형 및 동작을 분석합니다.</p></div>
-                                    <div className="academy-card"><div className="ac-badge">KSTS 1, 2급</div><h4>Korea Sports Taping Specialist</h4><p>스포츠 및 생활 체육 현장에서 경기력 향상과 부상 예방을 위해 테이핑 업무를 수행하는 전문가 과정입니다.</p></div>
-                                    <div className="academy-card"><div className="ac-badge">선수트레이너 1, 2급</div><h4>Athletic Trainer</h4><p>과학적 근거를 바탕으로 운동선수들의 경기력 향상과 최상의 컨디셔닝을 돕는 프로그램 구성 및 트레이닝 수료 과정입니다.</p></div>
-                                </div>
-                            </div>
-                            <div className="academy-category reveal">
-                                <h3 className="academy-cat-title"><span>03</span> 필라테스 및 골프 전문 분야</h3>
-                                <div className="academy-grid">
-                                    <div className="academy-card"><div className="ac-badge">KSMP 1, 2, 3급</div><h4>Pilates Instructor</h4><p>기구 및 매트 운동을 활용하여 바른 체형을 위한 운동 평가, 상담 및 강사 양성 업무를 수행합니다.</p></div>
-                                    <div className="academy-card"><div className="ac-badge">골프 컨디셔닝 1, 2, 3급</div><h4>MAXQ GOLF PHYSICAL TRAINING INSTITUTE</h4><p>골퍼의 경기력 향상과 컨디셔닝을 위한 운동 프로그램을 개발하고 운동역학적 스윙 분석 등을 제공합니다.</p></div>
-                                </div>
-                            </div>
-                            <div className="academy-category reveal">
-                                <h3 className="academy-cat-title"><span>04</span> 웰니스 및 맞춤형 관리 분야</h3>
-                                <div className="academy-grid">
-                                    <div className="academy-card"><div className="ac-badge">웰니스 코치 1, 2급</div><h4>Wellness Coach</h4><p>데이터 기반 분석을 통해 개인 맞춤형 처방 시스템을 운용하는 신체 건강 전문가 과정입니다.</p></div>
-                                    <div className="academy-card"><div className="ac-badge">PCP 1, 2급</div><h4>Physical Care Professionals (피지컬케어관리사)</h4><p>직장인의 직무능력 향상을 위해 근무 형태 연구 및 체력/신체 능력 평가 후 맞춤형 솔루션을 제공합니다.</p></div>
-                                    <div className="academy-card"><div className="ac-badge">SEP 1, 2급</div><h4>Senior Exercise Professionals (노인운동사)</h4><p>노인의 신체적 특징에 맞춰 낙상 예방 및 심혈관계 질환 예방을 돕는 안전한 운동 프로그램을 구성합니다.</p></div>
-                                    <div className="academy-card"><div className="ac-badge">마인드 코칭 1, 2급</div><h4>Mind Coaching</h4><p>뇌파측정기 등을 활용해 스포츠 선수 및 일반인의 심리 상담과 멘탈 강화를 지도하는 과정입니다.</p></div>
-                                </div>
-                            </div>
+                            ))}
                         </div>
                     </div>
                 </section>
