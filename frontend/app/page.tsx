@@ -17,19 +17,13 @@ import PartnerSection from '@/components/sections/PartnerSection';
 import MediaSection from '@/components/sections/MediaSection';
 
 export default function Home() {
-    const [isMounted, setIsMounted] = useState(false);
     const [reviewFilter, setReviewFilter] = useState('all');
     
     const {
         openModal,
         reviewsData,
-        mediaReports,
-        clientReviews
+        mediaReports
     } = useUI();
-
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
 
     // 리뷰 필터 시 Swiper 인스턴스 강제 업데이트 (원래 로직 유지)
     useEffect(() => {
@@ -41,8 +35,6 @@ export default function Home() {
 
     // 돋보기 X-ray 효과 (모바일 터치 지원 포함)
     useEffect(() => {
-        if (!isMounted) return;
-
         const container = document.querySelector('.magnify-container') as HTMLElement;
         if (!container) return;
 
@@ -128,12 +120,10 @@ export default function Home() {
             container.removeEventListener('touchcancel', handleLeave);
             document.body.style.overflow = '';
         };
-    }, [isMounted]);
+    }, []);
 
     // Swiper 마운트
     useEffect(() => {
-        if (!isMounted) return;
-
         const initSwipers = () => {
             if (typeof (window as any).Swiper !== 'undefined') {
                 if ((window as any).reviewSwiperInstance) {
@@ -189,9 +179,7 @@ export default function Home() {
         } else {
             initSwipers();
         }
-    }, [isMounted, reviewsData, reviewFilter, mediaReports]);
-
-    if (!isMounted) return null;
+    }, [reviewsData, reviewFilter, mediaReports]);
 
     return (
         <main id="page-home" className="page-content active">
