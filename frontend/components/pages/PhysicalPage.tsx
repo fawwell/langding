@@ -77,8 +77,36 @@ const PhysicalPage = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
+    // 지점 데이터를 LocalBusiness JSON-LD로 동적 매핑
+    const centersJsonLd = (centerData || []).map(center => ({
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": `https://faww.co.kr/physical#center-${center.id}`,
+        "name": `FaWW 파우 ${center.name}`,
+        "url": `https://faww.co.kr/physical`,
+        "logo": "https://faww.co.kr/images/%ED%8C%8C%EC%9A%B0%EB%AF%B8.png",
+        "image": center.image_url || "https://faww.co.kr/images/%ED%8C%8C%EC%9A%B0%EB%AF%B8.png",
+        "description": `${center.name} - ${center.tagline || center.philosophy || "FaWW 피지컬케어 공식 지점"}`,
+        "telephone": "02-6482-9003",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": center.address || "서울특별시 영등포구 도신로 143",
+            "addressLocality": center.name,
+            "addressRegion": "서울특별시",
+            "addressCountry": "KR"
+        },
+        "hasMap": center.map_url || undefined,
+        "priceRange": "$$"
+    }));
+
     return (
         <main id="page-physical" className="page-content active">
+            {centersJsonLd.length > 0 && (
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(centersJsonLd) }}
+                />
+            )}
             <section className="hero-brand hero-brand-sub reveal">
                 <video className="hero-video-bg" autoPlay loop muted playsInline>
                     <source src="background2.mp4" type="video/mp4" />
