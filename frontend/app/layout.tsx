@@ -7,6 +7,9 @@ import AppLayout from '@/components/layout/AppLayout';
 export const metadata: Metadata = {
   title: 'FaWW(파우) | AI 체형분석 기반 임직원 근골격계 피지컬케어 EAP',
   description: '거북목, 허리 통증 솔루션! 대기업·스타트업이 선택한 찾아가는 사내 임직원 건강 복지 프로그램, 데이터 기반 피지컬케어 No.1 파우.',
+  verification: {
+    google: 'f4ad7ff4480181ab',
+  },
 };
 
 export default function RootLayout({
