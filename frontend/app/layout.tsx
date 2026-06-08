@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import './v2_style.css'; // 💡 핵심: 재진님의 디자인을 최상위 권력으로 격상시킵니다!
+import { UIProvider } from '@/context/UIContext';
+import AppLayout from '@/components/layout/AppLayout';
 
 export const metadata: Metadata = {
   title: 'FaWW - 토탈 피지컬케어 솔루션 그룹',
@@ -15,7 +17,11 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        {children}
+        <UIProvider>
+          <AppLayout>
+            {children}
+          </AppLayout>
+        </UIProvider>
       </body>
     </html>
   );

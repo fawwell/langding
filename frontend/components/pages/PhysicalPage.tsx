@@ -1,43 +1,40 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
+import { useUI } from '@/context/UIContext';
 
-interface PhysicalPageProps {
-    activePage: string;
-    activePhysicalSub: string;
-    switchPage: (page: string) => void;
-    openPhysicalSub: (sub: string) => void;
-    showPhysicalGateway: () => void;
-    centerData: any[];
-    hoveredCenterId: string | null;
-    setHoveredCenterId: (id: string | null) => void;
-    openCenterModal: (id: string) => void;
-    openModal: (id: string) => void;
-    openKakaoChat: () => void;
-}
+const PhysicalPage = () => {
+    const router = useRouter();
+    const {
+        activePhysicalSub,
+        setActivePhysicalSub,
+        centerData,
+        hoveredCenterId,
+        setHoveredCenterId,
+        openCenterModal,
+        openModal
+    } = useUI();
 
-const PhysicalPage = ({
-    activePage,
-    activePhysicalSub,
-    switchPage,
-    openPhysicalSub,
-    showPhysicalGateway,
-    centerData,
-    hoveredCenterId,
-    setHoveredCenterId,
-    openCenterModal,
-    openModal,
-    openKakaoChat
-}: PhysicalPageProps) => {
+    const openKakaoChat = () => {
+        const kakaoChannelId = "_HwxiXn"; 
+        window.open(`https://pf.kakao.com/${kakaoChannelId}/chat`, '_blank');
+    };
+
+    const showPhysicalGateway = () => {
+        setActivePhysicalSub(null);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     return (
-        <main id="page-physical" className={`page-content ${activePage === 'page-physical' ? 'active' : ''}`}>
+        <main id="page-physical" className="page-content active">
             <section className="hero-brand hero-brand-sub reveal">
                 <video className="hero-video-bg" autoPlay loop muted playsInline>
                     <source src="background2.mp4" type="video/mp4" />
                 </video>
                 <div className="hero-overlay"></div>
                 <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-                    <div style={{ textAlign: 'left', marginBottom: '20px' }}><span className="back-btn" style={{ color: '#aaa', cursor: 'pointer', fontSize: '14px', border: '1px solid #555', padding: '8px 16px', borderRadius: '20px' }} onClick={() => switchPage('page-ai')}>← 타겟 선택으로 돌아가기</span></div>
+                    <div style={{ textAlign: 'left', marginBottom: '20px' }}><span className="back-btn" style={{ color: '#aaa', cursor: 'pointer', fontSize: '14px', border: '1px solid #555', padding: '8px 16px', borderRadius: '20px' }} onClick={() => router.push('/ai')}>← 타겟 선택으로 돌아가기</span></div>
                     <div className="hero-subtitle hero-el hero-el-1">FaWW Physical Care</div>
                     <h1 className="hero-el hero-el-2">현장과 실무를 잇는<br /><span>FaWW 피지컬케어</span></h1>
                     <p className="hero-el hero-el-3">
@@ -50,7 +47,7 @@ const PhysicalPage = ({
             <div id="physical-gateway" className={`container-fluid reveal ${!activePhysicalSub ? 'active' : ''}`} style={{ padding: '10px 0 100px', display: !activePhysicalSub ? 'block' : 'none', backgroundColor: '#f9f9f9' }}>
                 <div className="container">
                     <div className="premium-gateway-grid">
-                        <div className="gateway-card reveal" onClick={() => switchPage('page-eap')}>
+                        <div className="gateway-card reveal" onClick={() => router.push('/eap')}>
                             <div className="gateway-bg-text">PC</div>
                             <div className="gateway-icon-box" style={{ fontSize: '14px', fontWeight: 'bold' }}>PC</div>
                             <h3>피지컬케어</h3>
@@ -58,7 +55,7 @@ const PhysicalPage = ({
                             <div className="gateway-arrow">→</div>
                         </div>
 
-                        <div className="gateway-card reveal delay-1" onClick={() => openPhysicalSub('sub-academy')}>
+                        <div className="gateway-card reveal delay-1" onClick={() => setActivePhysicalSub('sub-academy')}>
                             <div className="gateway-bg-text">CL</div>
                             <div className="gateway-icon-box" style={{ fontSize: '14px', fontWeight: 'bold' }}>CL</div>
                             <h3>자격증</h3>
@@ -66,7 +63,7 @@ const PhysicalPage = ({
                             <div className="gateway-arrow">→</div>
                         </div>
 
-                        <div className="gateway-card reveal delay-2" onClick={() => openPhysicalSub('sub-center')}>
+                        <div className="gateway-card reveal delay-2" onClick={() => setActivePhysicalSub('sub-center')}>
                             <div className="gateway-bg-text">CT</div>
                             <div className="gateway-icon-box" style={{ fontSize: '14px', fontWeight: 'bold' }}>CT</div>
                             <h3>센터</h3>
@@ -203,27 +200,6 @@ const PhysicalPage = ({
                     <button className="cta-btn-white" onClick={openKakaoChat}>실시간 프로그램 상담하기</button>
                 </div>
             </section>
-
-            <footer style={{ backgroundColor: '#111', color: '#888', padding: '60px 20px', fontSize: '14px', lineHeight: '1.6' }}>
-                <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px', borderBottom: '1px solid #333', paddingBottom: '20px' }}>
-                        <div style={{ fontSize: '24px', fontWeight: '900', color: '#fff', letterSpacing: '-1px' }}>FaWW</div>
-                        <div style={{ display: 'flex', gap: '20px' }}>
-                            <a href="#" style={{ color: '#ccc', textDecoration: 'none' }}>이용약관</a>
-                            <a href="#" style={{ color: '#ccc', textDecoration: 'none', fontWeight: 'bold' }}>개인정보처리방침</a>
-                        </div>
-                    </div>
-                    <div>
-                        <p style={{ margin: '0 0 5px 0' }}>주식회사 파우(FaWW) | 대표이사: 김은주 | 사업자등록번호: 107-88-12047 | 통신판매업신고번호: 제 2014-서울영등포-1105호</p>
-                        <p style={{ margin: '0 0 5px 0' }}>주소: 서울특별시 영등포구 도신로 143, 대원빌딩 301호 | 고객센터: 02-6482-9003</p>
-                        <p style={{ margin: '0' }}>이메일: contact@faww.co.kr</p>
-                    </div>
-                    <div style={{ marginTop: '10px', color: '#555' }}>
-                        © {new Date().getFullYear()} FaWW Korea. All rights reserved.<br />
-                        <span style={{ fontSize: '12px', opacity: 0.7 }}>파우(FaWW)는 기업의 안전보건 컴플라이언스 파트너로서 법령 준수를 지원합니다.</span>
-                    </div>
-                </div>
-            </footer>
         </main>
     );
 };

@@ -1,26 +1,58 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
+import { useUI } from '@/context/UIContext';
 
-interface EAPPageProps {
-    activePage: string;
-    switchPage: (page: string) => void;
-    openModal: (id: string) => void;
-    toggleFaq: (e: React.MouseEvent) => void;
-}
+const EAPPage = () => {
+    const router = useRouter();
+    const { openModal } = useUI();
 
-const EAPPage = ({ activePage, switchPage, openModal, toggleFaq }: EAPPageProps) => {
+    const toggleFaq = (e: React.MouseEvent<HTMLDivElement>) => {
+        e.currentTarget.classList.toggle('open');
+    };
+
+    const faqData = [
+        { q: "우리 회사는 인원이 많은데, 하루에 몇 명이나 케어를 받을 수 있나요?", a: "투입되는 전문가 인원에 따라 유연하게 운영됩니다. 보통 전문가 1인당 하루(8시간 기준) 약 6~10명의 1:1 집중 케어가 가능하며, 단체 운동이나 강의 프로그램과 병행할 경우 하루 수백 명까지 참여 인원을 확대할 수 있습니다." },
+        { q: "사내에 별도의 공간이 필요한가요? 공간이 협소해도 진행이 가능한지 궁금합니다.", a: "네, 회의실이나 휴게실 정도의 유휴 공간만 있으면 충분합니다. 1:1 케어에 필요한 이동식 베드와 AI 체형 분석 장비는 저희가 직접 지참하며, 공간 크기에 맞춰 최적화된 동선으로 세팅해 드립니다." },
+        { q: "서비스 이용 예약은 어떤 방식으로 이루어지나요? 인사팀에서 일일이 명단을 취합해야 하나요?", a: "담당자님의 업무 부담을 줄이기 위해 자체 온라인 예약 시스템을 제공합니다. 임직원이 직접 원하는 시간에 접속해 예약하고 알림톡을 받을 수 있어, 별도의 명단 관리 없이 최종 확정 리스트만 확인하시면 됩니다." },
+        { q: "'스마트 AI 체형분석' 결과 리포트는 개인에게 별도로 제공되나요?", a: "네, 분석 즉시 모바일 리포트가 개별 전송됩니다. 현재 나의 불균형 상태, 위험도 점수, 그리고 일상에서 실천할 수 있는 맞춤형 운동 처방이 포함되어 있어 구성원들의 만족도가 매우 높습니다." },
+        { q: "1:1 케어에서 진행되는 'MCT'나 '수기치료'가 통증 완화에 즉각적인 효과?있나요?", a: "단순 마사지가 아닌 근막 이완(MCT)과 기능적 가동술을 결합한 전문 테라피입니다. 업무 중 발생하는 목, 어깨, 허리의 급성 통증과 근육 긴장을 즉각적으로 해소하여 업무 효율을 높이는 데 중점을 둡니다." },
+        { q: "우리 직무 특성(예: 장시간 서 있는 업무)에 맞춘 커스터마이징이 가능한가요?", a: "물론입니다. 사전 상담을 통해 해당 기업의 주된 업무 환경(데스크 워크, 현장직 등)을 분석하고, 그에 가장 빈번하게 발생하는 근골격계 질환 위주로 강의와 케어 루틴을 재구성하여 진행합니다." },
+        { q: "4가지 파트를 반드시 패키지로 도입해야 하나요? 필요한 파트만 선택할 수 있나요?", a: "전 사원 대상인 '강의'와 '진단'만 선택하시거나, 고위험군을 위한 '1:1 케어'만 집중 운영하는 등 기업의 예산과 필요에 따라 자유롭게 조합하여 설계할 수 있습니다." },
+        { q: "서비스 도입 후 임직원 만족도 조사나 결과 보고서를 제공해 주시나요?", a: "네, 프로그램 종료 후 참여도, 만족도 조사 결과, AI 분석 데이터 통계(익명 처리)를 포함한 성과 결과 보고서를 제공합니다. 이는 인사팀의 KPI 달성 증빙 및 차기 복지 예산 확보 자료로 활용하실 수 있습니다." },
+        { q: "AI 체형 분석 시 수집되는 개인정보나 신체 데이터는 어떻게 관리되나요?", a: "수집된 모든 데이터는 암호화되어 안전하게 관리되며, 개인정보보호법을 준수합니다. 기업 측에는 개인의 세부 정보가 아닌 조직 전체의 건강 통계 지표만 제공되므로 안심하셔도 됩니다." }
+    ];
+
+    const faqJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqData.map(item => ({
+            "@type": "Question",
+            "name": item.q,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": item.a
+            }
+        }))
+    };
+
     return (
-        <main id="page-eap" className={`page-content ${activePage === 'page-eap' ? 'active' : ''}`}>
+        <main id="page-eap" className="page-content active">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+            />
+
             <section className="hero-brand hero-brand-sub hero-premium reveal">
                 <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-                    <div style={{ textAlign: 'left', marginBottom: '20px' }}><span className="back-btn" style={{ color: '#aaa', cursor: 'pointer', fontSize: '14px', border: '1px solid #555', padding: '8px 16px', borderRadius: '20px' }} onClick={() => switchPage('page-ai')}>← 타겟 선택으로 돌아가기</span></div>
+                    <div style={{ textAlign: 'left', marginBottom: '20px' }}><span className="back-btn" style={{ color: '#aaa', cursor: 'pointer', fontSize: '14px', border: '1px solid #555', padding: '8px 16px', borderRadius: '20px' }} onClick={() => router.push('/ai')}>← 타겟 선택으로 돌아가기</span></div>
 
                     <div className="hero-subtitle hero-el hero-el-1">FaWW EAP Solution</div>
                     <h1 className="hero-el hero-el-2"><span>건강이 함께하는 회사</span>,<br />기업복지의 원조는 <span>FaWW</span></h1>
                     <p className="hero-el hero-el-3">
                         <strong>AI 빅데이터 기반의 피지컬케어 솔루션</strong><br />
-                        임직원의 건강 증진과 생산성 향상을 위한<br />맞춤형 복지 프로그램을 제안합니다
+                        임직원의 건강 증진 and 생산성 향상을 위한<br />맞춤형 복지 프로그램을 제안합니다
                     </p>
                     <div className="hero-buttons hero-el hero-el-4" style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                         <button className="btn-primary" onClick={() => openModal('modal-proposal')}>우리 회사 맞춤 제안서 받기</button>
@@ -187,17 +219,7 @@ const EAPPage = ({ activePage, switchPage, openModal, toggleFaq }: EAPPageProps)
                         <p>운동부터 강연, 콘텐츠까지 맞춤 프로그램으로 해결해 드립니다.</p>
                     </div>
                     <div className="faq-list grid-2x2" style={{ alignItems: 'flex-start' }}>
-                        {[
-                            { q: "우리 회사는 인원이 많은데, 하루에 몇 명이나 케어를 받을 수 있나요?", a: "투입되는 전문가 인원에 따라 유연하게 운영됩니다. 보통 전문가 1인당 하루(8시간 기준) 약 6~10명의 1:1 집중 케어가 가능하며, 단체 운동이나 강의 프로그램과 병행할 경우 하루 수백 명까지 참여 인원을 확대할 수 있습니다." },
-                            { q: "사내에 별도의 공간이 필요한가요? 공간이 협소해도 진행이 가능한지 궁금합니다.", a: "네, 회의실이나 휴게실 정도의 유휴 공간만 있으면 충분합니다. 1:1 케어에 필요한 이동식 베드와 AI 체형 분석 장비는 저희가 직접 지참하며, 공간 크기에 맞춰 최적화된 동선으로 세팅해 드립니다." },
-                            { q: "서비스 이용 예약은 어떤 방식으로 이루어지나요? 인사팀에서 일일이 명단을 취합해야 하나요?", a: "담당자님의 업무 부담을 줄이기 위해 자체 온라인 예약 시스템을 제공합니다. 임직원이 직접 원하는 시간에 접속해 예약하고 알림톡을 받을 수 있어, 별도의 명단 관리 없이 최종 확정 리스트만 확인하시면 됩니다." },
-                            { q: "'스마트 AI 체형분석' 결과 리포트는 개인에게 별도로 제공되나요?", a: "네, 분석 즉시 모바일 리포트가 개별 전송됩니다. 현재 나의 불균형 상태, 위험도 점수, 그리고 일상에서 실천할 수 있는 맞춤형 운동 처방이 포함되어 있어 구성원들의 만족도가 매우 높습니다." },
-                            { q: "1:1 케어에서 진행되는 'MCT'나 '수기치료'가 통증 완화에 즉각적인 효과가 있나요?", a: "단순 마사지가 아닌 근막 이완(MCT)과 기능적 가동술을 결합한 전문 테라피입니다. 업무 중 발생하는 목, 어깨, 허리의 급성 통증과 근육 긴장을 즉각적으로 해소하여 업무 효율을 높이는 데 중점을 둡니다." },
-                            { q: "우리 직무 특성(예: 장시간 서 있는 업무)에 맞춘 커스터마이징이 가능한가요?", a: "물론입니다. 사전 상담을 통해 해당 기업의 주된 업무 환경(데스크 워크, 현장직 등)을 분석하고, 그에 가장 빈번하게 발생하는 근골격계 질환 위주로 강의와 케어 루틴을 재구성하여 진행합니다." },
-                            { q: "4가지 파트를 반드시 패키지로 도입해야 하나요? 필요한 파트만 선택할 수 있나요?", a: "전 사원 대상인 '강의'와 '진단'만 선택하시거나, 고위험군을 위한 '1:1 케어'만 집중 운영하는 등 기업의 예산과 필요에 따라 자유롭게 조합하여 설계할 수 있습니다." },
-                            { q: "서비스 도입 후 임직원 만족도 조사나 결과 보고서를 제공해 주시나요?", a: "네, 프로그램 종료 후 참여도, 만족도 조사 결과, AI 분석 데이터 통계(익명 처리)를 포함한 성과 결과 보고서를 제공합니다. 이는 인사팀의 KPI 달성 증빙 및 차기 복지 예산 확보 자료로 활용하실 수 있습니다." },
-                            { q: "AI 체형 분석 시 수집되는 개인정보나 신체 데이터는 어떻게 관리되나요?", a: "수집된 모든 데이터는 암호화되어 안전하게 관리되며, 개인정보보호법을 준수합니다. 기업 측에는 개인의 세부 정보가 아닌 조직 전체의 건강 통계 지표만 제공되므로 안심하셔도 됩니다." }
-                        ].map((item, idx) => (
+                        {faqData.map((item, idx) => (
                             <div key={idx} className={`faq-item reveal delay-${idx % 4 + 1}`} onClick={toggleFaq}>
                                 <div className="faq-title-wrap">
                                     <div className="faq-title"><span className="q-mark">Q.</span> <span>{item.q}</span></div>
@@ -214,6 +236,7 @@ const EAPPage = ({ activePage, switchPage, openModal, toggleFaq }: EAPPageProps)
                     </div>
                 </div>
             </section>
+            
             <section className="cta-footer reveal">
                 <div className="container">
                     <h2>FaWW와 함께 건강한 조직을 구축하세요</h2>
@@ -221,27 +244,6 @@ const EAPPage = ({ activePage, switchPage, openModal, toggleFaq }: EAPPageProps)
                     <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>무료 상담 및 가이드 신청</button>
                 </div>
             </section>
-
-            <footer style={{ backgroundColor: '#111', color: '#888', padding: '60px 20px', fontSize: '14px', lineHeight: '1.6' }}>
-                <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px', borderBottom: '1px solid #333', paddingBottom: '20px' }}>
-                        <div style={{ fontSize: '24px', fontWeight: '900', color: '#fff', letterSpacing: '-1px' }}>FaWW</div>
-                        <div style={{ display: 'flex', gap: '20px' }}>
-                            <a href="#" style={{ color: '#ccc', textDecoration: 'none' }}>이용약관</a>
-                            <a href="#" style={{ color: '#ccc', textDecoration: 'none', fontWeight: 'bold' }}>개인정보처리방침</a>
-                        </div>
-                    </div>
-                    <div>
-                        <p style={{ margin: '0 0 5px 0' }}>주식회사 파우(FaWW) | 대표이사: 김은주 | 사업자등록번호: 107-88-12047 | 통신판매업신고번호: 제 2014-서울영등포-1105호</p>
-                        <p style={{ margin: '0 0 5px 0' }}>주소: 서울특별시 영등포구 도신로 143, 대원빌딩 301호 | 고객센터: 02-6482-9003</p>
-                        <p style={{ margin: '0' }}>이메일: contact@faww.co.kr</p>
-                    </div>
-                    <div style={{ marginTop: '10px', color: '#555' }}>
-                        © {new Date().getFullYear()} FaWW Korea. All rights reserved.<br />
-                        <span style={{ fontSize: '12px', opacity: 0.7 }}>파우(FaWW)는 기업의 안전보건 컴플라이언스 파트너로서 법령 준수를 지원합니다.</span>
-                    </div>
-                </div>
-            </footer>
         </main>
     );
 };

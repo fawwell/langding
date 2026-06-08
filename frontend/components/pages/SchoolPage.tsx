@@ -1,19 +1,18 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
+import { useUI } from '@/context/UIContext';
 
-interface SchoolPageProps {
-    activePage: string;
-    switchPage: (page: string) => void;
-    openModal: (id: string) => void;
-}
+const SchoolPage = () => {
+    const router = useRouter();
+    const { openModal } = useUI();
 
-const SchoolPage = ({ activePage, switchPage, openModal }: SchoolPageProps) => {
     return (
-        <main id="page-school" className={`page-content ${activePage === 'page-school' ? 'active' : ''}`}>
+        <main id="page-school" className="page-content active">
             <section className="hero-premium reveal" style={{ background: "linear-gradient(rgba(0, 30, 20, 0.75), rgba(0, 30, 20, 0.9)), url('https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=2070&auto=format&fit=crop') no-repeat center/cover fixed" }}>
                 <div className="container">
-                    <div style={{ textAlign: 'left' }}><span className="back-btn" onClick={() => switchPage('page-ai')}>← 타겟 선택으로 돌아가기</span></div>
+                    <div style={{ textAlign: 'left' }}><span className="back-btn" onClick={() => router.push('/ai')}>← 타겟 선택으로 돌아가기</span></div>
                     <h1>바른 성장의 시작,<br />FaWW 학생 체형분석 솔루션</h1>
                     <p>학교 현장에 최적화된 프로세스로 우리 아이들의 효율적인 건강관리를 지원합니다.</p>
                     <button className="btn-primary" onClick={() => openModal('modal-proposal')} style={{ fontSize: '18px', padding: '16px 36px', backgroundColor: '#004d40', border: '1px solid #004d40' }}>학교 맞춤 제안서 받기</button>
@@ -115,27 +114,6 @@ const SchoolPage = ({ activePage, switchPage, openModal }: SchoolPageProps) => {
                     <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>학교 맞춤 상담 및 가이드 신청</button>
                 </div>
             </section>
-
-            <footer style={{ backgroundColor: '#111', color: '#888', padding: '60px 20px', fontSize: '14px', lineHeight: '1.6' }}>
-                <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px', borderBottom: '1px solid #333', paddingBottom: '20px' }}>
-                        <div style={{ fontSize: '24px', fontWeight: '900', color: '#fff', letterSpacing: '-1px' }}>FaWW</div>
-                        <div style={{ display: 'flex', gap: '20px' }}>
-                            <a href="#" style={{ color: '#ccc', textDecoration: 'none' }}>이용약관</a>
-                            <a href="#" style={{ color: '#ccc', textDecoration: 'none', fontWeight: 'bold' }}>개인정보처리방침</a>
-                        </div>
-                    </div>
-                    <div>
-                        <p style={{ margin: '0 0 5px 0' }}>주식회사 파우(FaWW) | 대표이사: 김은주 | 사업자등록번호: 107-88-12047 | 통신판매업신고번호: 제 2014-서울영등포-1105호</p>
-                        <p style={{ margin: '0 0 5px 0' }}>주소: 서울특별시 영등포구 도신로 143, 대원빌딩 301호 | 고객센터: 02-6482-9003</p>
-                        <p style={{ margin: '0' }}>이메일: contact@faww.co.kr</p>
-                    </div>
-                    <div style={{ marginTop: '10px', color: '#555' }}>
-                        © {new Date().getFullYear()} FaWW Korea. All rights reserved.<br />
-                        <span style={{ fontSize: '12px', opacity: 0.7 }}>파우(FaWW)는 기업의 안전보건 컴플라이언스 파트너로서 법령 준수를 지원합니다.</span>
-                    </div>
-                </div>
-            </footer>
         </main>
     );
 };

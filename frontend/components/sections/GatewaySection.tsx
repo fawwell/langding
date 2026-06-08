@@ -1,14 +1,11 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
-interface GatewaySectionProps {
-    switchPage: (pageId: string) => void;
-    setActivePage: (pageId: string) => void;
-    setActivePhysicalSub: (subId: string) => void;
-}
-
-const GatewaySection = ({ switchPage, setActivePage, setActivePhysicalSub }: GatewaySectionProps) => {
+const GatewaySection = () => {
+    const router = useRouter();
+    
     return (
         <section className="gateway-section reveal" style={{ padding: '100px 0', background: '#fff' }}>
             <div className="container">
@@ -18,7 +15,7 @@ const GatewaySection = ({ switchPage, setActivePage, setActivePhysicalSub }: Gat
                     <p className="section-desc reveal soft-reveal">FaWW의 3가지 비즈니스로 여러분의 조직과 일상에 건강을 선물하세요.</p>
                 </div>
                 <div className="gateway-grid">
-                    <div className="gateway-card reveal" onClick={() => switchPage('page-ai')} style={{ padding: 0, overflow: 'hidden' }}>
+                    <div className="gateway-card reveal" onClick={() => router.push('/ai')} style={{ padding: 0, overflow: 'hidden' }}>
                         <div className="gateway-img" style={{ height: '200px', position: 'relative', overflow: 'hidden', background: '#f0f0f0' }}>
                             <img src="/images/gateway/ai_scanning.png" alt="AI Scanning" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                             <div className="scan-line"></div>
@@ -33,7 +30,7 @@ const GatewaySection = ({ switchPage, setActivePage, setActivePhysicalSub }: Gat
                             <div className="gateway-btn">조직 맞춤 솔루션 보기</div>
                         </div>
                     </div>
-                    <div className="gateway-card reveal delay-1" onClick={() => switchPage('page-physical')} style={{ padding: 0, overflow: 'hidden' }}>
+                    <div className="gateway-card reveal delay-1" onClick={() => router.push('/physical')} style={{ padding: 0, overflow: 'hidden' }}>
                         <div className="gateway-img" style={{ height: '200px', background: '#f0f0f0' }}>
                             <img src="/images/gateway/physical_care.jpg" alt="Physical Care" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
@@ -47,7 +44,7 @@ const GatewaySection = ({ switchPage, setActivePage, setActivePhysicalSub }: Gat
                             <div className="gateway-btn">피지컬케어 자세히 보기</div>
                         </div>
                     </div>
-                    <div className="gateway-card reveal delay-2" onClick={() => switchPage('page-mall')} style={{ padding: 0, overflow: 'hidden' }}>
+                    <div className="gateway-card reveal delay-2" onClick={() => router.push('/mall')} style={{ padding: 0, overflow: 'hidden' }}>
                         <div className="gateway-img" style={{ height: '200px', background: '#f0f0f0' }}>
                             <img src="/images/gateway/mall.jpg" alt="Wellness Mall" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
