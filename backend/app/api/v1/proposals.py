@@ -1,12 +1,14 @@
 """제안서 요청 관리."""
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends, Request
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 
 from supabase_wrapper import create_client, Client, APIError
 
 from app.core.config import settings
+from app.core.limiter import limiter
+from app.core.deps import verify_admin_token
 
 router = APIRouter(prefix="/proposals", tags=["proposals"])
 
@@ -31,7 +33,8 @@ def get_supabase_admin() -> Client:
 
 
 @router.post("/")
-async def create_proposal(data: ProposalCreate):
+@limiter.limit("5/minute")
+async def create_proposal(request: Request, data: ProposalCreate):
     """제안서 요청을 생성합니다."""
     supabase = get_supabase_admin()
 
@@ -62,7 +65,7 @@ async def create_proposal(data: ProposalCreate):
 
 
 @router.get("/")
-async def list_proposals():
+async def list_proposals(token: str = Depends(verify_admin_token)):
     """제안서 목록을 조회합니다. (관리자용)"""
     supabase = get_supabase_admin()
     

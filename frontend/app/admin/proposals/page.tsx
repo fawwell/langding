@@ -26,7 +26,26 @@ export default function AdminProposalsPage() {
 
   const fetchProposals = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/proposals/`);
+      const token = localStorage.getItem('admin_token');
+      if (!token) {
+        alert('관리자 인증이 필요합니다. 로그인 페이지로 이동합니다.');
+        window.location.href = '/admin';
+        return;
+      }
+
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/proposals/`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (res.status === 401) {
+        alert('인증 토큰이 유효하지 않습니다. 다시 로그인해 주세요.');
+        localStorage.removeItem('admin_token');
+        window.location.href = '/admin';
+        return;
+      }
+
       const json = await res.json();
       if (json.success) setProposals(json.data);
     } catch (e) {

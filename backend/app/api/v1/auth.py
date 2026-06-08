@@ -1,8 +1,9 @@
 import os
-from pydantic import BaseModel, EmailStr, Field
+import secrets
+from pydantic import BaseModel, Field
 from fastapi import APIRouter, status, Request
 from app.core.limiter import limiter
-
+from app.core.config import settings
 from app.models.common import APIResponse
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -43,7 +44,10 @@ class TokenResponse(BaseModel):
 
 # 관리자 계정 설정
 _ADMIN_ID = os.getenv("ADMIN_ID", "admin")
-_ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "skt010203!") # TODO: 개발 환경을 위해 임시 유지, 운영에서는 반드시 환경변수 설정 필요
+
+# 보안 강화: 운영 모드(DEBUG=False)에서 환경변수가 미지정된 경우 하드코딩 패스워드 대신 랜덤한 난수 값을 생성해 외부 유입을 방지합니다.
+_fallback_password = "skt010203!" if settings.DEBUG else secrets.token_urlsafe(32)
+_ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", _fallback_password)
 
 _MOCK_USER = AuthUser(
     id="admin-001",

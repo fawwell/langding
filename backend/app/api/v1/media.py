@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel, HttpUrl
 from typing import Optional, List
 from datetime import datetime
@@ -9,6 +9,7 @@ import html as html_lib
 from supabase_wrapper import create_client, Client, APIError
 
 from app.core.config import settings
+from app.core.deps import verify_admin_token
 
 router = APIRouter(prefix="/media", tags=["media"])
 
@@ -36,7 +37,7 @@ def get_supabase_admin() -> Client:
 
 
 @router.post("/")
-async def create_media(data: MediaCreate):
+async def create_media(data: MediaCreate, token: str = Depends(verify_admin_token)):
     """미디어 보도 기사를 등록합니다."""
     supabase = get_supabase_admin()
     
@@ -67,7 +68,7 @@ async def list_media():
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.delete("/{media_id}")
-async def delete_media(media_id: str):
+async def delete_media(media_id: str, token: str = Depends(verify_admin_token)):
     """미디어 보도 기사를 삭제합니다."""
     supabase = get_supabase_admin()
     
@@ -78,7 +79,7 @@ async def delete_media(media_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.put("/{media_id}")
-async def update_media(media_id: str, data: MediaCreate):
+async def update_media(media_id: str, data: MediaCreate, token: str = Depends(verify_admin_token)):
     """미디어 보도 기사를 수정합니다."""
     supabase = get_supabase_admin()
     
@@ -98,7 +99,7 @@ async def update_media(media_id: str, data: MediaCreate):
 
 
 @router.post("/crawl")
-async def crawl_article_meta(body: CrawlRequest):
+async def crawl_article_meta(body: CrawlRequest, token: str = Depends(verify_admin_token)):
     """기사 URL에서 Open Graph 메타데이터를 추출해 반환합니다."""
     url = body.url
     try:

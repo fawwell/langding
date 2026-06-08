@@ -27,6 +27,12 @@ export default function AdminMediaPage() {
 
   const fetchMedia = async () => {
     try {
+      const token = localStorage.getItem('admin_token');
+      if (!token) {
+        alert('관리자 인증이 필요합니다. 로그인 페이지로 이동합니다.');
+        window.location.href = '/admin';
+        return;
+      }
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/media/?t=${Date.now()}`, {
         cache: 'no-store'
       });
@@ -57,13 +63,28 @@ export default function AdminMediaPage() {
       alert('기사 링크(URL)를 입력해주세요.');
       return;
     }
+    const token = localStorage.getItem('admin_token');
+    if (!token) {
+      alert('관리자 인증이 필요합니다.');
+      window.location.href = '/admin';
+      return;
+    }
     setInfoLoading(true);
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/media/crawl`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({ url: formData.url }),
       });
+      if (res.status === 401) {
+        alert('인증 토큰이 유효하지 않습니다. 다시 로그인해 주세요.');
+        localStorage.removeItem('admin_token');
+        window.location.href = '/admin';
+        return;
+      }
       const json = await res.json();
       if (json.success && json.data) {
         setFormData(prev => ({
@@ -86,6 +107,12 @@ export default function AdminMediaPage() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    const token = localStorage.getItem('admin_token');
+    if (!token) {
+      alert('관리자 인증이 필요합니다.');
+      window.location.href = '/admin';
+      return;
+    }
     setLoading(true);
     
     const url = editId 
@@ -97,9 +124,18 @@ export default function AdminMediaPage() {
     try {
       const res = await fetch(url, {
         method: method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify(formData),
       });
+      if (res.status === 401) {
+        alert('인증 토큰이 유효하지 않습니다. 다시 로그인해 주세요.');
+        localStorage.removeItem('admin_token');
+        window.location.href = '/admin';
+        return;
+      }
       if (res.ok) {
         alert(editId ? '수정되었습니다!' : '업로드 되었습니다!');
         resetForm();
@@ -128,8 +164,25 @@ export default function AdminMediaPage() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('정말 삭제하시겠습니까?')) return;
+    const token = localStorage.getItem('admin_token');
+    if (!token) {
+      alert('관리자 인증이 필요합니다.');
+      window.location.href = '/admin';
+      return;
+    }
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/media/${id}`, { method: 'DELETE' });
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/media/${id}`, { 
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (res.status === 401) {
+        alert('인증 토큰이 유효하지 않습니다. 다시 로그인해 주세요.');
+        localStorage.removeItem('admin_token');
+        window.location.href = '/admin';
+        return;
+      }
       if (res.ok) fetchMedia();
       else alert('삭제 실패');
     } catch (e) {

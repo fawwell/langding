@@ -35,6 +35,12 @@ export default function AdminCentersPage() {
 
   const fetchCenters = async () => {
     try {
+      const token = localStorage.getItem('admin_token');
+      if (!token) {
+        alert('관리자 인증이 필요합니다. 로그인 페이지로 이동합니다.');
+        window.location.href = '/admin';
+        return;
+      }
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/centers/?t=${Date.now()}`, {
         cache: 'no-store'
       });
@@ -50,13 +56,28 @@ export default function AdminCentersPage() {
       alert('네이버 지도 URL을 입력해주세요.');
       return;
     }
+    const token = localStorage.getItem('admin_token');
+    if (!token) {
+      alert('관리자 인증이 필요합니다.');
+      window.location.href = '/admin';
+      return;
+    }
     setInfoLoading(true);
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/centers/crawl`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({ url: formData.map_url }),
       });
+      if (res.status === 401) {
+        alert('인증 토큰이 유효하지 않습니다. 다시 로그인해 주세요.');
+        localStorage.removeItem('admin_token');
+        window.location.href = '/admin';
+        return;
+      }
       const json = await res.json();
       if (json.success && json.data) {
         setFormData(prev => ({
@@ -107,10 +128,20 @@ export default function AdminCentersPage() {
 
     const experts = formData.experts_str.split(',').map(s => s.trim()).filter(s => s !== '');
 
+    const token = localStorage.getItem('admin_token');
+    if (!token) {
+      alert('관리자 인증이 필요합니다.');
+      window.location.href = '/admin';
+      return;
+    }
+
     try {
       const res = await fetch(url, {
         method: method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({
             name: formData.name,
             tagline: formData.tagline,
@@ -123,6 +154,12 @@ export default function AdminCentersPage() {
             sort_order: parseInt(formData.sort_order) || 0
         }),
       });
+      if (res.status === 401) {
+        alert('인증 토큰이 유효하지 않습니다. 다시 로그인해 주세요.');
+        localStorage.removeItem('admin_token');
+        window.location.href = '/admin';
+        return;
+      }
       if (res.ok) {
         alert(editId ? '수정되었습니다!' : '등록되었습니다!');
         resetForm();
@@ -156,8 +193,25 @@ export default function AdminCentersPage() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('정말 삭제하시겠습니까?')) return;
+    const token = localStorage.getItem('admin_token');
+    if (!token) {
+      alert('관리자 인증이 필요합니다.');
+      window.location.href = '/admin';
+      return;
+    }
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/centers/${id}`, { method: 'DELETE' });
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/centers/${id}`, { 
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (res.status === 401) {
+        alert('인증 토큰이 유효하지 않습니다. 다시 로그인해 주세요.');
+        localStorage.removeItem('admin_token');
+        window.location.href = '/admin';
+        return;
+      }
       if (res.ok) fetchCenters();
       else alert('삭제 실패');
     } catch (e) {

@@ -34,7 +34,7 @@ async def test_crawl():
         print(f"Extracted Place ID: {place_id}")
         
         # Fetch from Naver Map Summary API
-        summary_url = f"https://map.naver.com/v5/api/sites/summary/{place_id}?_format=json"
+        summary_url = f"https://map.naver.com/p/api/place/summary/{place_id}?_format=json"
         print(f"Fetching summary from: {summary_url}")
         
         async with httpx.AsyncClient(timeout=10.0) as client:
