@@ -6,6 +6,7 @@ import { UIProvider } from '@/context/UIContext';
 import AppLayout from '@/components/layout/AppLayout';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://faww.co.kr'),
   title: 'FaWW(파우) | AI 체형분석 기반 임직원 근골격계 피지컬케어 EAP',
   description: '거북목, 허리 통증 솔루션! 대기업·스타트업이 선택한 찾아가는 사내 임직원 건강 복지 프로그램, 데이터 기반 피지컬케어 No.1 파우.',
   keywords: ['임직원 건강관리', 'EAP', '근골격계 케어', '사내 피지컬케어', '기업 복지 프로그램', '찾아가는 운동', 'FaWW', '파우'],
@@ -47,10 +48,11 @@ const organizationJsonLd = {
   '@type': 'Organization',
   name: 'FaWW (파우)',
   url: 'https://faww.co.kr',
-  logo: 'https://faww.co.kr/images/logo.png',
+  logo: 'https://faww.co.kr/images/%ED%8C%8C%EC%9A%B0%EB%AF%B8.png',
   description: 'AI 체형분석 기반 임직원 근골격계 피지컬케어 EAP 전문 기업',
   contactPoint: {
     '@type': 'ContactPoint',
+    telephone: '+82-2-6482-9003',
     contactType: 'customer service',
     availableLanguage: 'Korean',
   },
@@ -64,7 +66,17 @@ const localBusinessJsonLd = {
   '@type': 'LocalBusiness',
   name: 'FaWW 파우',
   url: 'https://faww.co.kr',
+  logo: 'https://faww.co.kr/images/%ED%8C%8C%EC%9A%B0%EB%AF%B8.png',
+  image: 'https://faww.co.kr/images/%ED%8C%8C%EC%9A%B0%EB%AF%B8.png',
   description: '임직원 근골격계 케어, 사내 EAP 피지컬케어 전문 기업',
+  telephone: '02-6482-9003',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '도신로 143, 대원빌딩 301호',
+    addressLocality: '영등포구',
+    addressRegion: '서울특별시',
+    addressCountry: 'KR',
+  },
   priceRange: '$$',
   areaServed: '대한민국',
   serviceType: ['기업 복지 프로그램', 'EAP 임직원 건강관리', 'AI 체형분석', '찾아가는 피지컬케어'],

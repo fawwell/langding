@@ -17,7 +17,7 @@ const CenterDetailModal = ({ center, onClose }: CenterDetailModalProps) => {
                 
                 {/* 좌측 비주얼 */}
                 <div className="center-modal-visual" style={{ 
-                    backgroundImage: `url('${center.image_url || '/images/physical-care/001.jpg'}')`,
+                    backgroundImage: `url('${center.image_url || '/images/physical-care/001.webp'}')`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center'
                 }}>

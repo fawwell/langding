@@ -46,7 +46,7 @@ const GatewaySection = () => {
                     </div>
                     <div className="gateway-card reveal delay-2" onClick={() => router.push('/mall')} style={{ padding: 0, overflow: 'hidden' }}>
                         <div className="gateway-img" style={{ height: '200px', background: '#f0f0f0' }}>
-                            <img src="/images/gateway/mall.jpg" alt="Wellness Mall" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            <img src="/images/gateway/mall.webp" alt="Wellness Mall" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
                         <div className="gateway-content" style={{ padding: '30px' }}>
                             <div className="tags-wrap"><span className="hash-tag">#홈케어교구</span><span className="hash-tag">#복지포인트</span></div>

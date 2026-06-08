@@ -93,7 +93,7 @@ const SchoolPage = () => {
                         <div className="smart-card reveal delay-1" onClick={() => openModal('modal4')}>
                             <div className="smart-card-top">
                                 <div className="smart-card-img" style={{ 
-                                    backgroundImage: "linear-gradient(rgba(0,0,0,0.05), rgba(0,0,0,0.2)), url('/images/eap/group_exercise.jpg')",
+                                    backgroundImage: "linear-gradient(rgba(0,0,0,0.05), rgba(0,0,0,0.2)), url('/images/eap/group_exercise.webp')",
                                     backgroundSize: 'cover',
                                     backgroundPosition: 'center'
                                 }}></div>
