@@ -117,11 +117,28 @@ const EAPPage = () => {
         }))
     };
 
+    const serviceJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "FaWW EAP 임직원 근골격계 관리 솔루션",
+        "description": "AI 체형분석 기업복지 및 근골격계 유해요인조사 사후관리 통합 서비스. 임직원 근골격계 관리를 위한 전문 피지컬케어 프로그램을 제공합니다.",
+        "serviceType": ["임직원 근골격계 관리", "근골격계 유해요인조사 사후관리", "AI 체형분석 기업복지"],
+        "provider": {
+            "@type": "Organization",
+            "name": "FaWW",
+            "url": "https://www.faww.co.kr"
+        }
+    };
+
     return (
         <main id="page-eap" className="page-content active">
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
             />
 
             <style dangerouslySetInnerHTML={{ __html: EAP_PAGE_STYLES }} />

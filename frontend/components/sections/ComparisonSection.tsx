@@ -4,7 +4,7 @@ import React from 'react';
 
 const ComparisonSection = () => {
     return (
-        <section className="comparison-section reveal" style={{ padding: '60px 0', background: '#fff', borderTop: '1px solid #eee' }}>
+        <section className="comparison-section reveal" aria-label="임직원 근골격계 관리 솔루션 비교" style={{ padding: '60px 0', background: '#fff', borderTop: '1px solid #eee' }}>
             <div className="container" style={{ textAlign: 'center' }}>
                 <span className="section-kicker reveal soft-reveal">DIFFERENCE</span>
                 <h2 className="section-title reveal soft-reveal">품의서가 통과되는 압도적 차이</h2>
@@ -37,6 +37,20 @@ const ComparisonSection = () => {
                         </tbody>
                     </table>
                 </div>
+                {/* SEO: SR-only pattern for keyword indexing */}
+                <p style={{
+                    position: 'absolute',
+                    width: '1px',
+                    height: '1px',
+                    padding: '0',
+                    margin: '-1px',
+                    overflow: 'hidden',
+                    clip: 'rect(0, 0, 0, 0)',
+                    whiteSpace: 'nowrap',
+                    border: '0'
+                }}>
+                    FaWW 피지컬케어는 AI 체형분석 기업복지와 근골격계 유해요인조사 사후관리, 임직원 근골격계 관리를 통합 제공하는 대한민국 원조 전문 기업입니다.
+                </p>
             </div>
         </section>
     );

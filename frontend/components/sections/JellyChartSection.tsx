@@ -74,19 +74,19 @@ const JellyChartSection = ({ reviewsData }: JellyChartSectionProps) => {
                             <div className="stat-floating-card card-1 reveal delay-4">
                                 <div className="stat-card-badge">CORPORATE</div>
                                 <h4>LG 디스플레이 임직원</h4>
-                                <p className="rev-text">"사내로 직접 찾아오시는 출장 케어 덕분에 업무 중 짬을 내어 고질적인 거북목 통증을 해결할 수 있었습니다. 전문가의 손길이 확실히 다르네요."</p>
+                                <p className="rev-text">"사내로 찾아오는 AI 체형분석 기업복지 덕분에 고질적인 거북목과 허리 통증을 해결했습니다. 전문가들의 체계적인 개입이 돋보입니다."</p>
                                 <div style={{ color: '#fab005', fontSize: '12px', marginTop: '8px' }}>★★★★★</div>
                             </div>
                             <div className="stat-floating-card card-2 reveal delay-5">
                                 <div className="stat-card-badge">FIELD CARE</div>
                                 <h4>현대자동차 생산라인</h4>
-                                <p className="rev-text">"현장 근로자들의 신체적 특성을 정확히 이해하고 계십니다. 1:1 맞춤형 체형 분석과 스트레칭 교육이 실제 피로도 감소에 큰 도움이 되었습니다."</p>
+                                <p className="rev-text">"근골격계 유해요인조사 사후관리의 일환으로 도입했습니다. 생산직 근로자의 특성을 반영한 1:1 케어 덕분에 실제 피로가 줄어들었습니다."</p>
                                 <div style={{ color: '#fab005', fontSize: '12px', marginTop: '8px' }}>★★★★★</div>
                             </div>
                             <div className="stat-floating-card card-3 reveal delay-6">
                                 <div className="stat-card-badge">OFFICE CARE</div>
                                 <h4>네이버 인사팀장</h4>
-                                <p className="rev-text">"임직원 복지 차원에서 도입했는데 만족도가 기대 이상입니다. 정기적인 방문 케어 이후 사내 분위기가 훨씬 밝아지고 업무 집중도가 높아졌습니다."</p>
+                                <p className="rev-text">"사내 임직원 근골격계 관리 복지 프로그램으로 정기 케어를 선택했는데, 업무 몰입과 사내 활력이 눈에 띄게 좋아졌습니다."</p>
                                 <div style={{ color: '#fab005', fontSize: '12px', marginTop: '8px' }}>★★★★★</div>
                             </div>
                         </>

@@ -21,8 +21,8 @@ const HeroSection = ({ openModal }: HeroSectionProps) => {
                     <span className="text-highlight">기업복지</span>의 원조는 <span className="text-highlight">FaWW</span>
                 </h1>
                 <p className="hero-el hero-el-3 soft-reveal">
-                    <strong>스마트 AI를 활용한 맞춤형 케어프로그램</strong><br />
-                    근골격계 질환, 1:1 케어 프로그램을 통한 산재 예방 시스템을<br />업계 최초로 도입한 피지컬케어 전문가가 함께합니다
+                    <strong>스마트 AI 체형분석을 활용한 임직원 근골격계 관리</strong><br />
+                    근골격계 유해요인조사 사후관리부터 1:1 케어까지, 업계 최초로 산재 예방 시스템을 도입한 피지컬케어 전문가가 함께합니다
                 </p>
                 <div className="hero-buttons hero-el hero-el-4" style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap', marginTop: '30px' }}>
                     <button className="btn-primary" onClick={() => openModal('modal-proposal')}>맞춤 솔루션 문의하기</button>

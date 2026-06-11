@@ -17,11 +17,11 @@ const GatewaySection = () => {
                 <div className="gateway-grid">
                     <div className="gateway-card reveal" onClick={() => router.push('/ai')} style={{ padding: 0, overflow: 'hidden' }}>
                         <div className="gateway-img" style={{ height: '200px', position: 'relative', overflow: 'hidden', background: '#f0f0f0' }}>
-                            <img src="/images/gateway/ai_scanning.png" alt="AI Scanning" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            <img src="/images/gateway/ai_scanning.png" alt="AI 체형분석 기업복지" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                             <div className="scan-line"></div>
                         </div>
                         <div className="gateway-content" style={{ padding: '30px' }}>
-                            <div className="tags-wrap"><span className="hash-tag">#임직원_통증관리</span><span className="hash-tag">#학생_체형검진</span></div>
+                            <div className="tags-wrap"><span className="hash-tag">#임직원_근골격계_관리</span><span className="hash-tag">#유해요인조사_사후관리</span></div>
                             <h2>스마트 AI 체형분석 <br /> 솔루션</h2>
                             <p>기업의 업무 효율을 높이는 <br />
                                 EAP 복지 프로그램부터 학교 <br />
@@ -32,7 +32,7 @@ const GatewaySection = () => {
                     </div>
                     <div className="gateway-card reveal delay-1" onClick={() => router.push('/physical')} style={{ padding: 0, overflow: 'hidden' }}>
                         <div className="gateway-img" style={{ height: '200px', background: '#f0f0f0' }}>
-                            <img src="/images/gateway/physical_care.jpg" alt="Physical Care" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            <img src="/images/gateway/physical_care.jpg" alt="임직원 근골격계 관리" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
                         <div className="gateway-content" style={{ padding: '30px' }}>
                             <div className="tags-wrap"><span className="hash-tag">#로컬센터</span><span className="hash-tag">#전문가양성</span></div>

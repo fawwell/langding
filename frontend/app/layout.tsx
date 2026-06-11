@@ -7,9 +7,9 @@ import AppLayout from '@/components/layout/AppLayout';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://faww.co.kr'),
-  title: 'FaWW(파우) | AI 체형분석 기반 임직원 근골격계 피지컬케어 EAP',
-  description: '거북목, 허리 통증 솔루션! 대기업·스타트업이 선택한 찾아가는 사내 임직원 건강 복지 프로그램, 데이터 기반 피지컬케어 No.1 파우.',
-  keywords: ['임직원 건강관리', 'EAP', '근골격계 케어', '사내 피지컬케어', '기업 복지 프로그램', '찾아가는 운동', 'FaWW', '파우'],
+  title: 'FaWW(파우) | 임직원 근골격계 관리 & AI 체형분석 기업복지 EAP',
+  description: '근골격계 유해요인조사 사후관리 및 임직원 근골격계 관리 전문. 대기업·스타트업이 선택한 AI 체형분석 기업복지 EAP No.1 파우.',
+  keywords: ['임직원 근골격계 관리', '근골격계 유해요인조사 사후관리', 'AI 체형분석 기업복지', '임직원 건강관리', 'EAP', '근골격계 케어', '사내 피지컬케어', '기업 복지 프로그램', 'FaWW', '파우'],
   verification: {
     google: '1CKTUnV7zTqw0YWxzXDFNN0TBw_ZG6CVQo5xci6DOK8',
     other: {
@@ -21,8 +21,8 @@ export const metadata: Metadata = {
     locale: 'ko_KR',
     url: 'https://faww.co.kr',
     siteName: 'FaWW(파우)',
-    title: 'FaWW(파우) | AI 체형분석 기반 임직원 근골격계 피지컬케어 EAP',
-    description: '거북목, 허리 통증 솔루션! 대기업·스타트업이 선택한 찾아가는 사내 임직원 건강 복지 프로그램, 데이터 기반 피지컬케어 No.1 파우.',
+    title: 'FaWW(파우) | 임직원 근골격계 관리 & AI 체형분석 기업복지 EAP',
+    description: '근골격계 유해요인조사 사후관리 및 임직원 근골격계 관리 전문. 대기업·스타트업이 선택한 AI 체형분석 기업복지 EAP No.1 파우.',
     images: [
       {
         url: 'https://faww.co.kr/images/%ED%8C%8C%EC%9A%B0%EB%AF%B8.png',
@@ -34,8 +34,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'FaWW(파우) | AI 체형분석 기반 임직원 근골격계 피지컬케어 EAP',
-    description: '거북목, 허리 통증 솔루션! 대기업·스타트업이 선택한 찾아가는 사내 임직원 건강 복지 프로그램.',
+    title: 'FaWW(파우) | 임직원 근골격계 관리 & AI 체형분석 기업복지 EAP',
+    description: '근골격계 유해요인조사 사후관리 및 임직원 근골격계 관리 전문. 대기업·스타트업이 선택한 AI 체형분석 기업복지 EAP No.1 파우.',
     images: ['https://faww.co.kr/images/%ED%8C%8C%EC%9A%B0%EB%AF%B8.png'],
   },
   alternates: {
@@ -49,7 +49,7 @@ const organizationJsonLd = {
   name: 'FaWW (파우)',
   url: 'https://faww.co.kr',
   logo: 'https://faww.co.kr/images/%ED%8C%8C%EC%9A%B0%EB%AF%B8.png',
-  description: 'AI 체형분석 기반 임직원 근골격계 피지컬케어 EAP 전문 기업',
+  description: '임직원 근골격계 관리, 근골격계 유해요인조사 사후관리, AI 체형분석 기업복지 전문 기업',
   contactPoint: {
     '@type': 'ContactPoint',
     telephone: '+82-2-6482-9003',
@@ -68,7 +68,7 @@ const localBusinessJsonLd = {
   url: 'https://faww.co.kr',
   logo: 'https://faww.co.kr/images/%ED%8C%8C%EC%9A%B0%EB%AF%B8.png',
   image: 'https://faww.co.kr/images/%ED%8C%8C%EC%9A%B0%EB%AF%B8.png',
-  description: '임직원 근골격계 케어, 사내 EAP 피지컬케어 전문 기업',
+  description: '임직원 근골격계 관리, 근골격계 유해요인조사 사후관리, AI 체형분석 기업복지 전문 기업',
   telephone: '02-6482-9003',
   address: {
     '@type': 'PostalAddress',
@@ -79,7 +79,7 @@ const localBusinessJsonLd = {
   },
   priceRange: '$$',
   areaServed: '대한민국',
-  serviceType: ['기업 복지 프로그램', 'EAP 임직원 건강관리', 'AI 체형분석', '찾아가는 피지컬케어'],
+  serviceType: ['임직원 근골격계 관리', '근골격계 유해요인조사 사후관리', 'AI 체형분석 기업복지', 'EAP 임직원 건강관리', '찾아가는 피지컬케어'],
 };
 
 export default function RootLayout({

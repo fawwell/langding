@@ -369,9 +369,9 @@ export const UIProvider = ({ children }: { children: React.ReactNode }) => {
                     const baseData = data || [];
                     setReviewsData([
                         ...baseData,
-                        { type: 'b2b', stars: '★★★★★', text: '"수업 끝나고 사무실로 복귀할 때 벌써 변화를 체감합니다. 발바닥, 종아리, 허벅지 움직임부터가 다르네요. 최고입니다!"', reviewer: 'S사 운영팀' },
-                        { type: 'b2b', stars: '★★★★★', text: '"늘어나는 산재 발생이 큰 고민이었는데 업무 시작 전 사고를 예방하는 프로그램을 진행하면서 눈에 띄게 줄었어요."', reviewer: 'H사 안전환경팀' },
-                        { type: 'school', stars: '★★★★☆', text: '"모든 학생이 형평성 있게 검진을 이용할 수 있다는 점이 좋았어요. 체계적인 데이터 리포트 덕분에 학부모님들 만족도도 높습니다."', reviewer: 'OO고등학교 보건교사' }
+                        { type: 'b2b', stars: '★★★★★', text: "임직원 근골격계 관리 프로그램 도입 후 사무실 복귀할 때 벌써 변화를 체감합니다. 발바닥, 종아리, 허벅지 움직임부터가 다르네요. AI 체형분석 결과도 개인별로 바로 받아볼 수 있어 만족스럽습니다.", reviewer: 'S사 운영팀' },
+                        { type: 'b2b', stars: '★★★★★', text: "근골격계 유해요인조사 사후관리를 FaWW와 함께 진행한 후 산재 발생이 눈에 띄게 줄었어요. 법적 의무 이행과 실질적 케어를 동시에 해결한 최고의 기업복지 선택이었습니다.", reviewer: 'H사 안전환경팀' },
+                        { type: 'school', stars: '★★★★☆', text: "모든 학생이 형평성 있게 검진을 이용할 수 있다는 점이 좋았어요. 체계적인 AI 체형분석 데이터 리포트 덕분에 학부모님들 만족도도 높습니다.", reviewer: 'OO고등학교 보건교사' }
                     ]);
                 }
             } catch (err) {

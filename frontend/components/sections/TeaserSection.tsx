@@ -4,7 +4,7 @@ import React from 'react';
 
 const TeaserSection = () => {
     return (
-        <section className="teaser-section reveal">
+        <section className="teaser-section reveal" aria-label="임직원 근골격계 관리 및 AI 체형분석 기업복지 소개">
             <div className="container text-center" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
                 
                 {/* Step 1: 담당자님 (Grey) */}
@@ -42,6 +42,21 @@ const TeaserSection = () => {
                      style={{ color: '#aaa', fontSize: '15px' }}>
                     지금부터 파우(FaWW)를 소개합니다. ▼
                 </div>
+
+                {/* SEO: Visually hidden, screen-reader accessible context (SR-only pattern) */}
+                <p style={{
+                    position: 'absolute',
+                    width: '1px',
+                    height: '1px',
+                    padding: '0',
+                    margin: '-1px',
+                    overflow: 'hidden',
+                    clip: 'rect(0, 0, 0, 0)',
+                    whiteSpace: 'nowrap',
+                    border: '0'
+                }}>
+                    FaWW는 임직원 근골격계 관리 전문 기업으로, AI 체형분석 기반의 기업복지 솔루션과 근골격계 유해요인조사 사후관리 서비스를 제공합니다.
+                </p>
             </div>
         </section>
     );

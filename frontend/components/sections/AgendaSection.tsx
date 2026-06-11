@@ -15,7 +15,7 @@ const AgendaSection = () => {
                     <div className="agenda-card reveal reveal-left">
                         <div className="agenda-icon">🚨</div>
                         <h3 style={{ fontSize: '28px', lineHeight: '1.3' }}>건강한 몸이 곧<br />산재의 예방입니다</h3>
-                        <p style={{ fontSize: '18px' }}>눈에 보이지 않는 신체의 피로와 통증은 예고 없이 찾아오는 산재의 씨앗입니다. 근골격계 질환을 선제적으로 예방하여 <br />법적 리스크를 낮추고 조직의 생산성을 극대화하십시오.</p>
+                        <p style={{ fontSize: '18px' }}>눈에 보이지 않는 신체의 피로와 통증은 산재의 씨앗입니다. 근골격계 유해요인조사 사후관리를 실행하여 법적 리스크를 해소하고 임직원 근골격계 관리를 극대화하십시오.</p>
                     </div>
                     <div className="agenda-card reveal reveal-scale delay-2">
                         <div className="agenda-icon">👶</div>
@@ -47,7 +47,7 @@ const AgendaSection = () => {
                         <div className="agenda-card reveal" style={{ border: '2px solid #2b8a3e', boxShadow: '0 10px 30px rgba(43, 138, 62, 0.08)' }}>
                             <div className="agenda-icon">📊</div>
                             <h3>담당자의 성과를 증명하는 '사후 리포트'</h3>
-                            <p>현장 케어 후 단순 만족도 조사가 아닌, <strong>AI 스캐닝 기반의 <br />신체 개선 수치를 시각화한 리포트</strong>를 제공합니다. 인사평가, ESG 및 <br />산업안전보건 증빙 자료로 즉시 활용 가능한 결과물을 책임집니다.</p>
+                            <p>현장 케어 후 단순 만족도 조사가 아닌, <strong>AI 체형분석 기반의 신체 개선 수치를 시각화한 리포트</strong>를 제공합니다. 임직원 근골격계 관리 성과, ESG 및 근골격계 유해요인조사 사후관리 증빙 자료로 즉시 활용 가능한 결과물을 책임집니다.</p>
                             <div className="mini-chart">
                                 <div className="mini-bar mini-bar-1" style={{ backgroundColor: '#2b8a3e' }}></div>
                                 <div className="mini-bar mini-bar-2" style={{ backgroundColor: '#40c057' }}></div>

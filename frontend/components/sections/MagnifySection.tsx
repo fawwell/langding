@@ -19,7 +19,7 @@ const MagnifySection = () => {
                         color: '#00ff88', 
                         fontWeight: 'bold', 
                         textShadow: '0 0 8px rgba(0,255,136,0.6), 0 0 20px rgba(0,255,136,0.3)' 
-                    }}>스마트 AI 기술</span>은 신체 불균형을 정밀하게 측정하여<br />눈에 보이지 않는 통증의 원인을 찾아냅니다.
+                    }}>스마트 AI 체형분석</span> 기술은 신체 불균형을 정밀하게 측정하여<br />임직원 근골격계 관리와 근골격계 유해요인조사 사후관리의 과학적 근거를 제시합니다.
                 </p>
                 <div className="magnify-container reveal delay-4">
                     <div className="magnify-shine"></div>
