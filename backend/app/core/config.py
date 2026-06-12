@@ -29,6 +29,10 @@ class Settings(BaseSettings):
     # 보안
     SECRET_KEY: str = os.getenv("SECRET_KEY", "change-me-in-production")
 
+    # 관리자 설정
+    ADMIN_ID: str = "admin"
+    ADMIN_PASSWORD: str = "skt010203!"
+
     @property
     def cors_origins_list(self) -> list[str]:
         """CORS 오리진 문자열을 리스트로 변환."""
