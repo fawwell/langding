@@ -120,7 +120,7 @@ export default function AdminDashboard() {
         <button onClick={handleLogout} style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #ddd', background: '#fff', cursor: 'pointer', fontSize: '13px', color: '#666' }}>로그아웃</button>
       </div>
       
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '25px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(285px, 1fr))', gap: '25px' }}>
         <Link href="/admin/media" style={{ textDecoration: 'none' }}>
           <div style={{ 
             padding: '40px 20px', 
@@ -194,6 +194,25 @@ export default function AdminDashboard() {
             <div style={{ fontSize: '40px', marginBottom: '15px' }}>🏢</div>
             <h3 style={{ margin: '0 0 10px 0', color: '#111' }}>피지컬 센터 관리</h3>
             <p style={{ margin: 0, color: '#666', fontSize: '14px' }}>각 지점별 정보, 철학, 전문가 목록 관리</p>
+          </div>
+        </Link>
+
+        <Link href="/admin/analytics" style={{ textDecoration: 'none' }}>
+          <div style={{ 
+            padding: '40px 20px', 
+            background: '#fff', 
+            border: '1px solid #eee', 
+            borderRadius: '24px', 
+            boxShadow: '0 10px 25px rgba(0,0,0,0.03)',
+            transition: 'all 0.3s ease',
+            cursor: 'pointer'
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; e.currentTarget.style.borderColor = '#2b8a3e'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = '#eee'; }}
+          >
+            <div style={{ fontSize: '40px', marginBottom: '15px' }}>📊</div>
+            <h3 style={{ margin: '0 0 10px 0', color: '#111' }}>방문 및 광고 분석</h3>
+            <p style={{ margin: 0, color: '#666', fontSize: '14px' }}>구글/네이버 광고 유입 및 제안서 전환 분석</p>
           </div>
         </Link>
       </div>
