@@ -67,7 +67,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                         if (node.nodeType === 3) {
                             const text = node.textContent || '';
                             const fragment = document.createDocumentFragment();
-                            [...text].forEach((char) => {
+                            text.split('').forEach((char) => {
                                 const span = document.createElement('span');
                                 span.textContent = char === ' ' ? '\u00A0' : char;
                                 span.className = 'char';
@@ -268,7 +268,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
             {children}
 
-            <InfoModals activeModal={activeModal} onClose={closeModal} />
+            <InfoModals activeModal={activeModal || ''} onClose={closeModal} />
             
             <ProposalModal 
                 isOpen={activeModal === 'modal-proposal'} 

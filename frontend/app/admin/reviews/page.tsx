@@ -337,7 +337,7 @@ export default function ReviewAdmin() {
         fontFamily: 'sans-serif'
       }}>
         <h3 style={{ margin: '0 0 10px 0', color: '#2b8a3e', fontSize: '18px', fontWeight: '800' }}>📊 엑셀/CSV 후기 일괄 등록</h3>
-        <p style={{ margin: '0 0 20px 0', color: '#555', fontSize: '13px', lineHeight: '1.6', textAlign: 'left', maxWidth: '700px', margin: '0 auto 20px auto' }}>
+        <p style={{ color: '#555', fontSize: '13px', lineHeight: '1.6', textAlign: 'left', maxWidth: '700px', margin: '0 auto 20px auto' }}>
           보유하고 계신 설문 결과 엑셀(.xlsx) 또는 CSV 파일을 선택하면 아래의 규칙에 따라 일괄 업로드됩니다.<br /><br />
           <strong>📋 엑셀 열(컬럼) 감지 규칙:</strong><br />
           1. <strong>성함</strong>: 이름 부분은 자동으로 &apos;OO&apos; 마스킹 처리됩니다. (예: 김철수 ➔ 김OO)<br />

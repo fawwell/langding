@@ -237,7 +237,7 @@ const PhysicalPage = () => {
                                                 <div className="equipment-section">
                                                     <h4 className="sub-title">TECHNOLOGY & EQUIPMENT</h4>
                                                     <div className="equipment-tags">
-                                                        {(currentCenter.equipments || ['3D AI 스캐너', '정밀 체형 분석기']).map((eq, i) => (
+                                                        {(currentCenter.equipments || ['3D AI 스캐너', '정밀 체형 분석기']).map((eq: string, i: number) => (
                                                             <span key={i} className="eq-tag">{eq}</span>
                                                         ))}
                                                     </div>

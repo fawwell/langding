@@ -12,7 +12,7 @@ interface ProposalModalProps {
     onEmailValidate: (e: React.ChangeEvent<HTMLInputElement>) => void;
     inquiryText: string;
     setInquiryText: (text: string) => void;
-    toggleSubModules: (e: React.MouseEvent<HTMLElement>) => void;
+    toggleSubModules: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 const ProposalModal = ({

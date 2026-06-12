@@ -99,7 +99,7 @@ export const useScrollReveal = (isMounted: boolean, activePage: string, activePh
                     if (node.nodeType === Node.TEXT_NODE) {
                         const text = node.textContent || '';
                         const fragment = document.createDocumentFragment();
-                        [...text].forEach(char => {
+                        text.split('').forEach(char => {
                             const span = document.createElement('span');
                             span.textContent = char === ' ' ? '\u00A0' : char;
                             span.className = 'char';

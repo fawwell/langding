@@ -38,6 +38,9 @@ const BodyExplorer = () => {
 
         console.log("Initializing 3D Body Explorer...");
         let renderer: THREE.WebGLRenderer;
+        let onMouseClick: (event: MouseEvent) => void;
+        let handleResize: () => void;
+        let frameId: number;
         
         try {
             // 1. Scene Setup
@@ -131,7 +134,7 @@ const BodyExplorer = () => {
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
 
-        const onMouseClick = (event: MouseEvent) => {
+        onMouseClick = (event: MouseEvent) => {
             const rect = renderer.domElement.getBoundingClientRect();
             mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
             mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
@@ -147,8 +150,6 @@ const BodyExplorer = () => {
 
         window.addEventListener('click', onMouseClick);
 
-        // 6. Animation
-        let frameId: number;
         const animate = () => {
             frameId = requestAnimationFrame(animate);
             group.rotation.y += 0.005;
@@ -163,8 +164,7 @@ const BodyExplorer = () => {
         };
         animate();
 
-        // 7. Handle Resize
-        const handleResize = () => {
+        handleResize = () => {
             if (!canvasRef.current) return;
             camera.aspect = canvasRef.current.clientWidth / canvasRef.current.clientHeight;
             camera.updateProjectionMatrix();
