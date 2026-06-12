@@ -9,7 +9,7 @@ interface HeroSectionProps {
 const HeroSection = ({ openModal }: HeroSectionProps) => {
     return (
         <section className="hero-brand reveal">
-            <video className="hero-video-bg" autoPlay loop muted playsInline>
+            <video className="hero-video-bg" autoPlay loop muted playsInline preload="metadata">
                 <source src="background3.mp4" type="video/mp4" />
             </video>
             <div className="hero-overlay"></div>

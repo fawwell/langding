@@ -20,6 +20,28 @@ export const metadata: Metadata = {
   },
 };
 
+const physicalServiceJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'FaWW 피지컬케어 자격증 교육 및 센터',
+  provider: {
+    '@type': 'Organization',
+    name: 'FaWW (파우)',
+    url: 'https://faww.co.kr',
+  },
+  serviceType: '스포츠 테이핑, 퍼스널 트레이닝, 체형 교정 자격증 교육 및 1:1 맞춤 피지컬케어',
+  areaServed: 'KR',
+  description: '스포츠 테이핑, 퍼스널 트레이닝, 체형 교정 등 FaWW 오리지널 피지컬케어 자격증 양성 교육 정보 및 전국 공식 지점(센터)의 1:1 맞춤형 피지컬케어 솔루션.',
+};
+
 export default function PhysicalPageRoute() {
-  return <PhysicalPageClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(physicalServiceJsonLd) }}
+      />
+      <PhysicalPageClient />
+    </>
+  );
 }

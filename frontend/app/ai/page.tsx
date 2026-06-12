@@ -20,6 +20,28 @@ export const metadata: Metadata = {
   },
 };
 
+const aiServiceJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'FaWW AI 체형분석 솔루션',
+  provider: {
+    '@type': 'Organization',
+    name: 'FaWW (파우)',
+    url: 'https://faww.co.kr',
+  },
+  serviceType: 'AI 체형분석 및 3D 신체스캐닝 자세 진단',
+  areaServed: 'KR',
+  description: '정밀 3D 스캐닝과 스마트 AI 솔루션을 활용하여 임직원 근골격계 위험도 진단 및 학생 자세 불균형을 과학적으로 분석합니다.',
+};
+
 export default function AIPageRoute() {
-  return <AIPageClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aiServiceJsonLd) }}
+      />
+      <AIPageClient />
+    </>
+  );
 }

@@ -27,7 +27,7 @@ const PartnerSection = () => {
                                 <React.Fragment key={i}>
                                     {partnerLogos.map((logo, idx) => (
                                         <div key={`${i}-${idx}`} className="partner-logo">
-                                            <img src={`/images/partners/${logo}`} alt="Partner" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                                            <img src={`/images/partners/${logo}`} alt={`FaWW 협력 파트너사 로고 - ${logo.split('.')[0]}`} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
                                         </div>
                                     ))}
                                 </React.Fragment>

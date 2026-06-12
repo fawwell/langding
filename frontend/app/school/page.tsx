@@ -20,6 +20,28 @@ export const metadata: Metadata = {
   },
 };
 
+const schoolServiceJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'FaWW 학교용 AI 학생 체형분석 솔루션',
+  provider: {
+    '@type': 'Organization',
+    name: 'FaWW (파우)',
+    url: 'https://faww.co.kr',
+  },
+  serviceType: '초중고 단체 학생 체형검진 및 자세 진단 교육 서비스',
+  areaServed: 'KR',
+  description: '성장기 학생들의 올바른 자세를 지원하는 스마트 AI 단체 체형검진 프로그램. 척추측만증, 거북목, 평발 검사와 데이터 기반 맞춤형 운동/자세 보건 수업 제안.',
+};
+
 export default function SchoolPageRoute() {
-  return <SchoolPageClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schoolServiceJsonLd) }}
+      />
+      <SchoolPageClient />
+    </>
+  );
 }

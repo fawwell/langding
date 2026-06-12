@@ -20,6 +20,28 @@ export const metadata: Metadata = {
   },
 };
 
+const eapServiceJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'FaWW EAP 근골격계 기업복지 서비스',
+  provider: {
+    '@type': 'Organization',
+    name: 'FaWW (파우)',
+    url: 'https://faww.co.kr',
+  },
+  serviceType: '임직원 근골격계 관리 & 기업복지 EAP',
+  areaServed: 'KR',
+  description: '산업안전보건법 제39조 근골격계 유해요인조사 사후관리 대응부터 AI 체형분석 기업복지 EAP 프로그램까지, 대기업·공공기관이 선택한 No.1 EAP 솔루션.',
+};
+
 export default function EAPPageRoute() {
-  return <EAPPageClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(eapServiceJsonLd) }}
+      />
+      <EAPPageClient />
+    </>
+  );
 }
