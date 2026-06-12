@@ -5,6 +5,35 @@ import React from 'react';
 const TeaserSection = () => {
     return (
         <section className="teaser-section reveal" aria-label="임직원 근골격계 관리 및 AI 체형분석 기업복지 소개">
+            {/* 극극극강의 반응형 맞춤 디자인 오버라이드 */}
+            <style dangerouslySetInnerHTML={{ __html: `
+                .teaser-text {
+                    word-break: keep-all !important;
+                    overflow-wrap: break-word !important;
+                }
+                .teaser-mobile-br {
+                    display: none;
+                }
+                @media (max-width: 768px) {
+                    .teaser-mobile-br {
+                        display: block !important;
+                    }
+                    .teaser-text.step-2 {
+                        font-size: 20px !important;
+                        line-height: 1.6 !important;
+                    }
+                    .teaser-text.step-3 {
+                        font-size: 24px !important;
+                        line-height: 1.4 !important;
+                    }
+                    .teaser-text.step-4 {
+                        font-size: 15px !important;
+                        line-height: 1.6 !important;
+                        padding: 0 15px !important;
+                    }
+                }
+            `}} />
+
             <div className="container text-center" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
                 
                 {/* Step 1: 담당자님 (Grey) */}
@@ -18,6 +47,7 @@ const TeaserSection = () => {
                     <div style={{ marginBottom: '10px' }}>
                         <span style={{ color: '#2b8a3e', fontWeight: 900 }}>사고 없는 현장</span>
                         <span style={{ color: '#111', fontWeight: 900 }}>과 </span>
+                        <br className="teaser-mobile-br" />
                         <span style={{ color: '#2b8a3e', fontWeight: 900 }}>건강한 사무환경</span>
                         <span style={{ color: '#111', fontWeight: 900 }}>을 만드는</span>
                     </div>
@@ -34,7 +64,7 @@ const TeaserSection = () => {
 
                 {/* Step 4: 알약 박스 (Pill Style) */}
                 <div className="teaser-text step-4 soft-reveal" style={{ marginBottom: '60px' }}>
-                    "피지컬케어 원조"로서 증명해온 결과를 보여드리겠습니다.
+                    "피지컬케어 원조"로서<br className="teaser-mobile-br" />증명해온 결과를 보여드리겠습니다.
                 </div>
 
                 {/* Step 5: 소개합니다 (Light Grey) */}
