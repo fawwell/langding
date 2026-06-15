@@ -14,13 +14,14 @@ const HeroSection = ({ openModal }: HeroSectionProps) => {
                 .mobile-br {
                     display: none;
                 }
-                @media (max-width: 768px) {
+                @media (max-width: 1024px) {
+                    #page-home section.hero-brand,
                     .hero-brand {
-                        padding-top: 140px !important; /* 모바일 헤더와 겹치지 않게 아래로 충분히 밀어줌 */
+                        padding-top: 90px !important; /* Specificity 우회하여 모바일 헤더와 겹치지 않게 아래로 충분히 밀어줌 */
                         padding-bottom: 60px !important;
                     }
                     .hero-subtitle {
-                        margin-top: 0 !important;
+                        margin-top: 5px !important;
                         margin-bottom: 25px !important;
                         font-size: 12px !important;
                         padding: 8px 16px !important;
@@ -39,9 +40,6 @@ const HeroSection = ({ openModal }: HeroSectionProps) => {
                     .hero-buttons {
                         margin-top: 25px !important;
                     }
-                    .mobile-br {
-                        display: block !important; /* 모바일에서만 줄바꿈 활성화 */
-                    }
                 }
             `}} />
 
@@ -57,8 +55,10 @@ const HeroSection = ({ openModal }: HeroSectionProps) => {
                     <span className="text-highlight">기업복지</span>의 원조는 <span className="text-highlight">FaWW</span>
                 </h1>
                 <p className="hero-el hero-el-3 soft-reveal">
-                    <strong>스마트 AI 체형분석을 활용한 임직원 근골격계 관리</strong><br />
-                    근골격계 유해요인조사 사후관리부터 1:1 케어까지,<br className="mobile-br" />업계 최초로 산재 예방 시스템을 도입한 피지컬케어 전문가가 함께합니다
+                    <strong>스마트 AI 체형분석을 활용한 임직원 근골격계 관리</strong><br /><br />
+                    근골격계 유해요인조사 사후관리부터 1:1 케어까지,<br />
+                    업계 최초로 산재 예방 시스템을 도입한 <br />
+                    피지컬케어 전문가가 함께합니다
                 </p>
                 <div className="hero-buttons hero-el hero-el-4" style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap', marginTop: '30px' }}>
                     <button className="btn-primary" onClick={() => openModal('modal-proposal')}>맞춤 솔루션 문의하기</button>

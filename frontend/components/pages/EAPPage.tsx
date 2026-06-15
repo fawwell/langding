@@ -94,11 +94,22 @@ const EAP_PAGE_STYLES = `
     #page-eap section {
         padding: 180px 0 !important;
     }
+    @media (max-width: 1024px) {
+        #page-eap section {
+            padding: 80px 0 !important;
+        }
+    }
+    @media (max-width: 768px) {
+        #page-eap section {
+            padding: 50px 0 !important;
+        }
+    }
 `;
 
 const EAPPage = () => {
     const router = useRouter();
     const { openModal } = useUI();
+    const [flippedCardIdx, setFlippedCardIdx] = React.useState<number | null>(null);
 
     const toggleFaq = (e: React.MouseEvent<HTMLDivElement>) => {
         e.currentTarget.classList.toggle('open');
@@ -262,7 +273,11 @@ const EAPPage = () => {
                             { num: '10', title: '하루 2시간 이상 진동 공구 사용', desc: '진동 증후군(백색 수지), 말초 혈관 및 신경 장애' },
                             { num: '11', title: '그 외 인체에 과도한 부담을 주는 작업', desc: '전신 근골격계 피로 누적, 원인 불명의 만성 통증 체계' }
                         ].map((item, idx) => (
-                            <div key={idx} className={`risk-reveal-wrapper reveal delay-${idx % 4 + 1} has-reveal`}>
+                            <div 
+                                key={idx} 
+                                className={`risk-reveal-wrapper reveal delay-${idx % 4 + 1} has-reveal ${flippedCardIdx === idx ? 'flipped' : ''}`}
+                                onClick={() => setFlippedCardIdx(flippedCardIdx === idx ? null : idx)}
+                            >
                                 <div className="risk-type-card">
                                     <div className="card-front">
                                         <span className="risk-type-num">TYPE {item.num}</span>

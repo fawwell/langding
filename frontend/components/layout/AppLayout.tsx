@@ -256,6 +256,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                             <li><a href="https://cafe.naver.com/physicalcare" target="_blank" rel="noopener noreferrer">네이버 카페 (Cafe)</a></li>
                         </ul>
                     </li>
+                    <li className="mobile-only-action" style={{ display: 'none', padding: '15px 0 0 0', width: '100%' }}>
+                        <button className="consult-btn" style={{ width: '100%', margin: 0 }} onClick={() => openModal('modal-proposal')}>도입 및 제휴 문의</button>
+                    </li>
                 </ul>
                 <div className={`nav-actions ${isMobileMenuOpen ? 'show' : ''}`}>
                     <button className="consult-btn" onClick={() => openModal('modal-proposal')}>도입 및 제휴 문의</button>
