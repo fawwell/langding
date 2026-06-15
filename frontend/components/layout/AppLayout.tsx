@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Script from 'next/script';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useUI } from '@/context/UIContext';
@@ -44,15 +45,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         window.scrollTo({ top: 0, behavior: 'instant' as any });
     }, [pathname]);
 
-    // Swiper script loader
-    useEffect(() => {
-        if (typeof window !== 'undefined' && !document.getElementById('swiper-script')) {
-            const script = document.createElement('script');
-            script.id = 'swiper-script';
-            script.src = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js';
-            document.body.appendChild(script);
-        }
-    }, []);
+
 
     // Intersection Observer for scroll animations (Re-run on route change)
     useEffect(() => {
@@ -209,6 +202,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
     return (
         <>
+            <Script
+                id="swiper-script"
+                src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"
+                strategy="afterInteractive"
+            />
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

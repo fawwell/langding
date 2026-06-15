@@ -44,7 +44,7 @@ const HeroSection = ({ openModal }: HeroSectionProps) => {
             `}} />
 
             <video className="hero-video-bg" autoPlay loop muted playsInline preload="metadata">
-                <source src="background3.mp4" type="video/mp4" />
+                <source src="/background3.mp4" type="video/mp4" />
             </video>
             <div className="hero-overlay"></div>
 

@@ -109,7 +109,7 @@ const PhysicalPage = () => {
             )}
             <section className="hero-brand hero-brand-sub reveal">
                 <video className="hero-video-bg" autoPlay loop muted playsInline>
-                    <source src="background2.mp4" type="video/mp4" />
+                    <source src="/background2.mp4" type="video/mp4" />
                 </video>
                 <div className="hero-overlay"></div>
                 <div className="container" style={{ position: 'relative', zIndex: 2 }}>
