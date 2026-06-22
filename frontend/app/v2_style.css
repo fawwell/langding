@@ -1394,7 +1394,7 @@ header ul li a:hover, header ul li a.active-nav {
 }
 @media (max-width: 768px) {
     .fab-container { bottom: 20px; right: 20px; }
-    .chatbot-badge { font-size: 13px; padding: 12px 20px; }
+    .chatbot-badge, .cert-badge { font-size: 13px; padding: 12px 20px; }
 }
 .chatbot-badge { 
     background: linear-gradient(135deg, #2b8a3e 0%, #1e6b2d 100%); 
@@ -1412,6 +1412,38 @@ header ul li a:hover, header ul li a.active-nav {
     transition: transform 0.3s ease, box-shadow 0.3s ease; 
 }
 .chatbot-badge:hover { transform: scale(1.05); box-shadow: 0 15px 35px rgba(43, 138, 62, 0.4); animation: none; }
+
+.cert-badge { 
+    background: linear-gradient(135deg, #b28a2a 0%, #856214 100%); 
+    color: #fff; 
+    font-size: 15px; 
+    font-weight: 900; 
+    padding: 16px 28px; 
+    border-radius: 30px; 
+    box-shadow: 0 10px 25px rgba(133, 98, 20, 0.3); 
+    cursor: pointer; 
+    animation: pulseGlow 2.5s infinite; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+}
+.cert-badge:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 15px 35px rgba(133, 98, 20, 0.5); animation: none; }
+
+@keyframes pulseGlow {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 10px 25px rgba(133, 98, 20, 0.3);
+    }
+    50% {
+        transform: scale(1.03);
+        box-shadow: 0 10px 30px rgba(133, 98, 20, 0.6);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 10px 25px rgba(133, 98, 20, 0.3);
+    }
+}
 
 /* 모달, 퀴즈 관련 UI 통합 */
 .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 10000; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
@@ -2976,4 +3008,236 @@ header ul li a:hover, header ul li a.active-nav {
     line-height: 1.5;
     color: #fff !important;
     word-break: keep-all;
+}
+
+/* ==========================================================================
+   🏆 인증서 탭 모달 스타일 (Certificates Modal)
+   ========================================================================== */
+.cert-modal-content {
+    max-width: 600px;
+    background: #ffffff;
+    padding: 40px 30px;
+    border-radius: 24px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.cert-tabs {
+    display: flex;
+    gap: 10px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+}
+
+.cert-tab-btn {
+    flex: 1;
+    padding: 12px 16px;
+    font-size: 15px;
+    font-weight: 700;
+    background: #f8f9fa;
+    border: 1px solid #eaeaea;
+    border-radius: 10px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cert-tab-btn:hover {
+    background: #e8f5e9;
+    color: #2b8a3e;
+    border-color: #c8e6c9;
+}
+
+.cert-tab-btn.active {
+    background: #2b8a3e;
+    color: #fff;
+    border-color: #2b8a3e;
+    box-shadow: 0 4px 12px rgba(43, 138, 62, 0.2);
+}
+
+.cert-content-body {
+    min-height: 480px;
+    display: flex;
+    flex-direction: column;
+}
+
+.cert-viewer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.cert-image-wrapper {
+    position: relative;
+    width: 100%;
+    max-height: 520px;
+    overflow-y: auto;
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    background: #fafafa;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.cert-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+}
+
+.cert-img.blurred {
+    filter: blur(10px) brightness(0.95);
+    transition: filter 0.3s ease;
+}
+
+/* 중소기업확인서 갱신중 오버레이 */
+.cert-image-wrapper.pending {
+    overflow: hidden;
+}
+
+.cert-pending-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.85);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    z-index: 10;
+}
+
+.pending-badge {
+    background: #fff8e1;
+    color: #ffb300;
+    border: 1px solid #ffe082;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 10px rgba(255, 179, 0, 0.1);
+}
+
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    background: #ffb300;
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulseDot 1.5s infinite;
+}
+
+@keyframes pulseDot {
+    0% { transform: scale(0.8); opacity: 0.5; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(0.8); opacity: 0.5; }
+}
+
+.cert-pending-overlay h3 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.cert-pending-overlay p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+}
+
+.cert-info-footer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    gap: 15px;
+}
+
+.cert-badge-tag {
+    font-size: 13px;
+    color: #888;
+    font-weight: 600;
+}
+
+.cert-download-btn {
+    padding: 10px 20px;
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    color: #444;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.cert-download-btn:hover:not(.disabled) {
+    background: #e8f5e9;
+    border-color: #2b8a3e;
+    color: #2b8a3e;
+}
+
+.cert-download-btn.disabled {
+    background: #f5f5f5;
+    border-color: #eaeaea;
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+.fade-in {
+    animation: fadeInEffect 0.4s ease forwards;
+}
+
+@keyframes fadeInEffect {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 576px) {
+    .cert-modal-content {
+        padding: 30px 20px;
+        margin: 0 15px;
+    }
+    
+    .cert-tab-btn {
+        font-size: 13px;
+        padding: 10px 8px;
+    }
+    
+    .cert-content-body {
+        min-height: 380px;
+    }
+    
+    .cert-image-wrapper {
+        max-height: 380px;
+    }
+    
+    .cert-pending-overlay h3 {
+        font-size: 17px;
+    }
+    
+    .cert-pending-overlay p {
+        font-size: 12px;
+    }
+    
+    .cert-info-footer {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .cert-download-btn {
+        width: 100%;
+        text-align: center;
+    }
 }

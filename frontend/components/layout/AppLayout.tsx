@@ -9,6 +9,7 @@ import ProposalModal from '@/components/modals/ProposalModal';
 import QuizModal from '@/components/modals/QuizModal';
 import CenterDetailModal from '@/components/modals/CenterDetailModal';
 import InfoModals from '@/components/modals/InfoModals';
+import CertificatesModal from '@/components/modals/CertificatesModal';
 import { B2B_QUESTIONS, B2C_QUESTIONS } from '@/lib/constants';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -264,6 +265,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </header>
 
             <div className="fab-container">
+                <div className="cert-badge" onClick={() => openModal('modal-cert')}>🏅 여성·중소기업 인증</div>
                 <div className="chatbot-badge" onClick={openKakaoChat}>💬 실시간 챗봇 문의</div>
             </div>
 
@@ -304,6 +306,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <CenterDetailModal 
                 center={activeCenter} 
                 onClose={closeCenterModal} 
+            />
+            
+            <CertificatesModal 
+                isOpen={activeModal === 'modal-cert'}
+                onClose={closeModal}
             />
         </>
     );
