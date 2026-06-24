@@ -75,7 +75,7 @@ const CertificatesModal = ({ isOpen, onClose }: CertificatesModalProps) => {
                             <div className="cert-info-footer">
                                 <span className="cert-badge-tag">발급처: 중소벤처기업부</span>
                                 <a 
-                                    href="/images/sme_cert.png" 
+                                    href="/images/sme_cert.pdf" 
                                     target="_blank" 
                                     rel="noopener noreferrer" 
                                     className="cert-download-btn"
