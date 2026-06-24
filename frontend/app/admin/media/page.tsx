@@ -1,0 +1,315 @@
+'use client';
+
+import React, { useState, useEffect, FormEvent } from 'react';
+
+interface MediaReport {
+  id: string;
+  title: string;
+  url: string;
+  thumbnail_url: string;
+  content: string;
+  published_at: string;
+  created_at: string;
+}
+
+export default function AdminMediaPage() {
+  const [mediaList, setMediaList] = useState<MediaReport[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [infoLoading, setInfoLoading] = useState(false);
+  const [editId, setEditId] = useState<string | null>(null);
+  const [formData, setFormData] = useState({ 
+    title: '', 
+    url: '', 
+    thumbnail_url: '', 
+    content: '',
+    published_at: new Date().toISOString().split('T')[0]
+  });
+
+  const fetchMedia = async () => {
+    try {
+      const token = localStorage.getItem('admin_token');
+      if (!token) {
+        alert('관리자 인증이 필요합니다. 로그인 페이지로 이동합니다.');
+        window.location.href = '/admin';
+        return;
+      }
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/media/?t=${Date.now()}`, {
+        cache: 'no-store'
+      });
+      const json = await res.json();
+      if (json.success) setMediaList(json.data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    fetchMedia();
+  }, []);
+
+  const resetForm = () => {
+    setFormData({ 
+      title: '', 
+      url: '', 
+      thumbnail_url: '', 
+      content: '',
+      published_at: new Date().toISOString().split('T')[0]
+    });
+    setEditId(null);
+  };
+
+  const handleCrawl = async () => {
+    if (!formData.url) {
+      alert('기사 링크(URL)를 입력해주세요.');
+      return;
+    }
+    const token = localStorage.getItem('admin_token');
+    if (!token) {
+      alert('관리자 인증이 필요합니다.');
+      window.location.href = '/admin';
+      return;
+    }
+    setInfoLoading(true);
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/media/crawl`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ url: formData.url }),
+      });
+      if (res.status === 401) {
+        alert('인증 토큰이 유효하지 않습니다. 다시 로그인해 주세요.');
+        localStorage.removeItem('admin_token');
+        window.location.href = '/admin';
+        return;
+      }
+      const json = await res.json();
+      if (json.success && json.data) {
+        setFormData(prev => ({
+          ...prev,
+          title: json.data.title || prev.title,
+          thumbnail_url: json.data.thumbnail_url || prev.thumbnail_url,
+          content: json.data.content || prev.content,
+          published_at: json.data.published_at || prev.published_at,
+        }));
+        alert('기사 정보를 성공적으로 불러왔습니다!');
+      } else {
+        alert(json.detail || '기사 정보를 가져오는데 실패했습니다.');
+      }
+    } catch {
+      alert('기사 정보를 가져오는 중 오류가 발생했습니다.');
+    } finally {
+      setInfoLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    const token = localStorage.getItem('admin_token');
+    if (!token) {
+      alert('관리자 인증이 필요합니다.');
+      window.location.href = '/admin';
+      return;
+    }
+    setLoading(true);
+    
+    const url = editId 
+      ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/media/${editId}`
+      : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/media/`;
+    
+    const method = editId ? 'PUT' : 'POST';
+
+    try {
+      const res = await fetch(url, {
+        method: method,
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(formData),
+      });
+      if (res.status === 401) {
+        alert('인증 토큰이 유효하지 않습니다. 다시 로그인해 주세요.');
+        localStorage.removeItem('admin_token');
+        window.location.href = '/admin';
+        return;
+      }
+      if (res.ok) {
+        alert(editId ? '수정되었습니다!' : '업로드 되었습니다!');
+        resetForm();
+        fetchMedia();
+      } else {
+        alert('처리 실패');
+      }
+    } catch {
+      alert('오류 발생');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEdit = (media: MediaReport) => {
+    setFormData({
+      title: media.title,
+      url: media.url || '',
+      thumbnail_url: media.thumbnail_url || '',
+      content: media.content || '',
+      published_at: media.published_at ? media.published_at.split('T')[0] : new Date().toISOString().split('T')[0]
+    });
+    setEditId(media.id);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('정말 삭제하시겠습니까?')) return;
+    const token = localStorage.getItem('admin_token');
+    if (!token) {
+      alert('관리자 인증이 필요합니다.');
+      window.location.href = '/admin';
+      return;
+    }
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/media/${id}`, { 
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (res.status === 401) {
+        alert('인증 토큰이 유효하지 않습니다. 다시 로그인해 주세요.');
+        localStorage.removeItem('admin_token');
+        window.location.href = '/admin';
+        return;
+      }
+      if (res.ok) fetchMedia();
+      else alert('삭제 실패');
+    } catch {
+      alert('오류 발생');
+    }
+  };
+
+  return (
+    <div style={{ padding: '40px', maxWidth: '800px', margin: '0 auto', fontFamily: 'sans-serif' }}>
+      <div style={{ marginBottom: '20px' }}>
+        <a href="/admin" style={{ color: '#2b8a3e', textDecoration: 'none', fontWeight: 'bold' }}>← 관리자 홈으로 돌아가기</a>
+      </div>
+      <h1>FaWW 미디어 보도 관리자</h1>
+      
+      <div style={{ background: editId ? '#eef6f0' : '#f5f5f5', padding: '20px', borderRadius: '8px', marginBottom: '40px', border: editId ? '2px solid #2b8a3e' : '1px solid #ddd' }}>
+        <h2>{editId ? '기사 수정하기' : '새 기사 업로드'}</h2>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '3fr 1fr', gap: '15px' }}>
+            <div>
+              <label style={{ display: 'block', marginBottom: '5px' }}>기사 제목</label>
+              <input 
+                type="text" 
+                required 
+                style={{ width: '100%', padding: '8px' }} 
+                value={formData.title}
+                onChange={(e) => setFormData({...formData, title: e.target.value})}
+              />
+            </div>
+            <div>
+              <label style={{ display: 'block', marginBottom: '5px' }}>기사 날짜</label>
+              <input 
+                type="date" 
+                required 
+                style={{ width: '100%', padding: '8px' }} 
+                value={formData.published_at}
+                onChange={(e) => setFormData({...formData, published_at: e.target.value})}
+              />
+            </div>
+          </div>
+          <div>
+            <label style={{ display: 'block', marginBottom: '5px' }}>본문 내용 (선택)</label>
+            <textarea 
+              rows={5}
+              style={{ width: '100%', padding: '8px', resize: 'vertical' }} 
+              value={formData.content}
+              onChange={(e) => setFormData({...formData, content: e.target.value})}
+              placeholder="직접 기사 내용을 작성하실 경우 여기에 적어주세요."
+            />
+          </div>
+          <div>
+            <label style={{ display: 'block', marginBottom: '5px' }}>외부 기사 링크(URL, 선택)</label>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <input 
+                type="url" 
+                style={{ flex: 1, padding: '8px' }} 
+                value={formData.url}
+                onChange={(e) => setFormData({...formData, url: e.target.value})}
+                placeholder="예: https://news.naver.com/..."
+              />
+              <button 
+                type="button"
+                disabled={infoLoading || !formData.url}
+                onClick={handleCrawl}
+                style={{ 
+                  padding: '8px 15px', 
+                  background: formData.url ? '#2b8a3e' : '#ccc', 
+                  color: 'white', 
+                  border: 'none', 
+                  borderRadius: '4px', 
+                  cursor: formData.url ? 'pointer' : 'not-allowed', 
+                  fontWeight: 'bold',
+                  fontSize: '13px'
+                }}
+              >
+                {infoLoading ? '불러오는 중...' : '기사 정보 불러오기 ⚡'}
+              </button>
+            </div>
+          </div>
+          <div>
+            <label style={{ display: 'block', marginBottom: '5px' }}>썸네일 이미지(사진) 주소(URL)</label>
+            <input 
+              type="url" 
+              style={{ width: '100%', padding: '8px' }} 
+              value={formData.thumbnail_url}
+              onChange={(e) => setFormData({...formData, thumbnail_url: e.target.value})}
+              placeholder="예: https://example.com/image.jpg"
+            />
+          </div>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button type="submit" disabled={loading} style={{ flex: 1, padding: '12px 20px', background: '#2b8a3e', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>
+              {loading ? '처리 중...' : (editId ? '기사 수정 완료' : '기사 등록하기')}
+            </button>
+            {editId && (
+              <button type="button" onClick={resetForm} style={{ padding: '12px 20px', background: '#999', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>
+                취소
+              </button>
+            )}
+          </div>
+        </form>
+      </div>
+
+      <div>
+        <h2>등록된 기사 목록</h2>
+        {mediaList.length === 0 ? <p>등록된 기사가 없습니다.</p> : (
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            {mediaList.map(media => (
+              <li key={media.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px', borderBottom: '1px solid #ddd', background: editId === media.id ? '#f0fff0' : 'transparent' }}>
+                <div style={{ display: 'flex', gap: '15px', alignItems: 'flex-start' }}>
+                  {media.thumbnail_url && (
+                    <img src={media.thumbnail_url} alt={media.title} style={{ width: '80px', height: '60px', objectFit: 'cover', borderRadius: '4px' }} />
+                  )}
+                  <div>
+                    <div style={{ fontSize: '12px', color: '#2b8a3e', fontWeight: 'bold', marginBottom: '3px' }}>{media.published_at ? media.published_at.split('T')[0] : '날짜 없음'}</div>
+                    <strong>{media.title}</strong>
+                    {media.content && <p style={{ fontSize: '13px', color: '#555', margin: '5px 0' }}>{media.content.substring(0, 50)}{media.content.length > 50 ? '...' : ''}</p>}
+                    {media.url && <div style={{ fontSize: '12px', color: '#666', marginTop: '5px' }}><a href={media.url} target="_blank" rel="noreferrer">{media.url}</a></div>}
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button onClick={() => handleEdit(media)} style={{ padding: '5px 10px', background: '#1976d2', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>수정</button>
+                  <button onClick={() => handleDelete(media.id)} style={{ padding: '5px 10px', background: '#d32f2f', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>삭제</button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  );
+}
