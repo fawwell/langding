@@ -265,8 +265,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </header>
 
             <div className="fab-container">
-                <div className="cert-badge" onClick={() => openModal('modal-cert')}>🏅 여성·중소기업 인증</div>
-                <div className="chatbot-badge" onClick={openKakaoChat}>💬 실시간 챗봇 문의</div>
+                <div className="cert-badge" onClick={() => openModal('modal-cert')}>
+                    <span className="badge-icon">🏅</span>
+                    <span className="badge-text">여성·중소기업 인증</span>
+                </div>
+                <div className="chatbot-badge" onClick={openKakaoChat}>
+                    <span className="badge-icon">💬</span>
+                    <span className="badge-text">실시간 챗봇 문의</span>
+                </div>
             </div>
 
             {children}

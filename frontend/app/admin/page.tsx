@@ -39,7 +39,7 @@ export default function AdminDashboard() {
       } else {
         setError('이메일 또는 비밀번호가 일치하지 않습니다.');
       }
-    } catch (err) {
+    } catch {
       setError('서버 연결에 실패했습니다. 백엔드가 켜져 있는지 확인해 주세요.');
     }
   };

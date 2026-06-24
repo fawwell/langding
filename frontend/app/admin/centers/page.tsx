@@ -214,7 +214,7 @@ export default function AdminCentersPage() {
       }
       if (res.ok) fetchCenters();
       else alert('삭제 실패');
-    } catch (e) {
+    } catch {
       alert('오류 발생');
     }
   };

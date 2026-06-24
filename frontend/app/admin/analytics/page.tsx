@@ -17,7 +17,6 @@ interface Proposal {
 }
 
 export default function AdminAnalyticsPage() {
-  const [proposals, setProposals] = useState<Proposal[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     total: 0,
@@ -59,7 +58,6 @@ export default function AdminAnalyticsPage() {
       const json = await res.json();
       if (json.success) {
         const data: Proposal[] = json.data;
-        setProposals(data);
         calculateStats(data);
       }
     } catch (e) {
@@ -112,6 +110,7 @@ export default function AdminAnalyticsPage() {
 
   useEffect(() => {
     fetchProposals();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {

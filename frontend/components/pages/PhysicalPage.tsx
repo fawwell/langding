@@ -63,8 +63,7 @@ const PhysicalPage = () => {
         centerData,
         hoveredCenterId,
         setHoveredCenterId,
-        openCenterModal,
-        openModal
+        openCenterModal
     } = useUI();
 
     const openKakaoChat = () => {

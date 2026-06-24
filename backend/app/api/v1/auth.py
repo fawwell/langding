@@ -1,10 +1,11 @@
 import os
 import secrets
 from pydantic import BaseModel, Field
-from fastapi import APIRouter, status, Request
+from fastapi import APIRouter, status, Request, Depends
 from app.core.limiter import limiter
 from app.core.config import settings
 from app.models.common import APIResponse
+from app.core.deps import verify_admin_token
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -120,7 +121,7 @@ async def logout() -> APIResponse[None]:
     response_model=APIResponse[AuthUser],
     summary="현재 사용자 정보",
 )
-async def get_me() -> APIResponse[AuthUser]:
+async def get_me(token: str = Depends(verify_admin_token)) -> APIResponse[AuthUser]:
     """현재 인증된 사용자 정보를 반환합니다."""
     return APIResponse(
         success=True,

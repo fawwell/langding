@@ -1,7 +1,11 @@
 'use client';
 
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+
+interface CustomWindow extends Window {
+    openModal?: (id: string) => void;
+}
 
 const BodyExplorer = () => {
     const canvasRef = useRef<HTMLDivElement>(null);
@@ -176,14 +180,17 @@ const BodyExplorer = () => {
             console.error("Three.js initialization failed:", error);
         }
 
+        const canvasElement = canvasRef.current;
         return () => {
             window.removeEventListener('click', onMouseClick);
             window.removeEventListener('resize', handleResize);
             if (frameId) cancelAnimationFrame(frameId);
-            if (canvasRef.current && renderer) {
+            if (canvasElement && renderer) {
                 try {
-                    canvasRef.current.removeChild(renderer.domElement);
-                } catch (e) {}
+                    canvasElement.removeChild(renderer.domElement);
+                } catch {
+                    // ignore error
+                }
             }
         };
     }, []);
@@ -238,7 +245,7 @@ const BodyExplorer = () => {
                     <button 
                         className="btn-primary" 
                         style={{ marginTop: '40px', width: '100%', background: '#00ff00', color: '#000', fontSize: '18px' }}
-                        onClick={() => (window as any).openModal('modal-proposal')}
+                        onClick={() => (window as CustomWindow).openModal?.('modal-proposal')}
                     >
                         우리 조직 정밀 진단 문의하기
                     </button>

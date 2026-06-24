@@ -64,7 +64,7 @@ const TeaserSection = () => {
 
                 {/* Step 4: 알약 박스 (Pill Style) */}
                 <div className="teaser-text step-4 soft-reveal" style={{ marginBottom: '60px' }}>
-                    "피지컬케어 원조"로서<br className="teaser-mobile-br" />증명해온 결과를 보여드리겠습니다.
+                    &ldquo;피지컬케어 원조&rdquo;로서<br className="teaser-mobile-br" />증명해온 결과를 보여드리겠습니다.
                 </div>
 
                 {/* Step 5: 소개합니다 (Light Grey) */}

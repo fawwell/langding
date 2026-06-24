@@ -18,7 +18,7 @@ const CinematicScroll = () => {
             const totalScroll = containerRef.current.offsetHeight - windowHeight;
             const currentScroll = -rect.top;
             
-            let currentProgress = Math.max(0, Math.min(1, currentScroll / totalScroll));
+            const currentProgress = Math.max(0, Math.min(1, currentScroll / totalScroll));
             setProgress(currentProgress);
 
             // 비디오 프레임 제어

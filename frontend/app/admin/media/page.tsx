@@ -98,7 +98,7 @@ export default function AdminMediaPage() {
       } else {
         alert(json.detail || '기사 정보를 가져오는데 실패했습니다.');
       }
-    } catch (e) {
+    } catch {
       alert('기사 정보를 가져오는 중 오류가 발생했습니다.');
     } finally {
       setInfoLoading(false);
@@ -143,7 +143,7 @@ export default function AdminMediaPage() {
       } else {
         alert('처리 실패');
       }
-    } catch (e) {
+    } catch {
       alert('오류 발생');
     } finally {
       setLoading(false);
@@ -185,7 +185,7 @@ export default function AdminMediaPage() {
       }
       if (res.ok) fetchMedia();
       else alert('삭제 실패');
-    } catch (e) {
+    } catch {
       alert('오류 발생');
     }
   };

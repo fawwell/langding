@@ -467,7 +467,7 @@ header {
     backdrop-filter: blur(15px);
 }
 @media (min-width: 769px) and (max-width: 1400px) {
-    .fab-container { right: 20px; bottom: 20px; transform: scale(0.9); transform-origin: bottom right; }
+    .fab-container { right: 0; top: 50%; transform: translateY(-50%) scale(0.9); transform-origin: right center; }
     .hero-stats { max-width: 800px; }
 }
 @media (max-width: 768px) {
@@ -1384,64 +1384,94 @@ header ul li a:hover, header ul li a.active-nav {
 .cta-btn-white:hover { transform: scale(1.05); box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
 .fab-container { 
     position: fixed; 
-    bottom: 30px; 
-    right: 30px; 
+    top: 50%; 
+    right: 0; 
+    transform: translateY(-50%); 
     z-index: 9999; 
     display: flex; 
     flex-direction: column; 
-    gap: 12px; 
+    gap: 10px; 
     align-items: flex-end; 
 }
+@media (min-width: 769px) {
+    .chatbot-badge, .cert-badge {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 20px 14px 18px;
+        border-radius: 30px 0 0 30px;
+        color: #fff;
+        cursor: pointer;
+        box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.15);
+        transform: translateX(calc(100% - 50px)); /* 아이콘 영역(약 50px)만 노출하고 우측 숨김 */
+        transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
+        white-space: nowrap;
+    }
+    
+    .chatbot-badge {
+        background: linear-gradient(135deg, #2b8a3e 0%, #1e6b2d 100%);
+    }
+    .cert-badge {
+        background: linear-gradient(135deg, #b28a2a 0%, #856214 100%);
+    }
+
+    .chatbot-badge:hover, .cert-badge:hover {
+        transform: translateX(0);
+        box-shadow: -8px 8px 25px rgba(0, 0, 0, 0.25);
+    }
+
+    .badge-icon {
+        font-size: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+    }
+
+    .badge-text {
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+    }
+}
 @media (max-width: 768px) {
-    .fab-container { bottom: 20px; right: 20px; }
-    .chatbot-badge, .cert-badge { font-size: 13px; padding: 12px 20px; }
-}
-.chatbot-badge { 
-    background: linear-gradient(135deg, #2b8a3e 0%, #1e6b2d 100%); 
-    color: #fff; 
-    font-size: 15px; 
-    font-weight: 900; 
-    padding: 16px 28px; 
-    border-radius: 30px; 
-    box-shadow: 0 10px 25px rgba(43, 138, 62, 0.3); 
-    cursor: pointer; 
-    animation: bounce 2s infinite; 
-    display: flex; 
-    align-items: center; 
-    gap: 8px; 
-    transition: transform 0.3s ease, box-shadow 0.3s ease; 
-}
-.chatbot-badge:hover { transform: scale(1.05); box-shadow: 0 15px 35px rgba(43, 138, 62, 0.4); animation: none; }
-
-.cert-badge { 
-    background: linear-gradient(135deg, #b28a2a 0%, #856214 100%); 
-    color: #fff; 
-    font-size: 15px; 
-    font-weight: 900; 
-    padding: 16px 28px; 
-    border-radius: 30px; 
-    box-shadow: 0 10px 25px rgba(133, 98, 20, 0.3); 
-    cursor: pointer; 
-    animation: pulseGlow 2.5s infinite; 
-    display: flex; 
-    align-items: center; 
-    gap: 8px; 
-    transition: transform 0.3s ease, box-shadow 0.3s ease; 
-}
-.cert-badge:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 15px 35px rgba(133, 98, 20, 0.5); animation: none; }
-
-@keyframes pulseGlow {
-    0% {
-        transform: scale(1);
-        box-shadow: 0 10px 25px rgba(133, 98, 20, 0.3);
+    .fab-container { 
+        position: fixed;
+        bottom: 20px; 
+        right: 20px; 
+        top: auto;
+        transform: none;
+        flex-direction: row;
+        gap: 10px;
     }
-    50% {
-        transform: scale(1.03);
-        box-shadow: 0 10px 30px rgba(133, 98, 20, 0.6);
+    .chatbot-badge, .cert-badge { 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 52px;
+        height: 52px;
+        padding: 0;
+        border-radius: 50% !important;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        cursor: pointer;
+        transform: none !important;
+        transition: transform 0.2s ease;
     }
-    100% {
-        transform: scale(1);
-        box-shadow: 0 10px 25px rgba(133, 98, 20, 0.3);
+    .chatbot-badge {
+        background: linear-gradient(135deg, #2b8a3e 0%, #1e6b2d 100%);
+    }
+    .cert-badge {
+        background: linear-gradient(135deg, #b28a2a 0%, #856214 100%);
+    }
+    .chatbot-badge:active, .cert-badge:active {
+        transform: scale(0.95);
+    }
+    .badge-icon {
+        font-size: 22px;
+    }
+    .badge-text {
+        display: none;
     }
 }
 

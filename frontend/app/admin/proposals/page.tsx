@@ -2,10 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 
-interface ProposalPart {
-  selected: boolean;
-  sub_modules: string[];
-}
 
 interface Proposal {
   id: string;

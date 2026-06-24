@@ -448,7 +448,7 @@ const EAPPage = () => {
                     </div>
                     
                     <p style={{ textAlign: 'center', color: '#666', fontSize: '14px', marginTop: '40px', fontWeight: '500', lineHeight: '1.6', letterSpacing: '-0.3px' }}>
-                        "한국환경산업기술원, 한국치산기술협회, 한국중부발전 등 <strong>120+ 파트너가 직접 경험하고 검증한</strong><br />사내 임직원 근골격계 피지컬케어 웰니스 프로그램입니다."
+                        &ldquo;한국환경산업기술원, 한국치산기술협회, 한국중부발전 등 <strong>120+ 파트너가 직접 경험하고 검증한</strong><br />사내 임직원 근골격계 피지컬케어 웰니스 프로그램입니다.&rdquo;
                     </p>
                 </div>
             </section>
