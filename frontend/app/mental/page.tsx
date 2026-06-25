@@ -420,20 +420,20 @@ export default function MentalCoachingPage() {
           <div className="vision-grid">
             <div className="vision-card glass-card">
               <div className="card-icon-box">
-                <i className="fa-solid fa-dumbbell"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="monochrome-svg-icon">
+                  <path d="M18 8h2a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2" />
+                  <path d="M6 8H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2" />
+                  <rect x="8" y="10" width="8" height="4" rx="1" />
+                  <path d="M6 5v14" />
+                  <path d="M18 5v14" />
+                </svg>
               </div>
               <h3>FaWW Physical Care</h3>
               <p className="brand-link">기존 근골격계 테라피 서비스</p>
               <ul className="vision-list">
-                <li>
-                  <i className="fa-solid fa-circle-check"></i> 장시간 좌식 근무에 따른 목/허리 케어
-                </li>
-                <li>
-                  <i className="fa-solid fa-circle-check"></i> 현장직 맞춤 관절 및 피로 회복 케어
-                </li>
-                <li>
-                  <i className="fa-solid fa-circle-check"></i> 1대1 맞춤형 수기 마사지 및 체형 교정
-                </li>
+                <li>장시간 좌식 근무에 따른 목/허리 케어</li>
+                <li>현장직 맞춤 관절 및 피로 회복 케어</li>
+                <li>1대1 맞춤형 수기 마사지 및 체형 교정</li>
               </ul>
             </div>
             <div className="vision-connector">
@@ -446,20 +446,17 @@ export default function MentalCoachingPage() {
             </div>
             <div className="vision-card glass-card highlighted-vision">
               <div className="card-icon-box">
-                <i className="fa-solid fa-brain"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="monochrome-svg-icon">
+                  <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.44 2.5 2.5 0 0 1 0-3.12 3 3 0 0 1 0-3.88 2.5 2.5 0 0 1 0-3.12A2.5 2.5 0 0 1 9.5 2Z"/>
+                  <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.44 2.5 2.5 0 0 0 0-3.12 3 3 0 0 0 0-3.88 2.5 2.5 0 0 0 0-3.12A2.5 2.5 0 0 0 14.5 2Z"/>
+                </svg>
               </div>
               <h3>FaWW Mental Coaching</h3>
               <p className="brand-link">NEW 심리 멘탈코칭 서비스</p>
               <ul className="vision-list">
-                <li>
-                  <i className="fa-solid fa-circle-check"></i> 직무 스트레스 및 번아웃 예방 코칭
-                </li>
-                <li>
-                  <i className="fa-solid fa-circle-check"></i> 심리 불안, 대인관계, 정서 치유 상담
-                </li>
-                <li>
-                  <i className="fa-solid fa-circle-check"></i> 조직 진단 및 리포트 제공
-                </li>
+                <li>직무 스트레스 및 번아웃 예방 코칭</li>
+                <li>심리 불안, 대인관계, 정서 치유 상담</li>
+                <li>조직 진단 및 리포트 제공</li>
               </ul>
             </div>
           </div>
