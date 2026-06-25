@@ -242,6 +242,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                             <li><Link href="/physical?sub=center">센터</Link></li>
                         </ul>
                     </li>
+                    <li className="nav-dropdown-item">
+                        <Link href="/mental" className={pathname === '/mental' ? 'active-nav' : ''}>
+                            멘탈코치
+                        </Link>
+                        <ul className="sns-dropdown">
+                            <li><Link href="/mental?sub=counseling">FaWW 멘탈코치 상담</Link></li>
+                            <li><Link href="/mental?sub=planner">FaWW 멘탈 리셋 플래너</Link></li>
+                        </ul>
+                    </li>
                     <li>
                         <Link href="/mall" className={pathname === '/mall' ? 'active-nav' : ''}>
                             피지컬케어 mall
