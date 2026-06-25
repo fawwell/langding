@@ -1483,3 +1483,558 @@
     text-align: center;
   }
 }
+
+/* ==========================================
+   신규 인터랙티브 기능 스타일 정의 (호흡, AI 플래너, HR 대시보드)
+   ========================================== */
+
+/* 1. AI 마인드 리셋 플래너 스타일 */
+.mental-page-wrapper .reset-planner-widget {
+  margin-top: 40px;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  text-align: left;
+}
+
+.mental-page-wrapper .planner-header h4 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-light);
+  margin-bottom: 8px;
+}
+
+.mental-page-wrapper .planner-header p {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.mental-page-wrapper .planner-input-form {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.mental-page-wrapper .planner-input {
+  flex: 1;
+  padding: 14px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.8);
+  font-size: 15px;
+  color: var(--text-light);
+  outline: none;
+  transition: var(--transition-smooth);
+}
+
+.mental-page-wrapper .planner-input:focus {
+  border-color: var(--color-violet);
+  box-shadow: 0 0 0 3px var(--color-violet-glow);
+  background: #fff;
+}
+
+.mental-page-wrapper .btn-generate-planner {
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+/* 처방전 일기장 카드 디자인 */
+.mental-page-wrapper .reset-diary-card {
+  position: relative;
+  background: rgba(255, 253, 240, 0.85); /* 따뜻한 크림 옐로우 빛 일기장 */
+  border: 1px solid rgba(245, 222, 179, 0.7);
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03), inset 0 0 40px rgba(255, 255, 255, 0.5);
+  transform-origin: top center;
+  animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.mental-page-wrapper .diary-pin {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  filter: drop-shadow(0 3px 2px rgba(0,0,0,0.15));
+}
+
+.mental-page-wrapper .diary-tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-violet);
+  background: var(--color-violet-glow);
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
+.mental-page-wrapper .diary-content h3 {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 10px;
+  font-family: var(--font-heading);
+}
+
+.mental-page-wrapper .diary-summary {
+  font-size: 14.5px;
+  color: #475569;
+  line-height: 1.6;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.08);
+  padding-bottom: 15px;
+  margin-bottom: 18px;
+}
+
+.mental-page-wrapper .diary-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.mental-page-wrapper .diary-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.mental-page-wrapper .step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background: var(--color-violet);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.mental-page-wrapper .step-text {
+  font-size: 14.5px;
+  color: #334155;
+  line-height: 1.5;
+}
+
+.mental-page-wrapper .diary-quote {
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 600;
+  color: #64748b;
+  text-align: center;
+  background: rgba(255,255,255,0.4);
+  padding: 12px;
+  border-radius: 10px;
+  border-left: 3px solid var(--color-violet);
+}
+
+
+/* 2. 1분 마음챙김 호흡 & ASMR 스타일 */
+.mental-page-wrapper .therapy-section {
+  padding: 100px 0;
+  position: relative;
+}
+
+.mental-page-wrapper .therapy-container {
+  display: grid;
+  grid-template-columns: 1.2fr 1.8fr;
+  gap: 50px;
+  padding: 50px;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 32px;
+  box-shadow: 0 20px 50px rgba(31, 38, 135, 0.05);
+  align-items: center;
+}
+
+.mental-page-wrapper .breathing-space {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 260px;
+  position: relative;
+}
+
+/* 호흡 써클 가이드 */
+.mental-page-wrapper .breathing-circle {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(99, 102, 241, 0.25) 0%, rgba(6, 182, 212, 0.15) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 40px rgba(99, 102, 241, 0.15), inset 0 0 20px rgba(255,255,255,0.5);
+  border: 2px solid rgba(255,255,255,0.8);
+  transition: all 4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mental-page-wrapper .breathing-circle-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 2;
+}
+
+.mental-page-wrapper .breath-status {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-light);
+  margin-bottom: 6px;
+  transition: var(--transition-smooth);
+}
+
+.mental-page-wrapper .breath-timer {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--color-violet);
+  font-family: var(--font-heading);
+}
+
+/* 호흡 물결 파동 (Ripple) */
+.mental-page-wrapper .breath-ripple {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.1);
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(1);
+}
+
+/* 호흡 타이밍 상태별 클래스 */
+/* 1) inhale (들이마쉬기: 팽창) */
+.mental-page-wrapper .breathing-circle.inhale {
+  transform: scale(1.35);
+  background: radial-gradient(circle at center, rgba(99, 102, 241, 0.4) 0%, rgba(6, 182, 212, 0.25) 100%);
+  box-shadow: 0 0 60px rgba(99, 102, 241, 0.3), inset 0 0 30px rgba(255,255,255,0.6);
+}
+
+/* 2) hold (참기: 펄싱 유지) */
+.mental-page-wrapper .breathing-circle.hold {
+  transform: scale(1.35);
+  animation: holdPulse 2s infinite ease-in-out;
+}
+
+/* 3) exhale (내쉬기: 수축) */
+.mental-page-wrapper .breathing-circle.exhale {
+  transform: scale(0.9);
+  background: radial-gradient(circle at center, rgba(6, 182, 212, 0.25) 0%, rgba(99, 102, 241, 0.1) 100%);
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.1), inset 0 0 15px rgba(255,255,255,0.4);
+}
+
+/* 4) ready (대기) */
+.mental-page-wrapper .breathing-circle.ready {
+  transform: scale(1);
+}
+
+/* 들이마실 때 물결 자동 퍼지기 */
+.mental-page-wrapper .breathing-circle.inhale .ripple-1 {
+  animation: rip 2.5s infinite linear;
+}
+.mental-page-wrapper .breathing-circle.inhale .ripple-2 {
+  animation: rip 2.5s infinite linear 1.25s;
+}
+
+@keyframes rip {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+@keyframes holdPulse {
+  0%, 100% { box-shadow: 0 0 60px rgba(99, 102, 241, 0.3); }
+  50% { box-shadow: 0 0 80px rgba(99, 102, 241, 0.45); }
+}
+
+/* 컨트롤러 보드 */
+.mental-page-wrapper .therapy-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.mental-page-wrapper .sound-selector-box h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-light);
+  margin-bottom: 12px;
+}
+
+.mental-page-wrapper .sound-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.mental-page-wrapper .btn-sound {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.7);
+  font-size: 13.5px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  font-weight: 600;
+  text-align: center;
+}
+
+.mental-page-wrapper .btn-sound:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+.mental-page-wrapper .btn-sound.active {
+  background: #fff;
+  border-color: var(--color-violet);
+  color: var(--color-violet);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.1);
+}
+
+.mental-page-wrapper .breathing-action-box {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mental-page-wrapper .btn-breath-trigger {
+  padding: 16px 30px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--color-violet);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 20px var(--color-violet-glow);
+}
+
+.mental-page-wrapper .btn-breath-trigger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(99, 102, 241, 0.35);
+}
+
+.mental-page-wrapper .btn-breath-trigger.active {
+  background: #e05349; /* 정지 시 빨간색 피드백 */
+  box-shadow: 0 4px 20px rgba(224, 83, 73, 0.25);
+}
+
+.mental-page-wrapper .btn-breath-trigger.active:hover {
+  box-shadow: 0 6px 25px rgba(224, 83, 73, 0.35);
+}
+
+.mental-page-wrapper .breath-instruction {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+
+/* 3. B2B 대시보드 Mockup 고도화 스타일 */
+.mental-page-wrapper .db-tabs {
+  display: flex;
+  gap: 8px;
+  margin-top: 15px;
+  margin-bottom: 25px;
+  background: rgba(0, 0, 0, 0.03);
+  padding: 6px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+.mental-page-wrapper .db-tab-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  white-space: nowrap;
+}
+
+.mental-page-wrapper .db-tab-btn:hover {
+  color: var(--text-light);
+}
+
+.mental-page-wrapper .db-tab-btn.active {
+  background: #fff;
+  color: var(--color-violet);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* 도넛 차트 스타일 */
+.mental-page-wrapper .donut-chart-container {
+  padding: 10px 0;
+}
+
+.mental-page-wrapper .donut-chart-container h5 {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--text-light);
+  margin-bottom: 15px;
+}
+
+.mental-page-wrapper .donut-chart-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 20px;
+}
+
+.mental-page-wrapper .donut-chart {
+  transform: rotate(-90deg);
+  filter: drop-shadow(0 3px 8px rgba(99,102,241,0.08));
+}
+
+.mental-page-wrapper .donut-segment {
+  transition: stroke-dashoffset 0.8s ease-in-out, stroke-dasharray 0.8s ease-in-out;
+}
+
+.mental-page-wrapper .donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.mental-page-wrapper .legend-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.mental-page-wrapper .legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* 라인 차트 스타일 */
+.mental-page-wrapper .line-chart-container {
+  padding: 10px 0;
+}
+
+.mental-page-wrapper .line-chart-container h5 {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--text-light);
+  margin-bottom: 12px;
+}
+
+.mental-page-wrapper .line-chart {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  padding: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.mental-page-wrapper .line-path {
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  animation: drawLine 2s forwards ease-in-out;
+}
+
+@keyframes drawLine {
+  to { stroke-dashoffset: 0; }
+}
+
+.mental-page-wrapper .line-legend {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.mental-page-wrapper .legend-line {
+  display: inline-block;
+  width: 14px;
+  height: 3px;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+.mental-page-wrapper .line-orange-dash {
+  border-top: 2.5px dashed var(--color-orange);
+}
+
+.mental-page-wrapper .line-violet-solid {
+  background: var(--color-violet);
+  border-radius: 2px;
+}
+
+.mental-page-wrapper .line-chart-note {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 6px;
+  font-style: italic;
+}
+
+
+/* 모바일 반응형 조율 */
+@media (max-width: 768px) {
+  .mental-page-wrapper .therapy-container {
+    grid-template-columns: 1fr;
+    padding: 30px;
+    gap: 30px;
+  }
+  .mental-page-wrapper .breathing-space {
+    min-height: 200px;
+  }
+  .mental-page-wrapper .breathing-circle {
+    width: 150px;
+    height: 150px;
+  }
+  .mental-page-wrapper .planner-input-form {
+    flex-direction: column;
+  }
+  .mental-page-wrapper .donut-chart-box {
+    flex-direction: column;
+    gap: 15px;
+  }
+}

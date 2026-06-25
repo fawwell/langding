@@ -37,6 +37,142 @@ export default function MentalCoachingPage() {
     agreePrivacy: false,
   });
 
+  // 5. 호흡 가이드 및 ASMR 상태 관리
+  const [breathState, setBreathState] = useState<'ready' | 'inhale' | 'hold' | 'exhale'>('ready');
+  const [breathSeconds, setBreathSeconds] = useState<number>(4);
+  const [isBreathActive, setIsBreathActive] = useState<boolean>(false);
+  const [soundType, setSoundType] = useState<'none' | 'rain' | 'sea' | 'birds'>('none');
+  const [audioInstance, setAudioInstance] = useState<HTMLAudioElement | null>(null);
+
+  // 6. AI 마인드 리셋 플래너 상태 관리
+  const [plannerInput, setPlannerInput] = useState<string>('');
+  const [isGeneratingReset, setIsGeneratingReset] = useState<boolean>(false);
+  const [generatedResetPlan, setGeneratedResetPlan] = useState<{
+    type: string;
+    summary: string;
+    step1: string;
+    step2: string;
+    step3: string;
+    quote: string;
+  } | null>(null);
+
+  // 7. B2B 대시보드 탭 상태 관리
+  const [dashboardTab, setDashboardTab] = useState<'department' | 'stress-factor' | 'monthly-trend'>('department');
+
+  // 호흡 타이머 로직
+  React.useEffect(() => {
+    let timer: any;
+    if (isBreathActive) {
+      timer = setInterval(() => {
+        setBreathSeconds((prev) => {
+          if (prev <= 1) {
+            // 상태 전환
+            setBreathState((currentState) => {
+              if (currentState === 'ready' || currentState === 'exhale') {
+                return 'inhale';
+              } else if (currentState === 'inhale') {
+                return 'hold';
+              } else {
+                return 'exhale';
+              }
+            });
+            return 4; // 다음 4초 타이밍
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } else {
+      setBreathState('ready');
+      setBreathSeconds(4);
+    }
+    return () => clearInterval(timer);
+  }, [isBreathActive]);
+
+  // 오디오 제어 로직
+  React.useEffect(() => {
+    // 기존 오디오 중지
+    if (audioInstance) {
+      audioInstance.pause();
+    }
+
+    if (soundType === 'none') {
+      setAudioInstance(null);
+      return;
+    }
+
+    let url = '';
+    if (soundType === 'rain') {
+      url = 'https://actions.google.com/sounds/v1/water/rain_heavy_loud.ogg';
+    } else if (soundType === 'sea') {
+      url = 'https://actions.google.com/sounds/v1/water/sea_waves.ogg';
+    } else if (soundType === 'birds') {
+      url = 'https://actions.google.com/sounds/v1/ambient/morning_birds.ogg';
+    }
+
+    const audio = new Audio(url);
+    audio.loop = true;
+    
+    // 오디오 재생 오류 방지를 위한 플레이 로직
+    audio.play().catch((err) => {
+      console.warn("Audio play blocked by browser policy. Interaction required.", err);
+    });
+
+    setAudioInstance(audio);
+
+    return () => {
+      audio.pause();
+    };
+  }, [soundType]);
+
+  // 마인드 리셋 플래너 처방전 생성기
+  const handleGenerateResetPlan = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!plannerInput.trim()) {
+      alert('오늘의 마음을 한 줄이라도 적어주세요.');
+      return;
+    }
+
+    setIsGeneratingReset(true);
+    setGeneratedResetPlan(null);
+
+    // 1.5초 딜레이 후 생성 시뮬레이션
+    setTimeout(() => {
+      const input = plannerInput.toLowerCase();
+      let type = '일상 정서 밸런스';
+      let summary = '과도한 자극 없이 잔잔한 몰입을 통해 기분을 안정시키는 마음 챙김입니다.';
+      let step1 = '차분히 앉아 따뜻한 물 한 모금 마시기';
+      let step2 = '자신의 들숨과 날숨에만 집중하며 크게 3회 호흡하기';
+      let step3 = '나에게 어울리는 긍정적인 다짐 한 문장을 일기장에 쓰기';
+      let quote = '“충분히 괜찮은 하루였습니다. 나 자신을 다그치지 말고, 포근히 안아주세요.”';
+
+      if (input.includes('야근') || input.includes('일') || input.includes('피로') || input.includes('피곤') || input.includes('번아웃') || input.includes('퇴사')) {
+        type = '직무 번아웃 회복';
+        summary = '소진된 뇌의 인지 리소스를 복구하고 극도의 뇌 이완을 유도하는 리프레시 처방입니다.';
+        step1 = '손가락과 머리를 쓰는 모든 기기(스마트폰, 모니터) 멀리 치우기';
+        step2 = '목과 승모근 주위를 양손으로 잡고 부드럽게 지압하며 5회 서서히 둥글려주기';
+        step3 = '오늘은 평소보다 30분 일찍 취침을 시도하며 뇌에 완전한 수면 휴식 주기';
+        quote = '“오늘도 조직과 일을 위해 최선을 다했습니다. 이제 스위치를 끄고 내 영혼을 충전할 시간입니다.”';
+      } else if (input.includes('팀장') || input.includes('상사') || input.includes('동료') || input.includes('사람') || input.includes('관계') || input.includes('갈등') || input.includes('회의')) {
+        type = '관계 피로 솔루션';
+        summary = '타인과의 갈등으로 인한 정서 소모와 분노를 안전하게 가라앉히는 감정 경계선 찾기입니다.';
+        step1 = '가벼운 걷기나 시선 돌리기를 통해 갈등 상황의 주 원인과 물리적 거리 두기';
+        step2 = '코로 깊게 들이쉬고 입을 살짝 벌려 한숨 쉬듯 길게 내쉬는 호흡 5회 반복하기';
+        step3 = '타인의 감정은 그들의 몫이며, 내 마음의 주인은 온전히 나임을 인지하기';
+        quote = '“그 누구도 내 마음의 정원을 짓밟을 수 없습니다. 나만의 안전한 경계선을 세우세요.”';
+      } else if (input.includes('불안') || input.includes('걱정') || input.includes('우울') || input.includes('공황') || input.includes('초조') || input.includes('무서')) {
+        type = '안심 웰니스 그라운딩';
+        summary = '막연히 떠도는 두려움과 불안을 걷어내고, 내 몸이 있는 현재에 정신을 연결하는 정서 지지법입니다.';
+        step1 = '내 주변에 눈에 보이는 3가지 물건의 이름과 색상을 마음속으로 조용히 불러보기';
+        step2 = '차가운 물로 세수를 하거나 손을 씻어 감각을 깨워주기';
+        step3 = '지금의 신체 통증이나 긴장 부위(예: 움츠러든 어깨)를 천천히 이완하고 바로잡기';
+        quote = '“불안은 지나가는 바람일 뿐입니다. 지금 이 순간, 당신은 안전하고 단단히 서 있습니다.”';
+      }
+
+      setGeneratedResetPlan({ type, summary, step1, step2, step3, quote });
+      setIsGeneratingReset(false);
+    }, 1500);
+  };
+
   // 직무군 선택 핸들러
   const handleJobSelect = (type: 'office' | 'field') => {
     setJobType(type);
@@ -454,6 +590,62 @@ export default function MentalCoachingPage() {
                   </div>
                 </div>
 
+                {/* 6. AI 마인드 리셋 플래너 위젯 추가 */}
+                <div className="reset-planner-widget">
+                  <div className="planner-header">
+                    <h4><i className="fa-solid fa-wand-magic-sparkles text-violet"></i> 임직원 전용: 오늘의 AI 마인드 리셋 처방전</h4>
+                    <p>오늘 업무나 일상에서 느낀 스트레스 요인이나 현재 기분을 적어보세요. 맞춤 마음 챙김 처방을 즉석 발행해 드립니다.</p>
+                  </div>
+                  <form onSubmit={handleGenerateResetPlan} className="planner-input-form">
+                    <input
+                      type="text"
+                      placeholder="예시: 연이은 프로젝트 야근 때문에 너무 지치고 번아웃이 와요."
+                      value={plannerInput}
+                      onChange={(e) => setPlannerInput(e.target.value)}
+                      disabled={isGeneratingReset}
+                      className="planner-input"
+                    />
+                    <button type="submit" className="btn-generate-planner btn-primary" disabled={isGeneratingReset}>
+                      {isGeneratingReset ? (
+                        <>
+                          <i className="fa-solid fa-spinner fa-spin"></i> 분석 중...
+                        </>
+                      ) : (
+                        <>
+                          처방 받기 <i className="fa-solid fa-feather-pointed"></i>
+                        </>
+                      )}
+                    </button>
+                  </form>
+
+                  {/* 처방전 출력창 */}
+                  {generatedResetPlan && (
+                    <div className="reset-diary-card">
+                      <div className="diary-pin">📌</div>
+                      <div className="diary-content">
+                        <div className="diary-tag"># {generatedResetPlan.type}</div>
+                        <h3>오늘의 마인드 리셋 처방전</h3>
+                        <p className="diary-summary">{generatedResetPlan.summary}</p>
+                        <div className="diary-steps">
+                          <div className="diary-step">
+                            <span className="step-num">1</span>
+                            <span className="step-text">{generatedResetPlan.step1}</span>
+                          </div>
+                          <div className="diary-step">
+                            <span className="step-num">2</span>
+                            <span className="step-text">{generatedResetPlan.step2}</span>
+                          </div>
+                          <div className="diary-step">
+                            <span className="step-num">3</span>
+                            <span className="step-text">{generatedResetPlan.step3}</span>
+                          </div>
+                        </div>
+                        <div className="diary-quote">{generatedResetPlan.quote}</div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 <div className="diag-buttons">
                   <button className="btn-restart btn-secondary" onClick={handleRestart}>
                     <i className="fa-solid fa-rotate-left"></i> 다시 진단하기
@@ -626,8 +818,97 @@ export default function MentalCoachingPage() {
         </div>
       </section>
 
+      {/* Mindfulness Therapy Session */}
+      <section id="therapy" className="therapy-section">
+        <div className="container">
+          <div className="section-header">
+            <span className="sub-title">1-MIN THERAPY</span>
+            <h2>언제 어디서나, 1분 마인드풀니스 호흡 세션</h2>
+            <p className="section-desc">
+              바쁜 하루 중 단 1분만이라도 호흡에만 온전히 머물러보세요. 백색소음(ASMR)과 함께 호흡 박자에 맞춰 몸의 긴장을 이완시킬 수 있습니다.
+            </p>
+          </div>
+
+          <div className="therapy-container glass-card">
+            {/* 호흡 비주얼 서클 */}
+            <div className="breathing-space">
+              <div className={`breathing-circle ${isBreathActive ? breathState : 'ready'}`}>
+                <div className="breath-ripple ripple-1"></div>
+                <div className="breath-ripple ripple-2"></div>
+                <div className="breathing-circle-inner">
+                  <span className="breath-status">
+                    {breathState === 'ready' && '호흡 대기'}
+                    {breathState === 'inhale' && '숨 들이마시기'}
+                    {breathState === 'hold' && '숨 멈추기'}
+                    {breathState === 'exhale' && '숨 내쉬기'}
+                  </span>
+                  <span className="breath-timer">
+                    {isBreathActive ? `${breathSeconds}초` : '준비'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* 컨트롤러 보드 */}
+            <div className="therapy-controls">
+              {/* ASMR 플레이어 */}
+              <div className="sound-selector-box">
+                <h4><i className="fa-solid fa-headphones-simple"></i> 배경 사운드 (ASMR) 선택</h4>
+                <div className="sound-buttons">
+                  <button 
+                    className={`btn-sound ${soundType === 'none' ? 'active' : ''}`}
+                    onClick={() => setSoundType('none')}
+                  >
+                    🔇 소리 없음
+                  </button>
+                  <button 
+                    className={`btn-sound ${soundType === 'rain' ? 'active' : ''}`}
+                    onClick={() => setSoundType('rain')}
+                  >
+                    🌧️ 포근한 빗소리
+                  </button>
+                  <button 
+                    className={`btn-sound ${soundType === 'sea' ? 'active' : ''}`}
+                    onClick={() => setSoundType('sea')}
+                  >
+                    🌊 잔잔한 파도소리
+                  </button>
+                  <button 
+                    className={`btn-sound ${soundType === 'birds' ? 'active' : ''}`}
+                    onClick={() => setSoundType('birds')}
+                  >
+                    🐦 숲속 아침 새소리
+                  </button>
+                </div>
+              </div>
+
+              {/* 가이드 실행 버튼 */}
+              <div className="breathing-action-box">
+                <button 
+                  className={`btn-breath-trigger ${isBreathActive ? 'active' : ''}`}
+                  onClick={() => setIsBreathActive(!isBreathActive)}
+                >
+                  {isBreathActive ? (
+                    <>
+                      <i className="fa-solid fa-circle-stop"></i> 명상 중지하기
+                    </>
+                  ) : (
+                    <>
+                      <i className="fa-solid fa-circle-play"></i> 1분 마음챙김 호흡 시작
+                    </>
+                  )}
+                </button>
+                <p className="breath-instruction">
+                  * 편안하게 의자에 등을 기대고 어깨의 긴장을 푼 채, 동그라미가 팽창/수축하는 4-4-4 주기에 맞춰 호흡해보세요. (들이쉬고 4초 - 참고 4초 - 내쉬고 4초)
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* HR Dashboard Section */}
-      <section id="report" class="report-section">
+      <section id="report" className="report-section">
         <div className="container">
           <div className="report-wrapper">
             <div className="report-info">
@@ -690,42 +971,151 @@ export default function MentalCoachingPage() {
                     <span className="db-label">종합 조직 건강 지수</span>
                   </div>
                   <div className="db-metric-box">
-                    <span className="db-val text-green">-18%</span>
-                    <span className="db-label">전분기 대비 스트레스 지수</span>
+                    <span className="db-val text-green">
+                      {dashboardTab === 'department' && '-18%'}
+                      {dashboardTab === 'stress-factor' && '4개 요인'}
+                      {dashboardTab === 'monthly-trend' && '+24%p'}
+                    </span>
+                    <span className="db-label">
+                      {dashboardTab === 'department' && '전분기 대비 스트레스 지수'}
+                      {dashboardTab === 'stress-factor' && '주요 관리 대상 스트레스'}
+                      {dashboardTab === 'monthly-trend' && '3개월 차 스트레스 경감률'}
+                    </span>
                   </div>
                 </div>
 
+                {/* 대시보드 인터랙션 탭 */}
+                <div className="db-tabs">
+                  <button 
+                    className={`db-tab-btn ${dashboardTab === 'department' ? 'active' : ''}`}
+                    onClick={() => setDashboardTab('department')}
+                  >
+                    🏢 부서별 지표
+                  </button>
+                  <button 
+                    className={`db-tab-btn ${dashboardTab === 'stress-factor' ? 'active' : ''}`}
+                    onClick={() => setDashboardTab('stress-factor')}
+                  >
+                    🔥 스트레스 요인
+                  </button>
+                  <button 
+                    className={`db-tab-btn ${dashboardTab === 'monthly-trend' ? 'active' : ''}`}
+                    onClick={() => setDashboardTab('monthly-trend')}
+                  >
+                    📈 개선 트렌드
+                  </button>
+                </div>
+
                 <div className="db-chart-section">
-                  <h5>부서별 스트레스 취약도 (위험 지표)</h5>
-                  <div className="db-bar-chart">
-                    <div className="chart-row">
-                      <span className="row-label">개발팀</span>
-                      <div className="bar-wrapper">
-                        <div className="bar-fill bg-violet animate-width" style={{ width: '82%' }}></div>
+                  {dashboardTab === 'department' && (
+                    <>
+                      <h5>부서별 스트레스 취약도 (위험 지표)</h5>
+                      <div className="db-bar-chart">
+                        <div className="chart-row">
+                          <span className="row-label">개발팀</span>
+                          <div className="bar-wrapper">
+                            <div className="bar-fill bg-violet animate-width" style={{ width: '82%' }}></div>
+                          </div>
+                          <span className="row-val">82%</span>
+                        </div>
+                        <div className="chart-row">
+                          <span className="row-label">영업팀</span>
+                          <div className="bar-wrapper">
+                            <div className="bar-fill bg-cyan animate-width" style={{ width: '65%' }}></div>
+                          </div>
+                          <span className="row-val">65%</span>
+                        </div>
+                        <div className="chart-row">
+                          <span className="row-label">생산지원팀</span>
+                          <div className="bar-wrapper">
+                            <div className="bar-fill bg-orange animate-width" style={{ width: '48%' }}></div>
+                          </div>
+                          <span className="row-val">48%</span>
+                        </div>
                       </div>
-                      <span className="row-val">82%</span>
-                    </div>
-                    <div className="chart-row">
-                      <span className="row-label">영업팀</span>
-                      <div className="bar-wrapper">
-                        <div className="bar-fill bg-cyan animate-width" style={{ width: '65%' }}></div>
+                    </>
+                  )}
+
+                  {dashboardTab === 'stress-factor' && (
+                    <div className="donut-chart-container">
+                      <h5>임직원 스트레스 주 원인 통계</h5>
+                      <div className="donut-chart-box">
+                        <svg width="140" height="140" viewBox="0 0 42 42" className="donut-chart">
+                          <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#f1f2f6" strokeWidth="4.5" />
+                          
+                          {/* 직무 과부하 42% (violet): strokeDasharray="42 58" strokeDashoffset="25" */}
+                          <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="var(--color-violet)" strokeWidth="4.8" 
+                                  strokeDasharray="42 58" strokeDashoffset="25" className="donut-segment" />
+                          
+                          {/* 대인 갈등 28% (cyan): strokeDasharray="28 72" strokeDashoffset="83" */}
+                          <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="var(--color-cyan)" strokeWidth="4.8" 
+                                  strokeDasharray="28 72" strokeDashoffset="83" className="donut-segment" />
+                          
+                          {/* 미래 불안 18% (orange): strokeDasharray="18 82" strokeDashoffset="55" */}
+                          <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="var(--color-orange)" strokeWidth="4.8" 
+                                  strokeDasharray="18 82" strokeDashoffset="55" className="donut-segment" />
+
+                          {/* 기타 12% (green): strokeDasharray="12 88" strokeDashoffset="37" */}
+                          <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="var(--color-green)" strokeWidth="4.8" 
+                                  strokeDasharray="12 88" strokeDashoffset="37" className="donut-segment" />
+                        </svg>
+                        <div className="donut-legend">
+                          <div className="legend-row"><span className="legend-dot bg-violet"></span> 직무 과부하 (42%)</div>
+                          <div className="legend-row"><span className="legend-dot bg-cyan"></span> 대인 갈등 (28%)</div>
+                          <div className="legend-row"><span className="legend-dot bg-orange"></span> 커리어 미래불안 (18%)</div>
+                          <div className="legend-row"><span className="legend-dot bg-green"></span> 기타 개인고민 (12%)</div>
+                        </div>
                       </div>
-                      <span className="row-val">65%</span>
                     </div>
-                    <div className="chart-row">
-                      <span className="row-label">생산지원팀</span>
-                      <div className="bar-wrapper">
-                        <div className="bar-fill bg-orange animate-width" style={{ width: '48%' }}></div>
+                  )}
+
+                  {dashboardTab === 'monthly-trend' && (
+                    <div className="line-chart-container">
+                      <h5>EAP 프로그램 도입 전후 스트레스 변화 지표</h5>
+                      <svg viewBox="0 0 300 100" className="line-chart" width="100%" height="110">
+                        {/* 가이드 격자선 */}
+                        <line x1="10" y1="20" x2="290" y2="20" stroke="#f1f2f6" strokeWidth="1" strokeDasharray="3 3" />
+                        <line x1="10" y1="50" x2="290" y2="50" stroke="#f1f2f6" strokeWidth="1" strokeDasharray="3 3" />
+                        <line x1="10" y1="80" x2="290" y2="80" stroke="#f1f2f6" strokeWidth="1" strokeDasharray="3 3" />
+                        
+                        {/* X축 레이블 (월) */}
+                        <text x="10" y="95" fill="#a4b0be" fontSize="7" textAnchor="middle">도입 전</text>
+                        <text x="80" y="95" fill="#a4b0be" fontSize="7" textAnchor="middle">1개월 차</text>
+                        <text x="150" y="95" fill="#a4b0be" fontSize="7" textAnchor="middle">2개월 차</text>
+                        <text x="220" y="95" fill="#a4b0be" fontSize="7" textAnchor="middle">3개월 차</text>
+                        <text x="290" y="95" fill="#a4b0be" fontSize="7" textAnchor="middle">4개월 차</text>
+
+                        {/* 도입 전 스트레스 예상 유지 곡선 (Red/Orange 라인) */}
+                        <path d="M 10 75 Q 80 70, 150 78 T 290 82" fill="none" stroke="var(--color-orange)" strokeWidth="1.5" strokeDasharray="2 2" />
+                        
+                        {/* 도입 후 스트레스 하강 곡선 (Violet 라인) */}
+                        <path d="M 10 70 Q 80 50, 150 35 T 290 18" fill="none" stroke="var(--color-violet)" strokeWidth="2.5" className="line-path" />
+                        
+                        {/* 데이터 포인트 */}
+                        <circle cx="10" cy="70" r="3" fill="var(--color-violet)" />
+                        <circle cx="150" cy="35" r="3" fill="var(--color-violet)" />
+                        <circle cx="290" cy="18" r="3" fill="var(--color-violet)" />
+                      </svg>
+                      <div className="line-legend">
+                        <span><span className="legend-line line-orange-dash"></span> 미도입(유지예상)</span>
+                        <span><span className="legend-line line-violet-solid"></span> FaWW EAP 도입 후</span>
                       </div>
-                      <span className="row-val">48%</span>
                     </div>
-                  </div>
+                  )}
                 </div>
 
                 <div className="db-insight-box">
                   <i className="fa-solid fa-circle-exclamation text-orange"></i>
                   <p>
-                    개발팀의 <strong>업무 번아웃 요인</strong>이 80%를 초과했습니다. 집중 근골격계 테라피(피지컬) 및 릴랙세이션 마음챙김 명상(멘탈) 병행 패키지를 제안합니다.
+                    {dashboardTab === 'department' && (
+                      <>개발팀의 <strong>업무 번아웃 요인</strong>이 80%를 초과했습니다. 집중 근골격계 테라피(피지컬) 및 릴랙세이션 마음챙김 명상(멘탈) 병행 패키지를 제안합니다.</>
+                    )}
+                    {dashboardTab === 'stress-factor' && (
+                      <>임직원 과반수가 <strong>직무 과부하 및 소통 차단</strong>으로 인한 우울감을 겪고 있습니다. 부서별 워크숍과 심리 안심 상담 증설을 적극 추천합니다.</>
+                    )}
+                    {dashboardTab === 'monthly-trend' && (
+                      <>EAP 도입 후 <strong>3개월 내 평균 스트레스 감소율 24%p</strong>를 달성하여 생산성 개선이 입증되었습니다. 지속적인 모니터링을 권장합니다.</>
+                    )}
                   </p>
                 </div>
               </div>
@@ -735,7 +1125,7 @@ export default function MentalCoachingPage() {
       </section>
 
       {/* Application Form Section */}
-      <section id="apply" class="apply-section">
+      <section id="apply" className="apply-section">
         <div className="container">
           <div className="apply-container glass-card">
             <div className="apply-header">
