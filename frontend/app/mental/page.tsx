@@ -59,6 +59,35 @@ export default function MentalCoachingPage() {
   // 7. B2B 대시보드 탭 상태 관리
   const [dashboardTab, setDashboardTab] = useState<'department' | 'stress-factor' | 'monthly-trend'>('department');
 
+  // 8. 마인드 스파클 파티클 상태
+  interface Sparkle {
+    id: number;
+    x: number;
+    y: number;
+    size: number;
+    color: string;
+    delay: number;
+  }
+  const [sparkles, setSparkles] = useState<Sparkle[]>([]);
+
+  const triggerSparkles = () => {
+    const colors = ['#6366f1', '#06b6d4', '#10b981', '#f59e0b', '#e05349'];
+    const newSparkles: Sparkle[] = Array.from({ length: 16 }).map((_, i) => ({
+      id: Date.now() + i,
+      x: (Math.random() - 0.5) * 220, // -110px ~ 110px
+      y: (Math.random() - 0.5) * 220, // -110px ~ 110px
+      size: Math.random() * 12 + 10,  // 10px ~ 22px
+      color: colors[Math.floor(Math.random() * colors.length)],
+      delay: Math.random() * 0.25,
+    }));
+    setSparkles(newSparkles);
+
+    // 1.5초 후 정리
+    setTimeout(() => {
+      setSparkles([]);
+    }, 1500);
+  };
+
   // 호흡 타이머 로직
   React.useEffect(() => {
     let timer: any;
@@ -170,6 +199,7 @@ export default function MentalCoachingPage() {
 
       setGeneratedResetPlan({ type, summary, step1, step2, step3, quote });
       setIsGeneratingReset(false);
+      triggerSparkles();
     }, 1500);
   };
 
@@ -294,7 +324,7 @@ export default function MentalCoachingPage() {
   };
 
   return (
-    <div className="mental-page-wrapper">
+    <div className="mental-page-wrapper" data-breath-state={isBreathActive ? breathState : 'ready'}>
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-bg-glow"></div>
@@ -617,6 +647,28 @@ export default function MentalCoachingPage() {
                       )}
                     </button>
                   </form>
+
+                  {/* 스파클 파티클 효과 렌더링 */}
+                  <div className="sparkles-container">
+                    {sparkles.map((sp) => (
+                      <span
+                        key={sp.id}
+                        className="sparkle-element"
+                        style={{
+                          left: '50%',
+                          top: '50%',
+                          fontSize: `${sp.size}px`,
+                          color: sp.color,
+                          animationDelay: `${sp.delay}s`,
+                          // CSS 커스텀 속성을 활용해 개별 파티클의 도달 위치를 전달
+                          ['--tx' as any]: `${sp.x}px`,
+                          ['--ty' as any]: `${sp.y}px`,
+                        }}
+                      >
+                        ✦
+                      </span>
+                    ))}
+                  </div>
 
                   {/* 처방전 출력창 */}
                   {generatedResetPlan && (

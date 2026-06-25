@@ -37,6 +37,8 @@
 .mental-page-wrapper {
   font-family: var(--font-main);
   background-color: var(--bg-body);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.025'/%3E%3C/svg%3E");
+  background-blend-mode: overlay;
   color: var(--text-muted);
   line-height: 1.6;
   overflow-x: hidden;
@@ -2036,5 +2038,86 @@
   .mental-page-wrapper .donut-chart-box {
     flex-direction: column;
     gap: 15px;
+  }
+}
+
+/* ==========================================
+   프리미엄 디자인 고도화 효과 (호흡 싱크, 네온 카드, 스파클 모션)
+   ========================================== */
+
+/* 1. 호흡 싱크 배경 아우라 연동 */
+.mental-page-wrapper[data-breath-state="inhale"]::before,
+.mental-page-wrapper[data-breath-state="hold"]::before {
+  transform: translate3d(50px, 30px, 0) scale(1.22);
+  background: radial-gradient(circle, rgba(244, 63, 94, 0.18) 0%, rgba(99, 102, 241, 0.12) 50%, rgba(255, 255, 255, 0) 70%);
+  opacity: 0.95;
+  transition: transform 4s cubic-bezier(0.25, 1, 0.5, 1), background 4s ease;
+}
+
+.mental-page-wrapper[data-breath-state="inhale"]::after,
+.mental-page-wrapper[data-breath-state="hold"]::after {
+  transform: translate3d(-50px, -30px, 0) scale(1.22);
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.18) 0%, rgba(99, 102, 241, 0.12) 40%, rgba(255, 255, 255, 0) 70%);
+  opacity: 0.95;
+  transition: transform 4s cubic-bezier(0.25, 1, 0.5, 1), background 4s ease;
+}
+
+.mental-page-wrapper[data-breath-state="exhale"]::before {
+  transform: translate3d(0, 0, 0) scale(0.9);
+  opacity: 0.75;
+  transition: transform 4s cubic-bezier(0.25, 1, 0.5, 1), opacity 4s ease;
+}
+
+.mental-page-wrapper[data-breath-state="exhale"]::after {
+  transform: translate3d(0, 0, 0) scale(0.9);
+  opacity: 0.75;
+  transition: transform 4s cubic-bezier(0.25, 1, 0.5, 1), opacity 4s ease;
+}
+
+/* 2. 네온 글래스 테두리 및 섀도우 보강 */
+.mental-page-wrapper .glass-card {
+  box-shadow: 0 8px 32px 0 rgba(99, 102, 241, 0.03), inset 0 0 20px rgba(255, 255, 255, 0.2);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mental-page-wrapper .glass-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow: 0 20px 40px rgba(99, 102, 241, 0.12), inset 0 0 30px rgba(255, 255, 255, 0.4);
+}
+
+/* 3. 마인드 스파클 이펙트 스타일 */
+.mental-page-wrapper .sparkles-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+  overflow: visible;
+}
+
+.mental-page-wrapper .sparkle-element {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0);
+  animation: sparkle-burst 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes sparkle-burst {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.3);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0.2) rotate(180deg);
   }
 }
