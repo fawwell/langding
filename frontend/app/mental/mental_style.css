@@ -391,15 +391,15 @@
 }
 
 .mental-page-wrapper .card-left {
-  top: 90px;
-  left: -60px;
+  top: -15px;
+  left: -30px;
   z-index: 6;
   animation-delay: 0s;
 }
 
 .mental-page-wrapper .card-right {
-  bottom: 60px;
-  right: -50px;
+  bottom: -15px;
+  right: -30px;
   z-index: 6;
   animation-delay: 3s;
 }
