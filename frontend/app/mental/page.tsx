@@ -971,7 +971,7 @@ export default function MentalCoachingPage() {
                   )}
                 </button>
                 <p className="breath-instruction">
-                  * 편안하게 의자에 등을 기대고 어깨의 긴장을 푼 채, 동그라미가 팽창/수축하는 4-4-4 주기에 맞춰 호흡해보세요. (들이쉬고 4초 - 참고 4초 - 내쉬고 4초)
+                  ✦ 편안하게 의자에 등을 기대고 어깨의 긴장을 푼 채, 동그라미가 팽창/수축하는 4-4-4 주기에 맞춰 호흡해보세요. (들이쉬고 4초 - 참고 4초 - 내쉬고 4초)
                 </p>
               </div>
             </div>
@@ -991,7 +991,7 @@ export default function MentalCoachingPage() {
                 조직 현황은 투명하게.
               </h2>
               <p className="report-desc">
-                상담 내용의 익명성은 철저히 보장하되, 회사 차원의 조직 건강 상태를 모니터링할 수 있는 **'부서별/직무 유형별 통계 대시보드 리포트'**를 제공합니다.
+                상담 내용의 익명성은 철저히 보장하되, 회사 차원의 조직 건강 상태를 모니터링할 수 있는 <strong>&apos;부서별/직무 유형별 통계 대시보드 리포트&apos;</strong>를 제공합니다.
               </p>
               <ul className="report-features">
                 <li>

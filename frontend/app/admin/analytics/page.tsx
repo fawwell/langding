@@ -348,7 +348,7 @@ export default function AdminAnalyticsPage() {
                     제공되는 <strong>‘보고서 삽입 URL’</strong>(예: <code>https://lookerstudio.google.com/embed/...</code>)을 복사합니다.
                   </li>
                   <li style={{ marginBottom: '8px' }}>
-                    배포 환경(Vercel 등) 또는 로컬 환경변수 파일에 <code>NEXT_PUBLIC_LOOKER_STUDIO_URL</code> 키값으로 해당 URL을 설정한 후 **재배포**해 주시면 위 예시 자리에 완벽한 대시보드가 적용됩니다!
+                    배포 환경(Vercel 등) 또는 로컬 환경변수 파일에 <code>NEXT_PUBLIC_LOOKER_STUDIO_URL</code> 키값으로 해당 URL을 설정한 후 <strong>재배포</strong>해 주시면 위 예시 자리에 완벽한 대시보드가 적용됩니다!
                   </li>
                 </ol>
                 <div style={{ textAlign: 'center' }}>

@@ -344,7 +344,7 @@ export default function ReviewAdmin() {
           2. <strong>직장</strong>: <code>직장명</code> 또는 <code>직장</code> 컬럼에서 직장명을 자동 추출하여 반영하며 (지역명은 제외), 회사명에 &apos;학교&apos; 관련 단어가 있으면 <strong>[학교]</strong> 탭으로, 그 외는 <strong>[기업]</strong> 탭으로 자동 분류됩니다.<br />
           3. <strong>만족도</strong>: 고객 만족도 향상을 위해 <strong>무조건 별 다섯 개(★★★★★)</strong>로 자동 고정되어 입력됩니다.<br />
           4. <strong>후기 내용</strong>: <code>기프로그램 내용 및 과정 중 가장 인상 깊거나 유익했던 점은 무엇입니까?</code> 열의 텍스트를 후기 내용으로 자동 수집합니다.<br />
-          5. <strong>글자수 필터</strong>: 신뢰도 향상을 위해 **후기 본문이 46자 이상인 정성스러운 후기만 선별**하여 자동 등록됩니다. (45자 이하는 자동 제외)
+          5. <strong>글자수 필터</strong>: 신뢰도 향상을 위해 <strong>후기 본문이 46자 이상인 정성스러운 후기만 선별</strong>하여 자동 등록됩니다. (45자 이하는 자동 제외)
         </p>
         
         <div style={{ display: 'inline-block', position: 'relative' }}>
