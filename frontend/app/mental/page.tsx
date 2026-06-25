@@ -359,7 +359,7 @@ export default function MentalCoachingPage() {
                   <div className="card-header">
                     <span className="status-indicator">ON AIR</span>
                     <span className="user-count">
-                      <i className="fa-solid fa-users"></i> 4,200+ 임직원 케어 중
+                      <span className="monochrome-symbol">👥</span> 4,200+ 임직원 케어 중
                     </span>
                   </div>
                   <div className="mascot-area">
@@ -387,14 +387,19 @@ export default function MentalCoachingPage() {
                   </div>
                 </div>
                 <div className="glass-card floating-card card-left">
-                  <i className="fa-solid fa-brain-circuit brain-icon"></i>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="monochrome-svg-icon brain-icon">
+                    <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.44 2.5 2.5 0 0 1 0-3.12 3 3 0 0 1 0-3.88 2.5 2.5 0 0 1 0-3.12A2.5 2.5 0 0 1 9.5 2Z"/>
+                    <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.44 2.5 2.5 0 0 0 0-3.12 3 3 0 0 0 0-3.88 2.5 2.5 0 0 0 0-3.12A2.5 2.5 0 0 0 14.5 2Z"/>
+                  </svg>
                   <div>
                     <h4>실시간 스트레스 케어</h4>
                     <p>업무 피로도 즉시 완화</p>
                   </div>
                 </div>
                 <div className="glass-card floating-card card-right">
-                  <i className="fa-solid fa-hand-holding-heart heart-icon"></i>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="monochrome-svg-icon heart-icon">
+                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                  </svg>
                   <div>
                     <h4>1:1 심리상담 매칭</h4>
                     <p>전문 코치 상시 대기</p>
@@ -439,7 +444,10 @@ export default function MentalCoachingPage() {
             <div className="vision-connector">
               <div className="arrow-container">
                 <span className="plus-sign">
-                  <i className="fa-solid fa-plus"></i>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="plus-icon-symbol" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
                 </span>
                 <p>신체와 정신의 결합</p>
               </div>
@@ -479,17 +487,23 @@ export default function MentalCoachingPage() {
             {diagStep === 1 && (
               <div className="diag-step" id="diag-step-1">
                 <h3>Q1. 귀사 임직원들의 주요 근무 형태를 선택해주세요.</h3>
-                <div class="job-type-selection">
+                <div className="job-type-selection">
                   <div className="job-card" onClick={() => handleJobSelect('office')}>
                     <div className="job-icon">
-                      <i className="fa-solid fa-laptop-code"></i>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="monochrome-svg-icon">
+                        <rect width="20" height="14" x="2" y="3" rx="2" />
+                        <line x1="8" x2="16" y1="21" y2="21" />
+                        <line x1="12" x2="12" y1="17" y2="21" />
+                      </svg>
                     </div>
                     <h4>사무직군</h4>
                     <p>주로 본사, IT, 디자인, 관리 등 실내 모니터 작업 및 좌식 업무 중심</p>
                   </div>
                   <div className="job-card" onClick={() => handleJobSelect('field')}>
                     <div className="job-icon">
-                      <i className="fa-solid fa-helmet-safety"></i>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="monochrome-svg-icon">
+                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                      </svg>
                     </div>
                     <h4>현장직군</h4>
                     <p>제조, 물류, 건설, 고객응대, 교대근무 및 육체 활동 중심</p>
@@ -523,14 +537,14 @@ export default function MentalCoachingPage() {
                 </div>
                 <div className="diag-buttons">
                   <button className="btn-back btn-secondary" onClick={() => setDiagStep(1)}>
-                    <i className="fa-solid fa-arrow-left"></i> 이전으로
+                    ← 이전으로
                   </button>
                   <button
                     className="btn-next btn-primary"
                     id="btn-submit-office"
                     onClick={handleSubmitDiagnosis}
                   >
-                    진단 결과 보기 <i className="fa-solid fa-arrow-right"></i>
+                    진단 결과 보기 →
                   </button>
                 </div>
               </div>
@@ -561,14 +575,14 @@ export default function MentalCoachingPage() {
                 </div>
                 <div className="diag-buttons">
                   <button className="btn-back btn-secondary" onClick={() => setDiagStep(1)}>
-                    <i className="fa-solid fa-arrow-left"></i> 이전으로
+                    ← 이전으로
                   </button>
                   <button
                     className="btn-next btn-primary"
                     id="btn-submit-field"
                     onClick={handleSubmitDiagnosis}
                   >
-                    진단 결과 보기 <i className="fa-solid fa-arrow-right"></i>
+                    진단 결과 보기 →
                   </button>
                 </div>
               </div>
@@ -608,7 +622,16 @@ export default function MentalCoachingPage() {
                       {recommendedList.map((rec, index) => (
                         <div className="recommend-item" key={index}>
                           <h5>
-                            <i className={`fa-solid ${rec.icon}`}></i> {rec.title}
+                            <span className="rec-icon-symbol">
+                              {rec.icon === 'fa-brain' && '🧠'}
+                              {rec.icon === 'fa-dumbbell' && '🏋'}
+                              {rec.icon === 'fa-seedling' && '🌱'}
+                              {rec.icon === 'fa-bed' && '🛏'}
+                              {rec.icon === 'fa-shield-halved' && '🛡'}
+                              {rec.icon === 'fa-heart-pulse' && '♥'}
+                              {rec.icon === 'fa-chart-pie' && '📊'}
+                            </span>{' '}
+                            {rec.title}
                           </h5>
                           <p>{rec.desc}</p>
                         </div>
@@ -620,7 +643,7 @@ export default function MentalCoachingPage() {
                 {/* 6. AI 마인드 리셋 플래너 위젯 추가 */}
                 <div className="reset-planner-widget">
                   <div className="planner-header">
-                    <h4><i className="fa-solid fa-wand-magic-sparkles text-violet"></i> 임직원 전용: 오늘의 AI 마인드 리셋 처방전</h4>
+                    <h4><span className="text-violet">✦</span> 임직원 전용: 오늘의 AI 마인드 리셋 처방전</h4>
                     <p>오늘 업무나 일상에서 느낀 스트레스 요인이나 현재 기분을 적어보세요. 맞춤 마음 챙김 처방을 즉석 발행해 드립니다.</p>
                   </div>
                   <form onSubmit={handleGenerateResetPlan} className="planner-input-form">
@@ -635,11 +658,11 @@ export default function MentalCoachingPage() {
                     <button type="submit" className="btn-generate-planner btn-primary" disabled={isGeneratingReset}>
                       {isGeneratingReset ? (
                         <>
-                          <i className="fa-solid fa-spinner fa-spin"></i> 분석 중...
+                          ⌛ 분석 중...
                         </>
                       ) : (
                         <>
-                          처방 받기 <i className="fa-solid fa-feather-pointed"></i>
+                          처방 받기 →
                         </>
                       )}
                     </button>
@@ -697,10 +720,10 @@ export default function MentalCoachingPage() {
 
                 <div className="diag-buttons">
                   <button className="btn-restart btn-secondary" onClick={handleRestart}>
-                    <i className="fa-solid fa-rotate-left"></i> 다시 진단하기
+                    ↺ 다시 진단하기
                   </button>
                   <a href="#apply" className="btn-primary">
-                    이 솔루션으로 상세 견적 문의하기 <i className="fa-solid fa-paper-plane"></i>
+                    이 솔루션으로 상세 견적 문의하기 ✉
                   </a>
                 </div>
               </div>
@@ -726,13 +749,13 @@ export default function MentalCoachingPage() {
               className={`btn-tab ${activeTab === 'job-counseling' ? 'active' : ''}`}
               onClick={() => setActiveTab('job-counseling')}
             >
-              <i className="fa-solid fa-briefcase"></i> 직무 상담 (Work-focused)
+              <span className="tab-icon-symbol">⚙</span> 직무 상담 (Work-focused)
             </button>
             <button
               className={`btn-tab ${activeTab === 'personal-counseling' ? 'active' : ''}`}
               onClick={() => setActiveTab('personal-counseling')}
             >
-              <i className="fa-solid fa-user-shield"></i> 개인 상담 (Personal)
+              <span className="tab-icon-symbol">♥</span> 개인 상담 (Personal)
             </button>
           </div>
 
@@ -746,7 +769,7 @@ export default function MentalCoachingPage() {
                     className="card-img-placeholder"
                     style={{ background: 'linear-gradient(135deg, #6366f1, #a855f7)' }}
                   >
-                    <i className="fa-solid fa-fire-extinguisher"></i>
+                    <span className="placeholder-icon-symbol">🗲</span>
                   </div>
                   <div className="card-body">
                     <h3>직무 스트레스 & 번아웃 케어</h3>
@@ -765,7 +788,7 @@ export default function MentalCoachingPage() {
                     className="card-img-placeholder"
                     style={{ background: 'linear-gradient(135deg, #3b82f6, #06b6d4)' }}
                   >
-                    <i className="fa-solid fa-comments"></i>
+                    <span className="placeholder-icon-symbol">✉</span>
                   </div>
                   <div className="card-body">
                     <h3>직장 내 커뮤니케이션 갈등 해결</h3>
@@ -784,7 +807,7 @@ export default function MentalCoachingPage() {
                     className="card-img-placeholder"
                     style={{ background: 'linear-gradient(135deg, #f97316, #ec4899)' }}
                   >
-                    <i className="fa-solid fa-compass"></i>
+                    <span className="placeholder-icon-symbol">⚙</span>
                   </div>
                   <div className="card-body">
                     <h3>커리어 성장 & 역할 코칭</h3>
@@ -809,7 +832,7 @@ export default function MentalCoachingPage() {
                     className="card-img-placeholder"
                     style={{ background: 'linear-gradient(135deg, #10b981, #3b82f6)' }}
                   >
-                    <i className="fa-solid fa-heart-pulse"></i>
+                    <span className="placeholder-icon-symbol">♥</span>
                   </div>
                   <div className="card-body">
                     <h3>정서적 안정을 위한 심리 상담</h3>
@@ -828,7 +851,7 @@ export default function MentalCoachingPage() {
                     className="card-img-placeholder"
                     style={{ background: 'linear-gradient(135deg, #8b5cf6, #ec4899)' }}
                   >
-                    <i className="fa-solid fa-people-roof"></i>
+                    <span className="placeholder-icon-symbol">☖</span>
                   </div>
                   <div className="card-body">
                     <h3>대인 및 가족 갈등 솔루션</h3>
@@ -847,7 +870,7 @@ export default function MentalCoachingPage() {
                     className="card-img-placeholder"
                     style={{ background: 'linear-gradient(135deg, #14b8a6, #f59e0b)' }}
                   >
-                    <i className="fa-solid fa-shield-halved"></i>
+                    <span className="placeholder-icon-symbol">⛨</span>
                   </div>
                   <div className="card-body">
                     <h3>자존감 및 회복탄력성(Resilience)</h3>
@@ -902,7 +925,7 @@ export default function MentalCoachingPage() {
             <div className="therapy-controls">
               {/* ASMR 플레이어 */}
               <div className="sound-selector-box">
-                <h4><i className="fa-solid fa-headphones-simple"></i> 배경 사운드 (ASMR) 선택</h4>
+                <h4><span className="sound-icon-symbol">🎧</span> 배경 사운드 (ASMR) 선택</h4>
                 <div className="sound-buttons">
                   <button 
                     className={`btn-sound ${soundType === 'none' ? 'active' : ''}`}
@@ -939,11 +962,11 @@ export default function MentalCoachingPage() {
                 >
                   {isBreathActive ? (
                     <>
-                      <i className="fa-solid fa-circle-stop"></i> 명상 중지하기
+                      ■ 명상 중지하기
                     </>
                   ) : (
                     <>
-                      <i className="fa-solid fa-circle-play"></i> 1분 마음챙김 호흡 시작
+                      ▶ 1분 마음챙김 호흡 시작
                     </>
                   )}
                 </button>
@@ -973,7 +996,7 @@ export default function MentalCoachingPage() {
               <ul className="report-features">
                 <li>
                   <div className="feature-icon">
-                    <i className="fa-solid fa-lock"></i>
+                    <span className="feature-icon-symbol">🔑</span>
                   </div>
                   <div>
                     <h4>상담 임직원 익명성 100% 보장</h4>
@@ -982,7 +1005,7 @@ export default function MentalCoachingPage() {
                 </li>
                 <li>
                   <div className="feature-icon">
-                    <i className="fa-solid fa-chart-pie"></i>
+                    <span className="feature-icon-symbol">📊</span>
                   </div>
                   <div>
                     <h4>조직 스트레스 요인 데이터화</h4>
@@ -991,7 +1014,7 @@ export default function MentalCoachingPage() {
                 </li>
                 <li>
                   <div className="feature-icon">
-                    <i className="fa-solid fa-lightbulb"></i>
+                    <span className="feature-icon-symbol">💡</span>
                   </div>
                   <div>
                     <h4>조직 개선 방향 피드백 제언</h4>
@@ -1005,7 +1028,7 @@ export default function MentalCoachingPage() {
               <div className="glass-card dashboard-card">
                 <div className="db-header">
                   <div className="db-title-area">
-                    <i className="fa-solid fa-chart-line text-violet"></i>
+                    <span className="db-title-icon-symbol">📈</span>
                     <div>
                       <h4>FaWW EAP 조직 분석 대시보드</h4>
                       <p>2026년 2분기 조직 건강 리포트</p>
@@ -1154,7 +1177,11 @@ export default function MentalCoachingPage() {
                 </div>
 
                 <div className="db-insight-box">
-                  <i className="fa-solid fa-circle-exclamation text-orange"></i>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-orange" style={{ marginRight: '8px', flexShrink: 0, display: 'inline-block', verticalAlign: 'middle' }}>
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg>
                   <p>
                     {dashboardTab === 'department' && (
                       <>개발팀의 <strong>업무 번아웃 요인</strong>이 80%를 초과했습니다. 집중 근골격계 테라피(피지컬) 및 릴랙세이션 마음챙김 명상(멘탈) 병행 패키지를 제안합니다.</>
@@ -1295,7 +1322,7 @@ export default function MentalCoachingPage() {
               </div>
 
               <button type="submit" className="btn-submit">
-                무료 맞춤 컨설팅 제안서 신청하기 <i className="fa-solid fa-circle-arrow-right"></i>
+                무료 맞춤 컨설팅 제안서 신청하기 →
               </button>
             </form>
           </div>
@@ -1348,7 +1375,7 @@ export default function MentalCoachingPage() {
         <div className="modal-overlay" id="success-modal">
           <div className="glass-card success-modal-content">
             <div className="success-icon">
-              <i className="fa-solid fa-circle-check"></i>
+              ✓
             </div>
             <h2>제안서 신청 완료!</h2>
             <p>

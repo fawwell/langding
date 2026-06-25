@@ -694,10 +694,9 @@
 }
 
 .mental-page-wrapper .symptom-item input:checked + .checkbox-custom::after {
-  content: '\f00c';
-  font-family: 'Font Awesome 6 Free';
-  font-weight: 900;
-  font-size: 10px;
+  content: '✓';
+  font-weight: 700;
+  font-size: 14px;
   color: white;
   position: absolute;
   top: 50%;
@@ -2132,4 +2131,23 @@
     opacity: 0;
     transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0.2) rotate(180deg);
   }
+}
+
+/* 4. 무채색(Monochrome) 이모지 및 특수기호 그레이스케일화 */
+.mental-page-wrapper .rec-icon-symbol,
+.mental-page-wrapper .tab-icon-symbol,
+.mental-page-wrapper .placeholder-icon-symbol,
+.mental-page-wrapper .feature-icon-symbol,
+.mental-page-wrapper .db-title-icon-symbol {
+  font-style: normal;
+  filter: grayscale(1) opacity(0.85);
+  color: #64748b;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.mental-page-wrapper .placeholder-icon-symbol {
+  font-size: 32px;
+  color: #fff;
+  filter: none; /* 그라데이션 카드 내부 흰색 유지 */
 }
