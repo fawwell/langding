@@ -296,15 +296,45 @@ export default function MentalCoachingPage() {
   };
 
   // 도입 문의 신청서 제출 핸들러
-  const handleApplySubmit = (e: FormEvent) => {
+  const handleApplySubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!formData.agreePrivacy) {
       alert('개인정보 수집 및 이용약관 동의가 필요합니다.');
       return;
     }
-    // 여기에 실제 백엔드 연동(fetch) 추가 가능
-    // 현재는 성공 모달을 노출하는 목적으로 Mock 처리
-    setShowSuccessModal(true);
+    
+    // 백엔드 ProposalCreate DTO 규격에 맞춰 전송 데이터 가공
+    const submitData = {
+      company: formData.companyName,
+      manager: formData.managerName,
+      phone: formData.phone,
+      email: formData.email,
+      scale: formData.empCount,
+      inquiry: `[주요 근무 형태: ${formData.jobType}] ${formData.memo}`.trim(),
+      parts: {
+        physical: { selected: false, sub_modules: [] },
+        mental: { selected: true, sub_modules: ["counseling"] }
+      }
+    };
+
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+      const res = await fetch(`${apiUrl}/api/v1/proposals/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(submitData)
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        alert('❌ 저장 중 오류가 발생했습니다: ' + (err.detail || '알 수 없는 오류'));
+        return;
+      }
+
+      setShowSuccessModal(true);
+    } catch (err) {
+      alert('❌ 네트워크 오류로 인해 제안서 신청에 실패했습니다.');
+    }
   };
 
   // 성공 모달 닫기
