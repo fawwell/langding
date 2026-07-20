@@ -17,28 +17,37 @@ const AgendaSection = () => {
                         <div className="agenda-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <ShieldAlert size={40} strokeWidth={1.8} />
                         </div>
-                        <h3 style={{ fontSize: '28px', lineHeight: '1.3' }}>건강한 몸이 곧<br />산재의 예방입니다</h3>
-                        <p style={{ fontSize: '18px' }}>눈에 보이지 않는 신체의 피로와 통증은 산재의 씨앗입니다. 근골격계 유해요인조사 사후관리를 실행하여 법적 리스크를 해소하고 임직원 근골격계 관리를 극대화하십시오.</p>
+                        <h3>
+                            <span className="type-heavy">건강한 몸이 곧</span><br />
+                            <span className="type-light">산재의 예방입니다</span>
+                        </h3>
+                        <p><strong className="p-head">신체의 피로와 통증은 산재의 씨앗입니다.</strong> 근골격계 유해요인조사 사후관리를 실행하여 법적 리스크를 해소하고 관리 효율을 극대화하십시오.</p>
                     </div>
                     <div className="agenda-card reveal reveal-scale delay-2">
                         <div className="agenda-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <HeartHandshake size={40} strokeWidth={1.8} />
                         </div>
-                        <h3 style={{ fontSize: '28px', lineHeight: '1.3' }}>산모의 건강이<br />성공적 복직의 키 입니다 </h3>
-                        <p style={{ fontSize: '18px' }}>출산 친화적 조직문화, 이제는 신체의 근본적인 건강에서 출발해야 합니다. 전문가의 섬세한 피지컬케어로 출산 전후의 신체 회복을 돕고, 일과 가정이 양립하는 건강한 환경을 완성합니다.</p>
+                        <h3>
+                            <span className="type-heavy">산모의 건강이</span><br />
+                            <span className="type-light">성공적 복직의 키</span>
+                        </h3>
+                        <p><strong className="p-head">출산 친화적 조직문화의 핵심은 신체 회복입니다.</strong> 섬세한 1:1 피지컬케어로 출산 전후 회복을 돕고 일과 가정의 양립을 완벽 지원합니다.</p>
                     </div>
                     <div className="agenda-card reveal reveal-right delay-3">
                         <div className="agenda-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <Brain size={40} strokeWidth={1.8} />
                         </div>
-                        <h3 style={{ fontSize: '28px', lineHeight: '1.3' }}>신체가 건강해야<br />마음도 건강해집니다</h3>
-                        <p style={{ fontSize: '18px' }}>굳어있는 몸의 긴장은 곧 우울감과 번아웃으로 이어집니다. 전문가의 직접적인 피지컬케어로 신체의 활력을 되찾아주고, 마음의 병과 극단적인 선택을 예방하는 새로운 EAP를 제시합니다.</p>
+                        <h3>
+                            <span className="type-heavy">신체가 건강해야</span><br />
+                            <span className="type-light">마음도 건강해집니다</span>
+                        </h3>
+                        <p><strong className="p-head">굳어있는 몸의 긴장은 번아웃으로 이어집니다.</strong> 전문가의 개입으로 신체 활력을 되찾아주고 마음의 병을 예방하는 프리미엄 EAP를 제시합니다.</p>
                     </div>
                 </div>
 
                 <div className="expert-banner reveal">
                     <h4 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                        <AlertTriangle size={24} strokeWidth={2} style={{ color: '#e63946' }} />
+                        <AlertTriangle size={24} strokeWidth={2.5} style={{ color: '#dc2626' }} />
                         자격증 없는 무자격 플랫폼 업체를 주의하십시오.
                     </h4>
                     <p>단순 외부 강사들을 매칭해주는 타 플랫폼과 비교를 거부합니다.<br />
