@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { Building2, GraduationCap } from 'lucide-react';
 
 interface ReviewSectionProps {
     reviewFilter: string;
@@ -13,10 +14,14 @@ const ReviewSection = ({ reviewFilter, setReviewFilter, reviewsData }: ReviewSec
         <section className="testimonials reveal">
             <div className="container">
                 <h2 className="section-title reveal soft-reveal">담당자가 99%만족한 FaWW의 솔루션</h2>
-                <div className="review-filter-wrapper reveal delay-2" style={{ textAlign: 'center', marginBottom: '20px' }}>
+                <div className="review-filter-wrapper reveal delay-2" style={{ textAlign: 'center', marginBottom: '20px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
                     <button className={`review-filter-btn ${reviewFilter === 'all' ? 'active' : ''}`} onClick={() => setReviewFilter('all')}>전체 보기</button>
-                    <button className={`review-filter-btn ${reviewFilter === 'b2b' ? 'active' : ''}`} onClick={() => setReviewFilter('b2b')}>🏢 기업/HR 담당자</button>
-                    <button className={`review-filter-btn ${reviewFilter === 'school' ? 'active' : ''}`} onClick={() => setReviewFilter('school')}>🏫 학교/보건교사</button>
+                    <button className={`review-filter-btn ${reviewFilter === 'b2b' ? 'active' : ''}`} onClick={() => setReviewFilter('b2b')} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                        <Building2 size={16} /> 기업/HR 담당자
+                    </button>
+                    <button className={`review-filter-btn ${reviewFilter === 'school' ? 'active' : ''}`} onClick={() => setReviewFilter('school')} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                        <GraduationCap size={16} /> 학교/보건교사
+                    </button>
                 </div>
 
                 <div className="swiper reviewSwiper" key={`${reviewsData.length}-${reviewFilter}`} style={{ marginTop: '40px', padding: '20px 50px', position: 'relative' }}>

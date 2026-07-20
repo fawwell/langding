@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { Building2, User, Target } from 'lucide-react';
 
 interface QuizModalProps {
     isOpen: boolean;
@@ -40,16 +41,16 @@ const QuizModal = ({
     const questions = target === 'b2b' ? b2bQuestions : b2cQuestions;
 
     return (
-        <div className="modal active">
-            <div className="modal-content quiz-modal-content" style={{ maxWidth: '500px', textAlign: 'center' }}>
+        <div className="modal active" onClick={onClose}>
+            <div className="modal-content quiz-modal-content" style={{ maxWidth: '500px', textAlign: 'center' }} onClick={(e) => e.stopPropagation()}>
                 <button className="modal-close" onClick={onClose}>&times;</button>
                 
                 {step === 1 && (
                     <div className="quiz-step active">
                         <span className="gateway-badge" style={{ background: '#e8f5e9', color: '#2b8a3e', padding: '4px 10px', borderRadius: '12px', fontWeight: 'bold', fontSize: '12px' }}>STEP 1</span>
                         <div className="quiz-options" style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '30px' }}>
-                            <button className="quiz-btn" onClick={() => onNextStep(2, 'b2b')}>🏢 조직을 이끄는 HR/관리자 (조직 진단)</button>
-                            <button className="quiz-btn" onClick={() => onNextStep(2, 'b2c')}>👤 내 몸 상태가 궁금한 직장인 (개인 자가진단)</button>
+                            <button className="quiz-btn" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }} onClick={() => onNextStep(2, 'b2b')}><Building2 size={18} /> 조직을 이끄는 HR/관리자 (조직 진단)</button>
+                            <button className="quiz-btn" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }} onClick={() => onNextStep(2, 'b2c')}><User size={18} /> 내 몸 상태가 궁금한 직장인 (개인 자가진단)</button>
                         </div>
                     </div>
                 )}
@@ -78,7 +79,9 @@ const QuizModal = ({
                 {step === 3 && (
                     <div className="quiz-step active">
                         <div className="quiz-result-header" style={{ background: '#e8f5e9', padding: '30px', borderRadius: '16px', marginBottom: '20px' }}>
-                            <div style={{ fontSize: '40px', marginBottom: '10px' }}>🎯</div>
+                            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
+                                <Target size={40} color="#2b8a3e" />
+                            </div>
                             <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#2b8a3e' }}>담당자님을 위한 최적의 조합!</h3>
                         </div>
                         <h2 style={{ fontSize: '24px', fontWeight: 800, marginBottom: '15px' }}>{resultTitle}</h2>

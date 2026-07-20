@@ -4,6 +4,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useUI } from '@/context/UIContext';
 import Footer from '@/components/layout/Footer';
+import { Lightbulb, Landmark, Building2, Zap } from 'lucide-react';
 
 // FAQ 데이터 외부 분리
 const FAQ_DATA = [
@@ -383,9 +384,12 @@ const EAPPage = () => {
                         </div>
                     </div>
 
-                    <div className="esg-score-box">
-                        💡 시설관리공단 등 공공기관의 실제 집행 모델 도입!<br />
-                        지역 상권 상생 기여를 통한 ESG 경영 평가 점수 확보에 절대적으로 유리합니다.
+                    <div className="esg-score-box" style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center' }}>
+                        <Lightbulb size={20} className="text-amber-500" />
+                        <div>
+                            시설관리공단 등 공공기관의 실제 집행 모델 도입!<br />
+                            지역 상권 상생 기여를 통한 ESG 경영 평가 점수 확보에 절대적으로 유리합니다.
+                        </div>
                     </div>
                 </div>
             </section>
@@ -407,8 +411,8 @@ const EAPPage = () => {
                         justifyContent: 'center'
                     }}>
                         <div className="partner-card-premium">
-                            <h4 style={{ color: '#2b8a3e', fontSize: '16px', marginBottom: '20px', fontWeight: '700', letterSpacing: '-0.3px', borderBottom: '2px solid rgba(43, 138, 62, 0.1)', paddingBottom: '10px' }}>
-                                🏛️ 공공기관 / 국가 공기업
+                            <h4 style={{ color: '#2b8a3e', fontSize: '16px', marginBottom: '20px', fontWeight: '700', letterSpacing: '-0.3px', borderBottom: '2px solid rgba(43, 138, 62, 0.1)', paddingBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Landmark size={18} /> 공공기관 / 국가 공기업
                             </h4>
                             <ul className="partner-text-bullet">
                                 <li>한국환경산업기술원</li>
@@ -420,8 +424,8 @@ const EAPPage = () => {
                             </ul>
                         </div>
                         <div className="partner-card-premium">
-                            <h4 style={{ color: '#2b8a3e', fontSize: '16px', marginBottom: '20px', fontWeight: '700', letterSpacing: '-0.3px', borderBottom: '2px solid rgba(43, 138, 62, 0.1)', paddingBottom: '10px' }}>
-                                🏢 지방 공사 / 지방자치단체
+                            <h4 style={{ color: '#2b8a3e', fontSize: '16px', marginBottom: '20px', fontWeight: '700', letterSpacing: '-0.3px', borderBottom: '2px solid rgba(43, 138, 62, 0.1)', paddingBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Building2 size={18} /> 지방 공사 / 지방자치단체
                             </h4>
                             <ul className="partner-text-bullet">
                                 <li>서울시설공단</li>
@@ -433,8 +437,8 @@ const EAPPage = () => {
                             </ul>
                         </div>
                         <div className="partner-card-premium">
-                            <h4 style={{ color: '#2b8a3e', fontSize: '16px', marginBottom: '20px', fontWeight: '700', letterSpacing: '-0.3px', borderBottom: '2px solid rgba(43, 138, 62, 0.1)', paddingBottom: '10px' }}>
-                                ⚡ 발전사 / 대기업·테크
+                            <h4 style={{ color: '#2b8a3e', fontSize: '16px', marginBottom: '20px', fontWeight: '700', letterSpacing: '-0.3px', borderBottom: '2px solid rgba(43, 138, 62, 0.1)', paddingBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Zap size={18} /> 발전사 / 대기업·테크
                             </h4>
                             <ul className="partner-text-bullet">
                                 <li>한국중부발전 (인천발전본부 등)</li>

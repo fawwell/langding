@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { Sparkles, BarChart3, MousePointerClick } from 'lucide-react';
 
 interface CustomWindow extends Window {
     openModal?: (id: string) => void;
@@ -202,8 +203,8 @@ const BodyExplorer = () => {
                 {/* 3D Canvas Area */}
                 <div style={{ flex: '1', minWidth: '400px', height: '600px', position: 'relative' }}>
                     <div ref={canvasRef} style={{ width: '100%', height: '100%' }}></div>
-                    <div className="explorer-hint" style={{ position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)', color: '#00ff00', fontSize: '14px', fontWeight: 'bold', animation: 'fadeInOut 2s infinite' }}>
-                        💡 모델의 빛나는 부위를 클릭해 보세요
+                    <div className="explorer-hint" style={{ position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)', color: '#00ff00', fontSize: '14px', fontWeight: 'bold', animation: 'fadeInOut 2s infinite', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <Sparkles size={16} /> 모델의 빛나는 부위를 클릭해 보세요
                     </div>
                 </div>
 
@@ -231,12 +232,14 @@ const BodyExplorer = () => {
                                 <h3 style={{ color: '#00ff00', fontSize: '28px', marginBottom: '15px' }}>{partsInfo[selectedPart].title}</h3>
                                 <p style={{ color: '#ccc', fontSize: '18px', lineHeight: '1.6', marginBottom: '25px' }}>{partsInfo[selectedPart].desc}</p>
                                 <div style={{ background: 'rgba(0,255,0,0.1)', padding: '15px 20px', borderRadius: '12px', border: '1px solid rgba(0,255,0,0.2)' }}>
-                                    <span style={{ color: '#00ff00', fontWeight: 'bold' }}>📊 {partsInfo[selectedPart].stats}</span>
+                                    <span style={{ color: '#00ff00', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '6px' }}><BarChart3 size={16} /> {partsInfo[selectedPart].stats}</span>
                                 </div>
                             </>
                         ) : (
                             <div style={{ textAlign: 'center', color: '#888' }}>
-                                <div style={{ fontSize: '50px', marginBottom: '20px' }}>👆</div>
+                                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+                                    <MousePointerClick size={48} />
+                                </div>
                                 <p style={{ fontSize: '18px' }}>분석이 필요한 신체 부위를<br />좌측 모델에서 선택해 주세요</p>
                             </div>
                         )}

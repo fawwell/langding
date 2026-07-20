@@ -138,7 +138,7 @@ export default function ProposalModal() {
 
         {submitted ? (
           <div style={{ textAlign: 'center', padding: '40px 0', fontSize: 18, color: '#1a56db', fontWeight: 800 }}>
-            ✅ 제안서 요청이 접수되었습니다. 빠른 시일 내에 연락드리겠습니다.
+            <span className="emoji-mono">✓</span> 제안서 요청이 접수되었습니다. 빠른 시일 내에 연락드리겠습니다.
           </div>
         ) : (
           <form onSubmit={handleSubmit}>

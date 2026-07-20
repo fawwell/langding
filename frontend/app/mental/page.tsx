@@ -2,6 +2,7 @@
 
 import React, { useState, FormEvent } from 'react';
 import Link from 'next/link';
+import { Users, Brain, Dumbbell, Sprout, Bed, Shield, HeartPulse, PieChart, Headphones, VolumeX, CloudRain, Waves, Bird, Key, BarChart3, Lightbulb, TrendingUp, Building2, Flame, Pin } from 'lucide-react';
 import './mental_style.css';
 
 // 퀴즈/진단 결과 패키지 목록 인터페이스
@@ -388,8 +389,8 @@ export default function MentalCoachingPage() {
                 <div className="glass-card main-visual-card">
                   <div className="card-header">
                     <span className="status-indicator">ON AIR</span>
-                    <span className="user-count">
-                      <span className="monochrome-symbol">👥</span> 4,200+ 임직원 케어 중
+                    <span className="user-count" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <Users size={14} /> 4,200+ 임직원 케어 중
                     </span>
                   </div>
                   <div className="mascot-area">
@@ -651,15 +652,15 @@ export default function MentalCoachingPage() {
                     <div className="recommend-cards" id="recommend-cards-container">
                       {recommendedList.map((rec, index) => (
                         <div className="recommend-item" key={index}>
-                          <h5>
-                            <span className="rec-icon-symbol">
-                              {rec.icon === 'fa-brain' && '🧠'}
-                              {rec.icon === 'fa-dumbbell' && '🏋'}
-                              {rec.icon === 'fa-seedling' && '🌱'}
-                              {rec.icon === 'fa-bed' && '🛏'}
-                              {rec.icon === 'fa-shield-halved' && '🛡'}
-                              {rec.icon === 'fa-heart-pulse' && '♥'}
-                              {rec.icon === 'fa-chart-pie' && '📊'}
+                          <h5 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <span className="rec-icon-symbol" style={{ display: 'inline-flex', alignItems: 'center' }}>
+                              {rec.icon === 'fa-brain' && <Brain size={20} />}
+                              {rec.icon === 'fa-dumbbell' && <Dumbbell size={20} />}
+                              {rec.icon === 'fa-seedling' && <Sprout size={20} />}
+                              {rec.icon === 'fa-bed' && <Bed size={20} />}
+                              {rec.icon === 'fa-shield-halved' && <Shield size={20} />}
+                              {rec.icon === 'fa-heart-pulse' && <HeartPulse size={20} />}
+                              {rec.icon === 'fa-chart-pie' && <PieChart size={20} />}
                             </span>{' '}
                             {rec.title}
                           </h5>
@@ -723,7 +724,7 @@ export default function MentalCoachingPage() {
                   {/* 처방전 출력창 */}
                   {generatedResetPlan && (
                     <div className="reset-diary-card">
-                      <div className="diary-pin">📌</div>
+                      <div className="diary-pin" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Pin size={22} /></div>
                       <div className="diary-content">
                         <div className="diary-tag"># {generatedResetPlan.type}</div>
                         <h3>오늘의 마인드 리셋 처방전</h3>
@@ -955,31 +956,35 @@ export default function MentalCoachingPage() {
             <div className="therapy-controls">
               {/* ASMR 플레이어 */}
               <div className="sound-selector-box">
-                <h4><span className="sound-icon-symbol">🎧</span> 배경 사운드 (ASMR) 선택</h4>
+                <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><Headphones size={20} /> 배경 사운드 (ASMR) 선택</h4>
                 <div className="sound-buttons">
                   <button 
                     className={`btn-sound ${soundType === 'none' ? 'active' : ''}`}
                     onClick={() => setSoundType('none')}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                   >
-                    🔇 소리 없음
+                    <VolumeX size={16} /> 소리 없음
                   </button>
                   <button 
                     className={`btn-sound ${soundType === 'rain' ? 'active' : ''}`}
                     onClick={() => setSoundType('rain')}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                   >
-                    🌧️ 포근한 빗소리
+                    <CloudRain size={16} /> 포근한 빗소리
                   </button>
                   <button 
                     className={`btn-sound ${soundType === 'sea' ? 'active' : ''}`}
                     onClick={() => setSoundType('sea')}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                   >
-                    🌊 잔잔한 파도소리
+                    <Waves size={16} /> 잔잔한 파도소리
                   </button>
                   <button 
                     className={`btn-sound ${soundType === 'birds' ? 'active' : ''}`}
                     onClick={() => setSoundType('birds')}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                   >
-                    🐦 숲속 아침 새소리
+                    <Bird size={16} /> 숲속 아침 새소리
                   </button>
                 </div>
               </div>
@@ -1025,8 +1030,8 @@ export default function MentalCoachingPage() {
               </p>
               <ul className="report-features">
                 <li>
-                  <div className="feature-icon">
-                    <span className="feature-icon-symbol">🔑</span>
+                  <div className="feature-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Key size={22} />
                   </div>
                   <div>
                     <h4>상담 임직원 익명성 100% 보장</h4>
@@ -1034,8 +1039,8 @@ export default function MentalCoachingPage() {
                   </div>
                 </li>
                 <li>
-                  <div className="feature-icon">
-                    <span className="feature-icon-symbol">📊</span>
+                  <div className="feature-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <BarChart3 size={22} />
                   </div>
                   <div>
                     <h4>조직 스트레스 요인 데이터화</h4>
@@ -1043,8 +1048,8 @@ export default function MentalCoachingPage() {
                   </div>
                 </li>
                 <li>
-                  <div className="feature-icon">
-                    <span className="feature-icon-symbol">💡</span>
+                  <div className="feature-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Lightbulb size={22} />
                   </div>
                   <div>
                     <h4>조직 개선 방향 피드백 제언</h4>
@@ -1057,8 +1062,8 @@ export default function MentalCoachingPage() {
             <div className="report-preview-visual">
               <div className="glass-card dashboard-card">
                 <div className="db-header">
-                  <div className="db-title-area">
-                    <span className="db-title-icon-symbol">📈</span>
+                  <div className="db-title-area" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <TrendingUp size={24} className="text-violet" />
                     <div>
                       <h4>FaWW EAP 조직 분석 대시보드</h4>
                       <p>2026년 2분기 조직 건강 리포트</p>
@@ -1091,20 +1096,23 @@ export default function MentalCoachingPage() {
                   <button 
                     className={`db-tab-btn ${dashboardTab === 'department' ? 'active' : ''}`}
                     onClick={() => setDashboardTab('department')}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                   >
-                    🏢 부서별 지표
+                    <Building2 size={16} /> 부서별 지표
                   </button>
                   <button 
                     className={`db-tab-btn ${dashboardTab === 'stress-factor' ? 'active' : ''}`}
                     onClick={() => setDashboardTab('stress-factor')}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                   >
-                    🔥 스트레스 요인
+                    <Flame size={16} /> 스트레스 요인
                   </button>
                   <button 
                     className={`db-tab-btn ${dashboardTab === 'monthly-trend' ? 'active' : ''}`}
                     onClick={() => setDashboardTab('monthly-trend')}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                   >
-                    📈 개선 트렌드
+                    <TrendingUp size={16} /> 개선 트렌드
                   </button>
                 </div>
 
