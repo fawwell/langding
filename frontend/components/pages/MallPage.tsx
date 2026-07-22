@@ -91,8 +91,8 @@ const MallPage = () => {
                     z-index: 1;
                 }
                 .mall-pawmi-mascot {
-                    width: 125px;
-                    height: 125px;
+                    width: 120px;
+                    height: 120px;
                     object-fit: contain;
                     filter: drop-shadow(0 10px 25px rgba(0,0,0,0.6));
                     animation: mallPawmiFloat 3.8s ease-in-out infinite;
@@ -176,6 +176,17 @@ const MallPage = () => {
                     background: linear-gradient(135deg, #f02431 0%, #d01723 100%) !important;
                     transform: translateY(-2px) !important;
                     box-shadow: 0 10px 25px rgba(230, 30, 43, 0.5) !important;
+                }
+                @media (max-width: 768px) {
+                    .hero-mascot-wrapper {
+                        position: static !important;
+                        text-align: center !important;
+                        margin-bottom: 25px !important;
+                    }
+                    .speech-bubble-pawmi::after {
+                        left: 50% !important;
+                        transform: translateX(-50%) !important;
+                    }
                 }
             `}} />
 
@@ -358,8 +369,8 @@ const MallPage = () => {
 
             {/* 히어로 헤더 섹션 */}
             <section className="hero-brand hero-brand-sub reveal" style={{ backgroundColor: '#0e121b', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '120px 0 80px 0', position: 'relative', zIndex: 2 }}>
-                <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-                    <div style={{ textAlign: 'right', position: 'absolute', right: '20px', top: '-10px' }}>
+                <div className="container" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column' }}>
+                    <div className="hero-mascot-wrapper" style={{ textAlign: 'right', alignSelf: 'flex-end', marginBottom: '10px' }}>
                         <div className="speech-bubble-pawmi">
                             🚀 쿠팡 로켓배송으로 빠르게 받아보세요!
                         </div>
@@ -374,17 +385,19 @@ const MallPage = () => {
                         </div>
                     </div>
 
-                    <span className="coupang-badge-pill">
-                        <Truck size={15} /> COUPANG ROCKET SHIPPING OFFICIAL
-                    </span>
-                    <h1 className="hero-el hero-el-2 reveal soft-reveal" style={{ fontSize: '38px', fontWeight: 900, marginBottom: '16px', letterSpacing: '-0.5px' }}>
-                        검증된 제품, <span style={{ background: 'linear-gradient(135deg, #00ff88 0%, #059669 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>피지컬케어 mall</span>
-                    </h1>
-                    <p className="hero-el hero-el-3 reveal soft-reveal" style={{ color: '#94a3b8', fontSize: '16.5px', lineHeight: '1.7', maxWidth: '650px' }}>
-                        <strong style={{ color: '#f8fafc' }}>전문가가 직접 선별한 웰니스 건강 굿즈</strong><br />
-                        쿠팡 로켓배송으로 가장 빠르고 안전하게 파우 제품을 만나보세요.<br />
-                        기업 임직원 대량 구매 및 복지 포인트 차감 견적 상담도 지원합니다.
-                    </p>
+                    <div>
+                        <span className="coupang-badge-pill">
+                            <Truck size={15} /> COUPANG ROCKET SHIPPING OFFICIAL
+                        </span>
+                        <h1 className="hero-el hero-el-2 reveal soft-reveal" style={{ fontSize: '38px', fontWeight: 900, marginBottom: '16px', letterSpacing: '-0.5px' }}>
+                            검증된 제품, <span style={{ background: 'linear-gradient(135deg, #00ff88 0%, #059669 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>피지컬케어 mall</span>
+                        </h1>
+                        <p className="hero-el hero-el-3 reveal soft-reveal" style={{ color: '#94a3b8', fontSize: '16.5px', lineHeight: '1.7', maxWidth: '650px' }}>
+                            <strong style={{ color: '#f8fafc' }}>전문가가 직접 선별한 웰니스 건강 굿즈</strong><br />
+                            쿠팡 로켓배송으로 가장 빠르고 안전하게 파우 제품을 만나보세요.<br />
+                            기업 임직원 대량 구매 및 복지 포인트 차감 견적 상담도 지원합니다.
+                        </p>
+                    </div>
                 </div>
             </section>
 
@@ -402,7 +415,7 @@ const MallPage = () => {
 
                     <div style={{ 
                         display: 'grid', 
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
                         gap: '35px', 
                         maxWidth: '780px', 
                         margin: '0 auto' 
