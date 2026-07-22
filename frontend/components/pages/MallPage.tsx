@@ -34,7 +34,7 @@ const PRODUCTS = [
         ],
         price: '쿠팡 공식 스토어 특가',
         img: '/images/mall/blackterra.png',
-        coupangUrl: 'https://www.coupang.com/vp/products/7281228718?itemId=18590265091&searchId=5ce4eabb056e45e6a10388d231097659&sourceType=brandstore_sdp_atf-baseline_list&storeId=111499&subSourceType=brandstore_sdp_atf-baseline_list&vendorId=A00920407&vendorItemId=85726579068',
+        coupangUrl: 'https://www.coupang.com/vp/products/7281228718?itemId=18590265091&searchId=c9aae0eb29f243e682cd922b1fdd8b75&sourceType=brandstore_sdp_atf-baseline_list&storeId=111499&subSourceType=brandstore_sdp_atf-baseline_list&vendorId=A00920407&vendorItemId=85726579068',
     }
 ];
 
