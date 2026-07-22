@@ -306,7 +306,8 @@ header {
 .page-content, .sub-page-content { display: none; height: auto; overflow-y: visible; }
 .page-content.active, .sub-page-content.active { display: block; }
 
-#page-home.page-content.active {
+#page-home.page-content.active,
+#page-eap.page-content.active {
     height: 100vh;
     overflow-y: auto;
     scroll-snap-type: y mandatory;
@@ -315,6 +316,7 @@ header {
 
 #page-home section { 
     scroll-snap-align: start; 
+    scroll-snap-stop: always;
     height: 100vh; 
     display: flex; 
     flex-direction: column; 
@@ -322,12 +324,37 @@ header {
     margin: 0 !important; 
     padding: 100px 0;
     overflow-y: auto;
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
-#page-home section::-webkit-scrollbar {
-    display: none; /* Chrome, Safari and Opera */
+#page-eap section { 
+    scroll-snap-align: start; 
+    scroll-snap-stop: always;
+    height: 100vh; 
+    min-height: 100vh;
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center; 
+    margin: 0 !important; 
+    padding: 40px 0;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+#page-home footer,
+#page-eap footer {
+    scroll-snap-align: end;
+    scroll-snap-stop: normal;
+    min-height: 35vh;
+    box-sizing: border-box;
+}
+
+#page-home section::-webkit-scrollbar,
+#page-eap section::-webkit-scrollbar {
+    display: none;
 }
 
 #page-home section::before,
@@ -335,11 +362,6 @@ header {
     content: "";
     flex: 1;
     min-height: 0;
-}
-
-#page-eap section {
-    margin: 0 !important;
-    padding: 140px 0;
 }
 
 /* 히어로 브랜드 섹션 */
@@ -688,7 +710,7 @@ header ul li a:hover, header ul li a.active-nav {
     .next-btn { right: 10px; }
 }
 
-.agenda-section { padding: 140px 0; background: linear-gradient(135deg, #ffffff 0%, #f4f6fa 100%); border-top: 1px solid #e1e7f5; border-bottom: 1px solid #e1e7f5; }
+.agenda-section, .eap-system-section { padding: 140px 0; background: linear-gradient(135deg, #ffffff 0%, #f4f6fa 100%); border-top: 1px solid #e1e7f5; border-bottom: 1px solid #e1e7f5; }
 .agenda-header { text-align: center; margin-bottom: 50px; }
 .agenda-header h2 { font-size: 38px; font-weight: 900; color: #111; letter-spacing: -1px; margin-bottom: 15px; line-height: 1.4; }
 .agenda-header h2 span { color: #2b8a3e; }
@@ -740,6 +762,98 @@ header ul li a:hover, header ul li a.active-nav {
         inset 0 1px 0 rgba(255, 255, 255, 1) !important;
     border-color: #2b8a3e !important;
     z-index: 2;
+}
+.grid-2x2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    align-items: stretch;
+}
+
+.smart-card { 
+    background: #ffffff; 
+    border-radius: 24px; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); 
+    border: 1px solid rgba(0, 0, 0, 0.08); 
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); 
+    position: relative; 
+    overflow: hidden; 
+    display: flex; 
+    flex-direction: column; 
+    cursor: pointer; 
+    padding: 24px;
+    height: 100%;
+}
+
+.smart-card-top {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.smart-card-img {
+    width: 100%;
+    height: 200px !important;
+    flex-shrink: 0;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    transition: transform 0.5s ease;
+}
+
+.card-floating-tag {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.card-floating-tag .tag-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.smart-card-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* 5번: 호버 시 상단에 쓱 차오르는 슬림 그라데이션 라인 모션 */
+.smart-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, #10b981, #2b8a3e, #40c057);
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 5;
+}
+
+.smart-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(43, 138, 62, 0.12);
+    border-color: rgba(43, 138, 62, 0.3);
+}
+
+.smart-card:hover::after {
+    width: 100%;
+    opacity: 1;
 }
 
 /* 🤏 Strategy 5: 인라인 언더라인 & 아이콘 렌즈 줌 마이크로 호버 모션 */
@@ -1451,24 +1565,70 @@ header ul li a:hover, header ul li a.active-nav {
 /* 공용 배너 / 버튼 / 챗봇 */
 .hero { background-color: #0d1b2a; color: white; padding: 90px 20px; text-align: center; position: relative; overflow: hidden; }
 .hero-premium { background: linear-gradient(rgba(13, 27, 42, 0.7), rgba(13, 27, 42, 0.85)), url('https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2070&auto=format&fit=crop') no-repeat center/cover fixed; padding: 100px 20px 40px 20px !important; color: white; text-align: center; height: auto !important; min-height: 250px !important; display: flex; align-items: center; justify-content: center; }
-.cta-footer { background-color: #2b8a3e; color: white; text-align: center; padding: 80px 20px; }
-.cta-btn-white { 
-    background: #fff; 
-    color: #2b8a3e; 
+/* 🌌 Strategy 1: 시크 딥 다크 & 에메랄드 림라이트 CTA 배너 */
+.cta-footer { 
+    background: #0b0f19; 
+    color: #ffffff; 
+    text-align: center; 
+    padding: 110px 20px; 
+    position: relative; 
+    overflow: hidden; 
+    border-top: 1px solid rgba(255, 255, 255, 0.08); 
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.cta-footer::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.16) 0%, transparent 70%);
+    filter: blur(50px);
+    pointer-events: none;
+}
+.cta-footer h2 {
+    font-size: 38px;
+    font-weight: 900;
+    letter-spacing: -1.2px;
+    color: #ffffff;
+    margin-bottom: 16px;
+    line-height: 1.35;
+    position: relative;
+    z-index: 2;
+}
+.cta-footer p {
+    font-size: 17px;
+    color: #94a3b8;
+    font-weight: 400;
+    max-width: 680px;
+    margin: 0 auto 36px auto;
+    line-height: 1.6;
+    word-break: keep-all;
+    position: relative;
+    z-index: 2;
+}
+.cta-btn-gradient { 
+    position: relative;
+    z-index: 2;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
+    color: #ffffff; 
     font-weight: 900; 
-    padding: 18px 48px; 
+    padding: 20px 48px; 
     border-radius: 50px; 
     font-size: 18px; 
+    letter-spacing: -0.5px;
     cursor: pointer; 
     border: none; 
-    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 15px 35px rgba(16, 185, 129, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
-.cta-btn-white:hover {
-    transform: scale(1.05) translateY(-5px);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+.cta-btn-gradient:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 25px 50px rgba(16, 185, 129, 0.45);
+    background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
 }
-.cta-btn-white:hover { transform: scale(1.05); box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
 .fab-container { 
     position: fixed; 
     bottom: 30px; 
@@ -2730,15 +2890,14 @@ header ul li a:hover, header ul li a.active-nav {
 
 .gateway-card {
     background: #ffffff;
-    border: 1px solid rgba(0,0,0,0.05);
-    border-top: 6px solid #2b8a3e;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
-    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+    border-radius: 28px;
     padding: 60px 40px;
     position: relative;
     overflow: hidden;
     cursor: pointer;
-    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -2752,19 +2911,39 @@ header ul li a:hover, header ul li a.active-nav {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at top right, rgba(43, 138, 62, 0.15), transparent 70%);
+    background: radial-gradient(circle at top right, rgba(43, 138, 62, 0.1), transparent 70%);
     opacity: 0;
     transition: opacity 0.6s ease;
 }
 
+/* 5번: 호버 시 상단에 스무스하게 쓱 펼쳐지는 2.5px 그라데이션 림 라인 */
+.gateway-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, #10b981, #2b8a3e, #40c057);
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 5;
+}
+
 .gateway-card:hover {
-    transform: translateY(-15px);
+    transform: translateY(-10px);
     background: #ffffff;
-    border-color: #2b8a3e;
-    box-shadow: 0 30px 60px rgba(43, 138, 62, 0.2);
+    border-color: rgba(43, 138, 62, 0.3);
+    box-shadow: 0 25px 50px rgba(43, 138, 62, 0.15);
 }
 
 .gateway-card:hover::before {
+    opacity: 1;
+}
+
+.gateway-card:hover::after {
+    width: 100%;
     opacity: 1;
 }
 

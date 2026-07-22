@@ -253,8 +253,12 @@ const EAPPage = () => {
                             <p className="penalty"><span>NOTICE</span> 위반 시 벌칙 상동<br />(산재 발생 시 중대재해처벌법 연계 리스크)</p>
                         </div>
                     </div>
+                </div>
+            </section>
 
-                    <div className="school-header-wrap" style={{ textAlign: 'center', marginTop: '100px' }}>
+            <section className="risk-factors-wrap reveal">
+                <div className="container">
+                    <div className="school-header-wrap" style={{ textAlign: 'center', marginBottom: '30px' }}>
                         <span className="section-tag">RISK FACTORS</span>
                         <h2 className="section-title reveal">근골격계 부담작업 <span>11가지 유형</span></h2>
                         <p className="section-desc reveal">하나라도 해당된다면, 법적 의무 조사 대상입니다.</p>
@@ -309,7 +313,7 @@ const EAPPage = () => {
                         {[
                             { id: 'modal1', tag: '진단', title: '스마트 AI 체형분석', desc: '3D 스캐닝을 통해 임직원의 신체 불균형과 근골격계 위험도를 정밀 측정합니다.', img: '/images/eap/ai_scanning.webp', color: '#e3f2fd', text: '#1565c0', hashtags: ['#3D스캔', '#불균형측정', '#근골격계케어'] },
                             { id: 'modal2', tag: '케어', title: '1:1 맞춤 피지컬케어', desc: '전문가가 직접 파견되어 통증 부위를 즉각적으로 관리하고 이완하는 시그니처 프로그램입니다.', img: '/images/eap/manual_care.webp', color: '#e8f5e9', text: '#2b8a3e', hashtags: ['#통증완화', '#직접파견', '#1:1시그니처'] },
-                            { id: 'modal4', tag: '실습', title: '단체 운동 프로그램', desc: '오피스 스트레칭, 소도구 운동 등 현장에서 바로 실천 가능한 기능성 트레이닝을 진행합니다.', img: '/images/eap/group_exercise.webp', color: '#fff3e0', text: '#e65100', hashtags: ['#오피스스트레칭', '#기능성트레이닝', '#활력증진'] },
+                            { id: 'modal4', tag: '실습', title: '단체 운동 프로그램', desc: '오피스 스트레칭, 소도구 운동 등 현장에서 바로 실천 가능한 기능성 트레이닝을 진행합니다.', img: '/images/eap/group_exercise.webp', color: '#fff3e0', text: '#d97706', hashtags: ['#오피스스트레칭', '#기능성트레이닝', '#활력증진'] },
                             { id: 'modal3', tag: '강의', title: '건강 복지 특강', desc: '직무별 맞춤 질환 예방 교육 및 올바른 생활 습관 가이드를 전문가의 강연으로 제공합니다.', img: '/images/eap/lecture.webp', color: '#e3f2fd', text: '#1565c0', hashtags: ['#직무별예방교육', '#전문가강연', '#올바른습관'] }
                         ].map((s, i) => (
                             <div key={i} className={`smart-card reveal delay-${i + 4}`} onClick={() => openModal(s.id)}>
@@ -317,15 +321,22 @@ const EAPPage = () => {
                                     <div className="smart-card-img" style={{ 
                                         backgroundImage: `linear-gradient(rgba(0,0,0,0.05), rgba(0,0,0,0.2)), url('${s.img}')`,
                                         backgroundSize: 'cover',
-                                        backgroundPosition: 'center'
-                                    }}></div>
+                                        backgroundPosition: 'center',
+                                        position: 'relative'
+                                    }}>
+                                        <span className="card-floating-tag" style={{ color: s.text }}>
+                                            <span className="tag-dot" style={{ backgroundColor: s.text }}></span>
+                                            {s.tag} PROGRAM
+                                        </span>
+                                    </div>
                                     <div className="smart-card-body">
-                                        <span className="gateway-badge" style={{ background: s.color, color: s.text }}>{s.tag}</span>
-                                        <h3>{s.title}</h3>
-                                        <p>{s.desc}</p>
+                                        <div>
+                                            <h3 style={{ fontSize: '20px', fontWeight: '800', marginBottom: '8px', color: '#0f172a' }}>{s.title}</h3>
+                                            <p style={{ fontSize: '14.5px', color: '#64748b', lineHeight: '1.6' }}>{s.desc}</p>
+                                        </div>
                                         <div className="smart-card-hashtags" style={{ marginTop: '15px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                                             {s.hashtags.map((tag, ti) => (
-                                                <span key={ti} style={{ fontSize: '13px', color: '#868e96', fontWeight: '500', opacity: 0.8 }}>{tag}</span>
+                                                <span key={ti} style={{ fontSize: '12.5px', color: '#475569', background: '#f1f5f9', padding: '4px 10px', borderRadius: '6px', fontWeight: '600' }}>{tag}</span>
                                             ))}
                                         </div>
                                     </div>
@@ -485,8 +496,10 @@ const EAPPage = () => {
             <section className="cta-footer reveal">
                 <div className="container">
                     <h2>FaWW와 함께 건강한 조직을 구축하세요</h2>
-                    <p style={{ marginBottom: '30px' }}>기업 담당자를 위한 예산 활용 가이드 및 법적 의무 이행 리포트를 무상으로 제공해 드립니다.</p>
-                    <button className="cta-btn-white" onClick={() => openModal('modal-proposal')}>무료 상담 및 가이드 신청</button>
+                    <p>기업 담당자를 위한 예산 활용 가이드 및 법적 의무 이행 리포트를 무상으로 제공해 드립니다.</p>
+                    <button className="cta-btn-gradient" onClick={() => openModal('modal-proposal')}>
+                        무료 상담 및 가이드 신청
+                    </button>
                 </div>
             </section>
             <Footer />
