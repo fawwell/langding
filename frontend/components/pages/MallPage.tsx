@@ -59,6 +59,12 @@ const MallPage = () => {
         return url.replace('www.coupang.com/vp/products', 'm.coupang.com/vm/products');
     };
 
+    // 쿠팡 페이지를 자체 API 프록시로 중계 → X-Frame-Options 제거 + alert() 차단
+    const getProxyCoupangUrl = (url: string) => {
+        const mobileUrl = getEmbedCoupangUrl(url);
+        return `/api/coupang-proxy?url=${encodeURIComponent(mobileUrl)}`;
+    };
+
     return (
         <main id="page-mall" className="page-content active" style={{ backgroundColor: '#0b0e14', color: '#fff', position: 'relative', overflowX: 'hidden' }}>
             <style dangerouslySetInnerHTML={{ __html: `
@@ -287,12 +293,13 @@ const MallPage = () => {
                             </div>
                         </div>
 
-                        {/* 모달 본문: 쿠팡 모바일 전용 웹뷰 (m.coupang.com) */}
+                        {/* 모달 본문: 자체 프록시를 통한 쿠팡 웹뷰 (alert 차단) */}
                         <div style={{ flexGrow: 1, position: 'relative', width: '100%', height: '100%', background: '#fff', overflow: 'hidden' }}>
                             <iframe 
-                                src={getEmbedCoupangUrl(activeCoupangProduct.coupangUrl)}
+                                src={getProxyCoupangUrl(activeCoupangProduct.coupangUrl)}
                                 title={`${activeCoupangProduct.name} 쿠팡 제품 상세`}
                                 style={{ width: '100%', height: '100%', border: 'none' }}
+                                sandbox="allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin"
                             />
                         </div>
 
