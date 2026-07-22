@@ -30,28 +30,18 @@ const MallPage = () => {
     const { openModal } = useUI();
 
     const openCoupangShop = (url: string) => {
-        const width = 480;
-        const height = 750;
-        const left = (window.innerWidth - width) / 2;
-        const top = (window.innerHeight - height) / 2;
-        
-        try {
-            const popup = window.open(
-                url, 
-                'coupang_shop_popup', 
-                `width=${width},height=${height},top=${top},left=${left},scrollbars=yes,resizable=yes`
-            );
-            if (!popup || popup.closed || typeof popup.closed === 'undefined') {
-                window.open(url, '_blank');
-            }
-        } catch {
-            window.open(url, '_blank');
-        }
+        // 쿠팡 데스크톱/모바일 전체 레이아웃으로 열어 쿠팡 자체 '바로구매/장바구니' 버튼이 100% 노출되도록 새 탭 연결
+        window.open(url, '_blank', 'noopener,noreferrer');
     };
 
     return (
         <main id="page-mall" className="page-content active" style={{ backgroundColor: '#0b0c10', color: '#fff' }}>
             <style dangerouslySetInnerHTML={{ __html: `
+                #page-mall .reveal {
+                    opacity: 1 !important;
+                    transform: none !important;
+                    visibility: visible !important;
+                }
                 @keyframes mallPawmiFloat {
                     0%, 100% { transform: translateY(0px) rotate(0deg); }
                     50% { transform: translateY(-10px) rotate(4deg); }
