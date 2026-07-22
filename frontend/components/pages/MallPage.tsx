@@ -19,7 +19,7 @@ const PRODUCTS = [
         ],
         price: '쿠팡 공식 스토어 특가',
         img: '/images/mall/strap3d.png',
-        coupangUrl: 'https://www.coupang.com/vp/products/8477063323?itemId=18590264907',
+        coupangUrl: 'https://www.coupang.com/vp/products/8477063323?itemId=18590264907&searchId=5ce4eabb056e45e6a10388d231097659&sourceType=brandstore_sdp_atf-baseline_list&storeId=111499&subSourceType=brandstore_sdp_atf-baseline_list&vendorId=A00920407&vendorItemId=85726579078',
     },
     {
         id: 'blackterra',
@@ -34,7 +34,7 @@ const PRODUCTS = [
         ],
         price: '쿠팡 공식 스토어 특가',
         img: '/images/mall/blackterra.png',
-        coupangUrl: 'https://www.coupang.com/vp/products/7281228718?itemId=18590265091',
+        coupangUrl: 'https://www.coupang.com/vp/products/7281228718?itemId=18590265091&searchId=5ce4eabb056e45e6a10388d231097659&sourceType=brandstore_sdp_atf-baseline_list&storeId=111499&subSourceType=brandstore_sdp_atf-baseline_list&vendorId=A00920407&vendorItemId=85726579068',
     }
 ];
 
