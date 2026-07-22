@@ -3,7 +3,7 @@
 import React from 'react';
 import { useUI } from '@/context/UIContext';
 import Footer from '@/components/layout/Footer';
-import { ShoppingBag, Truck, Building2, ExternalLink, X, ShoppingCart, ArrowRight, CheckCircle2, ShieldCheck, Sparkles } from 'lucide-react';
+import { ShoppingBag, Truck, ExternalLink, X, ShoppingCart, ArrowRight } from 'lucide-react';
 
 const PRODUCTS = [
     {
@@ -53,6 +53,10 @@ const MallPage = () => {
 
     const goToCoupangCheckout = (url: string) => {
         window.open(url, '_blank', 'noopener,noreferrer');
+    };
+
+    const getEmbedCoupangUrl = (url: string) => {
+        return url.replace('www.coupang.com/vp/products', 'm.coupang.com/vm/products');
     };
 
     return (
@@ -173,28 +177,6 @@ const MallPage = () => {
                     transform: translateY(-2px) !important;
                     box-shadow: 0 10px 25px rgba(230, 30, 43, 0.5) !important;
                 }
-                .btn-b2b-inquiry {
-                    background: rgba(43, 138, 62, 0.12) !important;
-                    color: #00ff88 !important;
-                    border: 1px solid rgba(0, 255, 136, 0.3) !important;
-                    padding: 13px 18px !important;
-                    border-radius: 12px !important;
-                    font-size: 13.5px !important;
-                    font-weight: 700 !important;
-                    cursor: pointer !important;
-                    display: flex !important;
-                    align-items: center !important;
-                    justify-content: center !important;
-                    gap: 6px !important;
-                    transition: all 0.2s ease !important;
-                    width: 100% !important;
-                    margin-top: 10px !important;
-                }
-                .btn-b2b-inquiry:hover {
-                    background: rgba(43, 138, 62, 0.25) !important;
-                    border-color: #00ff88 !important;
-                    transform: translateY(-2px) !important;
-                }
             `}} />
 
             {/* 배경 은은한 오로라 글루 현상 */}
@@ -294,14 +276,12 @@ const MallPage = () => {
                             </div>
                         </div>
 
-                        {/* 모달 본문: 홈페이지 내부 쿠팡 웹페이지 뷰어 (iframe) */}
+                        {/* 모달 본문: 쿠팡 모바일 전용 웹뷰 (m.coupang.com - 데스크톱 스크립트 에러 팝업 원천 방지) */}
                         <div style={{ flexGrow: 1, position: 'relative', width: '100%', height: '100%', background: '#fff', overflow: 'hidden' }}>
                             <iframe 
-                                src={activeCoupangProduct.coupangUrl}
+                                src={getEmbedCoupangUrl(activeCoupangProduct.coupangUrl)}
                                 title={`${activeCoupangProduct.name} 쿠팡 제품 상세`}
                                 style={{ width: '100%', height: '100%', border: 'none' }}
-                                sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-presentation"
-                                referrerPolicy="no-referrer-when-downgrade"
                             />
                         </div>
 
@@ -398,11 +378,11 @@ const MallPage = () => {
                         <Truck size={15} /> COUPANG ROCKET SHIPPING OFFICIAL
                     </span>
                     <h1 className="hero-el hero-el-2 reveal soft-reveal" style={{ fontSize: '38px', fontWeight: 900, marginBottom: '16px', letterSpacing: '-0.5px' }}>
-                        검증된 교구, <span style={{ background: 'linear-gradient(135deg, #00ff88 0%, #059669 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>피지컬케어 mall</span>
+                        검증된 제품, <span style={{ background: 'linear-gradient(135deg, #00ff88 0%, #059669 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>피지컬케어 mall</span>
                     </h1>
                     <p className="hero-el hero-el-3 reveal soft-reveal" style={{ color: '#94a3b8', fontSize: '16.5px', lineHeight: '1.7', maxWidth: '650px' }}>
                         <strong style={{ color: '#f8fafc' }}>전문가가 직접 선별한 웰니스 건강 굿즈</strong><br />
-                        쿠팡 로켓배송으로 가장 빠르고 안전하게 파우 교구를 만나보세요.<br />
+                        쿠팡 로켓배송으로 가장 빠르고 안전하게 파우 제품을 만나보세요.<br />
                         기업 임직원 대량 구매 및 복지 포인트 차감 견적 상담도 지원합니다.
                     </p>
                 </div>
@@ -412,11 +392,8 @@ const MallPage = () => {
             <section className="floating-gallery reveal" style={{ padding: '80px 0 100px', background: '#0b0e14' }}>
                 <div className="container">
                     <div style={{ textAlign: 'center', marginBottom: '55px' }}>
-                        <span className="section-tag" style={{ color: '#00ff88', fontSize: '13px', fontWeight: 800, letterSpacing: '1px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                            <Sparkles size={14} /> PREMIUM SELECTION
-                        </span>
                         <h2 className="section-title reveal" style={{ color: '#fff', fontSize: '32px', fontWeight: 900, marginTop: '8px' }}>
-                            FaWW <span>공식 베스트 교구</span>
+                            FaWW <span style={{ background: 'linear-gradient(135deg, #00ff88 0%, #059669 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>공식 베스트 제품</span>
                         </h2>
                         <p style={{ color: '#64748b', fontSize: '15px', marginTop: '10px' }}>
                             원하시는 결제 방식을 선택하여 편하게 구매하실 수 있습니다.
@@ -467,13 +444,7 @@ const MallPage = () => {
                                             className="btn-coupang-buy"
                                             onClick={() => openInternalCoupangModal(prod)}
                                         >
-                                            <ShoppingBag size={16} /> 교구 상세 소개 & 구매 <ExternalLink size={14} />
-                                        </button>
-                                        <button 
-                                            className="btn-b2b-inquiry"
-                                            onClick={() => openModal('modal-proposal')}
-                                        >
-                                            <Building2 size={15} /> 기업 대량 / 복지포인트 문의
+                                            <ShoppingBag size={16} /> 제품 상세 소개 & 구매 <ExternalLink size={14} />
                                         </button>
                                     </div>
                                 </div>
@@ -487,7 +458,7 @@ const MallPage = () => {
             <section className="cta-footer reveal" style={{ backgroundColor: '#131924', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
                 <div className="container text-center" style={{ padding: '65px 20px' }}>
                     <h2 style={{ fontSize: '28px', fontWeight: 900, color: '#fff', marginBottom: '14px', letterSpacing: '-0.5px' }}>
-                        기업 복지 포인트 연동 및 대량 교구 구매 문의
+                        기업 복지 포인트 연동 및 대량 제품 구매 문의
                     </h2>
                     <p style={{ color: '#94a3b8', fontSize: '15.5px', marginBottom: '32px', maxWidth: '700px', margin: '0 auto 32px auto', lineHeight: '1.6' }}>
                         임직원 건강 증진을 위한 세금 감면 혜택, 기업 포인트 일괄 결제 및 견적서를 무상으로 빠르게 제공해 드립니다.
