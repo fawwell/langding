@@ -14,10 +14,10 @@ const PRODUCTS = [
         details: [
             '정밀 모션 측정이 가능한 고탄성 3D 스트랩',
             '자세 분석 및 피지컬 케어 연동 인공지능 지원',
-            '쿠팡 로켓배송 무료 배송 & 익일 빠르게 수령',
+            '쿠팡 공식 스토어 무료 배송 & 빠른 수령',
             'FaWW 100% 공식 인증 정품 보증'
         ],
-        price: '쿠팡 로켓배송 특가',
+        price: '쿠팡 공식 스토어 특가',
         img: '/images/mall/strap3d.png',
         coupangUrl: 'https://www.coupang.com/vp/products/8477063323?itemId=18590264907&searchId=5ce4eabb056e45e6a10388d231097659&sourceType=brandstore_sdp_atf-baseline_list&storeId=111499&subSourceType=brandstore_sdp_atf-baseline_list&vendorId=A00920407&vendorItemId=85726579078',
     },
@@ -29,10 +29,10 @@ const PRODUCTS = [
         details: [
             '전문가용 온열 딥티슈 근육 케어 시스템',
             '인체공학적 그립 설계 및 3단계 온도 조절',
-            '쿠팡 로켓배송 무료 배송 & 익일 빠르게 수령',
+            '쿠팡 공식 스토어 무료 배송 & 빠른 수령',
             'FaWW 100% 공식 인증 정품 보증'
         ],
-        price: '쿠팡 로켓배송 특가',
+        price: '쿠팡 공식 스토어 특가',
         img: '/images/mall/blackterra.png',
         coupangUrl: 'https://www.coupang.com/vp/products/7281228718?itemId=18590265091&searchId=5ce4eabb056e45e6a10388d231097659&sourceType=brandstore_sdp_atf-baseline_list&storeId=111499&subSourceType=brandstore_sdp_atf-baseline_list&vendorId=A00920407&vendorItemId=85726579068',
     }
@@ -287,7 +287,7 @@ const MallPage = () => {
                             </div>
                         </div>
 
-                        {/* 모달 본문: 쿠팡 모바일 전용 웹뷰 (m.coupang.com - 데스크톱 스크립트 에러 팝업 원천 방지) */}
+                        {/* 모달 본문: 쿠팡 모바일 전용 웹뷰 (m.coupang.com) */}
                         <div style={{ flexGrow: 1, position: 'relative', width: '100%', height: '100%', background: '#fff', overflow: 'hidden' }}>
                             <iframe 
                                 src={getEmbedCoupangUrl(activeCoupangProduct.coupangUrl)}
@@ -296,7 +296,7 @@ const MallPage = () => {
                             />
                         </div>
 
-                        {/* 모달 하단 액션 바: 정돈된 장바구니/바로구매 버튼 */}
+                        {/* 모달 하단 액션 바: 장바구니/바로구매 버튼 */}
                         <div style={{
                             padding: '16px 24px',
                             backgroundColor: '#121620',
@@ -311,7 +311,7 @@ const MallPage = () => {
                                 <img 
                                     src={activeCoupangProduct.img} 
                                     alt={activeCoupangProduct.name}
-                                    style={{ width: '48px', height: '48px', objectFit: 'contain', background: '#1c2230', padding: '4px', borderRadius: '10px' }} 
+                                    style={{ width: '48px', height: '48px', objectFit: 'cover', background: '#1c2230', padding: '2px', borderRadius: '10px' }} 
                                 />
                                 <div>
                                     <div style={{ fontSize: '15px', fontWeight: 800, color: '#fff' }}>
@@ -372,7 +372,7 @@ const MallPage = () => {
                 <div className="container" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column' }}>
                     <div className="hero-mascot-wrapper" style={{ textAlign: 'right', alignSelf: 'flex-end', marginBottom: '10px' }}>
                         <div className="speech-bubble-pawmi">
-                            🚀 쿠팡 로켓배송으로 빠르게 받아보세요!
+                            🚀 쿠팡 공식 스토어에서 빠르게 받아보세요!
                         </div>
                         <div>
                             <img 
@@ -387,14 +387,14 @@ const MallPage = () => {
 
                     <div>
                         <span className="coupang-badge-pill">
-                            <Truck size={15} /> COUPANG ROCKET SHIPPING OFFICIAL
+                            <Truck size={15} /> COUPANG OFFICIAL STORE
                         </span>
                         <h1 className="hero-el hero-el-2 reveal soft-reveal" style={{ fontSize: '38px', fontWeight: 900, marginBottom: '16px', letterSpacing: '-0.5px' }}>
                             검증된 제품, <span style={{ background: 'linear-gradient(135deg, #00ff88 0%, #059669 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>피지컬케어 mall</span>
                         </h1>
                         <p className="hero-el hero-el-3 reveal soft-reveal" style={{ color: '#94a3b8', fontSize: '16.5px', lineHeight: '1.7', maxWidth: '650px' }}>
                             <strong style={{ color: '#f8fafc' }}>전문가가 직접 선별한 웰니스 건강 굿즈</strong><br />
-                            쿠팡 로켓배송으로 가장 빠르고 안전하게 파우 제품을 만나보세요.<br />
+                            쿠팡 공식 스토어에서 가장 빠르고 안전하게 파우 제품을 만나보세요.<br />
                             기업 임직원 대량 구매 및 복지 포인트 차감 견적 상담도 지원합니다.
                         </p>
                     </div>
@@ -422,26 +422,27 @@ const MallPage = () => {
                     }}>
                         {PRODUCTS.map((prod) => (
                             <div key={prod.id} className="product-card-showroom reveal" style={{ opacity: 1, visibility: 'visible' }}>
-                                <div style={{ position: 'relative', height: '250px', background: '#161c28', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <div style={{ position: 'relative', height: '240px', background: '#ffffff', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                     <span style={{ 
                                         position: 'absolute', 
                                         top: '15px', 
                                         left: '15px', 
+                                        zIndex: 10,
                                         background: prod.tag === 'BEST' ? 'linear-gradient(135deg, #2b8a3e, #059669)' : 'linear-gradient(135deg, #e61e2b, #d01723)', 
                                         color: '#fff', 
                                         fontSize: '11px', 
                                         fontWeight: 900, 
-                                        padding: '4px 12px', 
+                                        padding: '5px 14px', 
                                         borderRadius: '6px',
                                         letterSpacing: '1px',
-                                        boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+                                        boxShadow: '0 4px 14px rgba(0,0,0,0.3)'
                                     }}>
                                         {prod.tag}
                                     </span>
                                     <img 
                                         src={prod.img} 
                                         alt={prod.name} 
-                                        style={{ width: '80%', height: '80%', objectFit: 'contain', transition: 'transform 0.3s ease', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.5))' }} 
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s ease' }} 
                                     />
                                 </div>
                                 <div style={{ padding: '28px 25px', display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between' }}>
