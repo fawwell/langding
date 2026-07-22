@@ -10,7 +10,7 @@ const PRODUCTS = [
         id: 'strap3d',
         name: '3D 스트랩',
         tag: 'BEST',
-        desc: '정밀 측정이 가능한 IT 융합 스트랩',
+        desc: '3차원 방향 운동이 가능한 기능성 스트랩',
         details: [
             '정밀 모션 측정이 가능한 고탄성 3D 스트랩',
             '자세 분석 및 피지컬 케어 연동 인공지능 지원',
