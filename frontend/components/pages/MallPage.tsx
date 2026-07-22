@@ -8,7 +8,7 @@ const MallPage = () => {
     const { openModal } = useUI();
 
     return (
-        <main id="page-mall" className="page-content active" style={{ position: 'relative', overflow: 'hidden' }}>
+        <main id="page-mall" className="page-content active" style={{ position: 'relative', minHeight: '100vh', background: '#0b0c10' }}>
             <style dangerouslySetInnerHTML={{ __html: `
                 @keyframes mallPawmiFloat {
                     0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -19,8 +19,8 @@ const MallPage = () => {
                     100% { transform: translateY(-14px) scale(1.18) rotate(-4deg); filter: drop-shadow(0 0 22px #00ffcc) drop-shadow(0 0 35px rgba(0, 255, 136, 0.9)); }
                 }
                 .mall-pawmi-mascot {
-                    width: 130px;
-                    height: 130px;
+                    width: 120px;
+                    height: 120px;
                     object-fit: contain;
                     filter: drop-shadow(0 8px 20px rgba(0,0,0,0.4));
                     animation: mallPawmiFloat 3.8s ease-in-out infinite;
@@ -32,45 +32,59 @@ const MallPage = () => {
                     animation: pawmiGlowBounceMall 0.5s ease-in-out infinite alternate !important;
                 }
                 .mall-blurred-content {
-                    filter: blur(10px) brightness(0.6);
+                    filter: blur(8px) brightness(0.6);
                     pointer-events: none;
                     user-select: none;
-                    transition: filter 0.3s ease;
+                    opacity: 1 !important;
                 }
-                .mall-coming-soon-overlay {
-                    position: absolute;
-                    top: 0;
+                .mall-blurred-content .reveal {
+                    opacity: 1 !important;
+                    transform: none !important;
+                }
+                .mall-coming-soon-wrapper {
+                    position: fixed;
+                    top: 80px;
                     left: 0;
                     width: 100%;
-                    height: 100%;
-                    min-height: 80vh;
-                    z-index: 50;
+                    height: calc(100vh - 80px);
+                    z-index: 90;
                     display: flex;
-                    flex-direction: column;
                     align-items: center;
                     justify-content: center;
-                    padding: 40px 20px;
-                    background: rgba(11, 12, 16, 0.45);
-                    backdrop-filter: blur(14px);
-                    -webkit-backdrop-filter: blur(14px);
+                    padding: 20px;
+                    background: rgba(11, 12, 16, 0.55);
+                    backdrop-filter: blur(10px);
+                    -webkit-backdrop-filter: blur(10px);
                 }
                 .coming-soon-card {
-                    background: rgba(20, 24, 33, 0.85);
-                    border: 1px solid rgba(43, 138, 62, 0.4);
-                    box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 30px rgba(43, 138, 62, 0.25);
-                    border-radius: 28px;
-                    padding: 50px 40px;
-                    max-width: 560px;
-                    width: 90%;
+                    background: rgba(18, 22, 30, 0.92);
+                    border: 1px solid rgba(43, 138, 62, 0.45);
+                    box-shadow: 0 25px 60px rgba(0,0,0,0.7), 0 0 40px rgba(43, 138, 62, 0.25);
+                    border-radius: 24px;
+                    padding: 45px 35px;
+                    max-width: 520px;
+                    width: 92%;
                     text-align: center;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                 }
+                @media (max-width: 768px) {
+                    .mall-coming-soon-wrapper {
+                        top: 70px;
+                        height: calc(100vh - 70px);
+                    }
+                    .coming-soon-card {
+                        padding: 35px 24px;
+                    }
+                    .coming-soon-card h2 {
+                        font-size: 22px !important;
+                    }
+                }
             `}} />
 
-            {/* 준비 중 모달 오버레이 */}
-            <div className="mall-coming-soon-overlay">
+            {/* 고정 준비 중 모달 오버레이 */}
+            <div className="mall-coming-soon-wrapper">
                 <div className="coming-soon-card">
                     <img 
                         src="/images/pawmi/pawmi_theragun.png" 
@@ -91,7 +105,7 @@ const MallPage = () => {
                     }}>
                         COMING SOON
                     </span>
-                    <h2 style={{ color: '#fff', fontSize: '28px', fontWeight: 900, marginBottom: '14px', letterSpacing: '-0.5px' }}>
+                    <h2 style={{ color: '#fff', fontSize: '26px', fontWeight: 900, marginBottom: '14px', letterSpacing: '-0.5px' }}>
                         피지컬케어 Mall 준비 중입니다
                     </h2>
                     <p style={{ color: '#aaa', fontSize: '15px', lineHeight: '1.6', marginBottom: '30px', wordBreak: 'keep-all' }}>
@@ -118,7 +132,7 @@ const MallPage = () => {
                 </div>
             </div>
 
-            {/* 뿌연 배경 콘텐츠 */}
+            {/* 뿌연 배경 콘텐츠 (선명하게 보이되 블러 처리) */}
             <div className="mall-blurred-content">
                 <section className="hero-brand hero-brand-sub reveal" style={{ backgroundColor: '#111', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                     <div className="container" style={{ position: 'relative', zIndex: 2 }}>
