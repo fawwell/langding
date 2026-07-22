@@ -169,4 +169,4 @@ const HeroSection = ({ openModal }: HeroSectionProps) => {
     );
 };
 
-export default HeroSection;
+export default React.memo(HeroSection);

@@ -56,4 +56,4 @@ const ComparisonSection = () => {
     );
 };
 
-export default ComparisonSection;
+export default React.memo(ComparisonSection);

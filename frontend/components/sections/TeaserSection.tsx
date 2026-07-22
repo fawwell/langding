@@ -112,4 +112,4 @@ const TeaserSection = () => {
     );
 };
 
-export default TeaserSection;
+export default React.memo(TeaserSection);

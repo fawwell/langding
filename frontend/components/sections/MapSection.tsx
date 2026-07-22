@@ -31,4 +31,4 @@ const MapSection = () => {
     );
 };
 
-export default MapSection;
+export default React.memo(MapSection);

@@ -93,4 +93,4 @@ const GatewaySection = () => {
     );
 };
 
-export default GatewaySection;
+export default React.memo(GatewaySection);

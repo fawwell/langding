@@ -100,4 +100,4 @@ const AgendaSection = () => {
     );
 };
 
-export default AgendaSection;
+export default React.memo(AgendaSection);

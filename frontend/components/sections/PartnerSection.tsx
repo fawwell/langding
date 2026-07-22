@@ -40,4 +40,4 @@ const PartnerSection = () => {
     );
 };
 
-export default PartnerSection;
+export default React.memo(PartnerSection);

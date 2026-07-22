@@ -33,4 +33,4 @@ const MagnifySection = () => {
     );
 };
 
-export default MagnifySection;
+export default React.memo(MagnifySection);

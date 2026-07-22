@@ -60,4 +60,4 @@ const MediaSection = ({ mediaReports }: MediaSectionProps) => {
     );
 };
 
-export default MediaSection;
+export default React.memo(MediaSection);
