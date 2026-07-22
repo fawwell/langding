@@ -45,21 +45,35 @@ const GatewaySection = () => {
                             <div className="gateway-btn">피지컬케어 자세히 보기</div>
                         </div>
                     </div>
-                    <div className="gateway-card reveal delay-2" onClick={() => router.push('/mall')} style={{ padding: 0, overflow: 'hidden', position: 'relative' }}>
-                        <img 
-                            src="/images/pawmi/pawmi_theragun.png" 
-                            alt="테라건 파우미" 
-                            style={{ 
-                                position: 'absolute', 
-                                top: '10px', 
-                                right: '10px', 
-                                width: '70px', 
-                                height: '70px', 
-                                objectFit: 'contain', 
-                                zIndex: 10,
-                                filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
-                            }} 
-                        />
+            <style dangerouslySetInnerHTML={{ __html: `
+                @keyframes pawmiGlowBounceGateway {
+                    0% { transform: translateY(-2px) scale(1.1) rotate(4deg); filter: drop-shadow(0 0 12px #00ff88) drop-shadow(0 0 20px rgba(43, 138, 62, 0.9)); }
+                    100% { transform: translateY(-8px) scale(1.18) rotate(-4deg); filter: drop-shadow(0 0 18px #00ffcc) drop-shadow(0 0 28px rgba(0, 255, 136, 0.9)); }
+                }
+                .gateway-pawmi-theragun {
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    width: 75px;
+                    height: 75px;
+                    object-fit: contain;
+                    z-index: 10;
+                    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.35));
+                    cursor: pointer;
+                    transition: transform 0.25s ease, filter 0.25s ease;
+                }
+                .gateway-pawmi-theragun:hover {
+                    animation: pawmiGlowBounceGateway 0.4s ease-in-out infinite alternate !important;
+                }
+            `}} />
+            <div className="gateway-card reveal delay-2" onClick={() => router.push('/mall')} style={{ padding: 0, overflow: 'hidden', position: 'relative' }}>
+                <img 
+                    src="/images/pawmi/pawmi_theragun.png" 
+                    alt="테라건 파우미 - 피지컬케어 mall 이동" 
+                    title="클릭 시 피지컬케어 mall로 이동합니다"
+                    className="gateway-pawmi-theragun"
+                    onClick={(e) => { e.stopPropagation(); router.push('/mall'); }}
+                />
                         <div className="gateway-img" style={{ height: '200px', position: 'relative', overflow: 'hidden', background: '#f0f0f0' }}>
                             <Image src="/images/gateway/mall.webp" alt="FaWW 피지컬케어 몰 - 홈케어 운동 교구 및 릴렉싱 용품 쇼핑몰" fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 100vw, 33vw" />
                         </div>

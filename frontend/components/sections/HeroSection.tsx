@@ -1,12 +1,15 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 interface HeroSectionProps {
     openModal: (modalId: string) => void;
 }
 
 const HeroSection = ({ openModal }: HeroSectionProps) => {
+    const router = useRouter();
+
     return (
         <section className="hero-brand reveal">
             {/* 반응형 & 뷰포트 완벽 피팅 디자인 오버라이드 */}
@@ -81,6 +84,10 @@ const HeroSection = ({ openModal }: HeroSectionProps) => {
                     0%, 100% { transform: translateY(0px) rotate(-2deg); }
                     50% { transform: translateY(-12px) rotate(2deg); }
                 }
+                @keyframes pawmiGlowBounce {
+                    0% { transform: translateY(-4px) scale(1.1) rotate(4deg); filter: drop-shadow(0 0 15px #00ff88) drop-shadow(0 0 25px rgba(43, 138, 62, 0.9)); }
+                    100% { transform: translateY(-14px) scale(1.18) rotate(-4deg); filter: drop-shadow(0 0 22px #00ffcc) drop-shadow(0 0 35px rgba(0, 255, 136, 0.9)); }
+                }
                 .hero-pawmi-mascot {
                     position: absolute;
                     right: -20px;
@@ -90,8 +97,13 @@ const HeroSection = ({ openModal }: HeroSectionProps) => {
                     object-fit: contain;
                     filter: drop-shadow(0 10px 20px rgba(0,0,0,0.35));
                     animation: heroPawmiFloat 4s ease-in-out infinite;
-                    pointer-events: none;
+                    pointer-events: auto;
+                    cursor: pointer;
                     z-index: 10;
+                    transition: filter 0.3s ease;
+                }
+                .hero-pawmi-mascot:hover {
+                    animation: pawmiGlowBounce 0.5s ease-in-out infinite alternate !important;
                 }
                 @media (max-width: 992px) {
                     .hero-pawmi-mascot {
@@ -109,8 +121,10 @@ const HeroSection = ({ openModal }: HeroSectionProps) => {
             <div className="container" style={{ position: 'relative', zIndex: 2 }}>
                 <img 
                     src="/images/pawmi/pawmi_theraband_rubber.png" 
-                    alt="세라밴드 파우미" 
+                    alt="세라밴드 파우미 - 피지컬케어 mall 이동" 
+                    title="클릭 시 피지컬케어 mall로 이동합니다"
                     className="hero-pawmi-mascot"
+                    onClick={() => router.push('/mall')}
                 />
                 <div className="hero-subtitle hero-el hero-el-1 soft-reveal" style={{ marginBottom: '12px' }}>FaWW : Family Wholesome Wellness</div>
                 <h1 className="hero-el hero-el-2 soft-reveal" style={{ marginBottom: '16px' }}>

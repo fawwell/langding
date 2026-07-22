@@ -17,6 +17,10 @@ const SchoolPage = () => {
                         0%, 100% { transform: translateY(0px) rotate(-2deg); }
                         50% { transform: translateY(-10px) rotate(3deg); }
                     }
+                    @keyframes pawmiGlowBounceSchool {
+                        0% { transform: translateY(-4px) scale(1.1) rotate(4deg); filter: drop-shadow(0 0 15px #00ff88) drop-shadow(0 0 25px rgba(43, 138, 62, 0.9)); }
+                        100% { transform: translateY(-14px) scale(1.18) rotate(-4deg); filter: drop-shadow(0 0 22px #00ffcc) drop-shadow(0 0 35px rgba(0, 255, 136, 0.9)); }
+                    }
                     .school-pawmi-mascot {
                         position: absolute;
                         right: 50px;
@@ -26,6 +30,12 @@ const SchoolPage = () => {
                         object-fit: contain;
                         filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
                         animation: schoolPawmiFloat 4s ease-in-out infinite;
+                        cursor: pointer;
+                        z-index: 10;
+                        transition: filter 0.3s ease;
+                    }
+                    .school-pawmi-mascot:hover {
+                        animation: pawmiGlowBounceSchool 0.5s ease-in-out infinite alternate !important;
                     }
                     @media (max-width: 768px) {
                         .school-pawmi-mascot {
@@ -42,8 +52,10 @@ const SchoolPage = () => {
                 <div className="container" style={{ position: 'relative', zIndex: 2 }}>
                     <img 
                         src="/images/pawmi/pawmi_theraband_stretch.png" 
-                        alt="학생 체형분석 파우미" 
+                        alt="학생 체형분석 파우미 - 피지컬케어 mall 이동" 
+                        title="클릭 시 피지컬케어 mall로 이동합니다"
                         className="school-pawmi-mascot"
+                        onClick={() => router.push('/mall')}
                     />
                     <div style={{ textAlign: 'left' }}><span className="back-btn" onClick={() => router.push('/ai')}>← 타겟 선택으로 돌아가기</span></div>
                     <h1>바른 성장의 시작,<br />FaWW 학생 체형분석 솔루션</h1>

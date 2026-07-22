@@ -161,6 +161,10 @@ const EAPPage = () => {
                         0%, 100% { transform: translateY(0px) rotate(0deg); }
                         50% { transform: translateY(-10px) rotate(-3deg); }
                     }
+                    @keyframes pawmiGlowBounceEap {
+                        0% { transform: translateY(-4px) scale(1.1) rotate(4deg); filter: drop-shadow(0 0 15px #00ff88) drop-shadow(0 0 25px rgba(43, 138, 62, 0.9)); }
+                        100% { transform: translateY(-14px) scale(1.18) rotate(-4deg); filter: drop-shadow(0 0 22px #00ffcc) drop-shadow(0 0 35px rgba(0, 255, 136, 0.9)); }
+                    }
                     .eap-pawmi-mascot {
                         position: absolute;
                         right: 40px;
@@ -170,6 +174,12 @@ const EAPPage = () => {
                         object-fit: contain;
                         filter: drop-shadow(0 8px 20px rgba(0,0,0,0.3));
                         animation: eapPawmiFloat 3.6s ease-in-out infinite;
+                        cursor: pointer;
+                        z-index: 10;
+                        transition: filter 0.3s ease;
+                    }
+                    .eap-pawmi-mascot:hover {
+                        animation: pawmiGlowBounceEap 0.5s ease-in-out infinite alternate !important;
                     }
                     @media (max-width: 768px) {
                         .eap-pawmi-mascot {
@@ -186,8 +196,10 @@ const EAPPage = () => {
                 <div className="container" style={{ position: 'relative', zIndex: 2 }}>
                     <img 
                         src="/images/pawmi/pawmi_theraband_stretch.png" 
-                        alt="세라밴드 스트레칭 파우미" 
+                        alt="세라밴드 스트레칭 파우미 - 피지컬케어 mall 이동" 
+                        title="클릭 시 피지컬케어 mall로 이동합니다"
                         className="eap-pawmi-mascot"
+                        onClick={() => router.push('/mall')}
                     />
                     <div style={{ textAlign: 'left', marginBottom: '20px' }}><span className="back-btn" style={{ color: '#aaa', cursor: 'pointer', fontSize: '14px', border: '1px solid #555', padding: '8px 16px', borderRadius: '20px' }} onClick={() => router.push('/ai')}>← 타겟 선택으로 돌아가기</span></div>
 
