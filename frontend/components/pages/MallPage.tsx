@@ -13,34 +13,16 @@ const PRODUCTS = [
         desc: '전문가용 프리미엄 온열 마사지 케어 툴',
         price: '쿠팡 로켓배송 특가',
         img: '/images/mall/blackterra.png',
-        coupangUrl: 'https://www.coupang.com', // 필요 시 실제 쿠팡 상품 링크로 교체 가능
-    },
-    {
-        id: 'physicalband',
-        name: '피지컬 밴드',
-        tag: 'NEW',
-        desc: '고탄성 프리미엄 저항 밴드',
-        price: '쿠팡 로켓배송 특가',
-        img: '/images/mall/physicalband.png',
-        coupangUrl: 'https://www.coupang.com',
-    },
-    {
-        id: 'physicalball',
-        name: '피지컬볼',
-        tag: 'PREMIUM',
-        desc: '심부 근육 이완용 고강도 마사지볼',
-        price: '쿠팡 로켓배송 특가',
-        img: '/images/mall/physicalball.png',
-        coupangUrl: 'https://www.coupang.com',
+        coupangUrl: 'https://www.coupang.com/vp/products/7281228718?itemId=18590265091&searchId=5ce4eabb056e45e6a10388d231097659&sourceType=brandstore_sdp_atf-baseline_list&storeId=111499&subSourceType=brandstore_sdp_atf-baseline_list&vendorId=A00920407&vendorItemId=85726579068',
     },
     {
         id: 'strap3d',
-        name: '3d스트랩',
-        tag: 'IOT',
+        name: '3D 스트랩',
+        tag: 'HOT',
         desc: '정밀 측정이 가능한 IT 융합 스트랩',
         price: '쿠팡 로켓배송 특가',
         img: '/images/mall/strap3d.png',
-        coupangUrl: 'https://www.coupang.com',
+        coupangUrl: 'https://www.coupang.com/vp/products/8477063323?itemId=18590264907&searchId=5ce4eabb056e45e6a10388d231097659&sourceType=brandstore_sdp_atf-baseline_list&storeId=111499&subSourceType=brandstore_sdp_atf-baseline_list&vendorId=A00920407&vendorItemId=85726579078',
     }
 ];
 
@@ -201,7 +183,7 @@ const MallPage = () => {
                                 alt="몰 파우미" 
                                 title="클릭하면 튀어오릅니다!"
                                 className="mall-pawmi-mascot"
-                                onClick={() => openCoupangShop('https://www.coupang.com')}
+                                onClick={() => openCoupangShop(PRODUCTS[0].coupangUrl)}
                             />
                         </div>
                     </div>
@@ -235,9 +217,9 @@ const MallPage = () => {
 
                     <div style={{ 
                         display: 'grid', 
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(270px, 1fr))', 
-                        gap: '30px', 
-                        maxWidth: '1200px', 
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
+                        gap: '35px', 
+                        maxWidth: '780px', 
                         margin: '0 auto' 
                     }}>
                         {PRODUCTS.map((prod) => (
