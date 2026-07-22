@@ -7,24 +7,9 @@ import { ShoppingBag, Truck, ExternalLink, X, ShoppingCart, ArrowRight } from 'l
 
 const PRODUCTS = [
     {
-        id: 'blackterra',
-        name: '블랙테라',
-        tag: 'BEST',
-        desc: '전문가용 프리미엄 온열 마사지 케어 툴',
-        details: [
-            '전문가용 온열 딥티슈 근육 케어 시스템',
-            '인체공학적 그립 설계 및 3단계 온도 조절',
-            '쿠팡 로켓배송 무료 배송 & 익일 빠르게 수령',
-            'FaWW 100% 공식 인증 정품 보증'
-        ],
-        price: '쿠팡 로켓배송 특가',
-        img: '/images/mall/blackterra.png',
-        coupangUrl: 'https://www.coupang.com/vp/products/7281228718?itemId=18590265091&searchId=5ce4eabb056e45e6a10388d231097659&sourceType=brandstore_sdp_atf-baseline_list&storeId=111499&subSourceType=brandstore_sdp_atf-baseline_list&vendorId=A00920407&vendorItemId=85726579068',
-    },
-    {
         id: 'strap3d',
         name: '3D 스트랩',
-        tag: 'HOT',
+        tag: 'BEST',
         desc: '정밀 측정이 가능한 IT 융합 스트랩',
         details: [
             '정밀 모션 측정이 가능한 고탄성 3D 스트랩',
@@ -35,6 +20,21 @@ const PRODUCTS = [
         price: '쿠팡 로켓배송 특가',
         img: '/images/mall/strap3d.png',
         coupangUrl: 'https://www.coupang.com/vp/products/8477063323?itemId=18590264907&searchId=5ce4eabb056e45e6a10388d231097659&sourceType=brandstore_sdp_atf-baseline_list&storeId=111499&subSourceType=brandstore_sdp_atf-baseline_list&vendorId=A00920407&vendorItemId=85726579078',
+    },
+    {
+        id: 'blackterra',
+        name: '블랙테라',
+        tag: 'HOT',
+        desc: '전문가용 프리미엄 온열 마사지 케어 툴',
+        details: [
+            '전문가용 온열 딥티슈 근육 케어 시스템',
+            '인체공학적 그립 설계 및 3단계 온도 조절',
+            '쿠팡 로켓배송 무료 배송 & 익일 빠르게 수령',
+            'FaWW 100% 공식 인증 정품 보증'
+        ],
+        price: '쿠팡 로켓배송 특가',
+        img: '/images/mall/blackterra.png',
+        coupangUrl: 'https://www.coupang.com/vp/products/7281228718?itemId=18590265091&searchId=5ce4eabb056e45e6a10388d231097659&sourceType=brandstore_sdp_atf-baseline_list&storeId=111499&subSourceType=brandstore_sdp_atf-baseline_list&vendorId=A00920407&vendorItemId=85726579068',
     }
 ];
 
