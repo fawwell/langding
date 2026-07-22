@@ -74,7 +74,7 @@ const HeroSection = ({ openModal }: HeroSectionProps) => {
                 }
             `}} />
 
-            <video className="hero-video-bg" autoPlay loop muted playsInline preload="metadata">
+            <video className="hero-video-bg" autoPlay loop muted playsInline preload="metadata" style={{ willChange: 'transform', transform: 'translateZ(0)' }}>
                 <source src="/background3.mp4" type="video/mp4" />
             </video>
             <div className="hero-overlay"></div>
@@ -101,6 +101,8 @@ const HeroSection = ({ openModal }: HeroSectionProps) => {
                     cursor: pointer;
                     z-index: 10;
                     transition: filter 0.3s ease;
+                    will-change: transform;
+                    transform: translateZ(0);
                 }
                 .hero-pawmi-mascot:hover {
                     animation: pawmiGlowBounce 0.5s ease-in-out infinite alternate !important;

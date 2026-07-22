@@ -53,87 +53,91 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         const revealObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
+                    const targetEl = entry.target;
                     
-                    // Cinematic Soft Reveal Text animation
-                    const revealElements = entry.target.querySelectorAll('.soft-reveal');
-                    const splitText = (node: Node, charIndex: { value: number }) => {
-                        if (node.nodeType === 3) {
-                            const text = node.textContent || '';
-                            const fragment = document.createDocumentFragment();
-                            text.split('').forEach((char) => {
-                                const span = document.createElement('span');
-                                span.textContent = char === ' ' ? '\u00A0' : char;
-                                span.className = 'char';
-                                span.style.transitionDelay = `${charIndex.value * 30}ms`;
-                                fragment.appendChild(span);
-                                charIndex.value++;
+                    requestAnimationFrame(() => {
+                        targetEl.classList.add('active');
+                        
+                        // Cinematic Soft Reveal Text animation
+                        const revealElements = targetEl.querySelectorAll('.soft-reveal:not(.reveal-done)');
+                        if (revealElements.length > 0) {
+                            const splitText = (node: Node, charIndex: { value: number }) => {
+                                if (node.nodeType === 3) {
+                                    const text = node.textContent || '';
+                                    if (!text.trim()) return;
+                                    const fragment = document.createDocumentFragment();
+                                    text.split('').forEach((char) => {
+                                        const span = document.createElement('span');
+                                        span.textContent = char === ' ' ? '\u00A0' : char;
+                                        span.className = 'char';
+                                        span.style.transitionDelay = `${charIndex.value * 30}ms`;
+                                        fragment.appendChild(span);
+                                        charIndex.value++;
+                                    });
+                                    node.parentNode?.replaceChild(fragment, node);
+                                } else if (node.nodeType === 1) {
+                                    const children = Array.from(node.childNodes);
+                                    children.forEach(child => splitText(child, charIndex));
+                                }
+                            };
+
+                            revealElements.forEach(el => {
+                                const charIndex = { value: 0 };
+                                splitText(el, charIndex);
+                                el.classList.add('reveal-done');
                             });
-                            node.parentNode?.replaceChild(fragment, node);
-                        } else if (node.nodeType === 1) {
-                            const children = Array.from(node.childNodes);
-                            children.forEach(child => splitText(child, charIndex));
                         }
-                    };
 
-                    revealElements.forEach(el => {
-                        if (!el.classList.contains('reveal-done')) {
-                            const charIndex = { value: 0 };
-                            splitText(el, charIndex);
-                            el.classList.add('reveal-done');
-                        }
-                    });
+                        // Count-up animation
+                        const countElements = targetEl.querySelectorAll('.count-up:not(.counting-done)');
+                        countElements.forEach(el => {
+                            el.classList.add('counting-done');
 
-                    // Count-up animation
-                    const countElements = entry.target.querySelectorAll('.count-up');
-                    countElements.forEach(el => {
-                        if (el.classList.contains('counting-done')) return;
-                        el.classList.add('counting-done');
+                            const target = parseInt(el.getAttribute('data-target') || '0');
+                            const isFormat = el.getAttribute('data-format') === 'true';
+                            const duration = 2000;
+                            let startTime: number | null = null;
 
-                        const target = parseInt(el.getAttribute('data-target') || '0');
-                        const isFormat = el.getAttribute('data-format') === 'true';
-                        const duration = 2000;
-                        let startTime: number | null = null;
+                            const easeOutExpo = (t: number): number => {
+                                return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+                            };
 
-                        const easeOutExpo = (t: number): number => {
-                            return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
-                        };
+                            const animate = (timestamp: number) => {
+                                if (!startTime) startTime = timestamp;
+                                const progress = Math.min((timestamp - startTime) / duration, 1);
+                                const easedProgress = easeOutExpo(progress);
+                                const current = Math.floor(easedProgress * target);
 
-                        const animate = (timestamp: number) => {
-                            if (!startTime) startTime = timestamp;
-                            const progress = Math.min((timestamp - startTime) / duration, 1);
-                            const easedProgress = easeOutExpo(progress);
-                            const current = Math.floor(easedProgress * target);
+                                el.textContent = isFormat ? current.toLocaleString() : current.toString();
 
-                            el.textContent = isFormat ? current.toLocaleString() : current.toString();
+                                if (progress < 1) {
+                                    requestAnimationFrame(animate);
+                                } else {
+                                    el.textContent = isFormat ? target.toLocaleString() : target.toString();
+                                }
+                            };
+                            requestAnimationFrame(animate);
+                        });
 
-                            if (progress < 1) {
-                                requestAnimationFrame(animate);
-                            } else {
-                                el.textContent = isFormat ? target.toLocaleString() : target.toString();
-                            }
-                        };
-                        requestAnimationFrame(animate);
-                    });
+                        // Circular gauges
+                        const circleGauges = targetEl.querySelectorAll('.count-up-circle');
+                        circleGauges.forEach(circle => {
+                            const target = 1;
+                            let current = 100;
+                            const duration = 2000;
+                            const stepTime = 20;
+                            const decrement = (100 - target) / (duration / stepTime);
 
-                    // Circular gauges
-                    const circleGauges = entry.target.querySelectorAll('.count-up-circle');
-                    circleGauges.forEach(circle => {
-                        const target = 1;
-                        let current = 100;
-                        const duration = 2000;
-                        const stepTime = 20;
-                        const decrement = (100 - target) / (duration / stepTime);
-
-                        const timer = setInterval(() => {
-                            current -= decrement;
-                            if (current <= target) {
-                                (circle as HTMLElement).style.strokeDashoffset = target.toString();
-                                clearInterval(timer);
-                            } else {
-                                (circle as HTMLElement).style.strokeDashoffset = current.toString();
-                            }
-                        }, stepTime);
+                            const timer = setInterval(() => {
+                                current -= decrement;
+                                if (current <= target) {
+                                    (circle as HTMLElement).style.strokeDashoffset = target.toString();
+                                    clearInterval(timer);
+                                } else {
+                                    (circle as HTMLElement).style.strokeDashoffset = current.toString();
+                                }
+                            }, stepTime);
+                        });
                     });
                 }
             });
@@ -145,8 +149,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         // Trigger reveal for top section immediately
         const topSection = document.querySelector('main > section');
         if (topSection) {
-            topSection.classList.add('active');
-            topSection.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
+            requestAnimationFrame(() => {
+                topSection.classList.add('active');
+                topSection.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
+            });
         }
 
         return () => revealObserver.disconnect();

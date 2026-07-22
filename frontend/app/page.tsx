@@ -34,57 +34,69 @@ export default function Home() {
         }
     }, [reviewFilter]);
 
-    // 돋보기 X-ray 효과 (모바일 터치 지원 포함)
+    // 돋보기 X-ray 효과 (모바일 터치 지원 포함) - 60fps 최적화 (RAF ticking lock & 캐싱)
     useEffect(() => {
         const container = document.querySelector('.magnify-container') as HTMLElement;
         if (!container) return;
 
         const glass = container.querySelector('.magnify-glass') as HTMLElement;
+        const human = container.querySelector('.magnify-human') as HTMLElement;
+        const skeleton = container.querySelector('.magnify-skeleton') as HTMLElement;
+        const shine = container.querySelector('.magnify-shine') as HTMLElement;
 
-        const updatePosition = (clientX: number, clientY: number) => {
+        let ticking = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        const updatePosition = () => {
             const rect = container.getBoundingClientRect();
-            const x = clientX - rect.left;
-            const y = clientY - rect.top;
+            const x = lastX - rect.left;
+            const y = lastY - rect.top;
 
             const tiltX = ((y / rect.height) - 0.5) * -12;
             const tiltY = ((x / rect.width) - 0.5) * 12;
 
-            requestAnimationFrame(() => {
-                container.style.setProperty('--x', `${x}px`);
-                container.style.setProperty('--y', `${y}px`);
+            container.style.setProperty('--x', `${x}px`);
+            container.style.setProperty('--y', `${y}px`);
+            
+            container.style.transform = `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+            container.style.boxShadow = `${-tiltY * 3}px ${tiltX * 3}px 50px rgba(0,0,0,0.6), 0 0 20px rgba(0, 255, 255, 0.1)`;
+            
+            if (human) human.style.transform = `translate3d(${-tiltY * 0.5}px, ${tiltX * 0.5}px, 20px)`;
+            if (skeleton) skeleton.style.transform = `translate3d(${tiltY * 0.3}px, ${-tiltX * 0.3}px, -30px) scale(1.05)`;
+
+            if (shine) {
+                shine.style.backgroundPosition = `${50 + tiltY * 2}% ${50 + tiltX * 2}%`;
+            }
+
+            if (glass) {
+                glass.style.left = `${x}px`;
+                glass.style.top = `${y}px`;
+                glass.style.display = 'block';
                 
-                container.style.transform = `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
-                container.style.boxShadow = `${-tiltY * 3}px ${tiltX * 3}px 50px rgba(0,0,0,0.6), 0 0 20px rgba(0, 255, 255, 0.1)`;
-                
-                const human = container.querySelector('.magnify-human') as HTMLElement;
-                const skeleton = container.querySelector('.magnify-skeleton') as HTMLElement;
-                const shine = container.querySelector('.magnify-shine') as HTMLElement;
+                const angle = Math.abs(Math.floor(tiltY * 2 + 15));
+                const score = 90 + Math.floor(Math.random() * 10);
+                glass.setAttribute('data-info', `ANGLE: ${angle}°\nSCORE: ${score}%`);
+            }
 
-                if (human) human.style.transform = `translate3d(${-tiltY * 0.5}px, ${tiltX * 0.5}px, 20px)`;
-                if (skeleton) skeleton.style.transform = `translate3d(${tiltY * 0.3}px, ${-tiltX * 0.3}px, -30px) scale(1.05)`;
-
-                if (shine) {
-                    shine.style.backgroundPosition = `${50 + tiltY * 2}% ${50 + tiltX * 2}%`;
-                }
-
-                if (glass) {
-                    glass.style.left = `${x}px`;
-                    glass.style.top = `${y}px`;
-                    glass.style.display = 'block';
-                    
-                    const angle = Math.abs(Math.floor(tiltY * 2 + 15));
-                    const score = 90 + Math.floor(Math.random() * 10);
-                    glass.setAttribute('data-info', `ANGLE: ${angle}°\nSCORE: ${score}%`);
-                }
-            });
+            ticking = false;
         };
 
-        const handleMouseMove = (e: globalThis.MouseEvent) => updatePosition(e.clientX, e.clientY);
+        const scheduleUpdate = (clientX: number, clientY: number) => {
+            lastX = clientX;
+            lastY = clientY;
+            if (!ticking) {
+                ticking = true;
+                requestAnimationFrame(updatePosition);
+            }
+        };
+
+        const handleMouseMove = (e: globalThis.MouseEvent) => scheduleUpdate(e.clientX, e.clientY);
         const handleTouchMove = (e: globalThis.TouchEvent) => {
             if (e.touches.length > 0) {
                 if (e.cancelable) e.preventDefault(); 
                 const touch = e.touches[0];
-                updatePosition(touch.clientX, touch.clientY);
+                scheduleUpdate(touch.clientX, touch.clientY);
             }
         };
 
