@@ -300,6 +300,8 @@ const MallPage = () => {
                                 src={activeCoupangProduct.coupangUrl}
                                 title={`${activeCoupangProduct.name} 쿠팡 제품 상세`}
                                 style={{ width: '100%', height: '100%', border: 'none' }}
+                                sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-presentation"
+                                referrerPolicy="no-referrer-when-downgrade"
                             />
                         </div>
 
