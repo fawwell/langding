@@ -3,12 +3,72 @@
 import React from 'react';
 import { useUI } from '@/context/UIContext';
 import Footer from '@/components/layout/Footer';
+import { ShoppingBag, Truck, Building2, ExternalLink } from 'lucide-react';
+
+const PRODUCTS = [
+    {
+        id: 'blackterra',
+        name: '블랙테라',
+        tag: 'BEST',
+        desc: '전문가용 프리미엄 온열 마사지 케어 툴',
+        price: '쿠팡 로켓배송 특가',
+        img: '/images/mall/blackterra.png',
+        coupangUrl: 'https://www.coupang.com', // 필요 시 실제 쿠팡 상품 링크로 교체 가능
+    },
+    {
+        id: 'physicalband',
+        name: '피지컬 밴드',
+        tag: 'NEW',
+        desc: '고탄성 프리미엄 저항 밴드',
+        price: '쿠팡 로켓배송 특가',
+        img: '/images/mall/physicalband.png',
+        coupangUrl: 'https://www.coupang.com',
+    },
+    {
+        id: 'physicalball',
+        name: '피지컬볼',
+        tag: 'PREMIUM',
+        desc: '심부 근육 이완용 고강도 마사지볼',
+        price: '쿠팡 로켓배송 특가',
+        img: '/images/mall/physicalball.png',
+        coupangUrl: 'https://www.coupang.com',
+    },
+    {
+        id: 'strap3d',
+        name: '3d스트랩',
+        tag: 'IOT',
+        desc: '정밀 측정이 가능한 IT 융합 스트랩',
+        price: '쿠팡 로켓배송 특가',
+        img: '/images/mall/strap3d.png',
+        coupangUrl: 'https://www.coupang.com',
+    }
+];
 
 const MallPage = () => {
     const { openModal } = useUI();
 
+    const openCoupangShop = (url: string) => {
+        const width = 480;
+        const height = 750;
+        const left = (window.innerWidth - width) / 2;
+        const top = (window.innerHeight - height) / 2;
+        
+        try {
+            const popup = window.open(
+                url, 
+                'coupang_shop_popup', 
+                `width=${width},height=${height},top=${top},left=${left},scrollbars=yes,resizable=yes`
+            );
+            if (!popup || popup.closed || typeof popup.closed === 'undefined') {
+                window.open(url, '_blank');
+            }
+        } catch {
+            window.open(url, '_blank');
+        }
+    };
+
     return (
-        <main id="page-mall" className="page-content active" style={{ position: 'relative', minHeight: '100vh', background: '#0b0c10' }}>
+        <main id="page-mall" className="page-content active" style={{ backgroundColor: '#0b0c10', color: '#fff' }}>
             <style dangerouslySetInnerHTML={{ __html: `
                 @keyframes mallPawmiFloat {
                     0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -19,195 +79,238 @@ const MallPage = () => {
                     100% { transform: translateY(-14px) scale(1.18) rotate(-4deg); filter: drop-shadow(0 0 22px #00ffcc) drop-shadow(0 0 35px rgba(0, 255, 136, 0.9)); }
                 }
                 .mall-pawmi-mascot {
-                    width: 120px;
-                    height: 120px;
+                    width: 125px;
+                    height: 125px;
                     object-fit: contain;
-                    filter: drop-shadow(0 8px 20px rgba(0,0,0,0.4));
+                    filter: drop-shadow(0 8px 20px rgba(0,0,0,0.5));
                     animation: mallPawmiFloat 3.8s ease-in-out infinite;
                     cursor: pointer;
-                    margin-bottom: 20px;
                     transition: filter 0.3s ease;
                 }
                 .mall-pawmi-mascot:hover {
                     animation: pawmiGlowBounceMall 0.5s ease-in-out infinite alternate !important;
                 }
-                .mall-blurred-content {
-                    filter: blur(8px) brightness(0.6);
-                    pointer-events: none;
-                    user-select: none;
-                    opacity: 1 !important;
+                .coupang-badge-pill {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    background: rgba(230, 30, 43, 0.15);
+                    border: 1px solid rgba(230, 30, 43, 0.4);
+                    color: #ff4d4d;
+                    padding: 6px 16px;
+                    border-radius: 20px;
+                    font-size: 13px;
+                    font-weight: 700;
+                    margin-bottom: 15px;
+                    letter-spacing: -0.3px;
                 }
-                .mall-blurred-content .reveal {
-                    opacity: 1 !important;
-                    transform: none !important;
+                .speech-bubble-pawmi {
+                    background: rgba(20, 26, 36, 0.9);
+                    border: 1px solid rgba(43, 138, 62, 0.4);
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                    border-radius: 16px;
+                    padding: 12px 18px;
+                    color: #e2e8f0;
+                    font-size: 14px;
+                    font-weight: 600;
+                    position: relative;
+                    margin-bottom: 12px;
+                    display: inline-block;
                 }
-                .mall-coming-soon-wrapper {
-                    position: fixed;
-                    top: 80px;
-                    left: 0;
-                    width: 100%;
-                    height: calc(100vh - 80px);
-                    z-index: 90;
+                .speech-bubble-pawmi::after {
+                    content: '';
+                    position: absolute;
+                    bottom: -8px;
+                    right: 30px;
+                    border-width: 8px 8px 0;
+                    border-style: solid;
+                    border-color: rgba(20, 26, 36, 0.9) transparent;
+                    display: block;
+                    width: 0;
+                }
+                .product-card-showroom {
+                    background: #141822;
+                    border: 1px solid rgba(255,255,255,0.08);
+                    border-radius: 20px;
+                    overflow: hidden;
+                    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+                    display: flex;
+                    flex-direction: column;
+                    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+                }
+                .product-card-showroom:hover {
+                    transform: translateY(-8px);
+                    border-color: rgba(43, 138, 62, 0.4);
+                    box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 20px rgba(43, 138, 62, 0.2);
+                }
+                .btn-coupang-buy {
+                    background: #e61e2b;
+                    color: #fff;
+                    border: none;
+                    padding: 12px 16px;
+                    border-radius: 12px;
+                    font-size: 14px;
+                    font-weight: 700;
+                    cursor: pointer;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    padding: 20px;
-                    background: rgba(11, 12, 16, 0.55);
-                    backdrop-filter: blur(10px);
-                    -webkit-backdrop-filter: blur(10px);
+                    gap: 6px;
+                    transition: all 0.2s ease;
+                    width: 100%;
                 }
-                .coming-soon-card {
-                    background: rgba(18, 22, 30, 0.92);
-                    border: 1px solid rgba(43, 138, 62, 0.45);
-                    box-shadow: 0 25px 60px rgba(0,0,0,0.7), 0 0 40px rgba(43, 138, 62, 0.25);
-                    border-radius: 24px;
-                    padding: 45px 35px;
-                    max-width: 520px;
-                    width: 92%;
-                    text-align: center;
+                .btn-coupang-buy:hover {
+                    background: #d01723;
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 15px rgba(230, 30, 43, 0.4);
+                }
+                .btn-b2b-inquiry {
+                    background: rgba(43, 138, 62, 0.15);
+                    color: #00ff88;
+                    border: 1px solid rgba(0, 255, 136, 0.3);
+                    padding: 11px 16px;
+                    border-radius: 12px;
+                    font-size: 13.5px;
+                    font-weight: 600;
+                    cursor: pointer;
                     display: flex;
-                    flex-direction: column;
                     align-items: center;
+                    justify-content: center;
+                    gap: 6px;
+                    transition: all 0.2s ease;
+                    width: 100%;
+                    margin-top: 8px;
                 }
-                @media (max-width: 768px) {
-                    .mall-coming-soon-wrapper {
-                        top: 70px;
-                        height: calc(100vh - 70px);
-                    }
-                    .coming-soon-card {
-                        padding: 35px 24px;
-                    }
-                    .coming-soon-card h2 {
-                        font-size: 22px !important;
-                    }
+                .btn-b2b-inquiry:hover {
+                    background: rgba(43, 138, 62, 0.3);
+                    border-color: #00ff88;
+                    transform: translateY(-2px);
                 }
             `}} />
 
-            {/* 고정 준비 중 모달 오버레이 */}
-            <div className="mall-coming-soon-wrapper">
-                <div className="coming-soon-card">
-                    <img 
-                        src="/images/pawmi/pawmi_theragun.png" 
-                        alt="테라건 파우미" 
-                        title="클릭하면 튀어오릅니다!"
-                        className="mall-pawmi-mascot"
-                    />
-                    <span style={{ 
-                        background: 'rgba(43, 138, 62, 0.2)', 
-                        color: '#00ff88', 
-                        border: '1px solid rgba(0, 255, 136, 0.3)', 
-                        padding: '6px 16px', 
-                        borderRadius: '20px', 
-                        fontSize: '13px', 
-                        fontWeight: 'bold', 
-                        marginBottom: '16px',
-                        letterSpacing: '1px'
-                    }}>
-                        COMING SOON
+            {/* 히어로 헤더 섹션 */}
+            <section className="hero-brand hero-brand-sub reveal" style={{ backgroundColor: '#0f1219', borderBottom: '1px solid rgba(255,255,255,0.08)', padding: '120px 0 80px 0' }}>
+                <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+                    <div style={{ textAlign: 'right', position: 'absolute', right: '20px', top: '-10px' }}>
+                        <div className="speech-bubble-pawmi">
+                            🚀 쿠팡 로켓배송으로 빠르게 받아보세요!
+                        </div>
+                        <div>
+                            <img 
+                                src="/images/pawmi/pawmi_theragun.png" 
+                                alt="몰 파우미" 
+                                title="클릭하면 튀어오릅니다!"
+                                className="mall-pawmi-mascot"
+                                onClick={() => openCoupangShop('https://www.coupang.com')}
+                            />
+                        </div>
+                    </div>
+
+                    <span className="coupang-badge-pill">
+                        <Truck size={15} /> COUPANG ROCKET SHIPPING OFFICIAL
                     </span>
-                    <h2 style={{ color: '#fff', fontSize: '26px', fontWeight: 900, marginBottom: '14px', letterSpacing: '-0.5px' }}>
-                        피지컬케어 Mall 준비 중입니다
+                    <h1 className="hero-el hero-el-2 reveal soft-reveal" style={{ fontSize: '38px', fontWeight: 900, marginBottom: '16px' }}>
+                        검증된 교구, <span>피지컬케어 mall</span>
+                    </h1>
+                    <p className="hero-el hero-el-3 reveal soft-reveal" style={{ color: '#aaa', fontSize: '16.5px', lineHeight: '1.7', maxWidth: '650px' }}>
+                        <strong>전문가가 직접 선별한 웰니스 건강 굿즈</strong><br />
+                        쿠팡 로켓배송으로 가장 빠르고 안전하게 파우 교구를 만나보세요.<br />
+                        기업 임직원 대량 구매 및 복지 포인트 차감 견적 상담도 지원합니다.
+                    </p>
+                </div>
+            </section>
+
+            {/* 쇼룸 상품 갤러리 섹션 */}
+            <section className="floating-gallery reveal" style={{ padding: '80px 0 100px', background: '#0b0c10' }}>
+                <div className="container">
+                    <div style={{ textAlign: 'center', marginBottom: '50px' }}>
+                        <span className="section-tag" style={{ color: '#00ff88' }}>PREMIUM SELECTION</span>
+                        <h2 className="section-title reveal" style={{ color: '#fff', fontSize: '30px' }}>
+                            FaWW <span>공식 베스트 교구</span>
+                        </h2>
+                        <p style={{ color: '#888', fontSize: '15px', marginTop: '10px' }}>
+                            원하시는 결제 방식을 선택하여 편하게 구매하실 수 있습니다.
+                        </p>
+                    </div>
+
+                    <div style={{ 
+                        display: 'grid', 
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(270px, 1fr))', 
+                        gap: '30px', 
+                        maxWidth: '1200px', 
+                        margin: '0 auto' 
+                    }}>
+                        {PRODUCTS.map((prod) => (
+                            <div key={prod.id} className="product-card-showroom reveal">
+                                <div style={{ position: 'relative', height: '240px', background: '#1c2230', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <span style={{ 
+                                        position: 'absolute', 
+                                        top: '15px', 
+                                        left: '15px', 
+                                        background: '#2b8a3e', 
+                                        color: '#fff', 
+                                        fontSize: '11px', 
+                                        fontWeight: 800, 
+                                        padding: '4px 10px', 
+                                        borderRadius: '6px',
+                                        letterSpacing: '1px'
+                                    }}>
+                                        {prod.tag}
+                                    </span>
+                                    <img 
+                                        src={prod.img} 
+                                        alt={prod.name} 
+                                        style={{ width: '80%', height: '80%', objectFit: 'contain', transition: 'transform 0.3s ease' }} 
+                                    />
+                                </div>
+                                <div style={{ padding: '25px', display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between' }}>
+                                    <div>
+                                        <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#fff', marginBottom: '6px' }}>{prod.name}</h3>
+                                        <p style={{ fontSize: '13px', color: '#94a3b8', lineHeight: '1.5', marginBottom: '16px' }}>{prod.desc}</p>
+                                    </div>
+                                    <div>
+                                        <div style={{ fontSize: '14px', fontWeight: 700, color: '#ff4d4d', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                            <ShoppingBag size={15} /> {prod.price}
+                                        </div>
+                                        <button 
+                                            className="btn-coupang-buy"
+                                            onClick={() => openCoupangShop(prod.coupangUrl)}
+                                        >
+                                            <Truck size={16} /> 쿠팡 로켓배송 구매 <ExternalLink size={14} />
+                                        </button>
+                                        <button 
+                                            className="btn-b2b-inquiry"
+                                            onClick={() => openModal('modal-proposal')}
+                                        >
+                                            <Building2 size={15} /> 기업 대량 / 복지포인트 문의
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* CTA 하단 배너 */}
+            <section className="cta-footer reveal" style={{ backgroundColor: '#141822', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+                <div className="container text-center" style={{ padding: '60px 20px' }}>
+                    <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#fff', marginBottom: '14px' }}>
+                        기업 복지 포인트 연동 및 대량 교구 구매 문의
                     </h2>
-                    <p style={{ color: '#aaa', fontSize: '15px', lineHeight: '1.6', marginBottom: '30px', wordBreak: 'keep-all' }}>
-                        전문가가 직접 검증한 프리미엄 교구와<br />
-                        기업 복지 포인트 연동 혜택으로 찾아뵙겠습니다.
+                    <p style={{ color: '#aaa', fontSize: '15.5px', marginBottom: '30px', maxWidth: '700px', margin: '0 auto 30px auto', lineHeight: '1.6' }}>
+                        임직원 건강 증진을 위한 세금 감면 혜택, 기업 포인트 일괄 결제 및 견적서를 무상으로 빠르게 제공해 드립니다.
                     </p>
                     <button 
                         className="cta-btn-white" 
                         onClick={() => openModal('modal-proposal')}
-                        style={{ 
-                            background: '#2b8a3e', 
-                            color: '#fff', 
-                            border: 'none', 
-                            padding: '16px 36px', 
-                            borderRadius: '30px', 
-                            fontSize: '16px', 
-                            fontWeight: 'bold', 
-                            cursor: 'pointer',
-                            boxShadow: '0 8px 20px rgba(43, 138, 62, 0.4)'
-                        }}
+                        style={{ background: '#2b8a3e', color: '#fff', padding: '16px 40px', borderRadius: '30px', fontSize: '16px', fontWeight: 800, border: 'none', cursor: 'pointer', boxShadow: '0 10px 25px rgba(43, 138, 62, 0.4)' }}
                     >
-                        도입 및 대량 구매 문의하기
+                        기업 전용 견적 및 제안서 신청하기
                     </button>
                 </div>
-            </div>
-
-            {/* 뿌연 배경 콘텐츠 (선명하게 보이되 블러 처리) */}
-            <div className="mall-blurred-content">
-                <section className="hero-brand hero-brand-sub reveal" style={{ backgroundColor: '#111', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                    <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-                        <div className="hero-subtitle hero-el hero-el-1 reveal soft-reveal">Physical Care Mall</div>
-                        <h1 className="hero-el hero-el-2 reveal soft-reveal">검증된 교구, <span>피지컬케어 mall</span></h1>
-                        <p className="hero-el hero-el-3 reveal soft-reveal">
-                            <strong>전문가가 직접 선별한 건강 굿즈</strong><br />
-                            임직원 복지 포인트 차감을 지원하는 전용 교구몰에서<br />일상을 변화시키는 건강 아이템을 만나보세요
-                        </p>
-                    </div>
-                </section>
-                
-                <section className="floating-gallery reveal" style={{ padding: '100px 0', background: '#0b0c10' }}>
-                    <div className="container">
-                        <div className="product-grid-premium">
-                            {/* 제품 1: 블랙테라 */}
-                            <div className="product-card-premium reveal">
-                                <div className="product-tag-premium">BEST</div>
-                                <div className="product-img-wrapper">
-                                    <img src="/images/mall/blackterra.png" alt="블랙테라" />
-                                </div>
-                                <div className="product-info-premium">
-                                    <h3 className="product-name-premium">블랙테라</h3>
-                                    <p className="product-desc-premium" style={{ fontSize: '13px', color: '#888', marginBottom: '10px' }}>전문가용 프리미엄 온열 마사지 케어 툴</p>
-                                    <p className="product-price-premium">도입가 별도문의</p>
-                                    <button className="buy-btn-premium">제품 상세 보기</button>
-                                </div>
-                            </div>
-
-                            {/* 제품 2: 피지컬 밴드 */}
-                            <div className="product-card-premium reveal">
-                                <div className="product-tag-premium">NEW</div>
-                                <div className="product-img-wrapper">
-                                    <img src="/images/mall/physicalband.png" alt="피지컬 밴드" />
-                                </div>
-                                <div className="product-info-premium">
-                                    <h3 className="product-name-premium">피지컬 밴드</h3>
-                                    <p className="product-desc-premium" style={{ fontSize: '13px', color: '#888', marginBottom: '10px' }}>고탄성 프리미엄 저항 밴드</p>
-                                    <p className="product-price-premium">도입가 별도문의</p>
-                                    <button className="buy-btn-premium">제품 상세 보기</button>
-                                </div>
-                            </div>
-
-                            {/* 제품 3: 피지컬볼 */}
-                            <div className="product-card-premium reveal">
-                                <div className="product-tag-premium">PREMIUM</div>
-                                <div className="product-img-wrapper">
-                                    <img src="/images/mall/physicalball.png" alt="피지컬볼" />
-                                </div>
-                                <div className="product-info-premium">
-                                    <h3 className="product-name-premium">피지컬볼</h3>
-                                    <p className="product-desc-premium" style={{ fontSize: '13px', color: '#888', marginBottom: '10px' }}>심부 근육 이완용 고강도 마사지볼</p>
-                                    <p className="product-price-premium">도입가 별도문의</p>
-                                    <button className="buy-btn-premium">제품 상세 보기</button>
-                                </div>
-                            </div>
-
-                            {/* 제품 4: 3d스트랩 */}
-                            <div className="product-card-premium reveal">
-                                <div className="product-tag-premium">IOT</div>
-                                <div className="product-img-wrapper">
-                                    <img src="/images/mall/strap3d.png" alt="3d스트랩" />
-                                </div>
-                                <div className="product-info-premium">
-                                    <h3 className="product-name-premium">3d스트랩</h3>
-                                    <p className="product-desc-premium" style={{ fontSize: '13px', color: '#888', marginBottom: '10px' }}>정밀 측정이 가능한 IT 융합 스트랩</p>
-                                    <p className="product-price-premium">도입가 별도문의</p>
-                                    <button className="buy-btn-premium">제품 상세 보기</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <Footer />
-            </div>
+            </section>
+            <Footer />
         </main>
     );
 };
