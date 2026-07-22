@@ -21,6 +21,38 @@ const FAQ_DATA = [
 
 // EAP 전용 스타일 외부 분리
 const EAP_PAGE_STYLES = `
+    #page-eap .reveal {
+        opacity: 0;
+        transform: translateY(45px);
+        transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: opacity, transform;
+    }
+    #page-eap .reveal.active {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+    #page-eap .reveal.delay-1 { transition-delay: 0.12s; }
+    #page-eap .reveal.delay-2 { transition-delay: 0.24s; }
+    #page-eap .reveal.delay-3 { transition-delay: 0.36s; }
+    #page-eap .reveal.delay-4 { transition-delay: 0.48s; }
+    #page-eap .reveal.delay-5 { transition-delay: 0.6s; }
+    #page-eap .reveal.delay-6 { transition-delay: 0.72s; }
+
+    #page-eap .comp-box.others {
+        opacity: 0;
+        transform: translateX(-40px);
+        transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #page-eap .comp-box.faww {
+        opacity: 0;
+        transform: translateX(40px);
+        transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
+    }
+    #page-eap .comp-box.active {
+        opacity: 1 !important;
+        transform: translateX(0) !important;
+    }
+
     .keyword-badge-pill {
         font-size: 13px;
         padding: 6px 14px;
@@ -111,6 +143,45 @@ const EAPPage = () => {
     const router = useRouter();
     const { openModal } = useUI();
     const [flippedCardIdx, setFlippedCardIdx] = React.useState<number | null>(null);
+
+    React.useEffect(() => {
+        // IntersectionObserver for scroll-driven reveals & number counter in EAP Page
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+
+                    // Count up numbers animation for stats
+                    const counters = entry.target.querySelectorAll('.count-up');
+                    counters.forEach(counter => {
+                        if (counter.classList.contains('counted')) return;
+                        counter.classList.add('counted');
+                        const target = +(counter.getAttribute('data-target') || 0);
+                        const isFormat = counter.getAttribute('data-format') === 'true';
+                        let current = 0;
+                        const duration = 1400;
+                        const startTime = performance.now();
+
+                        const update = (currentTime: number) => {
+                            const elapsed = currentTime - startTime;
+                            const progress = Math.min(elapsed / duration, 1);
+                            const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+                            current = target * easeProgress;
+                            counter.textContent = Math.ceil(current).toLocaleString(isFormat ? 'en-US' : undefined);
+                            if (progress < 1) requestAnimationFrame(update);
+                            else counter.textContent = target.toLocaleString(isFormat ? 'en-US' : undefined);
+                        };
+                        requestAnimationFrame(update);
+                    });
+                }
+            });
+        }, { threshold: 0.12 });
+
+        const revealElements = document.querySelectorAll('#page-eap .reveal, #page-eap .comp-box');
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        return () => revealObserver.disconnect();
+    }, []);
 
     const toggleFaq = (e: React.MouseEvent<HTMLDivElement>) => {
         e.currentTarget.classList.toggle('open');
