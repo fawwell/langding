@@ -19,9 +19,6 @@ const PRODUCTS = [
         ],
         price: '쿠팡 공식 스토어 특가',
         img: '/images/mall/strap3d.png',
-        // iframe 표시용 (일반 모바일 상품 URL - 브랜드스토어 파라미터 없음)
-        embedUrl: 'https://m.coupang.com/vm/products/8477063323?itemId=18590264907',
-        // 구매 버튼용 (브랜드스토어 파트너스 추적 URL)
         coupangUrl: 'https://www.coupang.com/vp/products/8477063323?itemId=18590264907&searchId=5ce4eabb056e45e6a10388d231097659&sourceType=brandstore_sdp_atf-baseline_list&storeId=111499&subSourceType=brandstore_sdp_atf-baseline_list&vendorId=A00920407&vendorItemId=85726579078',
     },
     {
@@ -37,9 +34,6 @@ const PRODUCTS = [
         ],
         price: '쿠팡 공식 스토어 특가',
         img: '/images/mall/blackterra.png',
-        // iframe 표시용 (일반 모바일 상품 URL)
-        embedUrl: 'https://m.coupang.com/vm/products/7281228718?itemId=18590265091',
-        // 구매 버튼용 (브랜드스토어 파트너스 추적 URL)
         coupangUrl: 'https://www.coupang.com/vp/products/7281228718?itemId=18590265091&searchId=c9aae0eb29f243e682cd922b1fdd8b75&sourceType=brandstore_sdp_atf-baseline_list&storeId=111499&subSourceType=brandstore_sdp_atf-baseline_list&vendorId=A00920407&vendorItemId=85726579068',
     }
 ];
@@ -294,10 +288,10 @@ const MallPage = () => {
                             </div>
                         </div>
 
-                        {/* 모달 본문: 쿠팡 모바일 일반 상품 URL (sandbox 없음 → 쿠키 정상 작동) */}
+                        {/* 모달 본문: 쿠팡 모바일 웹뷰 */}
                         <div style={{ flexGrow: 1, position: 'relative', width: '100%', height: '100%', background: '#fff', overflow: 'hidden' }}>
                             <iframe 
-                                src={activeCoupangProduct.embedUrl}
+                                src={getEmbedCoupangUrl(activeCoupangProduct.coupangUrl)}
                                 title={`${activeCoupangProduct.name} 쿠팡 제품 상세`}
                                 style={{ width: '100%', height: '100%', border: 'none' }}
                             />
