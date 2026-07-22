@@ -3542,4 +3542,36 @@ header ul li a:hover, header ul li a.active-nav {
     }
 }
 
+/* =========================================================
+   ⚡ 2차 고도화 성능 최적화 (디자인/기능 100% 동일 유지)
+   ========================================================= */
 
+/* 1. 글래스모피즘(backdrop-filter) GPU 셰이더 하드웨어 가속 */
+.trust-bar,
+.modal,
+.hero-subtitle,
+.marker-detail ul,
+[style*="backdrop-filter"] {
+    will-change: transform;
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+/* 2. 텍스트 시네마틱 페이드인 낱글자 GPU 레이어 합성 */
+.soft-reveal .char {
+    display: inline-block;
+    will-change: opacity, transform;
+    transform: translateZ(0);
+}
+
+/* 3. 화면 밖 하단 섹션 렌더링 스킵 (content-visibility: auto) */
+.agenda-section,
+.comparison-section,
+.gateway-section,
+.map-section,
+.partner-section,
+.media-section {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 600px;
+}
