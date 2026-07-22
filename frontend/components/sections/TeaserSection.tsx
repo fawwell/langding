@@ -34,8 +34,28 @@ const TeaserSection = () => {
                 }
             `}} />
 
-            <div className="container text-center" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
-                
+            <style dangerouslySetInnerHTML={{ __html: `
+                @keyframes sadPawmiTilt {
+                    0%, 100% { transform: translateY(0px) rotate(-3deg); }
+                    50% { transform: translateY(-8px) rotate(3deg); }
+                }
+                .teaser-pawmi-sad {
+                    width: 100px;
+                    height: 100px;
+                    object-fit: contain;
+                    margin-bottom: 15px;
+                    filter: drop-shadow(0 6px 15px rgba(0,0,0,0.15));
+                    animation: sadPawmiTilt 3.5s ease-in-out infinite;
+                }
+            `}} />
+
+            <div className="container text-center" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', position: 'relative' }}>
+                <img 
+                    src="/images/pawmi/pawmi_sad.png" 
+                    alt="슬픈 파우미" 
+                    className="teaser-pawmi-sad soft-reveal"
+                />
+
                 {/* Step 1: 담당자님 (Grey) */}
                 <div className="teaser-text step-1 soft-reveal" 
                      style={{ color: '#888', marginBottom: '20px' }}>

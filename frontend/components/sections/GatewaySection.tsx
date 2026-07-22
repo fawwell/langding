@@ -45,7 +45,21 @@ const GatewaySection = () => {
                             <div className="gateway-btn">피지컬케어 자세히 보기</div>
                         </div>
                     </div>
-                    <div className="gateway-card reveal delay-2" onClick={() => router.push('/mall')} style={{ padding: 0, overflow: 'hidden' }}>
+                    <div className="gateway-card reveal delay-2" onClick={() => router.push('/mall')} style={{ padding: 0, overflow: 'hidden', position: 'relative' }}>
+                        <img 
+                            src="/images/pawmi/pawmi_theragun.png" 
+                            alt="테라건 파우미" 
+                            style={{ 
+                                position: 'absolute', 
+                                top: '10px', 
+                                right: '10px', 
+                                width: '70px', 
+                                height: '70px', 
+                                objectFit: 'contain', 
+                                zIndex: 10,
+                                filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
+                            }} 
+                        />
                         <div className="gateway-img" style={{ height: '200px', position: 'relative', overflow: 'hidden', background: '#f0f0f0' }}>
                             <Image src="/images/gateway/mall.webp" alt="FaWW 피지컬케어 몰 - 홈케어 운동 교구 및 릴렉싱 용품 쇼핑몰" fill style={{ objectFit: 'cover' }} sizes="(max-width: 768px) 100vw, 33vw" />
                         </div>

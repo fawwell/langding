@@ -273,7 +273,30 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </div>
             </header>
 
-            <div className="fab-container">
+            <style dangerouslySetInnerHTML={{ __html: `
+                @keyframes pawmiFloat {
+                    0%, 100% { transform: translateY(0px) rotate(0deg); }
+                    50% { transform: translateY(-6px) rotate(3deg); }
+                }
+                .fab-pawmi-mascot {
+                    position: absolute;
+                    top: -42px;
+                    right: 15px;
+                    width: 48px;
+                    height: 48px;
+                    object-fit: contain;
+                    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.25));
+                    animation: pawmiFloat 3s ease-in-out infinite;
+                    pointer-events: none;
+                    z-index: 100;
+                }
+            `}} />
+            <div className="fab-container" style={{ position: 'fixed' }}>
+                <img 
+                    src="/images/pawmi/pawmi_mini.png" 
+                    alt="파우미 캐릭터" 
+                    className="fab-pawmi-mascot"
+                />
                 <div className="cert-badge" onClick={() => openModal('modal-cert')}>
                     <span className="badge-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" style={{ width: '18px', height: '18px' }}>

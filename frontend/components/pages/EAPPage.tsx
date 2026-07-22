@@ -156,7 +156,39 @@ const EAPPage = () => {
             <style dangerouslySetInnerHTML={{ __html: EAP_PAGE_STYLES }} />
 
             <section className="hero-brand hero-brand-sub hero-premium reveal">
+                <style dangerouslySetInnerHTML={{ __html: `
+                    @keyframes eapPawmiFloat {
+                        0%, 100% { transform: translateY(0px) rotate(0deg); }
+                        50% { transform: translateY(-10px) rotate(-3deg); }
+                    }
+                    .eap-pawmi-mascot {
+                        position: absolute;
+                        right: 40px;
+                        top: 30px;
+                        width: 130px;
+                        height: 130px;
+                        object-fit: contain;
+                        filter: drop-shadow(0 8px 20px rgba(0,0,0,0.3));
+                        animation: eapPawmiFloat 3.6s ease-in-out infinite;
+                    }
+                    @media (max-width: 768px) {
+                        .eap-pawmi-mascot {
+                            position: relative;
+                            right: auto;
+                            top: auto;
+                            width: 80px;
+                            height: 80px;
+                            margin: 0 auto 10px auto;
+                            display: block;
+                        }
+                    }
+                `}} />
                 <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+                    <img 
+                        src="/images/pawmi/pawmi_theraband_stretch.png" 
+                        alt="세라밴드 스트레칭 파우미" 
+                        className="eap-pawmi-mascot"
+                    />
                     <div style={{ textAlign: 'left', marginBottom: '20px' }}><span className="back-btn" style={{ color: '#aaa', cursor: 'pointer', fontSize: '14px', border: '1px solid #555', padding: '8px 16px', borderRadius: '20px' }} onClick={() => router.push('/ai')}>← 타겟 선택으로 돌아가기</span></div>
 
                     <div className="hero-subtitle hero-el hero-el-1">FaWW EAP Solution</div>

@@ -47,8 +47,16 @@ const QuizModal = ({
                 
                 {step === 1 && (
                     <div className="quiz-step active">
+                        <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+                            <img 
+                                src="/images/pawmi/pawmi_angry.png" 
+                                alt="화난 파우미" 
+                                style={{ width: '80px', height: '80px', objectFit: 'contain', filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.15))' }} 
+                            />
+                        </div>
                         <span className="gateway-badge" style={{ background: '#e8f5e9', color: '#2b8a3e', padding: '4px 10px', borderRadius: '12px', fontWeight: 'bold', fontSize: '12px' }}>STEP 1</span>
-                        <div className="quiz-options" style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '30px' }}>
+                        <h2 style={{ fontSize: '20px', fontWeight: 800, margin: '12px 0 6px 0', color: '#222' }}>어떤 상태 진단이 필요하신가요?</h2>
+                        <div className="quiz-options" style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '20px' }}>
                             <button className="quiz-btn" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }} onClick={() => onNextStep(2, 'b2b')}><Building2 size={18} /> 조직을 이끄는 HR/관리자 (조직 진단)</button>
                             <button className="quiz-btn" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }} onClick={() => onNextStep(2, 'b2c')}><User size={18} /> 내 몸 상태가 궁금한 직장인 (개인 자가진단)</button>
                         </div>

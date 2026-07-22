@@ -111,7 +111,38 @@ const PhysicalPage = () => {
                     <source src="/background2.mp4" type="video/mp4" />
                 </video>
                 <div className="hero-overlay"></div>
+                <style dangerouslySetInnerHTML={{ __html: `
+                    @keyframes physicalPawmiFloat {
+                        0%, 100% { transform: translateY(0px) rotate(0deg); }
+                        50% { transform: translateY(-10px) rotate(4deg); }
+                    }
+                    .physical-pawmi-mascot {
+                        position: absolute;
+                        right: 30px;
+                        top: 20px;
+                        width: 130px;
+                        height: 130px;
+                        object-fit: contain;
+                        filter: drop-shadow(0 8px 20px rgba(0,0,0,0.3));
+                        animation: physicalPawmiFloat 3.8s ease-in-out infinite;
+                    }
+                    @media (max-width: 768px) {
+                        .physical-pawmi-mascot {
+                            position: relative;
+                            right: auto;
+                            top: auto;
+                            width: 80px;
+                            height: 80px;
+                            margin: 0 0 10px 0;
+                        }
+                    }
+                `}} />
                 <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+                    <img 
+                        src="/images/pawmi/pawmi_massage.png" 
+                        alt="마사지볼 3D 파우미" 
+                        className="physical-pawmi-mascot"
+                    />
                     <div style={{ textAlign: 'left', marginBottom: '20px' }}><span className="back-btn" style={{ color: '#aaa', cursor: 'pointer', fontSize: '14px', border: '1px solid #555', padding: '8px 16px', borderRadius: '20px' }} onClick={() => router.push('/ai')}>← 타겟 선택으로 돌아가기</span></div>
                     <div className="hero-subtitle hero-el hero-el-1">FaWW Physical Care</div>
                     <h1 className="hero-el hero-el-2">현장과 실무를 잇는<br /><span>FaWW 피지컬케어</span></h1>

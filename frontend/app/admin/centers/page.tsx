@@ -9,6 +9,7 @@ interface Center {
   philosophy: string;
   image_url: string;
   experts: string[];
+  programs?: string[];
   map_url: string;
   reserve_url: string;
   address: string;
@@ -27,6 +28,7 @@ export default function AdminCentersPage() {
     philosophy: '', 
     image_url: '',
     experts_str: '',
+    programs_str: '',
     map_url: '',
     reserve_url: '',
     address: '',
@@ -108,6 +110,7 @@ export default function AdminCentersPage() {
       philosophy: '', 
       image_url: '',
       experts_str: '',
+      programs_str: '',
       map_url: '',
       reserve_url: '',
       address: '',
@@ -127,6 +130,7 @@ export default function AdminCentersPage() {
     const method = editId ? 'PUT' : 'POST';
 
     const experts = formData.experts_str.split(',').map(s => s.trim()).filter(s => s !== '');
+    const programs = formData.programs_str.split(',').map(s => s.trim()).filter(s => s !== '');
 
     const token = localStorage.getItem('admin_token');
     if (!token) {
@@ -148,6 +152,7 @@ export default function AdminCentersPage() {
             philosophy: formData.philosophy,
             image_url: formData.image_url,
             experts: experts,
+            programs: programs,
             map_url: formData.map_url,
             reserve_url: formData.reserve_url,
             address: formData.address,
@@ -182,6 +187,7 @@ export default function AdminCentersPage() {
       philosophy: center.philosophy || '',
       image_url: center.image_url || '',
       experts_str: center.experts ? center.experts.join(', ') : '',
+      programs_str: center.programs ? center.programs.join(', ') : '',
       map_url: center.map_url || '',
       reserve_url: center.reserve_url || '',
       address: center.address || '',
@@ -300,6 +306,17 @@ export default function AdminCentersPage() {
             </div>
           </div>
 
+          <div>
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>주요 진행 프로그램 (쉼표 구분 - CORE PROGRAMS)</label>
+            <input 
+              type="text" 
+              placeholder="개인별 맞춤형 정밀 체형 분석, 1:1 도수 케어, 근막 이완 테라피"
+              style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ccc' }} 
+              value={formData.programs_str}
+              onChange={(e) => setFormData({...formData, programs_str: e.target.value})}
+            />
+          </div>
+
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
             <div>
               <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>네이버 지도 URL</label>
@@ -387,16 +404,30 @@ export default function AdminCentersPage() {
                   </div>
                   <div>
                     <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '5px' }}>
-                      <span style={{ fontSize: '13px', color: '#2b8a3e', fontWeight: '800' }}>{center.tagline}</span>
+                      <span style={{ fontSize: '13px', color: '#2b8a3e', fontWeight: '800' }}>{center.tagline || '공식 인증 피지컬 케어 센터'}</span>
                       <span style={{ fontSize: '11px', background: '#eef6f0', color: '#2b8a3e', padding: '2px 8px', borderRadius: '4px', fontWeight: 'bold' }}>순서: {center.sort_order ?? 0}</span>
                     </div>
                     <h3 style={{ margin: '0 0 8px 0', fontSize: '20px' }}>{center.name}</h3>
                     <div style={{ fontSize: '13px', color: '#444', marginBottom: '8px', fontWeight: 'bold' }}>📍 {center.address || '주소 미등록'}</div>
                     <div style={{ fontSize: '14px', color: '#666', lineHeight: '1.4', maxWidth: '500px' }}>{center.philosophy}</div>
-                    <div style={{ marginTop: '10px', display: 'flex', gap: '5px' }}>
-                        {center.experts && center.experts.map((exp, i) => (
+                    
+                    <div style={{ marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                      {center.experts && center.experts.length > 0 && (
+                        <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap', alignItems: 'center' }}>
+                          <span style={{ fontSize: '11px', color: '#888', fontWeight: 'bold' }}>전문가:</span>
+                          {center.experts.map((exp, i) => (
                             <span key={i} style={{ fontSize: '11px', background: '#f0f0f0', padding: '2px 8px', borderRadius: '4px' }}>{exp}</span>
-                        ))}
+                          ))}
+                        </div>
+                      )}
+                      {center.programs && center.programs.length > 0 && (
+                        <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap', alignItems: 'center' }}>
+                          <span style={{ fontSize: '11px', color: '#2b8a3e', fontWeight: 'bold' }}>프로그램:</span>
+                          {center.programs.map((prog, i) => (
+                            <span key={i} style={{ fontSize: '11px', background: '#e8f5e9', color: '#2b8a3e', padding: '2px 8px', borderRadius: '4px' }}>{prog}</span>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

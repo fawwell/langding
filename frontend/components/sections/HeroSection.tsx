@@ -76,7 +76,42 @@ const HeroSection = ({ openModal }: HeroSectionProps) => {
             </video>
             <div className="hero-overlay"></div>
 
+            <style dangerouslySetInnerHTML={{ __html: `
+                @keyframes heroPawmiFloat {
+                    0%, 100% { transform: translateY(0px) rotate(-2deg); }
+                    50% { transform: translateY(-12px) rotate(2deg); }
+                }
+                .hero-pawmi-mascot {
+                    position: absolute;
+                    right: -20px;
+                    top: -40px;
+                    width: 140px;
+                    height: 140px;
+                    object-fit: contain;
+                    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.35));
+                    animation: heroPawmiFloat 4s ease-in-out infinite;
+                    pointer-events: none;
+                    z-index: 10;
+                }
+                @media (max-width: 992px) {
+                    .hero-pawmi-mascot {
+                        position: relative;
+                        right: auto;
+                        top: auto;
+                        width: 90px;
+                        height: 90px;
+                        margin: 0 auto 10px auto;
+                        display: block;
+                    }
+                }
+            `}} />
+
             <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+                <img 
+                    src="/images/pawmi/pawmi_theraband_rubber.png" 
+                    alt="세라밴드 파우미" 
+                    className="hero-pawmi-mascot"
+                />
                 <div className="hero-subtitle hero-el hero-el-1 soft-reveal" style={{ marginBottom: '12px' }}>FaWW : Family Wholesome Wellness</div>
                 <h1 className="hero-el hero-el-2 soft-reveal" style={{ marginBottom: '16px' }}>
                     <span className="text-highlight">건강</span>이 함께하는 <span className="text-highlight">회사</span>,<br />

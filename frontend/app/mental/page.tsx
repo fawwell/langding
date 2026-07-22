@@ -396,12 +396,11 @@ export default function MentalCoachingPage() {
                   <div className="mascot-area">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src="/images/faww_mascot.png"
-                      alt="파우미 마스코트"
+                      src="/images/pawmi/pawmi_sleepy.png"
+                      alt="졸린 파우미 마스코트"
                       className="mascot-img animate-bounce"
                       onError={(e) => {
-                        // 파우미 마스코트 이미지가 누락되었을 때의 대체 처리
-                        (e.target as HTMLImageElement).src = '/images/%ED%8C%8C%EC%9A%B0%EB%AF%B8.png';
+                        (e.target as HTMLImageElement).src = '/images/pawmi/pawmi_sleepy.png';
                       }}
                     />
                     <div className="speech-bubble">"오늘 하루 마음의 날씨는 어떤가요?"</div>

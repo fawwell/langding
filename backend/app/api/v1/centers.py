@@ -23,6 +23,7 @@ class CenterCreate(BaseModel):
     philosophy: str = ""
     image_url: str = ""
     experts: List[str] = []
+    programs: List[str] = []
     map_url: str = ""
     reserve_url: str = ""
     address: str = ""
@@ -43,6 +44,7 @@ async def create_center(data: CenterCreate, token: str = Depends(verify_admin_to
         "philosophy": data.philosophy,
         "image_url": data.image_url,
         "experts": data.experts,
+        "programs": data.programs,
         "map_url": data.map_url,
         "reserve_url": data.reserve_url,
         "address": data.address,
@@ -79,6 +81,7 @@ async def update_center(center_id: str, data: CenterCreate, token: str = Depends
         "philosophy": data.philosophy,
         "image_url": data.image_url,
         "experts": data.experts,
+        "programs": data.programs,
         "map_url": data.map_url,
         "reserve_url": data.reserve_url,
         "address": data.address,
