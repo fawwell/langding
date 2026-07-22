@@ -3,7 +3,7 @@
 import React from 'react';
 import { useUI } from '@/context/UIContext';
 import Footer from '@/components/layout/Footer';
-import { ShoppingBag, Truck, Building2, ExternalLink, X, ShieldCheck, CheckCircle2, Search } from 'lucide-react';
+import { ShoppingBag, Truck, Building2, ExternalLink, X, ShoppingCart, ArrowRight } from 'lucide-react';
 
 const PRODUCTS = [
     {
@@ -49,6 +49,10 @@ const MallPage = () => {
 
     const openInternalCoupangModal = (prod: typeof PRODUCTS[0]) => {
         setActiveCoupangProduct(prod);
+    };
+
+    const goToCoupangCheckout = (url: string) => {
+        window.open(url, '_blank', 'noopener,noreferrer');
     };
 
     return (
@@ -182,7 +186,7 @@ const MallPage = () => {
                 }
             `}} />
 
-            {/* 1️⃣ 홈페이지 내부 교구 소개 모달 (우리 홈페이지 화면 내부 팝업) */}
+            {/* 홈페이지 내부 쿠팡 제품 뷰어 + 하단 고정 장바구니/바로구매 버튼 모달 */}
             {activeCoupangProduct && (
                 <div 
                     onClick={() => setActiveCoupangProduct(null)}
@@ -192,24 +196,25 @@ const MallPage = () => {
                         left: 0,
                         width: '100vw',
                         height: '100vh',
-                        backgroundColor: 'rgba(0, 0, 0, 0.82)',
+                        backgroundColor: 'rgba(0, 0, 0, 0.85)',
                         backdropFilter: 'blur(10px)',
                         WebkitBackdropFilter: 'blur(10px)',
                         zIndex: 99999,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        padding: '20px'
+                        padding: '16px'
                     }}
                 >
                     <div 
                         onClick={(e) => e.stopPropagation()}
                         style={{
                             width: '100%',
-                            maxWidth: '620px',
+                            maxWidth: '960px',
+                            height: '88vh',
                             backgroundColor: '#121620',
                             border: '1px solid rgba(230, 30, 43, 0.5)',
-                            borderRadius: '28px',
+                            borderRadius: '24px',
                             boxShadow: '0 30px 80px rgba(0,0,0,0.9), 0 0 45px rgba(230, 30, 43, 0.35)',
                             overflow: 'hidden',
                             display: 'flex',
@@ -220,7 +225,7 @@ const MallPage = () => {
                     >
                         {/* 모달 상단 컨트롤 헤더 바 */}
                         <div style={{ 
-                            padding: '18px 26px', 
+                            padding: '16px 24px', 
                             backgroundColor: '#181d29', 
                             borderBottom: '1px solid rgba(255,255,255,0.08)',
                             display: 'flex', 
@@ -233,83 +238,123 @@ const MallPage = () => {
                                     COUPANG
                                 </span>
                                 <span style={{ fontSize: '16px', fontWeight: 800, color: '#fff' }}>
-                                    {activeCoupangProduct.name} 교구 소개
+                                    {activeCoupangProduct.name} - 제품 상세 보기
                                 </span>
                             </div>
-                            <button 
-                                onClick={() => setActiveCoupangProduct(null)}
-                                style={{ 
-                                    background: 'rgba(255,255,255,0.1)', 
-                                    border: 'none', 
-                                    color: '#fff', 
-                                    cursor: 'pointer', 
-                                    width: '32px', 
-                                    height: '32px', 
-                                    borderRadius: '50%',
-                                    display: 'flex', 
-                                    alignItems: 'center', 
-                                    justifyContent: 'center',
-                                    transition: 'background 0.2s ease'
-                                }}
-                            >
-                                <X size={18} />
-                            </button>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <button 
+                                    onClick={() => goToCoupangCheckout(activeCoupangProduct.coupangUrl)}
+                                    style={{ 
+                                        background: 'rgba(230, 30, 43, 0.15)',
+                                        color: '#ff4d4d', 
+                                        border: '1px solid rgba(230, 30, 43, 0.4)',
+                                        padding: '6px 14px',
+                                        borderRadius: '8px',
+                                        fontSize: '12.5px', 
+                                        fontWeight: 700, 
+                                        display: 'inline-flex', 
+                                        alignItems: 'center', 
+                                        gap: '4px', 
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    쿠팡 크게보기 <ExternalLink size={13} />
+                                </button>
+                                <button 
+                                    onClick={() => setActiveCoupangProduct(null)}
+                                    style={{ 
+                                        background: 'rgba(255,255,255,0.1)', 
+                                        border: 'none', 
+                                        color: '#fff', 
+                                        cursor: 'pointer', 
+                                        width: '32px', 
+                                        height: '32px', 
+                                        borderRadius: '50%',
+                                        display: 'flex', 
+                                        alignItems: 'center', 
+                                        justifyContent: 'center'
+                                    }}
+                                >
+                                    <X size={18} />
+                                </button>
+                            </div>
                         </div>
 
-                        {/* 모달 내용: 제품 상세 및 쿠팡 이동 결제 버튼 */}
-                        <div style={{ padding: '35px 30px', textAlign: 'center', backgroundColor: '#0e121a' }}>
-                            <div style={{ position: 'relative', width: '200px', height: '200px', margin: '0 auto 24px auto', background: '#1c2230', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '18px' }}>
+                        {/* 모달 본문: 쿠팡 페이지 뷰어 frame */}
+                        <div style={{ flexGrow: 1, position: 'relative', width: '100%', height: '100%', background: '#fff', overflow: 'hidden' }}>
+                            <iframe 
+                                src={activeCoupangProduct.coupangUrl}
+                                title={`${activeCoupangProduct.name} 쿠팡 제품 상세`}
+                                style={{ width: '100%', height: '100%', border: 'none' }}
+                            />
+                        </div>
+
+                        {/* 모달 하단 고정 장바구니 & 바로구매 액션 바 (원하시던 구매/장바구니 버튼 배치) */}
+                        <div style={{
+                            padding: '16px 24px',
+                            backgroundColor: '#121620',
+                            borderTop: '1px solid rgba(230, 30, 43, 0.5)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            boxShadow: '0 -10px 30px rgba(0,0,0,0.7)',
+                            zIndex: 20
+                        }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                                 <img 
                                     src={activeCoupangProduct.img} 
                                     alt={activeCoupangProduct.name}
-                                    style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'drop-shadow(0 12px 25px rgba(0,0,0,0.55))' }} 
+                                    style={{ width: '48px', height: '48px', objectFit: 'contain', background: '#1c2230', padding: '4px', borderRadius: '10px' }} 
                                 />
-                                <span style={{ position: 'absolute', top: '12px', left: '12px', background: '#2b8a3e', color: '#fff', fontSize: '11px', fontWeight: 800, padding: '3px 9px', borderRadius: '6px' }}>
-                                    {activeCoupangProduct.tag}
-                                </span>
-                            </div>
-
-                            <h3 style={{ fontSize: '26px', fontWeight: 900, color: '#fff', marginBottom: '8px' }}>
-                                {activeCoupangProduct.name}
-                            </h3>
-                            <p style={{ color: '#aaa', fontSize: '15px', marginBottom: '24px', lineHeight: '1.6', wordBreak: 'keep-all' }}>
-                                {activeCoupangProduct.desc}
-                            </p>
-
-                            {/* 주요 특징 및 혜택 체크리스트 */}
-                            <div style={{ background: '#181d29', borderRadius: '18px', padding: '20px 24px', marginBottom: '30px', textAlign: 'left', border: '1px solid rgba(255,255,255,0.06)' }}>
-                                {activeCoupangProduct.details.map((detail, idx) => (
-                                    <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#cbd5e1', fontSize: '14px', fontWeight: 500, marginBottom: idx === activeCoupangProduct.details.length - 1 ? 0 : '10px' }}>
-                                        <CheckCircle2 size={17} color="#00ff88" />
-                                        <span>{detail}</span>
+                                <div>
+                                    <div style={{ fontSize: '15px', fontWeight: 800, color: '#fff' }}>
+                                        {activeCoupangProduct.name}
                                     </div>
-                                ))}
+                                    <div style={{ fontSize: '13px', color: '#ff4d4d', fontWeight: 700 }}>
+                                        🚀 {activeCoupangProduct.price}
+                                    </div>
+                                </div>
                             </div>
-                            
-                            {/* 2️⃣ 쿠팡 결제 창으로 이동하는 메인 버튼 */}
-                            <a 
-                                href={activeCoupangProduct.coupangUrl} 
-                                target="_blank" 
-                                rel="noreferrer"
-                                onClick={() => setActiveCoupangProduct(null)}
-                                style={{ 
-                                    background: '#e61e2b', 
-                                    color: '#fff', 
-                                    padding: '18px 36px', 
-                                    borderRadius: '16px', 
-                                    fontSize: '17px', 
-                                    fontWeight: 900, 
-                                    textDecoration: 'none',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    gap: '8px',
-                                    boxShadow: '0 10px 30px rgba(230, 30, 43, 0.45)',
-                                    width: '100%'
-                                }}
-                            >
-                                <Truck size={20} /> 쿠팡 공식스토어에서 결제하기 <ExternalLink size={17} />
-                            </a>
+
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                <button 
+                                    onClick={() => goToCoupangCheckout(activeCoupangProduct.coupangUrl)}
+                                    style={{ 
+                                        background: '#282e3d', 
+                                        color: '#e2e8f0', 
+                                        border: '1px solid rgba(255,255,255,0.15)', 
+                                        padding: '12px 20px', 
+                                        borderRadius: '12px', 
+                                        fontSize: '14.5px', 
+                                        fontWeight: 700, 
+                                        cursor: 'pointer',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '6px'
+                                    }}
+                                >
+                                    <ShoppingCart size={17} /> 장바구니 담기
+                                </button>
+                                <button 
+                                    onClick={() => goToCoupangCheckout(activeCoupangProduct.coupangUrl)}
+                                    style={{ 
+                                        background: '#e61e2b', 
+                                        color: '#fff', 
+                                        border: 'none',
+                                        padding: '12px 28px', 
+                                        borderRadius: '12px', 
+                                        fontSize: '15px', 
+                                        fontWeight: 900, 
+                                        cursor: 'pointer',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '6px',
+                                        boxShadow: '0 6px 20px rgba(230, 30, 43, 0.45)'
+                                    }}
+                                >
+                                    <Truck size={18} /> 바로 구매하기 <ArrowRight size={16} />
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -403,7 +448,7 @@ const MallPage = () => {
                                             className="btn-coupang-buy"
                                             onClick={() => openInternalCoupangModal(prod)}
                                         >
-                                            <Search size={16} /> 교구 상세 소개 & 구매 <ExternalLink size={14} />
+                                            <ShoppingBag size={16} /> 교구 상세 소개 & 구매 <ExternalLink size={14} />
                                         </button>
                                         <button 
                                             className="btn-b2b-inquiry"
