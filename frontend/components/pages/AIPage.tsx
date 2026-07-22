@@ -16,7 +16,39 @@ const AIPage = () => {
                     <source src="/background.mp4" type="video/mp4" />
                 </video>
                 <div className="hero-overlay"></div>
+                <style dangerouslySetInnerHTML={{ __html: `
+                    @keyframes aiPawmiFloat {
+                        0%, 100% { transform: translateY(0px) rotate(0deg); }
+                        50% { transform: translateY(-10px) rotate(3deg); }
+                    }
+                    .ai-pawmi-mascot {
+                        position: absolute;
+                        right: 40px;
+                        top: 25px;
+                        width: 130px;
+                        height: 130px;
+                        object-fit: contain;
+                        filter: drop-shadow(0 8px 20px rgba(0,0,0,0.35));
+                        animation: aiPawmiFloat 3.5s ease-in-out infinite;
+                    }
+                    @media (max-width: 768px) {
+                        .ai-pawmi-mascot {
+                            position: relative;
+                            right: auto;
+                            top: auto;
+                            width: 80px;
+                            height: 80px;
+                            margin: 0 auto 10px auto;
+                            display: block;
+                        }
+                    }
+                `}} />
                 <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+                    <img 
+                        src="/images/pawmi/pawmi_angry.png" 
+                        alt="AI 체형분석 파우미" 
+                        className="ai-pawmi-mascot"
+                    />
                     <div className="hero-subtitle hero-el hero-el-1">AI Scanning</div>
                     <h1 className="hero-el hero-el-2">데이터로 증명하는 <span>스마트 AI 체형분석</span></h1>
                     <p className="hero-el hero-el-3">

@@ -23,8 +23,27 @@ const JellyChartSection = ({ reviewsData }: JellyChartSectionProps) => {
     }, [reviewsData]);
 
     return (
-        <section className="jelly-chart-section reveal" style={{ padding: '40px 0 60px', backgroundColor: '#f8f9fa', borderTop: '1px solid #eee', overflow: 'visible' }}>
+        <section className="jelly-chart-section reveal" style={{ padding: '40px 0 60px', backgroundColor: '#f8f9fa', borderTop: '1px solid #eee', overflow: 'visible', position: 'relative' }}>
+            <style dangerouslySetInnerHTML={{ __html: `
+                @keyframes jellyPawmiFloat {
+                    0%, 100% { transform: translateY(0px) rotate(-3deg); }
+                    50% { transform: translateY(-8px) rotate(3deg); }
+                }
+                .jelly-pawmi-mascot {
+                    width: 90px;
+                    height: 90px;
+                    object-fit: contain;
+                    margin: 0 auto 10px auto;
+                    filter: drop-shadow(0 6px 15px rgba(0,0,0,0.15));
+                    animation: jellyPawmiFloat 3.6s ease-in-out infinite;
+                }
+            `}} />
             <div className="container text-center" style={{ overflow: 'visible' }}>
+                <img 
+                    src="/images/pawmi/pawmi_massage.png" 
+                    alt="만족도 99% 파우미" 
+                    className="jelly-pawmi-mascot soft-reveal"
+                />
                 <h2 className="section-title reveal soft-reveal" style={{ marginBottom: '10px' }}>FaWW <span className="text-highlight">피지컬케어 종합 만족도</span></h2>
                 <p className="section-desc reveal soft-reveal" style={{ marginBottom: '40px' }}>2만 건 이상의 데이터가 증명하는 압도적인 결과</p>
 

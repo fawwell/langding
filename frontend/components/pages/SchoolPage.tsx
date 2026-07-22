@@ -11,8 +11,40 @@ const SchoolPage = () => {
 
     return (
         <main id="page-school" className="page-content active">
-            <section className="hero-premium reveal" style={{ background: "linear-gradient(rgba(0, 30, 20, 0.75), rgba(0, 30, 20, 0.9)), url('https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=2070&auto=format&fit=crop') no-repeat center/cover fixed" }}>
-                <div className="container">
+            <section className="hero-premium reveal" style={{ background: "linear-gradient(rgba(0, 30, 20, 0.75), rgba(0, 30, 20, 0.9)), url('https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=2070&auto=format&fit=crop') no-repeat center/cover fixed", position: 'relative' }}>
+                <style dangerouslySetInnerHTML={{ __html: `
+                    @keyframes schoolPawmiFloat {
+                        0%, 100% { transform: translateY(0px) rotate(-2deg); }
+                        50% { transform: translateY(-10px) rotate(3deg); }
+                    }
+                    .school-pawmi-mascot {
+                        position: absolute;
+                        right: 50px;
+                        top: 30px;
+                        width: 140px;
+                        height: 140px;
+                        object-fit: contain;
+                        filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
+                        animation: schoolPawmiFloat 4s ease-in-out infinite;
+                    }
+                    @media (max-width: 768px) {
+                        .school-pawmi-mascot {
+                            position: relative;
+                            right: auto;
+                            top: auto;
+                            width: 90px;
+                            height: 90px;
+                            margin: 0 auto 15px auto;
+                            display: block;
+                        }
+                    }
+                `}} />
+                <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+                    <img 
+                        src="/images/pawmi/pawmi_theraband_stretch.png" 
+                        alt="학생 체형분석 파우미" 
+                        className="school-pawmi-mascot"
+                    />
                     <div style={{ textAlign: 'left' }}><span className="back-btn" onClick={() => router.push('/ai')}>← 타겟 선택으로 돌아가기</span></div>
                     <h1>바른 성장의 시작,<br />FaWW 학생 체형분석 솔루션</h1>
                     <p>학교 현장에 최적화된 프로세스로 우리 아이들의 효율적인 건강관리를 지원합니다.</p>

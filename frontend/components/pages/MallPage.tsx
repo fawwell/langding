@@ -10,7 +10,39 @@ const MallPage = () => {
     return (
         <main id="page-mall" className="page-content active">
             <section className="hero-brand hero-brand-sub reveal" style={{ backgroundColor: '#111', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                <style dangerouslySetInnerHTML={{ __html: `
+                    @keyframes mallPawmiFloat {
+                        0%, 100% { transform: translateY(0px) rotate(0deg); }
+                        50% { transform: translateY(-10px) rotate(4deg); }
+                    }
+                    .mall-pawmi-mascot {
+                        position: absolute;
+                        right: 40px;
+                        top: 25px;
+                        width: 130px;
+                        height: 130px;
+                        object-fit: contain;
+                        filter: drop-shadow(0 8px 20px rgba(0,0,0,0.4));
+                        animation: mallPawmiFloat 3.8s ease-in-out infinite;
+                    }
+                    @media (max-width: 768px) {
+                        .mall-pawmi-mascot {
+                            position: relative;
+                            right: auto;
+                            top: auto;
+                            width: 85px;
+                            height: 85px;
+                            margin: 0 auto 10px auto;
+                            display: block;
+                        }
+                    }
+                `}} />
                 <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+                    <img 
+                        src="/images/pawmi/pawmi_theragun.png" 
+                        alt="몰 파우미" 
+                        className="mall-pawmi-mascot"
+                    />
                     <div className="hero-subtitle hero-el hero-el-1 reveal soft-reveal">Physical Care Mall</div>
                     <h1 className="hero-el hero-el-2 reveal soft-reveal">검증된 교구, <span>피지컬케어 mall</span></h1>
                     <p className="hero-el hero-el-3 reveal soft-reveal">
