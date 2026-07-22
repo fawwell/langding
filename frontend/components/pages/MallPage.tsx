@@ -3,7 +3,7 @@
 import React from 'react';
 import { useUI } from '@/context/UIContext';
 import Footer from '@/components/layout/Footer';
-import { ShoppingBag, Truck, Building2, ExternalLink, X, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { ShoppingBag, Truck, Building2, ExternalLink, X, ShieldCheck, CheckCircle2, Search } from 'lucide-react';
 
 const PRODUCTS = [
     {
@@ -11,6 +11,12 @@ const PRODUCTS = [
         name: '블랙테라',
         tag: 'BEST',
         desc: '전문가용 프리미엄 온열 마사지 케어 툴',
+        details: [
+            '전문가용 온열 딥티슈 근육 케어 시스템',
+            '인체공학적 그립 설계 및 3단계 온도 조절',
+            '쿠팡 로켓배송 무료 배송 & 빠르게 수령',
+            'FaWW 100% 공식 인증 정품'
+        ],
         price: '쿠팡 로켓배송 특가',
         img: '/images/mall/blackterra.png',
         coupangUrl: 'https://www.coupang.com/vp/products/7281228718?itemId=18590265091&searchId=5ce4eabb056e45e6a10388d231097659&sourceType=brandstore_sdp_atf-baseline_list&storeId=111499&subSourceType=brandstore_sdp_atf-baseline_list&vendorId=A00920407&vendorItemId=85726579068',
@@ -20,6 +26,12 @@ const PRODUCTS = [
         name: '3D 스트랩',
         tag: 'HOT',
         desc: '정밀 측정이 가능한 IT 융합 스트랩',
+        details: [
+            '정밀 모션 측정이 가능한 고탄성 3D 스트랩',
+            '자세 분석 및 피지컬 케어 연동 인공지능 지원',
+            '쿠팡 로켓배송 무료 배송 & 빠르게 수령',
+            'FaWW 100% 공식 인증 정품'
+        ],
         price: '쿠팡 로켓배송 특가',
         img: '/images/mall/strap3d.png',
         coupangUrl: 'https://www.coupang.com/vp/products/8477063323?itemId=18590264907&searchId=5ce4eabb056e45e6a10388d231097659&sourceType=brandstore_sdp_atf-baseline_list&storeId=111499&subSourceType=brandstore_sdp_atf-baseline_list&vendorId=A00920407&vendorItemId=85726579078',
@@ -170,7 +182,7 @@ const MallPage = () => {
                 }
             `}} />
 
-            {/* 홈페이지 내부 쿠팡 뷰어 모달 */}
+            {/* 1️⃣ 홈페이지 내부 교구 소개 모달 (우리 홈페이지 화면 내부 팝업) */}
             {activeCoupangProduct && (
                 <div 
                     onClick={() => setActiveCoupangProduct(null)}
@@ -194,7 +206,7 @@ const MallPage = () => {
                         onClick={(e) => e.stopPropagation()}
                         style={{
                             width: '100%',
-                            maxWidth: '600px',
+                            maxWidth: '620px',
                             backgroundColor: '#121620',
                             border: '1px solid rgba(230, 30, 43, 0.5)',
                             borderRadius: '28px',
@@ -208,7 +220,7 @@ const MallPage = () => {
                     >
                         {/* 모달 상단 컨트롤 헤더 바 */}
                         <div style={{ 
-                            padding: '18px 24px', 
+                            padding: '18px 26px', 
                             backgroundColor: '#181d29', 
                             borderBottom: '1px solid rgba(255,255,255,0.08)',
                             display: 'flex', 
@@ -221,7 +233,7 @@ const MallPage = () => {
                                     COUPANG
                                 </span>
                                 <span style={{ fontSize: '16px', fontWeight: 800, color: '#fff' }}>
-                                    {activeCoupangProduct.name} 로켓배송
+                                    {activeCoupangProduct.name} 교구 소개
                                 </span>
                             </div>
                             <button 
@@ -244,38 +256,37 @@ const MallPage = () => {
                             </button>
                         </div>
 
-                        {/* 내장 상세 카드 콘텐츠 (Access Denied 방지용 보안 프리뷰) */}
+                        {/* 모달 내용: 제품 상세 및 쿠팡 이동 결제 버튼 */}
                         <div style={{ padding: '35px 30px', textAlign: 'center', backgroundColor: '#0e121a' }}>
-                            <div style={{ position: 'relative', width: '180px', height: '180px', margin: '0 auto 24px auto', background: '#1c2230', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '15px' }}>
+                            <div style={{ position: 'relative', width: '200px', height: '200px', margin: '0 auto 24px auto', background: '#1c2230', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '18px' }}>
                                 <img 
                                     src={activeCoupangProduct.img} 
                                     alt={activeCoupangProduct.name}
-                                    style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.5))' }} 
+                                    style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'drop-shadow(0 12px 25px rgba(0,0,0,0.55))' }} 
                                 />
-                                <span style={{ position: 'absolute', top: '10px', left: '10px', background: '#2b8a3e', color: '#fff', fontSize: '11px', fontWeight: 800, padding: '3px 8px', borderRadius: '4px' }}>
+                                <span style={{ position: 'absolute', top: '12px', left: '12px', background: '#2b8a3e', color: '#fff', fontSize: '11px', fontWeight: 800, padding: '3px 9px', borderRadius: '6px' }}>
                                     {activeCoupangProduct.tag}
                                 </span>
                             </div>
 
-                            <h3 style={{ fontSize: '24px', fontWeight: 900, color: '#fff', marginBottom: '8px' }}>
+                            <h3 style={{ fontSize: '26px', fontWeight: 900, color: '#fff', marginBottom: '8px' }}>
                                 {activeCoupangProduct.name}
                             </h3>
-                            <p style={{ color: '#aaa', fontSize: '14.5px', marginBottom: '24px', lineHeight: '1.6', wordBreak: 'keep-all' }}>
+                            <p style={{ color: '#aaa', fontSize: '15px', marginBottom: '24px', lineHeight: '1.6', wordBreak: 'keep-all' }}>
                                 {activeCoupangProduct.desc}
                             </p>
 
-                            <div style={{ background: '#181d29', borderRadius: '16px', padding: '16px 20px', marginBottom: '30px', textAlign: 'left', border: '1px solid rgba(255,255,255,0.06)' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#00ff88', fontSize: '13.5px', fontWeight: 700, marginBottom: '8px' }}>
-                                    <CheckCircle2 size={16} /> 쿠팡 로켓배송 혜택 그대로 적용
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#cbd5e1', fontSize: '13.5px', fontWeight: 500, marginBottom: '8px' }}>
-                                    <ShieldCheck size={16} /> FaWW 100% 공식 정품 보증
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#cbd5e1', fontSize: '13.5px', fontWeight: 500 }}>
-                                    <Truck size={16} /> 와우 회원 무료 배송 및 빠른 익일 수령
-                                </div>
+                            {/* 주요 특징 및 혜택 체크리스트 */}
+                            <div style={{ background: '#181d29', borderRadius: '18px', padding: '20px 24px', marginBottom: '30px', textAlign: 'left', border: '1px solid rgba(255,255,255,0.06)' }}>
+                                {activeCoupangProduct.details.map((detail, idx) => (
+                                    <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#cbd5e1', fontSize: '14px', fontWeight: 500, marginBottom: idx === activeCoupangProduct.details.length - 1 ? 0 : '10px' }}>
+                                        <CheckCircle2 size={17} color="#00ff88" />
+                                        <span>{detail}</span>
+                                    </div>
+                                ))}
                             </div>
                             
+                            {/* 2️⃣ 쿠팡 결제 창으로 이동하는 메인 버튼 */}
                             <a 
                                 href={activeCoupangProduct.coupangUrl} 
                                 target="_blank" 
@@ -286,7 +297,7 @@ const MallPage = () => {
                                     color: '#fff', 
                                     padding: '18px 36px', 
                                     borderRadius: '16px', 
-                                    fontSize: '16.5px', 
+                                    fontSize: '17px', 
                                     fontWeight: 900, 
                                     textDecoration: 'none',
                                     display: 'flex',
@@ -297,7 +308,7 @@ const MallPage = () => {
                                     width: '100%'
                                 }}
                             >
-                                <Truck size={20} /> 쿠팡 결제 페이지로 이동하기 <ExternalLink size={17} />
+                                <Truck size={20} /> 쿠팡 공식스토어에서 결제하기 <ExternalLink size={17} />
                             </a>
                         </div>
                     </div>
@@ -392,7 +403,7 @@ const MallPage = () => {
                                             className="btn-coupang-buy"
                                             onClick={() => openInternalCoupangModal(prod)}
                                         >
-                                            <Truck size={16} /> 쿠팡 로켓배송 구매 <ExternalLink size={14} />
+                                            <Search size={16} /> 교구 상세 소개 & 구매 <ExternalLink size={14} />
                                         </button>
                                         <button 
                                             className="btn-b2b-inquiry"
