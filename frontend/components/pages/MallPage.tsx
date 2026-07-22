@@ -3,7 +3,7 @@
 import React from 'react';
 import { useUI } from '@/context/UIContext';
 import Footer from '@/components/layout/Footer';
-import { ShoppingBag, Truck, Building2, ExternalLink, X, ShoppingCart, ArrowRight } from 'lucide-react';
+import { ShoppingBag, Truck, Building2, ExternalLink, X, ShoppingCart, ArrowRight, CheckCircle2, ShieldCheck, Sparkles } from 'lucide-react';
 
 const PRODUCTS = [
     {
@@ -56,7 +56,7 @@ const MallPage = () => {
     };
 
     return (
-        <main id="page-mall" className="page-content active" style={{ backgroundColor: '#0b0c10', color: '#fff', position: 'relative' }}>
+        <main id="page-mall" className="page-content active" style={{ backgroundColor: '#0b0e14', color: '#fff', position: 'relative', overflowX: 'hidden' }}>
             <style dangerouslySetInnerHTML={{ __html: `
                 #page-mall .reveal {
                     opacity: 1 !important;
@@ -75,11 +75,22 @@ const MallPage = () => {
                     0% { opacity: 0; transform: translateY(30px) scale(0.96); }
                     100% { opacity: 1; transform: translateY(0) scale(1); }
                 }
+                .mall-ambient-glow {
+                    position: absolute;
+                    top: -100px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 1000px;
+                    height: 500px;
+                    background: radial-gradient(circle, rgba(43, 138, 62, 0.18) 0%, rgba(0, 255, 136, 0.05) 35%, transparent 70%);
+                    pointer-events: none;
+                    z-index: 1;
+                }
                 .mall-pawmi-mascot {
                     width: 125px;
                     height: 125px;
                     object-fit: contain;
-                    filter: drop-shadow(0 8px 20px rgba(0,0,0,0.5));
+                    filter: drop-shadow(0 10px 25px rgba(0,0,0,0.6));
                     animation: mallPawmiFloat 3.8s ease-in-out infinite;
                     cursor: pointer;
                     transition: filter 0.3s ease;
@@ -91,24 +102,24 @@ const MallPage = () => {
                     display: inline-flex;
                     align-items: center;
                     gap: 6px;
-                    background: rgba(230, 30, 43, 0.15);
-                    border: 1px solid rgba(230, 30, 43, 0.4);
-                    color: #ff4d4d;
+                    background: rgba(230, 30, 43, 0.12);
+                    border: 1px solid rgba(230, 30, 43, 0.35);
+                    color: #ff5252;
                     padding: 6px 16px;
                     border-radius: 20px;
-                    font-size: 13px;
+                    font-size: 12.5px;
                     font-weight: 700;
-                    margin-bottom: 15px;
-                    letter-spacing: -0.3px;
+                    margin-bottom: 18px;
+                    letter-spacing: -0.2px;
                 }
                 .speech-bubble-pawmi {
-                    background: rgba(20, 26, 36, 0.9);
-                    border: 1px solid rgba(43, 138, 62, 0.4);
-                    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                    background: rgba(18, 24, 35, 0.95);
+                    border: 1px solid rgba(0, 255, 136, 0.3);
+                    box-shadow: 0 12px 35px rgba(0,0,0,0.6), 0 0 15px rgba(0, 255, 136, 0.15);
                     border-radius: 16px;
                     padding: 12px 18px;
                     color: #e2e8f0;
-                    font-size: 14px;
+                    font-size: 13.5px;
                     font-weight: 600;
                     position: relative;
                     margin-bottom: 12px;
@@ -121,33 +132,33 @@ const MallPage = () => {
                     right: 30px;
                     border-width: 8px 8px 0;
                     border-style: solid;
-                    border-color: rgba(20, 26, 36, 0.9) transparent;
+                    border-color: rgba(18, 24, 35, 0.95) transparent;
                     display: block;
                     width: 0;
                 }
                 .product-card-showroom {
-                    background: #141822;
-                    border: 1px solid rgba(255,255,255,0.08);
-                    border-radius: 20px;
+                    background: #131924;
+                    border: 1px solid rgba(255, 255, 255, 0.08);
+                    border-radius: 22px;
                     overflow: hidden;
                     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
                     display: flex;
                     flex-direction: column;
-                    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+                    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
                 }
                 .product-card-showroom:hover {
                     transform: translateY(-8px);
-                    border-color: rgba(43, 138, 62, 0.4);
-                    box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 20px rgba(43, 138, 62, 0.2);
+                    border-color: rgba(0, 255, 136, 0.35);
+                    box-shadow: 0 25px 50px rgba(0,0,0,0.6), 0 0 25px rgba(43, 138, 62, 0.25);
                 }
                 .btn-coupang-buy {
-                    background: #e61e2b !important;
+                    background: linear-gradient(135deg, #e61e2b 0%, #c0111d 100%) !important;
                     color: #ffffff !important;
                     border: none !important;
                     padding: 14px 18px !important;
                     border-radius: 12px !important;
                     font-size: 14px !important;
-                    font-weight: 700 !important;
+                    font-weight: 800 !important;
                     cursor: pointer !important;
                     display: flex !important;
                     align-items: center !important;
@@ -155,21 +166,21 @@ const MallPage = () => {
                     gap: 6px !important;
                     transition: all 0.2s ease !important;
                     width: 100% !important;
-                    box-shadow: 0 4px 15px rgba(230, 30, 43, 0.35) !important;
+                    box-shadow: 0 6px 20px rgba(230, 30, 43, 0.35) !important;
                 }
                 .btn-coupang-buy:hover {
-                    background: #d01723 !important;
+                    background: linear-gradient(135deg, #f02431 0%, #d01723 100%) !important;
                     transform: translateY(-2px) !important;
-                    box-shadow: 0 8px 20px rgba(230, 30, 43, 0.5) !important;
+                    box-shadow: 0 10px 25px rgba(230, 30, 43, 0.5) !important;
                 }
                 .btn-b2b-inquiry {
-                    background: rgba(43, 138, 62, 0.2) !important;
+                    background: rgba(43, 138, 62, 0.12) !important;
                     color: #00ff88 !important;
-                    border: 1px solid rgba(0, 255, 136, 0.4) !important;
+                    border: 1px solid rgba(0, 255, 136, 0.3) !important;
                     padding: 13px 18px !important;
                     border-radius: 12px !important;
                     font-size: 13.5px !important;
-                    font-weight: 600 !important;
+                    font-weight: 700 !important;
                     cursor: pointer !important;
                     display: flex !important;
                     align-items: center !important;
@@ -180,11 +191,14 @@ const MallPage = () => {
                     margin-top: 10px !important;
                 }
                 .btn-b2b-inquiry:hover {
-                    background: rgba(43, 138, 62, 0.35) !important;
+                    background: rgba(43, 138, 62, 0.25) !important;
                     border-color: #00ff88 !important;
                     transform: translateY(-2px) !important;
                 }
             `}} />
+
+            {/* 배경 은은한 오로라 글루 현상 */}
+            <div className="mall-ambient-glow" />
 
             {/* 홈페이지 내부 쿠팡 웹뷰 미니 창 모달 */}
             {activeCoupangProduct && (
@@ -197,8 +211,8 @@ const MallPage = () => {
                         width: '100vw',
                         height: '100vh',
                         backgroundColor: 'rgba(0, 0, 0, 0.85)',
-                        backdropFilter: 'blur(10px)',
-                        WebkitBackdropFilter: 'blur(10px)',
+                        backdropFilter: 'blur(12px)',
+                        WebkitBackdropFilter: 'blur(12px)',
                         zIndex: 99999,
                         display: 'flex',
                         alignItems: 'center',
@@ -213,9 +227,9 @@ const MallPage = () => {
                             maxWidth: '960px',
                             height: '88vh',
                             backgroundColor: '#121620',
-                            border: '1px solid rgba(230, 30, 43, 0.5)',
+                            border: '1px solid rgba(230, 30, 43, 0.4)',
                             borderRadius: '24px',
-                            boxShadow: '0 30px 80px rgba(0,0,0,0.9), 0 0 45px rgba(230, 30, 43, 0.35)',
+                            boxShadow: '0 30px 80px rgba(0,0,0,0.9), 0 0 45px rgba(230, 30, 43, 0.3)',
                             overflow: 'hidden',
                             display: 'flex',
                             flexDirection: 'column',
@@ -223,10 +237,10 @@ const MallPage = () => {
                             position: 'relative'
                         }}
                     >
-                        {/* 모달 상단 헤더 바 */}
+                        {/* 모달 상단 컨트롤 헤더 바 */}
                         <div style={{ 
                             padding: '16px 24px', 
-                            backgroundColor: '#181d29', 
+                            backgroundColor: '#161c28', 
                             borderBottom: '1px solid rgba(255,255,255,0.08)',
                             display: 'flex', 
                             alignItems: 'center', 
@@ -245,9 +259,9 @@ const MallPage = () => {
                                 <button 
                                     onClick={() => goToCoupangCheckout(activeCoupangProduct.coupangUrl)}
                                     style={{ 
-                                        background: 'rgba(230, 30, 43, 0.15)',
-                                        color: '#ff4d4d', 
-                                        border: '1px solid rgba(230, 30, 43, 0.4)',
+                                        background: 'rgba(230, 30, 43, 0.12)',
+                                        color: '#ff5252', 
+                                        border: '1px solid rgba(230, 30, 43, 0.35)',
                                         padding: '6px 14px',
                                         borderRadius: '8px',
                                         fontSize: '12.5px', 
@@ -258,7 +272,7 @@ const MallPage = () => {
                                         cursor: 'pointer'
                                     }}
                                 >
-                                    외부 창으로 열기 <ExternalLink size={13} />
+                                    외부 창으로 크게보기 <ExternalLink size={13} />
                                 </button>
                                 <button 
                                     onClick={() => setActiveCoupangProduct(null)}
@@ -289,11 +303,11 @@ const MallPage = () => {
                             />
                         </div>
 
-                        {/* 모달 하단 액션 바: 거기서 구매하기/장바구니를 누르면 외부 쿠팡 구매창으로 연결 */}
+                        {/* 모달 하단 액션 바: 정돈된 장바구니/바로구매 버튼 */}
                         <div style={{
                             padding: '16px 24px',
                             backgroundColor: '#121620',
-                            borderTop: '1px solid rgba(230, 30, 43, 0.5)',
+                            borderTop: '1px solid rgba(230, 30, 43, 0.4)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
@@ -310,7 +324,7 @@ const MallPage = () => {
                                     <div style={{ fontSize: '15px', fontWeight: 800, color: '#fff' }}>
                                         {activeCoupangProduct.name}
                                     </div>
-                                    <div style={{ fontSize: '13px', color: '#ff4d4d', fontWeight: 700 }}>
+                                    <div style={{ fontSize: '13px', color: '#ff5252', fontWeight: 700 }}>
                                         🚀 {activeCoupangProduct.price}
                                     </div>
                                 </div>
@@ -320,9 +334,9 @@ const MallPage = () => {
                                 <button 
                                     onClick={() => goToCoupangCheckout(activeCoupangProduct.coupangUrl)}
                                     style={{ 
-                                        background: '#282e3d', 
+                                        background: '#1d2433', 
                                         color: '#e2e8f0', 
-                                        border: '1px solid rgba(255,255,255,0.15)', 
+                                        border: '1px solid rgba(255,255,255,0.12)', 
                                         padding: '12px 20px', 
                                         borderRadius: '12px', 
                                         fontSize: '14.5px', 
@@ -338,7 +352,7 @@ const MallPage = () => {
                                 <button 
                                     onClick={() => goToCoupangCheckout(activeCoupangProduct.coupangUrl)}
                                     style={{ 
-                                        background: '#e61e2b', 
+                                        background: 'linear-gradient(135deg, #e61e2b 0%, #c0111d 100%)', 
                                         color: '#fff', 
                                         border: 'none',
                                         padding: '12px 28px', 
@@ -361,7 +375,7 @@ const MallPage = () => {
             )}
 
             {/* 히어로 헤더 섹션 */}
-            <section className="hero-brand hero-brand-sub reveal" style={{ backgroundColor: '#0f1219', borderBottom: '1px solid rgba(255,255,255,0.08)', padding: '120px 0 80px 0' }}>
+            <section className="hero-brand hero-brand-sub reveal" style={{ backgroundColor: '#0e121b', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '120px 0 80px 0', position: 'relative', zIndex: 2 }}>
                 <div className="container" style={{ position: 'relative', zIndex: 2 }}>
                     <div style={{ textAlign: 'right', position: 'absolute', right: '20px', top: '-10px' }}>
                         <div className="speech-bubble-pawmi">
@@ -381,11 +395,11 @@ const MallPage = () => {
                     <span className="coupang-badge-pill">
                         <Truck size={15} /> COUPANG ROCKET SHIPPING OFFICIAL
                     </span>
-                    <h1 className="hero-el hero-el-2 reveal soft-reveal" style={{ fontSize: '38px', fontWeight: 900, marginBottom: '16px' }}>
-                        검증된 교구, <span>피지컬케어 mall</span>
+                    <h1 className="hero-el hero-el-2 reveal soft-reveal" style={{ fontSize: '38px', fontWeight: 900, marginBottom: '16px', letterSpacing: '-0.5px' }}>
+                        검증된 교구, <span style={{ background: 'linear-gradient(135deg, #00ff88 0%, #059669 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>피지컬케어 mall</span>
                     </h1>
-                    <p className="hero-el hero-el-3 reveal soft-reveal" style={{ color: '#aaa', fontSize: '16.5px', lineHeight: '1.7', maxWidth: '650px' }}>
-                        <strong>전문가가 직접 선별한 웰니스 건강 굿즈</strong><br />
+                    <p className="hero-el hero-el-3 reveal soft-reveal" style={{ color: '#94a3b8', fontSize: '16.5px', lineHeight: '1.7', maxWidth: '650px' }}>
+                        <strong style={{ color: '#f8fafc' }}>전문가가 직접 선별한 웰니스 건강 굿즈</strong><br />
                         쿠팡 로켓배송으로 가장 빠르고 안전하게 파우 교구를 만나보세요.<br />
                         기업 임직원 대량 구매 및 복지 포인트 차감 견적 상담도 지원합니다.
                     </p>
@@ -393,14 +407,16 @@ const MallPage = () => {
             </section>
 
             {/* 쇼룸 상품 갤러리 섹션 */}
-            <section className="floating-gallery reveal" style={{ padding: '80px 0 100px', background: '#0b0c10' }}>
+            <section className="floating-gallery reveal" style={{ padding: '80px 0 100px', background: '#0b0e14' }}>
                 <div className="container">
-                    <div style={{ textAlign: 'center', marginBottom: '50px' }}>
-                        <span className="section-tag" style={{ color: '#00ff88' }}>PREMIUM SELECTION</span>
-                        <h2 className="section-title reveal" style={{ color: '#fff', fontSize: '30px' }}>
+                    <div style={{ textAlign: 'center', marginBottom: '55px' }}>
+                        <span className="section-tag" style={{ color: '#00ff88', fontSize: '13px', fontWeight: 800, letterSpacing: '1px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                            <Sparkles size={14} /> PREMIUM SELECTION
+                        </span>
+                        <h2 className="section-title reveal" style={{ color: '#fff', fontSize: '32px', fontWeight: 900, marginTop: '8px' }}>
                             FaWW <span>공식 베스트 교구</span>
                         </h2>
-                        <p style={{ color: '#888', fontSize: '15px', marginTop: '10px' }}>
+                        <p style={{ color: '#64748b', fontSize: '15px', marginTop: '10px' }}>
                             원하시는 결제 방식을 선택하여 편하게 구매하실 수 있습니다.
                         </p>
                     </div>
@@ -414,34 +430,35 @@ const MallPage = () => {
                     }}>
                         {PRODUCTS.map((prod) => (
                             <div key={prod.id} className="product-card-showroom reveal" style={{ opacity: 1, visibility: 'visible' }}>
-                                <div style={{ position: 'relative', height: '240px', background: '#1c2230', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <div style={{ position: 'relative', height: '250px', background: '#161c28', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                     <span style={{ 
                                         position: 'absolute', 
                                         top: '15px', 
                                         left: '15px', 
-                                        background: '#2b8a3e', 
+                                        background: prod.tag === 'BEST' ? 'linear-gradient(135deg, #2b8a3e, #059669)' : 'linear-gradient(135deg, #e61e2b, #d01723)', 
                                         color: '#fff', 
                                         fontSize: '11px', 
-                                        fontWeight: 800, 
-                                        padding: '4px 10px', 
+                                        fontWeight: 900, 
+                                        padding: '4px 12px', 
                                         borderRadius: '6px',
-                                        letterSpacing: '1px'
+                                        letterSpacing: '1px',
+                                        boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
                                     }}>
                                         {prod.tag}
                                     </span>
                                     <img 
                                         src={prod.img} 
                                         alt={prod.name} 
-                                        style={{ width: '80%', height: '80%', objectFit: 'contain', transition: 'transform 0.3s ease' }} 
+                                        style={{ width: '80%', height: '80%', objectFit: 'contain', transition: 'transform 0.3s ease', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.5))' }} 
                                     />
                                 </div>
-                                <div style={{ padding: '25px', display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between' }}>
+                                <div style={{ padding: '28px 25px', display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between' }}>
                                     <div>
-                                        <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#fff', marginBottom: '6px' }}>{prod.name}</h3>
-                                        <p style={{ fontSize: '13px', color: '#94a3b8', lineHeight: '1.5', marginBottom: '16px' }}>{prod.desc}</p>
+                                        <h3 style={{ fontSize: '21px', fontWeight: 800, color: '#fff', marginBottom: '6px' }}>{prod.name}</h3>
+                                        <p style={{ fontSize: '13.5px', color: '#94a3b8', lineHeight: '1.5', marginBottom: '18px' }}>{prod.desc}</p>
                                     </div>
                                     <div>
-                                        <div style={{ fontSize: '14px', fontWeight: 700, color: '#ff4d4d', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                        <div style={{ fontSize: '14px', fontWeight: 700, color: '#ff5252', marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '5px' }}>
                                             <ShoppingBag size={15} /> {prod.price}
                                         </div>
                                         <button 
@@ -465,18 +482,18 @@ const MallPage = () => {
             </section>
 
             {/* CTA 하단 배너 */}
-            <section className="cta-footer reveal" style={{ backgroundColor: '#141822', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-                <div className="container text-center" style={{ padding: '60px 20px' }}>
-                    <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#fff', marginBottom: '14px' }}>
+            <section className="cta-footer reveal" style={{ backgroundColor: '#131924', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                <div className="container text-center" style={{ padding: '65px 20px' }}>
+                    <h2 style={{ fontSize: '28px', fontWeight: 900, color: '#fff', marginBottom: '14px', letterSpacing: '-0.5px' }}>
                         기업 복지 포인트 연동 및 대량 교구 구매 문의
                     </h2>
-                    <p style={{ color: '#aaa', fontSize: '15.5px', marginBottom: '30px', maxWidth: '700px', margin: '0 auto 30px auto', lineHeight: '1.6' }}>
+                    <p style={{ color: '#94a3b8', fontSize: '15.5px', marginBottom: '32px', maxWidth: '700px', margin: '0 auto 32px auto', lineHeight: '1.6' }}>
                         임직원 건강 증진을 위한 세금 감면 혜택, 기업 포인트 일괄 결제 및 견적서를 무상으로 빠르게 제공해 드립니다.
                     </p>
                     <button 
                         className="cta-btn-white" 
                         onClick={() => openModal('modal-proposal')}
-                        style={{ background: '#2b8a3e', color: '#fff', padding: '16px 40px', borderRadius: '30px', fontSize: '16px', fontWeight: 800, border: 'none', cursor: 'pointer', boxShadow: '0 10px 25px rgba(43, 138, 62, 0.4)' }}
+                        style={{ background: '#2b8a3e', color: '#fff', padding: '16px 42px', borderRadius: '30px', fontSize: '16px', fontWeight: 800, border: 'none', cursor: 'pointer', boxShadow: '0 10px 25px rgba(43, 138, 62, 0.4)', transition: 'all 0.2s ease' }}
                     >
                         기업 전용 견적 및 제안서 신청하기
                     </button>
