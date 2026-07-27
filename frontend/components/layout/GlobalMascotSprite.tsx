@@ -3,6 +3,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 const GlobalMascotSprite = () => {
+    const [state, setState] = useState<'default' | 'hover' | 'click' | 'double_click' | 'sleep' | 'roam'>('default');
+    const [isVisible, setIsVisible] = useState(false);
     const [currentSectionText, setCurrentSectionText] = useState('안녕? 난 파우미야!');
     const [isChasingState, setIsChasingState] = useState(false);
 
