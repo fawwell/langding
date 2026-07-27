@@ -17,6 +17,11 @@ const ReviewSection = () => {
                 swiperInstance = new (window as any).Swiper(".reviewSwiper", {
                     slidesPerView: 1, 
                     spaceBetween: 20, 
+                    loop: true,
+                    autoplay: {
+                        delay: 3000,
+                        disableOnInteraction: false,
+                    },
                     observer: true, 
                     observeParents: true,
                     navigation: {
