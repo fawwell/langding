@@ -319,28 +319,44 @@ const GlobalMascotSprite = () => {
             >
                 <div className="mascot-tooltip" style={{
                     position: 'absolute',
-                    top: (state === 'hover' || state === 'click' || state === 'double_click' || state === 'sleep' || state === 'roam') ? '-35px' : '-25px',
+                    top: 'auto',
+                    bottom: (state === 'hover' || state === 'click' || state === 'double_click' || state === 'sleep' || state === 'roam') ? 'calc(100% - 10px)' : 'calc(100% - 20px)',
                     left: '50%',
                     transform: 'translateX(-50%)',
-                    background: '#fff',
-                    padding: '8px 14px',
-                    borderRadius: '20px',
-                    boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
-                    border: '1px solid #eaeaea',
-                    fontSize: '13px',
-                    fontWeight: '900',
-                    color: '#2b8a3e',
+                    width: 'max-content',
+                    maxWidth: '400px',
+                    background: 'rgba(255, 255, 255, 0.96)',
+                    backdropFilter: 'blur(10px)',
+                    padding: '9px 16px',
+                    borderRadius: '16px',
+                    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06)',
+                    border: '1px solid rgba(255, 255, 255, 0.9)',
+                    fontSize: '13.5px',
+                    fontWeight: '700',
+                    color: '#1e293b',
                     opacity: (state === 'hover' || state === 'click' || state === 'double_click' || state === 'sleep' || state === 'roam') ? 1 : 0,
                     transition: 'all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1)',
                     pointerEvents: 'none',
                     whiteSpace: 'nowrap',
-                    letterSpacing: '-0.5px',
-                    zIndex: 2
+                    letterSpacing: '-0.4px',
+                    zIndex: 10
                 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        {tooltipObj.icon}
-                        <span>{tooltipObj.text}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '7px', whiteSpace: 'nowrap' }}>
+                        <span style={{ color: '#10b981', display: 'flex', alignItems: 'center' }}>{tooltipObj.icon}</span>
+                        <span style={{ whiteSpace: 'nowrap' }}>{tooltipObj.text}</span>
                     </div>
+                    <div className="tooltip-tail" style={{
+                        position: 'absolute',
+                        bottom: '-5px',
+                        left: '50%',
+                        transform: 'translateX(-50%) rotate(45deg)',
+                        width: '10px',
+                        height: '10px',
+                        background: 'rgba(255, 255, 255, 0.96)',
+                        borderRight: '1px solid rgba(255, 255, 255, 0.9)',
+                        borderBottom: '1px solid rgba(255, 255, 255, 0.9)',
+                        zIndex: -1
+                    }} />
                 </div>
                 
                 <div ref={spriteRef} className="pawmi-sprite" style={{
