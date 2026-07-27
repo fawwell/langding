@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import Script from 'next/script';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Footer from './Footer';
+import GlobalMascotSprite from './GlobalMascotSprite';
 import { useUI } from '@/context/UIContext';
 import ProposalModal from '@/components/modals/ProposalModal';
 import QuizModal from '@/components/modals/QuizModal';
@@ -302,11 +304,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 }
             `}} />
             <div className="fab-container" style={{ position: 'fixed' }}>
-                <img 
-                    src="/images/pawmi/pawmi_mini.png" 
-                    alt="파우미 캐릭터" 
-                    className="fab-pawmi-mascot"
-                />
+                <GlobalMascotSprite />
                 <div className="cert-badge" onClick={() => openModal('modal-cert')}>
                     <span className="badge-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" style={{ width: '18px', height: '18px' }}>
