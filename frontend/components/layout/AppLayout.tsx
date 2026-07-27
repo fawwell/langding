@@ -50,10 +50,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
     // Intersection Observer for scroll animations (Re-run on route change)
     useEffect(() => {
-        const revealObserver = new IntersectionObserver((entries) => {
+        const revealObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const targetEl = entry.target;
+                    
+                    // 핵심 최적화: 한 번 렌더링된 섹션은 다시 옵저빙하지 않음 (스크롤 렉 방지)
+                    observer.unobserve(targetEl);
                     
                     requestAnimationFrame(() => {
                         targetEl.classList.add('active');
@@ -120,8 +123,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                         });
 
                         // Circular gauges
-                        const circleGauges = targetEl.querySelectorAll('.count-up-circle');
+                        const circleGauges = targetEl.querySelectorAll('.count-up-circle:not(.gauge-done)');
                         circleGauges.forEach(circle => {
+                            circle.classList.add('gauge-done');
                             const target = 1;
                             let current = 100;
                             const duration = 2000;
