@@ -153,16 +153,16 @@ const GlobalMascotSprite = () => {
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
                 // Steer towards target smoothly (slower when roaming for floating feel)
-                const targetVx = (dx / (dist || 1)) * (isChasing.current ? 6 : 0.5);
-                const targetVy = (dy / (dist || 1)) * (isChasing.current ? 6 : 0.5);
+                const targetVx = (dx / (dist || 1)) * (isChasing.current ? 1.8 : 0.8);
+                const targetVy = (dy / (dist || 1)) * (isChasing.current ? 1.8 : 0.8);
 
                 // Add erratic zigzag noise (much gentler noise for floating feel)
-                const noise = isChasing.current ? 0.5 : 0.15;
+                const noise = isChasing.current ? 0.3 : 0.2;
                 vel.current.vx += (targetVx - vel.current.vx) * 0.03 + (Math.random() - 0.5) * noise;
                 vel.current.vy += (targetVy - vel.current.vy) * 0.03 + (Math.random() - 0.5) * noise;
 
                 // Cap max velocity to avoid insane speeds (slower for gentle floating)
-                const maxSpeed = isChasing.current ? 8 : 0.8;
+                const maxSpeed = isChasing.current ? 1.8 : 1.2;
                 const speed = Math.sqrt(vel.current.vx * vel.current.vx + vel.current.vy * vel.current.vy);
                 if (speed > maxSpeed) {
                     vel.current.vx = (vel.current.vx / speed) * maxSpeed;
@@ -210,7 +210,7 @@ const GlobalMascotSprite = () => {
         extraAnimation = 'runSmooth 0.3s ease-in-out infinite';
     } else if (state === 'hover') {
         spriteImage = '/images/pawmi/ai_mascot_waving_strip_transparent.png';
-        tooltipText = 'Shift 키를 꾹 눌러보세요!';
+        tooltipText = '더블클릭 하거나 Shift 키를 꾹 눌러보세요! ✨';
         extraAnimation = 'none';
     } else if (state === 'click') {
         spriteImage = '/images/pawmi/ai_mascot_jumping_clean_strip_transparent.png';
