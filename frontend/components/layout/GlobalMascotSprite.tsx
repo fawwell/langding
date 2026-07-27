@@ -18,6 +18,7 @@ const GlobalMascotSprite = () => {
         icon: <Sparkles size={15} />
     });
     const [isChasingState, setIsChasingState] = useState(false);
+    const [isArrived, setIsArrived] = useState(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const spriteRef = useRef<HTMLDivElement>(null);
@@ -25,6 +26,7 @@ const GlobalMascotSprite = () => {
     const vel = useRef({ vx: -2, vy: -1.5 });
     const isRoaming = useRef(false);
     const isChasing = useRef(false);
+    const isArrivedRef = useRef(false);
     const mousePos = useRef({ x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0 });
 
     // Initial appearance
@@ -113,6 +115,8 @@ const GlobalMascotSprite = () => {
             if (e.key === 'Shift' && isChasing.current) {
                 isChasing.current = false;
                 setIsChasingState(false);
+                isArrivedRef.current = false;
+                setIsArrived(false);
             }
         };
 
@@ -174,6 +178,18 @@ const GlobalMascotSprite = () => {
                 const dy = currentTarget.y - pos.current.y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
+                if (isChasing.current && dist < 45) {
+                    if (!isArrivedRef.current) {
+                        isArrivedRef.current = true;
+                        setIsArrived(true);
+                    }
+                } else {
+                    if (isArrivedRef.current) {
+                        isArrivedRef.current = false;
+                        setIsArrived(false);
+                    }
+                }
+
                 // Steer towards target smoothly (slower when roaming for floating feel)
                 const targetVx = (dx / (dist || 1)) * (isChasing.current ? 7.0 : 2.5);
                 const targetVy = (dy / (dist || 1)) * (isChasing.current ? 7.0 : 2.5);
@@ -225,7 +241,11 @@ const GlobalMascotSprite = () => {
     
     const isHeroSection = currentSectionObj.text.includes('환영합니다') || currentSectionObj.text.includes('파우미야');
 
-    if (isChasingState) {
+    if (isArrived) {
+        spriteImage = '/images/pawmi/ai_mascot_dancing_clean_strip_transparent.png';
+        tooltipObj = { text: '헤헤 도착! 2만 건의 데이터 기반 1:1 맞춤 피지컬 복지, 파우미가 곁에서 지켜드릴게요 💕', icon: <HeartPulse size={15} /> };
+        extraAnimation = 'pawmiArriveWiggle 0.6s ease-in-out infinite';
+    } else if (isChasingState) {
         spriteImage = '/images/pawmi/ai_mascot_running_clean_strip_transparent.png';
         tooltipObj = isHeroSection ? { text: '잡았다 요놈!! 다다다다', icon: <Flame size={15} /> } : currentSectionObj;
         extraAnimation = 'runSmooth 0.3s ease-in-out infinite';
@@ -317,10 +337,26 @@ const GlobalMascotSprite = () => {
                     willChange: 'transform'
                 }}
             >
+                {isArrived && (
+                    <div className="pawmi-arrived-particles" style={{
+                        position: 'absolute',
+                        top: '-25px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        pointerEvents: 'none',
+                        zIndex: 200,
+                        width: '100px',
+                        height: '60px'
+                    }}>
+                        <span style={{ position: 'absolute', left: '15%', bottom: '0', fontSize: '20px', animation: 'floatParticleUp 1.2s ease-out infinite' }}>💕</span>
+                        <span style={{ position: 'absolute', left: '75%', bottom: '5px', fontSize: '16px', animation: 'floatParticleUp 1.4s ease-out infinite 0.3s' }}>✨</span>
+                        <span style={{ position: 'absolute', left: '45%', bottom: '0px', fontSize: '18px', animation: 'floatParticleUp 1.1s ease-out infinite 0.6s' }}>💖</span>
+                    </div>
+                )}
                 <div className="mascot-tooltip" style={{
                     position: 'absolute',
                     top: 'auto',
-                    bottom: (state === 'hover' || state === 'click' || state === 'double_click' || state === 'sleep' || state === 'roam') ? 'calc(100% - 10px)' : 'calc(100% - 20px)',
+                    bottom: (isArrived || isChasingState || state === 'hover' || state === 'click' || state === 'double_click' || state === 'sleep' || state === 'roam') ? 'calc(100% - 10px)' : 'calc(100% - 20px)',
                     left: '50%',
                     transform: 'translateX(-50%)',
                     width: 'max-content',
@@ -334,7 +370,7 @@ const GlobalMascotSprite = () => {
                     fontSize: '13.5px',
                     fontWeight: '700',
                     color: '#1e293b',
-                    opacity: (state === 'hover' || state === 'click' || state === 'double_click' || state === 'sleep' || state === 'roam') ? 1 : 0,
+                    opacity: (isArrived || isChasingState || state === 'hover' || state === 'click' || state === 'double_click' || state === 'sleep' || state === 'roam') ? 1 : 0,
                     transition: 'all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1)',
                     pointerEvents: 'none',
                     whiteSpace: 'nowrap',
@@ -398,6 +434,19 @@ const GlobalMascotSprite = () => {
                         0% { transform: translateY(0px) scale(0.78); }
                         50% { transform: translateY(-3px) scale(0.82); }
                         100% { transform: translateY(0px) scale(0.78); }
+                    }
+                    @keyframes pawmiArriveWiggle {
+                        0% { transform: rotate(0deg) scale(1.15); }
+                        25% { transform: rotate(-12deg) scale(1.2) translateY(-6px); }
+                        50% { transform: rotate(0deg) scale(1.15); }
+                        75% { transform: rotate(12deg) scale(1.2) translateY(-6px); }
+                        100% { transform: rotate(0deg) scale(1.15); }
+                    }
+                    @keyframes floatParticleUp {
+                        0% { opacity: 0; transform: translateY(10px) scale(0.6); }
+                        30% { opacity: 1; transform: translateY(-5px) scale(1.1); }
+                        80% { opacity: 0.8; transform: translateY(-25px) scale(1); }
+                        100% { opacity: 0; transform: translateY(-40px) scale(0.8); }
                     }
                 `}} />
             </div>

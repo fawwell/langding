@@ -8,11 +8,11 @@ const TeaserSection = () => {
         <section className="teaser-section reveal" aria-label="임직원 근골격계 관리 및 AI 체형분석 기업복지 소개">
             <div className="container text-center" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', position: 'relative' }}>
                 <Image 
-                    src="/images/pawmi/pawmi_sad.png" 
-                    alt="슬픈 파우미" 
-                    width={100}
-                    height={100}
-                    className="teaser-pawmi-sad soft-reveal"
+                    src="/images/pawmi/pawmi_theragun.png" 
+                    alt="피지컬케어 마사지건 파우미" 
+                    width={120}
+                    height={120}
+                    className="teaser-pawmi-hero soft-reveal"
                 />
 
                 {/* Step 1: 담당자님 (Grey) */}
