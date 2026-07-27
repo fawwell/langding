@@ -8,11 +8,13 @@ const GlobalMascotSprite = () => {
 
     // X, Y positions (relative to bottom-right fixed container)
     const containerRef = useRef<HTMLDivElement>(null);
+    const spriteRef = useRef<HTMLDivElement>(null);
     const pos = useRef({ x: 0, y: 0 });
     const vel = useRef({ vx: -2, vy: -1.5 });
     const isDragging = useRef(false);
     const isRoaming = useRef(false);
     const lastMousePos = useRef({ x: 0, y: 0 });
+    const dragDistance = useRef(0);
 
     // Initial appearance
     useEffect(() => {
@@ -41,8 +43,7 @@ const GlobalMascotSprite = () => {
                 pos.current.y += vel.current.vy;
                 
                 // Boundaries (assuming it starts at bottom right)
-                // x goes negative to left, y goes negative to top
-                const maxX = 50; // slightly out of right bounds
+                const maxX = 50;
                 const minX = -window.innerWidth + 100;
                 const maxY = 50;
                 const minY = -window.innerHeight + 100;
@@ -65,38 +66,51 @@ const GlobalMascotSprite = () => {
     }, []);
 
     const handlePointerDown = (e: React.PointerEvent) => {
+        if (spriteRef.current) {
+            spriteRef.current.setPointerCapture(e.pointerId);
+        }
         isDragging.current = true;
+        dragDistance.current = 0;
         lastMousePos.current = { x: e.clientX, y: e.clientY };
         
-        // Pause roaming while dragging
         if (containerRef.current) {
             containerRef.current.style.transition = 'none';
         }
+    };
 
-        const handlePointerMove = (moveEvent: PointerEvent) => {
-            if (!isDragging.current) return;
-            const dx = moveEvent.clientX - lastMousePos.current.x;
-            const dy = moveEvent.clientY - lastMousePos.current.y;
-            pos.current.x += dx;
-            pos.current.y += dy;
-            lastMousePos.current = { x: moveEvent.clientX, y: moveEvent.clientY };
-            
-            if (containerRef.current) {
-                containerRef.current.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0)`;
-                if (dx > 0) containerRef.current.style.scale = '-1 1';
-                else if (dx < 0) containerRef.current.style.scale = '1 1';
-            }
-        };
+    const handlePointerMove = (e: React.PointerEvent) => {
+        if (!isDragging.current) return;
+        const dx = e.clientX - lastMousePos.current.x;
+        const dy = e.clientY - lastMousePos.current.y;
+        
+        dragDistance.current += Math.abs(dx) + Math.abs(dy);
+        
+        // Update positions with boundary clamping
+        const maxX = 50;
+        const minX = -window.innerWidth + 100;
+        const maxY = 50;
+        const minY = -window.innerHeight + 100;
+        
+        pos.current.x = Math.max(minX, Math.min(maxX, pos.current.x + dx));
+        pos.current.y = Math.max(minY, Math.min(maxY, pos.current.y + dy));
+        
+        lastMousePos.current = { x: e.clientX, y: e.clientY };
+        
+        if (containerRef.current) {
+            containerRef.current.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0)`;
+            if (dx > 0) containerRef.current.style.scale = '-1 1';
+            else if (dx < 0) containerRef.current.style.scale = '1 1';
+        }
+    };
 
-        const handlePointerUp = () => {
-            isDragging.current = false;
-            window.removeEventListener('pointermove', handlePointerMove);
-            window.removeEventListener('pointerup', handlePointerUp);
-            // If they threw it fast, maybe update velocity here (optional)
-        };
-
-        window.addEventListener('pointermove', handlePointerMove);
-        window.addEventListener('pointerup', handlePointerUp);
+    const handlePointerUp = (e: React.PointerEvent) => {
+        isDragging.current = false;
+        if (spriteRef.current) {
+            spriteRef.current.releasePointerCapture(e.pointerId);
+        }
+        if (containerRef.current && !isRoaming.current) {
+            containerRef.current.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        }
     };
 
     let spriteImage = '/images/pawmi/ai_mascot_idle_clean_strip_transparent.png';
@@ -125,7 +139,7 @@ const GlobalMascotSprite = () => {
         tooltipText = '슈우웅~!';
         extraAnimation = 'floatSmooth 1s ease-in-out infinite';
         if (containerRef.current && containerRef.current.style.scale === '-1 1') {
-            flipTooltip = true; // Fix tooltip text reversing when sprite is flipped
+            flipTooltip = true;
         }
     }
 
@@ -142,9 +156,9 @@ const GlobalMascotSprite = () => {
     };
 
     const handleClick = () => {
-        if (isDragging.current) return; // Prevent click when releasing drag
+        if (dragDistance.current > 5) return; // Prevent click if the user was dragging
+        
         if (state === 'roam') {
-            // Stop roaming and go back home
             isRoaming.current = false;
             pos.current = { x: 0, y: 0 };
             if (containerRef.current) {
@@ -158,13 +172,13 @@ const GlobalMascotSprite = () => {
 
         if (state === 'double_click') return;
         setState('click');
-        // window.scrollTo({ top: 0, behavior: 'smooth' }); // Disable auto-scroll so dragging feels better
         setTimeout(() => setState('hover'), 2000);
     };
 
     const handleDoubleClick = () => {
+        if (dragDistance.current > 5) return; // Prevent double click if dragging
         if (state === 'roam') return;
-        // Start Roaming Mode
+        
         isRoaming.current = true;
         setState('roam');
     };
@@ -178,16 +192,20 @@ const GlobalMascotSprite = () => {
                 bottom: 0, 
                 right: 0,
                 zIndex: 9999,
-                touchAction: 'none' // Prevent scrolling while dragging on mobile
+                touchAction: 'none'
             }}
         >
             <div 
+                ref={spriteRef}
                 className="global-pawmi-sprite-container"
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 onClick={handleClick}
                 onDoubleClick={handleDoubleClick}
                 onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerUp}
+                onPointerCancel={handlePointerUp}
                 style={{
                     position: 'relative',
                     cursor: isDragging.current ? 'grabbing' : 'grab',
