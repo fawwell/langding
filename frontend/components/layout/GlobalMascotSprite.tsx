@@ -8,13 +8,9 @@ const GlobalMascotSprite = () => {
 
     // X, Y positions (relative to bottom-right fixed container)
     const containerRef = useRef<HTMLDivElement>(null);
-    const spriteRef = useRef<HTMLDivElement>(null);
     const pos = useRef({ x: 0, y: 0 });
     const vel = useRef({ vx: -2, vy: -1.5 });
-    const isDragging = useRef(false);
     const isRoaming = useRef(false);
-    const lastMousePos = useRef({ x: 0, y: 0 });
-    const dragDistance = useRef(0);
 
     // Initial appearance
     useEffect(() => {
@@ -26,7 +22,7 @@ const GlobalMascotSprite = () => {
     useEffect(() => {
         if (state !== 'default') return;
         const timer = setTimeout(() => {
-            if (!isDragging.current && !isRoaming.current) {
+            if (!isRoaming.current) {
                 setState('sleep');
             }
         }, 15000); 
@@ -38,7 +34,7 @@ const GlobalMascotSprite = () => {
         let animationFrameId: number;
         
         const roamLoop = () => {
-            if (isRoaming.current && !isDragging.current && containerRef.current) {
+            if (isRoaming.current && containerRef.current) {
                 pos.current.x += vel.current.vx;
                 pos.current.y += vel.current.vy;
                 
@@ -64,54 +60,6 @@ const GlobalMascotSprite = () => {
         roamLoop();
         return () => cancelAnimationFrame(animationFrameId);
     }, []);
-
-    const handlePointerDown = (e: React.PointerEvent) => {
-        if (spriteRef.current) {
-            spriteRef.current.setPointerCapture(e.pointerId);
-        }
-        isDragging.current = true;
-        dragDistance.current = 0;
-        lastMousePos.current = { x: e.clientX, y: e.clientY };
-        
-        if (containerRef.current) {
-            containerRef.current.style.transition = 'none';
-        }
-    };
-
-    const handlePointerMove = (e: React.PointerEvent) => {
-        if (!isDragging.current) return;
-        const dx = e.clientX - lastMousePos.current.x;
-        const dy = e.clientY - lastMousePos.current.y;
-        
-        dragDistance.current += Math.abs(dx) + Math.abs(dy);
-        
-        // Update positions with boundary clamping
-        const maxX = 50;
-        const minX = -window.innerWidth + 100;
-        const maxY = 50;
-        const minY = -window.innerHeight + 100;
-        
-        pos.current.x = Math.max(minX, Math.min(maxX, pos.current.x + dx));
-        pos.current.y = Math.max(minY, Math.min(maxY, pos.current.y + dy));
-        
-        lastMousePos.current = { x: e.clientX, y: e.clientY };
-        
-        if (containerRef.current) {
-            containerRef.current.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0)`;
-            if (dx > 0) containerRef.current.style.scale = '-1 1';
-            else if (dx < 0) containerRef.current.style.scale = '1 1';
-        }
-    };
-
-    const handlePointerUp = (e: React.PointerEvent) => {
-        isDragging.current = false;
-        if (spriteRef.current) {
-            spriteRef.current.releasePointerCapture(e.pointerId);
-        }
-        if (containerRef.current && !isRoaming.current) {
-            containerRef.current.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-        }
-    };
 
     let spriteImage = '/images/pawmi/ai_mascot_idle_clean_strip_transparent.png';
     let tooltipText = '안녕? 난 파우미야!';
@@ -156,8 +104,6 @@ const GlobalMascotSprite = () => {
     };
 
     const handleClick = () => {
-        if (dragDistance.current > 5) return; // Prevent click if the user was dragging
-        
         if (state === 'roam') {
             isRoaming.current = false;
             pos.current = { x: 0, y: 0 };
@@ -176,7 +122,6 @@ const GlobalMascotSprite = () => {
     };
 
     const handleDoubleClick = () => {
-        if (dragDistance.current > 5) return; // Prevent double click if dragging
         if (state === 'roam') return;
         
         isRoaming.current = true;
@@ -202,13 +147,9 @@ const GlobalMascotSprite = () => {
                 onMouseLeave={handleMouseLeave}
                 onClick={handleClick}
                 onDoubleClick={handleDoubleClick}
-                onPointerDown={handlePointerDown}
-                onPointerMove={handlePointerMove}
-                onPointerUp={handlePointerUp}
-                onPointerCancel={handlePointerUp}
                 style={{
                     position: 'relative',
-                    cursor: isDragging.current ? 'grabbing' : 'grab',
+                    cursor: 'pointer',
                     transition: 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
                     transform: (state === 'hover' || state === 'click' || state === 'double_click' || state === 'roam') ? 'scale(1.15) translateY(-10px)' : 'scale(1) translateY(0)',
                     willChange: 'transform'
