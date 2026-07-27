@@ -355,9 +355,9 @@ const GlobalMascotSprite = () => {
                         100% { transform: translateY(0px) scale(1, 1); }
                     }
                     @keyframes runSmooth {
-                        0% { transform: translateY(0px) scale(1); }
-                        50% { transform: translateY(-4px) scale(1.05); }
-                        100% { transform: translateY(0px) scale(1); }
+                        0% { transform: translateY(0px) scale(0.78); }
+                        50% { transform: translateY(-3px) scale(0.82); }
+                        100% { transform: translateY(0px) scale(0.78); }
                     }
                 `}} />
             </div>
