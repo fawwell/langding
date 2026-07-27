@@ -183,9 +183,9 @@ const GlobalMascotSprite = () => {
                 containerRef.current.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0)`;
                 // Flip mascot horizontally if moving left vs right (apply to sprite only)
                 if (spriteRef.current) {
-                    if (vel.current.vx < -0.5) {
+                    if (vel.current.vx < -0.05) {
                          spriteRef.current.style.scale = '1 1';
-                    } else if (vel.current.vx > 0.5) {
+                    } else if (vel.current.vx > 0.05) {
                          spriteRef.current.style.scale = '-1 1'; // look right
                     }
                 }
