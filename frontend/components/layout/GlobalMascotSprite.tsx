@@ -77,7 +77,7 @@ const GlobalMascotSprite = () => {
                     else if (combined.includes('comparison')) bestObj = { text: '기존 복지와 차원이 다른 맞춤형 관리', icon: <Scale size={15} /> };
                     else if (combined.includes('gateway')) bestObj = { text: '우리 회사에 꼭 맞는 서비스를 시작해 보세요', icon: <ArrowRight size={15} /> };
                     else if (combined.includes('review')) bestObj = { text: '도입 기업 임직원분들의 생생한 만족 후기', icon: <ThumbsUp size={15} /> };
-                    else if (combined.includes('map') || combined.includes('contact')) bestObj = { text: '전국 어디서나 편리하게 만나는 파우 센터', icon: <MapPin size={15} /> };
+                    else if (combined.includes('map') || combined.includes('contact')) bestObj = { text: '전국 어디든 직접 찾아가는 맞춤형 출장 케어', icon: <MapPin size={15} /> };
                     else if (combined.includes('partner')) bestObj = { text: '수많은 리딩 기업들이 파우와 함께합니다', icon: <Users size={15} /> };
                     else if (combined.includes('media')) bestObj = { text: '언론과 미디어가 주목하는 파우의 혁신', icon: <Play size={15} /> };
                 }
