@@ -3075,8 +3075,8 @@ header ul li a:hover, header ul li a.active-nav {
     text-align: left;
     min-width: 220px;
     max-width: 280px;
-    opacity: 0;
-    transform: translateY(40px) scale(0.95);
+    opacity: 1 !important;
+    transform: none;
     transition: all 1.2s cubic-bezier(0.19, 1, 0.22, 1), opacity 1.2s ease;
     cursor: pointer;
 }

@@ -60,7 +60,7 @@ const JellyChartSection = () => {
                     {/* 💎 부유하는 만족도 카드들 (실제 DB 연동 + PTS 제외 필터) */}
                     {b2bReviews.length > 0 ? (
                         b2bReviews.map((rev, idx) => (
-                            <div key={idx} className={`stat-floating-card card-${idx + 1} reveal delay-${idx + 4}`}>
+                            <div key={idx} className={`stat-floating-card card-${idx + 1}`}>
                                 <div className="stat-card-badge">CORPORATE</div>
                                 <h4>{rev.reviewer}</h4>
                                 <p className="rev-text">{rev.text}</p>
@@ -69,19 +69,19 @@ const JellyChartSection = () => {
                         ))
                     ) : (
                         <>
-                            <div className="stat-floating-card card-1 reveal delay-4">
+                            <div className="stat-floating-card card-1">
                                 <div className="stat-card-badge">CORPORATE</div>
                                 <h4>LG 디스플레이 임직원</h4>
                                 <p className="rev-text">&ldquo;사내로 찾아오는 AI 체형분석 기업복지 덕분에 고질적인 거북목과 허리 통증을 해결했습니다. 전문가들의 체계적인 개입이 돋보입니다.&rdquo;</p>
                                 <div style={{ color: '#fab005', fontSize: '12px', marginTop: '8px' }}>★★★★★</div>
                             </div>
-                            <div className="stat-floating-card card-2 reveal delay-5">
+                            <div className="stat-floating-card card-2">
                                 <div className="stat-card-badge">FIELD CARE</div>
                                 <h4>현대자동차 생산라인</h4>
                                 <p className="rev-text">&ldquo;근골격계 유해요인조사 사후관리의 일환으로 도입했습니다. 생산직 근로자의 특성을 반영한 1:1 케어 덕분에 실제 피로가 줄어들었습니다.&rdquo;</p>
                                 <div style={{ color: '#fab005', fontSize: '12px', marginTop: '8px' }}>★★★★★</div>
                             </div>
-                            <div className="stat-floating-card card-3 reveal delay-6">
+                            <div className="stat-floating-card card-3">
                                 <div className="stat-card-badge">OFFICE CARE</div>
                                 <h4>네이버 인사팀장</h4>
                                 <p className="rev-text">&ldquo;사내 임직원 근골격계 관리 복지 프로그램으로 정기 케어를 선택했는데, 업무 몰입과 사내 활력이 눈에 띄게 좋아졌습니다.&rdquo;</p>
