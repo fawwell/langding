@@ -134,8 +134,8 @@ const GlobalMascotSprite = () => {
             className="global-pawmi-roam-layer"
             style={{
                 position: 'fixed',
-                bottom: typeof window !== 'undefined' && window.innerWidth <= 768 ? '140px' : '20px', 
-                right: '20px',
+                bottom: '160px', 
+                right: '30px',
                 zIndex: 99999,
                 touchAction: 'none'
             }}
