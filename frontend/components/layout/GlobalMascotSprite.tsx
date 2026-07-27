@@ -7,6 +7,7 @@ const GlobalMascotSprite = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [currentSectionText, setCurrentSectionText] = useState('안녕? 난 파우미야!');
     const [isChasingState, setIsChasingState] = useState(false);
+    const [isRunningState, setIsRunningState] = useState(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const spriteRef = useRef<HTMLDivElement>(null);
@@ -56,7 +57,13 @@ const GlobalMascotSprite = () => {
                 }
             });
             
-            if (maxVisible > 0) setCurrentSectionText(bestText);
+            if (maxVisible > 0) {
+                if (bestText !== currentSectionText) {
+                    setIsRunningState(true);
+                    setTimeout(() => setIsRunningState(false), 2000);
+                }
+                setCurrentSectionText(bestText);
+            }
         }, { threshold: [0.2, 0.5, 0.8] });
 
         const sections = document.querySelectorAll('section, [class*="section" i], [class*="Section"]');
@@ -194,9 +201,13 @@ const GlobalMascotSprite = () => {
     let extraAnimation = 'floatSmooth 3s ease-in-out infinite';
     
     if (isChasingState) {
-        spriteImage = '/images/pawmi/ai_mascot_flying_clean_strip_transparent.png';
-        tooltipText = '잡았다 요놈!! 슝슝!';
-        extraAnimation = 'floatSmooth 0.5s ease-in-out infinite';
+        spriteImage = '/images/pawmi/ai_mascot_running_clean_strip_transparent.png';
+        tooltipText = '잡았다 요놈!! 다다다다!';
+        extraAnimation = 'runSmooth 0.3s ease-in-out infinite';
+    } else if (isRunningState) {
+        spriteImage = '/images/pawmi/ai_mascot_running_clean_strip_transparent.png';
+        tooltipText = currentSectionText;
+        extraAnimation = 'runSmooth 0.3s ease-in-out infinite';
     } else if (state === 'hover') {
         spriteImage = '/images/pawmi/ai_mascot_waving_strip_transparent.png';
         tooltipText = 'Shift 키를 꾹 눌러보세요!';
@@ -342,6 +353,11 @@ const GlobalMascotSprite = () => {
                         0% { transform: translateY(0px) scale(1, 1); }
                         40% { transform: translateY(-25px) scale(0.9, 1.1); }
                         100% { transform: translateY(0px) scale(1, 1); }
+                    }
+                    @keyframes runSmooth {
+                        0% { transform: translateY(0px) scale(1); }
+                        50% { transform: translateY(-4px) scale(1.05); }
+                        100% { transform: translateY(0px) scale(1); }
                     }
                 `}} />
             </div>
