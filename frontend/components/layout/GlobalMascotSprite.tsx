@@ -86,7 +86,7 @@ const GlobalMascotSprite = () => {
             });
             
             if (maxVisible > 0) {
-                setCurrentSectionObj(bestObj);
+                setCurrentSectionObj(prev => (prev.text === bestObj.text ? prev : bestObj));
             }
         }, { threshold: [0.2, 0.5, 0.8] });
 
@@ -132,6 +132,8 @@ const GlobalMascotSprite = () => {
 
     // High performance Organic Roaming Engine (Boids/Steering)
     const targetPos = useRef({ x: -200, y: -200 });
+    const lastScaleRef = useRef('1 1');
+    const lastPosRef = useRef({ x: -9999, y: -9999 });
 
     useEffect(() => {
         let animationFrameId: number;
@@ -152,12 +154,8 @@ const GlobalMascotSprite = () => {
                 let currentTarget = targetPos.current;
 
                 if (isChasing.current) {
-                    // Translate mouse coordinates to sprite's local translation space
-                    // container is fixed at bottom:160, right:120 (width:130, height:130)
-                    // We want the CENTER of the sprite (offset 65) to match the mouse
                     const containerOriginX = window.innerWidth - 250;
-                    const containerOriginY = window.innerHeight - 290; // 160 (bottom) + 130 (height)
-                    
+                    const containerOriginY = window.innerHeight - 290;
                     currentTarget = {
                         x: mousePos.current.x - containerOriginX - 65,
                         y: mousePos.current.y - containerOriginY - 65
@@ -190,16 +188,13 @@ const GlobalMascotSprite = () => {
                     }
                 }
 
-                // Steer towards target smoothly (slower when roaming for floating feel)
                 const targetVx = (dx / (dist || 1)) * (isChasing.current ? 7.0 : 2.5);
                 const targetVy = (dy / (dist || 1)) * (isChasing.current ? 7.0 : 2.5);
 
-                // Add erratic zigzag noise (much gentler noise for floating feel)
                 const noise = isChasing.current ? 0.5 : 0.3;
                 vel.current.vx += (targetVx - vel.current.vx) * 0.04 + (Math.random() - 0.5) * noise;
                 vel.current.vy += (targetVy - vel.current.vy) * 0.04 + (Math.random() - 0.5) * noise;
 
-                // Cap max velocity to avoid insane speeds (slower for gentle floating)
                 const maxSpeed = isChasing.current ? 8.0 : 4.0;
                 const speed = Math.sqrt(vel.current.vx * vel.current.vx + vel.current.vy * vel.current.vy);
                 if (speed > maxSpeed) {
@@ -210,7 +205,6 @@ const GlobalMascotSprite = () => {
                 pos.current.x += vel.current.vx;
                 pos.current.y += vel.current.vy;
 
-                // Soft boundaries (only apply if not chasing)
                 if (!isChasing.current) {
                     if (pos.current.x < minX - 50) vel.current.vx += 1;
                     if (pos.current.x > maxX + 50) vel.current.vx -= 1;
@@ -218,14 +212,22 @@ const GlobalMascotSprite = () => {
                     if (pos.current.y > maxY + 50) vel.current.vy -= 1;
                 }
 
-                containerRef.current.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0)`;
-                // Flip mascot horizontally if moving left vs right (apply to sprite only)
+                if (Math.abs(lastPosRef.current.x - pos.current.x) > 0.1 || Math.abs(lastPosRef.current.y - pos.current.y) > 0.1) {
+                    lastPosRef.current = { x: pos.current.x, y: pos.current.y };
+                    containerRef.current.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0)`;
+                }
+
                 if (spriteRef.current) {
                     const isRun = isChasing.current;
+                    let nextScale = lastScaleRef.current;
                     if (vel.current.vx < -0.05) {
-                         spriteRef.current.style.scale = isRun ? '-1 1' : '1 1';
+                         nextScale = isRun ? '-1 1' : '1 1';
                     } else if (vel.current.vx > 0.05) {
-                         spriteRef.current.style.scale = isRun ? '1 1' : '-1 1';
+                         nextScale = isRun ? '1 1' : '-1 1';
+                    }
+                    if (nextScale !== lastScaleRef.current) {
+                         lastScaleRef.current = nextScale;
+                         spriteRef.current.style.scale = nextScale;
                     }
                 }
             }
@@ -361,15 +363,15 @@ const GlobalMascotSprite = () => {
                     transform: 'translateX(-50%)',
                     width: 'max-content',
                     maxWidth: '350px',
-                    background: 'rgba(255, 255, 255, 0.96)',
-                    backdropFilter: 'blur(10px)',
+                    background: 'rgba(255, 255, 255, 0.98)',
                     padding: '9px 16px',
                     borderRadius: '16px',
-                    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06)',
+                    boxShadow: '0 8px 20px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.05)',
                     border: '1px solid rgba(255, 255, 255, 0.9)',
                     fontSize: '13.5px',
                     fontWeight: '700',
                     color: '#1e293b',
+                    willChange: 'opacity, transform',
                     opacity: (isArrived || isChasingState || state === 'hover' || state === 'click' || state === 'double_click' || state === 'sleep' || state === 'roam') ? 1 : 0,
                     transition: 'all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1)',
                     pointerEvents: 'none',
