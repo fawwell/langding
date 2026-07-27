@@ -67,7 +67,7 @@ const ReviewSection = () => {
                     height={80}
                     className="review-pawmi-mascot soft-reveal"
                 />
-                <h2 className="section-title reveal soft-reveal">담당자가 99%만족한 FaWW의 솔루션</h2>
+                <h2 className="section-title reveal soft-reveal">임직원이 99%만족한 FaWW의 솔루션</h2>
                 <div className="review-filter-wrapper reveal delay-2" style={{ textAlign: 'center', marginBottom: '20px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
                     <button className={`review-filter-btn ${reviewFilter === 'all' ? 'active' : ''}`} onClick={() => setReviewFilter('all')}>전체 보기</button>
                     <button className={`review-filter-btn ${reviewFilter === 'b2b' ? 'active' : ''}`} onClick={() => setReviewFilter('b2b')} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
