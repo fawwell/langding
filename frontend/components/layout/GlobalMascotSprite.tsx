@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 
 const GlobalMascotSprite = () => {
+    const pathname = usePathname();
     const [state, setState] = useState<'default' | 'hover' | 'click' | 'double_click' | 'sleep' | 'roam'>('default');
     const [isVisible, setIsVisible] = useState(false);
     const [currentSectionText, setCurrentSectionText] = useState('안녕? 난 파우미야!');
@@ -35,9 +37,21 @@ const GlobalMascotSprite = () => {
 
     // Section Scroll Observer
     useEffect(() => {
+        let defaultText = '안녕? 난 파우미야!';
+        if (pathname?.includes('/physical')) defaultText = 'AI 체형분석기 파우로 근골격계 건강을 챙겨보세요! 🦴💪';
+        else if (pathname?.includes('/mental')) defaultText = '임직원의 마음 건강과 심리까지 따뜻하게 케어해요! 🌿🧠';
+        else if (pathname?.includes('/mall')) defaultText = '엄선된 최저가 기업 복지몰 상품을 만나보세요! 🛒🎁';
+        else if (pathname?.includes('/eap')) defaultText = '우리 회사에 딱 맞는 맞춤형 기업복지 EAP 솔루션! 🏢🤝';
+        else if (pathname?.includes('/ai')) defaultText = '단 10초 만에 분석 완료! 놀라운 AI 체형 분석 기술! 🤖✨';
+        else if (pathname?.includes('/school')) defaultText = '바른 자세와 성장을 위한 학교/학생 맞춤형 솔루션! 🎒📚';
+        else if (pathname?.includes('/center')) defaultText = '전국 제휴 센터에서 전문적인 관리를 받아보세요! 🏥✨';
+        else if (pathname?.includes('/admin')) defaultText = '관리자 모드입니다. 효율적으로 운영 관리해 보세요! ⚙️👑';
+
+        setCurrentSectionText(defaultText);
+
         const observer = new IntersectionObserver((entries) => {
             let maxVisible = 0;
-            let bestText = '안녕? 난 파우미야!';
+            let bestText = defaultText;
 
             entries.forEach(entry => {
                 if (entry.isIntersecting && entry.intersectionRatio > maxVisible) {
@@ -64,7 +78,7 @@ const GlobalMascotSprite = () => {
         const sections = document.querySelectorAll('section, [class*="section" i], [class*="Section"]');
         sections.forEach(s => observer.observe(s));
         return () => observer.disconnect();
-    }, []);
+    }, [pathname]);
 
     // Mouse & Chase Event Listeners
     useEffect(() => {
