@@ -158,16 +158,16 @@ const GlobalMascotSprite = () => {
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
                 // Steer towards target smoothly (slower when roaming for floating feel)
-                const targetVx = (dx / (dist || 1)) * (isChasing.current ? 5.0 : 2.5);
-                const targetVy = (dy / (dist || 1)) * (isChasing.current ? 5.0 : 2.5);
+                const targetVx = (dx / (dist || 1)) * (isChasing.current ? 7.0 : 2.5);
+                const targetVy = (dy / (dist || 1)) * (isChasing.current ? 7.0 : 2.5);
 
                 // Add erratic zigzag noise (much gentler noise for floating feel)
-                const noise = isChasing.current ? 0.4 : 0.3;
+                const noise = isChasing.current ? 0.5 : 0.3;
                 vel.current.vx += (targetVx - vel.current.vx) * 0.04 + (Math.random() - 0.5) * noise;
                 vel.current.vy += (targetVy - vel.current.vy) * 0.04 + (Math.random() - 0.5) * noise;
 
                 // Cap max velocity to avoid insane speeds (slower for gentle floating)
-                const maxSpeed = isChasing.current ? 6.0 : 4.0;
+                const maxSpeed = isChasing.current ? 8.0 : 4.0;
                 const speed = Math.sqrt(vel.current.vx * vel.current.vx + vel.current.vy * vel.current.vy);
                 if (speed > maxSpeed) {
                     vel.current.vx = (vel.current.vx / speed) * maxSpeed;
@@ -206,9 +206,11 @@ const GlobalMascotSprite = () => {
     let tooltipText = currentSectionText;
     let extraAnimation = 'floatSmooth 3s ease-in-out infinite';
     
+    const isHeroSection = currentSectionText === '안녕? 난 파우미야!' || currentSectionText === '여기가 메인이에요! ✨';
+
     if (isChasingState) {
         spriteImage = '/images/pawmi/ai_mascot_running_clean_strip_transparent.png';
-        tooltipText = '잡았다 요놈!! 다다다다!';
+        tooltipText = isHeroSection ? '잡았다 요놈!! 다다다다!' : currentSectionText;
         extraAnimation = 'runSmooth 0.3s ease-in-out infinite';
     } else if (isRunningState) {
         spriteImage = '/images/pawmi/ai_mascot_running_clean_strip_transparent.png';
@@ -216,23 +218,23 @@ const GlobalMascotSprite = () => {
         extraAnimation = 'runSmooth 0.3s ease-in-out infinite';
     } else if (state === 'hover') {
         spriteImage = '/images/pawmi/ai_mascot_waving_strip_transparent.png';
-        tooltipText = '더블클릭 하거나 Shift 키를 꾹 눌러보세요! ✨';
+        tooltipText = isHeroSection ? '더블클릭 하거나 Shift 키를 꾹 눌러보세요! ✨' : currentSectionText;
         extraAnimation = 'none';
     } else if (state === 'click') {
         spriteImage = '/images/pawmi/ai_mascot_jumping_clean_strip_transparent.png';
-        tooltipText = '얍!!';
+        tooltipText = isHeroSection ? '얍!!' : currentSectionText;
         extraAnimation = 'jumpSmooth 0.5s ease-out';
     } else if (state === 'double_click') {
         spriteImage = '/images/pawmi/ai_mascot_dancing_clean_strip_transparent.png';
-        tooltipText = '신난다!! 춤추자!!';
+        tooltipText = isHeroSection ? '신난다!! 춤추자!!' : currentSectionText;
         extraAnimation = 'danceSmooth 1s ease-in-out infinite';
     } else if (state === 'sleep') {
         spriteImage = '/images/pawmi/ai_mascot_sleeping_clean_strip_transparent.png';
-        tooltipText = '쿨쿨... Zzz...';
+        tooltipText = isHeroSection ? '쿨쿨... Zzz...' : currentSectionText;
         extraAnimation = 'sleepSmooth 4s ease-in-out infinite';
     } else if (state === 'roam') {
         spriteImage = '/images/pawmi/ai_mascot_flying_clean_strip_transparent.png';
-        tooltipText = '슈우웅~!';
+        tooltipText = isHeroSection ? '슈우웅~!' : currentSectionText;
         extraAnimation = 'floatSmooth 1s ease-in-out infinite';
     }
 
