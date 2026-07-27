@@ -308,16 +308,16 @@ header {
 
 #page-home.page-content.active,
 #page-eap.page-content.active {
-    height: 100vh;
+    height: calc(100vh - 65px);
     overflow-y: auto;
     scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
 }
 
-#page-home section { 
-    scroll-snap-align: start; 
+#page-home section {
+    scroll-snap-align: start;
     scroll-snap-stop: always;
-    height: 100vh; 
+    height: calc(100vh - 65px); 
     display: flex; 
     flex-direction: column; 
     justify-content: flex-start; 
