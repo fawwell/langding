@@ -1,8 +1,10 @@
 from rembg import remove
 from PIL import Image
 
-input_path = r"c:\Users\onekt\Desktop\langding-main\frontend\public\images\pawmi\ai_mascot_strip.png"
-output_path = r"c:\Users\onekt\Desktop\langding-main\frontend\public\images\pawmi\ai_mascot_strip_transparent.png"
+import sys
+
+input_path = sys.argv[1]
+output_path = sys.argv[2]
 
 input_img = Image.open(input_path)
 output_img = remove(input_img)

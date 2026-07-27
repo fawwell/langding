@@ -1,8 +1,10 @@
 from PIL import Image
 import os
 
-input_path = r"c:\Users\onekt\Desktop\langding-main\frontend\public\images\pawmi\ai_mascot_2x2.png"
-output_path = r"c:\Users\onekt\Desktop\langding-main\frontend\public\images\pawmi\ai_mascot_strip.png"
+import sys
+
+input_path = sys.argv[1]
+output_path = sys.argv[2]
 
 img = Image.open(input_path).convert("RGBA")
 w, h = img.size
