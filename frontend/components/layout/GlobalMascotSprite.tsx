@@ -11,14 +11,14 @@ const GlobalMascotSprite = () => {
         return () => clearTimeout(timer);
     }, []);
 
-    let spriteImage = '/images/pawmi/ai_mascot_strip_transparent.png';
+    let spriteImage = '/images/pawmi/ai_mascot_idle_clean_strip_transparent.png';
     let tooltipText = '안녕? 난 파우미야!';
     
     if (state === 'hover') {
         spriteImage = '/images/pawmi/ai_mascot_waving_strip_transparent.png';
         tooltipText = '반가워요!';
     } else if (state === 'click') {
-        spriteImage = '/images/pawmi/ai_mascot_jumping_strip_transparent.png';
+        spriteImage = '/images/pawmi/ai_mascot_jumping_clean_strip_transparent.png';
         tooltipText = '맨 위로 가자!';
     }
 
