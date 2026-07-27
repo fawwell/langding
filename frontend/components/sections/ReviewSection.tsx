@@ -1,36 +1,64 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Building2, GraduationCap } from 'lucide-react';
+import Image from 'next/image';
+import { useUI } from '@/context/UIContext';
 
-interface ReviewSectionProps {
-    reviewFilter: string;
-    setReviewFilter: (filter: string) => void;
-    reviewsData: any[];
-}
+const ReviewSection = () => {
+    const { reviewsData } = useUI();
+    const [reviewFilter, setReviewFilter] = useState('all');
 
-const ReviewSection = ({ reviewFilter, setReviewFilter, reviewsData }: ReviewSectionProps) => {
+    useEffect(() => {
+        let swiperInstance: any = null;
+
+        const initSwiper = () => {
+            if (typeof (window as any).Swiper !== 'undefined') {
+                swiperInstance = new (window as any).Swiper(".reviewSwiper", {
+                    slidesPerView: 1, 
+                    spaceBetween: 20, 
+                    observer: true, 
+                    observeParents: true,
+                    navigation: {
+                        nextEl: ".review-swiper-button-next",
+                        prevEl: ".review-swiper-button-prev"
+                    },
+                    breakpoints: { 
+                        768: { slidesPerView: 2, spaceBetween: 20 }, 
+                        1024: { slidesPerView: 3, spaceBetween: 30 } 
+                    }
+                });
+            } else {
+                setTimeout(initSwiper, 200);
+            }
+        };
+
+        initSwiper();
+
+        return () => {
+            if (swiperInstance && swiperInstance.destroy) {
+                swiperInstance.destroy(true, true);
+            }
+        };
+    }, []);
+
+    // Filter changes should update swiper position
+    useEffect(() => {
+        const swiper = (document.querySelector('.reviewSwiper') as any)?.swiper;
+        if (swiper) {
+            swiper.update();
+            swiper.slideTo(0);
+        }
+    }, [reviewFilter, reviewsData]);
+
     return (
         <section className="testimonials reveal" style={{ position: 'relative' }}>
-            <style dangerouslySetInnerHTML={{ __html: `
-                @keyframes reviewPawmiFloat {
-                    0%, 100% { transform: translateY(0px) rotate(0deg); }
-                    50% { transform: translateY(-7px) rotate(-3deg); }
-                }
-                .review-pawmi-mascot {
-                    width: 80px;
-                    height: 80px;
-                    object-fit: contain;
-                    margin: 0 auto 10px auto;
-                    display: block;
-                    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15));
-                    animation: reviewPawmiFloat 3.4s ease-in-out infinite;
-                }
-            `}} />
             <div className="container" style={{ textAlign: 'center' }}>
-                <img 
+                <Image 
                     src="/images/pawmi/pawmi_sleepy.png" 
                     alt="후기 파우미" 
+                    width={80}
+                    height={80}
                     className="review-pawmi-mascot soft-reveal"
                 />
                 <h2 className="section-title reveal soft-reveal">담당자가 99%만족한 FaWW의 솔루션</h2>
@@ -76,4 +104,4 @@ const ReviewSection = ({ reviewFilter, setReviewFilter, reviewsData }: ReviewSec
     );
 };
 
-export default ReviewSection;
+export default React.memo(ReviewSection);

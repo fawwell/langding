@@ -1,58 +1,17 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 
 const TeaserSection = () => {
     return (
         <section className="teaser-section reveal" aria-label="임직원 근골격계 관리 및 AI 체형분석 기업복지 소개">
-            {/* 극극극강의 반응형 맞춤 디자인 오버라이드 */}
-            <style dangerouslySetInnerHTML={{ __html: `
-                .teaser-text {
-                    word-break: keep-all !important;
-                    overflow-wrap: break-word !important;
-                }
-                .teaser-mobile-br {
-                    display: none;
-                }
-                @media (max-width: 768px) {
-                    .teaser-mobile-br {
-                        display: block !important;
-                    }
-                    .teaser-text.step-2 {
-                        font-size: 20px !important;
-                        line-height: 1.6 !important;
-                    }
-                    .teaser-text.step-3 {
-                        font-size: 24px !important;
-                        line-height: 1.4 !important;
-                    }
-                    .teaser-text.step-4 {
-                        font-size: 15px !important;
-                        line-height: 1.6 !important;
-                        padding: 0 15px !important;
-                    }
-                }
-            `}} />
-
-            <style dangerouslySetInnerHTML={{ __html: `
-                @keyframes sadPawmiTilt {
-                    0%, 100% { transform: translateY(0px) rotate(-3deg); }
-                    50% { transform: translateY(-8px) rotate(3deg); }
-                }
-                .teaser-pawmi-sad {
-                    width: 100px;
-                    height: 100px;
-                    object-fit: contain;
-                    margin-bottom: 15px;
-                    filter: drop-shadow(0 6px 15px rgba(0,0,0,0.15));
-                    animation: sadPawmiTilt 3.5s ease-in-out infinite;
-                }
-            `}} />
-
             <div className="container text-center" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', position: 'relative' }}>
-                <img 
+                <Image 
                     src="/images/pawmi/pawmi_sad.png" 
                     alt="슬픈 파우미" 
+                    width={100}
+                    height={100}
                     className="teaser-pawmi-sad soft-reveal"
                 />
 

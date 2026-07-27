@@ -1,12 +1,44 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useUI } from '@/context/UIContext';
 
-interface MediaSectionProps {
-    mediaReports: any[];
-}
+const MediaSection = () => {
+    const { mediaReports } = useUI();
 
-const MediaSection = ({ mediaReports }: MediaSectionProps) => {
+    useEffect(() => {
+        let swiperInstance: any = null;
+
+        const initSwiper = () => {
+            if (typeof (window as any).Swiper !== 'undefined') {
+                swiperInstance = new (window as any).Swiper(".mediaSwiper", {
+                    slidesPerView: 1, 
+                    spaceBetween: 30, 
+                    observer: true, 
+                    observeParents: true,
+                    pagination: {
+                        el: ".media-swiper-pagination",
+                        clickable: true
+                    },
+                    navigation: {
+                        nextEl: ".media-swiper-button-next",
+                        prevEl: ".media-swiper-button-prev"
+                    }
+                });
+            } else {
+                setTimeout(initSwiper, 200);
+            }
+        };
+
+        initSwiper();
+
+        return () => {
+            if (swiperInstance && swiperInstance.destroy) {
+                swiperInstance.destroy(true, true);
+            }
+        };
+    }, [mediaReports]);
+
     const chunkArray = (arr: any[], size: number) => {
         const chunks = [];
         for (let i = 0; i < arr.length; i += size) {

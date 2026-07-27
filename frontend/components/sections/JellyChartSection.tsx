@@ -1,34 +1,28 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
+import Image from 'next/image';
+import { useUI } from '@/context/UIContext';
 
-interface JellyChartSectionProps {
-    reviewsData: any[];
-}
+const JellyChartSection = () => {
+    const { reviewsData } = useUI();
 
-const JellyChartSection = ({ reviewsData }: JellyChartSectionProps) => {
+    const b2bReviews = useMemo(() => {
+        return reviewsData.filter(r => r.type === 'b2b' && !r.reviewer.includes('PTS') && !r.text.includes('PTS')).slice(0, 3);
+    }, [reviewsData]);
+
     return (
         <section className="jelly-chart-section reveal" style={{ padding: '40px 0 60px', backgroundColor: '#f8f9fa', borderTop: '1px solid #eee', overflow: 'visible', position: 'relative' }}>
-            <style dangerouslySetInnerHTML={{ __html: `
-                @keyframes jellyPawmiFloat {
-                    0%, 100% { transform: translateY(0px) rotate(-3deg); }
-                    50% { transform: translateY(-8px) rotate(3deg); }
-                }
-                .jelly-pawmi-mascot {
-                    width: 90px;
-                    height: 90px;
-                    object-fit: contain;
-                    margin: 0 auto 10px auto;
-                    filter: drop-shadow(0 6px 15px rgba(0,0,0,0.15));
-                    animation: jellyPawmiFloat 3.6s ease-in-out infinite;
-                }
-            `}} />
             <div className="container text-center" style={{ overflow: 'visible' }}>
-                <img 
-                    src="/images/pawmi/pawmi_massage.png" 
-                    alt="만족도 99% 파우미" 
-                    className="jelly-pawmi-mascot soft-reveal"
-                />
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
+                    <Image 
+                        src="/images/pawmi/pawmi_massage.png" 
+                        alt="만족도 99% 파우미" 
+                        width={90}
+                        height={90}
+                        className="jelly-pawmi-mascot soft-reveal"
+                    />
+                </div>
                 <h2 className="section-title reveal soft-reveal" style={{ marginBottom: '10px' }}>FaWW <span className="text-highlight">피지컬케어 종합 만족도</span></h2>
                 <p className="section-desc reveal soft-reveal" style={{ marginBottom: '40px' }}>2만 건 이상의 데이터가 증명하는 압도적인 결과</p>
 
@@ -64,8 +58,8 @@ const JellyChartSection = ({ reviewsData }: JellyChartSectionProps) => {
                     </div>
 
                     {/* 💎 부유하는 만족도 카드들 (실제 DB 연동 + PTS 제외 필터) */}
-                    {reviewsData.filter(r => r.type === 'b2b' && !r.reviewer.includes('PTS') && !r.text.includes('PTS')).length > 0 ? (
-                        reviewsData.filter(r => r.type === 'b2b' && !r.reviewer.includes('PTS') && !r.text.includes('PTS')).slice(0, 3).map((rev, idx) => (
+                    {b2bReviews.length > 0 ? (
+                        b2bReviews.map((rev, idx) => (
                             <div key={idx} className={`stat-floating-card card-${idx + 1} reveal delay-${idx + 4}`}>
                                 <div className="stat-card-badge">CORPORATE</div>
                                 <h4>{rev.reviewer}</h4>
@@ -108,4 +102,4 @@ const JellyChartSection = ({ reviewsData }: JellyChartSectionProps) => {
     );
 };
 
-export default JellyChartSection;
+export default React.memo(JellyChartSection);
