@@ -149,9 +149,9 @@ const GlobalMascotSprite = () => {
 
                 if (isChasing.current) {
                     // Translate mouse coordinates to sprite's local translation space
-                    // container is fixed at bottom:160, right:30 (width:130, height:130)
+                    // container is fixed at bottom:160, right:120 (width:130, height:130)
                     // We want the CENTER of the sprite (offset 65) to match the mouse
-                    const containerOriginX = window.innerWidth - 160;
+                    const containerOriginX = window.innerWidth - 250;
                     const containerOriginY = window.innerHeight - 290; // 160 (bottom) + 130 (height)
                     
                     currentTarget = {
@@ -298,7 +298,7 @@ const GlobalMascotSprite = () => {
             style={{
                 position: 'fixed',
                 bottom: '160px', 
-                right: '30px',
+                right: '120px',
                 zIndex: 99999,
                 touchAction: 'none'
             }}
@@ -324,7 +324,7 @@ const GlobalMascotSprite = () => {
                     left: '50%',
                     transform: 'translateX(-50%)',
                     width: 'max-content',
-                    maxWidth: '400px',
+                    maxWidth: '350px',
                     background: 'rgba(255, 255, 255, 0.96)',
                     backdropFilter: 'blur(10px)',
                     padding: '9px 16px',
