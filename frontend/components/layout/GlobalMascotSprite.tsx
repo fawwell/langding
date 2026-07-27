@@ -55,18 +55,17 @@ const GlobalMascotSprite = () => {
             
             {/* 스프라이트 시트 애니메이션 레이어 */}
             <div className="pawmi-sprite" style={{
-                width: '130px', /* Frame Width 260의 절반 (레티나 디스플레이 대비) */
+                width: '130px',
                 height: '130px',
-                backgroundImage: 'url(/images/pawmi/pawmi_floating_sprite.png)',
-                backgroundSize: '1560px 130px', /* 12 프레임 * 130px = 1560px */
-                animation: 'playSprite 1.5s steps(12) infinite',
-                filter: 'drop-shadow(0 8px 15px rgba(0,0,0,0.2))',
+                backgroundImage: 'url(/images/pawmi/ai_mascot_strip_transparent.png)',
+                backgroundSize: '520px 130px',
+                animation: 'playSprite 1s steps(4) infinite',
                 willChange: 'background-position'
             }} />
 
             <style dangerouslySetInnerHTML={{__html: `
                 @keyframes playSprite {
-                    100% { background-position: -1560px 0; }
+                    100% { background-position: -520px 0; }
                 }
             `}} />
         </div>
