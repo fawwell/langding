@@ -6,8 +6,8 @@ const GlobalMascotSprite = () => {
     const [state, setState] = useState<'default' | 'hover' | 'click' | 'double_click' | 'sleep' | 'roam'>('default');
     const [isVisible, setIsVisible] = useState(false);
 
-    // X, Y positions (relative to bottom-right fixed container)
     const containerRef = useRef<HTMLDivElement>(null);
+    const spriteRef = useRef<HTMLDivElement>(null);
     const pos = useRef({ x: 0, y: 0 });
     const vel = useRef({ vx: -2, vy: -1.5 });
     const isRoaming = useRef(false);
@@ -29,59 +29,64 @@ const GlobalMascotSprite = () => {
         return () => clearTimeout(timer);
     }, [state]);
 
-    // High performance Roaming Engine (No React re-renders)
+    // High performance Organic Roaming Engine (Boids/Steering)
+    const targetPos = useRef({ x: -200, y: -200 });
+
     useEffect(() => {
         let animationFrameId: number;
         
         const roamLoop = () => {
             if (isRoaming.current && containerRef.current) {
+                // Safe bounds for targeting and soft collisions
+                const minX = -window.innerWidth + 200;
+                const maxX = -20;
+                const minY = -window.innerHeight + 320;
+                const maxY = 80;
+
+                const dx = targetPos.current.x - pos.current.x;
+                const dy = targetPos.current.y - pos.current.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                // If close to target, pick a new random target within safe bounds
+                if (dist < 100) {
+                    targetPos.current = {
+                        x: minX + Math.random() * (maxX - minX),
+                        y: minY + Math.random() * (maxY - minY)
+                    };
+                }
+
+                // Steer towards target smoothly
+                const targetVx = (dx / (dist || 1)) * 3;
+                const targetVy = (dy / (dist || 1)) * 3;
+
+                // Add erratic zigzag noise
+                vel.current.vx += (targetVx - vel.current.vx) * 0.03 + (Math.random() - 0.5) * 1.5;
+                vel.current.vy += (targetVy - vel.current.vy) * 0.03 + (Math.random() - 0.5) * 1.5;
+
+                // Cap max velocity to avoid insane speeds
+                const speed = Math.sqrt(vel.current.vx * vel.current.vx + vel.current.vy * vel.current.vy);
+                if (speed > 5) {
+                    vel.current.vx = (vel.current.vx / speed) * 5;
+                    vel.current.vy = (vel.current.vy / speed) * 5;
+                }
+
                 pos.current.x += vel.current.vx;
                 pos.current.y += vel.current.vy;
-                
-                // Precise boundaries based on sprite size (130x130) and start position (right: 30, bottom: 160)
-                const mascotWidth = 130;
-                const mascotHeight = 130;
-                const startRight = 30;
-                const startBottom = 160;
-                const padding = 10;
 
-                const minX = -window.innerWidth + (mascotWidth + startRight + padding);
-                const maxX = startRight - padding;
-
-                const minY = -window.innerHeight + (mascotHeight + startBottom + padding);
-                const maxY = startBottom - padding;
-
-                let hitWall = false;
-
-                if (pos.current.x <= minX || pos.current.x >= maxX) {
-                    vel.current.vx *= -1;
-                    vel.current.vy += (Math.random() - 0.5) * 2; // Flutter effect
-                    hitWall = true;
-                }
-                if (pos.current.y <= minY || pos.current.y >= maxY) {
-                    vel.current.vy *= -1;
-                    vel.current.vx += (Math.random() - 0.5) * 2; // Flutter effect
-                    hitWall = true;
-                }
-
-                // Prevent getting stuck outside boundaries
-                pos.current.x = Math.max(minX, Math.min(maxX, pos.current.x));
-                pos.current.y = Math.max(minY, Math.min(maxY, pos.current.y));
-
-                // Normalize velocity to keep a constant average speed
-                if (hitWall) {
-                    const speed = Math.sqrt(vel.current.vx * vel.current.vx + vel.current.vy * vel.current.vy);
-                    const targetSpeed = 2.5; // Constant speed
-                    vel.current.vx = (vel.current.vx / speed) * targetSpeed;
-                    vel.current.vy = (vel.current.vy / speed) * targetSpeed;
-                }
+                // Soft boundaries to gently repel it if it drifts too far out
+                if (pos.current.x < minX - 50) vel.current.vx += 1;
+                if (pos.current.x > maxX + 50) vel.current.vx -= 1;
+                if (pos.current.y < minY - 50) vel.current.vy += 1;
+                if (pos.current.y > maxY + 50) vel.current.vy -= 1;
 
                 containerRef.current.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0)`;
-                // Flip mascot horizontally if moving left vs right
-                if (vel.current.vx < 0) {
-                     containerRef.current.style.scale = '1 1';
-                } else {
-                     containerRef.current.style.scale = '-1 1'; // look right
+                // Flip mascot horizontally if moving left vs right (apply to sprite only)
+                if (spriteRef.current) {
+                    if (vel.current.vx < -0.5) {
+                         spriteRef.current.style.scale = '1 1';
+                    } else if (vel.current.vx > 0.5) {
+                         spriteRef.current.style.scale = '-1 1'; // look right
+                    }
                 }
             }
             animationFrameId = requestAnimationFrame(roamLoop);
@@ -93,7 +98,6 @@ const GlobalMascotSprite = () => {
     let spriteImage = '/images/pawmi/ai_mascot_idle_clean_strip_transparent.png';
     let tooltipText = '안녕? 난 파우미야!';
     let extraAnimation = 'floatSmooth 3s ease-in-out infinite';
-    let flipTooltip = false;
     
     if (state === 'hover') {
         spriteImage = '/images/pawmi/ai_mascot_waving_strip_transparent.png';
@@ -115,9 +119,6 @@ const GlobalMascotSprite = () => {
         spriteImage = '/images/pawmi/ai_mascot_flying_clean_strip_transparent.png';
         tooltipText = '슈우웅~!';
         extraAnimation = 'floatSmooth 1s ease-in-out infinite';
-        if (containerRef.current && containerRef.current.style.scale === '-1 1') {
-            flipTooltip = true;
-        }
     }
 
     if (!isVisible) return null;
@@ -190,7 +191,7 @@ const GlobalMascotSprite = () => {
                     position: 'absolute',
                     top: (state === 'hover' || state === 'click' || state === 'double_click' || state === 'sleep' || state === 'roam') ? '-35px' : '-25px',
                     left: '50%',
-                    transform: `translateX(-50%) ${flipTooltip ? 'scaleX(-1)' : 'scaleX(1)'}`,
+                    transform: 'translateX(-50%)',
                     background: '#fff',
                     padding: '8px 14px',
                     borderRadius: '20px',
@@ -209,7 +210,7 @@ const GlobalMascotSprite = () => {
                     {tooltipText}
                 </div>
                 
-                <div className="pawmi-sprite" style={{
+                <div ref={spriteRef} className="pawmi-sprite" style={{
                     width: '130px',
                     height: '130px',
                     backgroundImage: `url(${spriteImage})`,
