@@ -10,8 +10,8 @@ const HeroSection = () => {
     const { openModal } = useUI();
 
     return (
-        <section className="hero-brand reveal">
-            <video className="hero-video-bg" autoPlay loop muted playsInline preload="metadata" style={{ willChange: 'transform', transform: 'translateZ(0)' }} poster="/images/video_poster.jpg">
+        <section className="hero-brand reveal active">
+            <video className="hero-video-bg" autoPlay loop muted playsInline preload="metadata" style={{ willChange: 'transform', transform: 'translateZ(0)' }}>
                 <source src="/background3.mp4" type="video/mp4" />
             </video>
             <div className="hero-overlay"></div>
