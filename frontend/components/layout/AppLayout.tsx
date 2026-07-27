@@ -303,8 +303,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                     z-index: 100;
                 }
             `}} />
+            <GlobalMascotSprite />
             <div className="fab-container" style={{ position: 'fixed' }}>
-                <GlobalMascotSprite />
                 <div className="cert-badge" onClick={() => openModal('modal-cert')}>
                     <span className="badge-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" style={{ width: '18px', height: '18px' }}>

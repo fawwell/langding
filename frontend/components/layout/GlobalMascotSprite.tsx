@@ -68,7 +68,7 @@ const GlobalMascotSprite = () => {
     
     if (state === 'hover') {
         spriteImage = '/images/pawmi/ai_mascot_waving_strip_transparent.png';
-        tooltipText = '드래그해서 던져보세요!';
+        tooltipText = '반가워요! 더블클릭 해볼래요?';
         extraAnimation = 'none';
     } else if (state === 'click') {
         spriteImage = '/images/pawmi/ai_mascot_jumping_clean_strip_transparent.png';
@@ -94,17 +94,17 @@ const GlobalMascotSprite = () => {
     if (!isVisible) return null;
 
     const handleMouseEnter = () => {
-        if (state === 'roam') return;
+        if (isRoaming.current) return;
         if (state !== 'click' && state !== 'double_click') setState('hover');
     };
 
     const handleMouseLeave = () => {
-        if (state === 'roam') return;
+        if (isRoaming.current) return;
         if (state !== 'click' && state !== 'double_click') setState('default');
     };
 
     const handleClick = () => {
-        if (state === 'roam') {
+        if (isRoaming.current) {
             isRoaming.current = false;
             pos.current = { x: 0, y: 0 };
             if (containerRef.current) {
@@ -122,7 +122,7 @@ const GlobalMascotSprite = () => {
     };
 
     const handleDoubleClick = () => {
-        if (state === 'roam') return;
+        if (isRoaming.current) return;
         
         isRoaming.current = true;
         setState('roam');
@@ -133,9 +133,9 @@ const GlobalMascotSprite = () => {
             ref={containerRef}
             className="global-pawmi-roam-layer"
             style={{
-                position: 'absolute',
-                bottom: 0, 
-                right: 0,
+                position: 'fixed',
+                bottom: typeof window !== 'undefined' && window.innerWidth <= 768 ? '140px' : '20px', 
+                right: '20px',
                 zIndex: 9999,
                 touchAction: 'none'
             }}
