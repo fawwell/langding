@@ -118,7 +118,10 @@ const GlobalMascotSprite = () => {
 
         if (state === 'double_click') return;
         setState('click');
-        setTimeout(() => setState('hover'), 2000);
+        setTimeout(() => {
+            if (isRoaming.current) return;
+            setState('hover');
+        }, 2000);
     };
 
     const handleDoubleClick = () => {
