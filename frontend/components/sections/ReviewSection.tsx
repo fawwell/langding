@@ -72,7 +72,7 @@ const ReviewSection = () => {
                     </button>
                 </div>
 
-                <div className="swiper reviewSwiper" key={`${reviewsData.length}-${reviewFilter}`} style={{ marginTop: '40px', padding: '20px 50px', position: 'relative' }}>
+                <div className="swiper reviewSwiper" style={{ marginTop: '40px', padding: '20px 50px', position: 'relative' }}>
                     <div className="swiper-wrapper" id="review-wrapper">
                         {reviewsData.length > 0 ? (
                             reviewsData
