@@ -17,25 +17,30 @@ const GlobalMascotSprite = () => {
         if (state !== 'default') return;
         const timer = setTimeout(() => {
             setState('sleep');
-        }, 15000); // 15초 동안 아무 반응 없으면 수면
+        }, 15000); 
         return () => clearTimeout(timer);
     }, [state]);
 
     let spriteImage = '/images/pawmi/ai_mascot_idle_clean_strip_transparent.png';
     let tooltipText = '안녕? 난 파우미야!';
+    let extraAnimation = 'floatSmooth 3s ease-in-out infinite';
     
     if (state === 'hover') {
         spriteImage = '/images/pawmi/ai_mascot_waving_strip_transparent.png';
         tooltipText = '반가워요!';
+        extraAnimation = 'none';
     } else if (state === 'click') {
         spriteImage = '/images/pawmi/ai_mascot_jumping_clean_strip_transparent.png';
         tooltipText = '위로 점프!';
+        extraAnimation = 'jumpSmooth 0.5s ease-out';
     } else if (state === 'double_click') {
         spriteImage = '/images/pawmi/ai_mascot_dancing_clean_strip_transparent.png';
         tooltipText = '신난다!! 춤추자!!';
+        extraAnimation = 'danceSmooth 1s ease-in-out infinite';
     } else if (state === 'sleep') {
         spriteImage = '/images/pawmi/ai_mascot_sleeping_clean_strip_transparent.png';
         tooltipText = '쿨쿨... Zzz...';
+        extraAnimation = 'sleepSmooth 4s ease-in-out infinite';
     }
 
     if (!isVisible) return null;
@@ -104,13 +109,35 @@ const GlobalMascotSprite = () => {
                 height: '130px',
                 backgroundImage: `url(${spriteImage})`,
                 backgroundSize: '520px 130px',
-                animation: 'playSprite 1s steps(4) infinite',
-                willChange: 'background-position'
+                animation: `playSprite 1s steps(4) infinite, ${extraAnimation}`,
+                willChange: 'background-position, transform'
             }} />
 
             <style dangerouslySetInnerHTML={{__html: `
                 @keyframes playSprite {
                     100% { background-position: -520px 0; }
+                }
+                @keyframes floatSmooth {
+                    0% { transform: translateY(0px); }
+                    50% { transform: translateY(-8px); }
+                    100% { transform: translateY(0px); }
+                }
+                @keyframes sleepSmooth {
+                    0% { transform: scale(1); }
+                    50% { transform: scale(1.05) translateY(-2px); }
+                    100% { transform: scale(1); }
+                }
+                @keyframes danceSmooth {
+                    0% { transform: rotate(0deg) scale(1); }
+                    25% { transform: rotate(-10deg) scale(1.1); }
+                    50% { transform: rotate(0deg) scale(1); }
+                    75% { transform: rotate(10deg) scale(1.1); }
+                    100% { transform: rotate(0deg) scale(1); }
+                }
+                @keyframes jumpSmooth {
+                    0% { transform: translateY(0px) scale(1, 1); }
+                    40% { transform: translateY(-25px) scale(0.9, 1.1); }
+                    100% { transform: translateY(0px) scale(1, 1); }
                 }
             `}} />
         </div>
