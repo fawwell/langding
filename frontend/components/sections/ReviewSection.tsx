@@ -18,8 +18,9 @@ const ReviewSection = () => {
                     slidesPerView: 1, 
                     spaceBetween: 20, 
                     loop: true,
+                    speed: 800,
                     autoplay: {
-                        delay: 3000,
+                        delay: 2500,
                         disableOnInteraction: false,
                     },
                     observer: true, 

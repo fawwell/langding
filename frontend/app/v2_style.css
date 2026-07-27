@@ -3774,3 +3774,9 @@ header ul li a:hover, header ul li a.active-nav {
     filter: drop-shadow(0 6px 15px rgba(0,0,0,0.15));
     animation: sadPawmiTilt 3.5s ease-in-out infinite;
 }
+
+/* Hardware Acceleration Fixes */
+.jelly-pawmi-mascot, .review-pawmi-mascot {
+    will-change: transform;
+    transform: translateZ(0);
+}
