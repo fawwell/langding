@@ -2,12 +2,21 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
+import { 
+    Sparkles, HeartPulse, Brain, ShoppingBag, Building2, Bot, 
+    GraduationCap, Hospital, ShieldCheck, ThumbsUp, Users, 
+    Scale, ArrowRight, MapPin, TrendingUp, Lightbulb, 
+    Activity, Play, Zap, CheckCircle2, Navigation, Flame
+} from 'lucide-react';
 
 const GlobalMascotSprite = () => {
     const pathname = usePathname();
     const [state, setState] = useState<'default' | 'hover' | 'click' | 'double_click' | 'sleep' | 'roam'>('default');
     const [isVisible, setIsVisible] = useState(false);
-    const [currentSectionText, setCurrentSectionText] = useState('안녕? 난 파우미야!');
+    const [currentSectionObj, setCurrentSectionObj] = useState<{ text: string; icon: React.ReactNode }>({
+        text: '파우(FaWW)에 오신 것을 환영합니다',
+        icon: <Sparkles size={15} />
+    });
     const [isChasingState, setIsChasingState] = useState(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -37,21 +46,21 @@ const GlobalMascotSprite = () => {
 
     // Section Scroll Observer
     useEffect(() => {
-        let defaultText = '파우(FaWW)에 오신 것을 환영합니다 ✦';
-        if (pathname?.includes('/physical')) defaultText = 'AI 체형분석기 · 근골격계 건강 관리 ✦';
-        else if (pathname?.includes('/mental')) defaultText = '임직원 심리 및 마음 건강 케어 ∙';
-        else if (pathname?.includes('/mall')) defaultText = '엄선된 최저가 기업 복지몰 ✦';
-        else if (pathname?.includes('/eap')) defaultText = '맞춤형 기업복지 EAP 솔루션 ∙';
-        else if (pathname?.includes('/ai')) defaultText = '단 10초 완료 · 놀라운 AI 정밀 분석 ✦';
-        else if (pathname?.includes('/school')) defaultText = '바른 자세와 성장을 위한 맞춤 솔루션 ∙';
-        else if (pathname?.includes('/center')) defaultText = '전국 제휴 센터 · 전문적인 관리 ✦';
-        else if (pathname?.includes('/admin')) defaultText = '관리자 모드 · 효율적인 운영 관리 ∙';
+        let defaultObj = { text: '파우(FaWW)에 오신 것을 환영합니다', icon: <Sparkles size={15} /> };
+        if (pathname?.includes('/physical')) defaultObj = { text: 'AI 체형분석기 · 근골격계 건강 관리', icon: <HeartPulse size={15} /> };
+        else if (pathname?.includes('/mental')) defaultObj = { text: '임직원 심리 및 마음 건강 케어', icon: <Brain size={15} /> };
+        else if (pathname?.includes('/mall')) defaultObj = { text: '엄선된 최저가 기업 복지몰', icon: <ShoppingBag size={15} /> };
+        else if (pathname?.includes('/eap')) defaultObj = { text: '맞춤형 기업복지 EAP 솔루션', icon: <Building2 size={15} /> };
+        else if (pathname?.includes('/ai')) defaultObj = { text: '단 10초 완료 · 놀라운 AI 정밀 분석', icon: <Bot size={15} /> };
+        else if (pathname?.includes('/school')) defaultObj = { text: '바른 자세와 성장을 위한 맞춤 솔루션', icon: <GraduationCap size={15} /> };
+        else if (pathname?.includes('/center')) defaultObj = { text: '전국 제휴 센터 · 전문적인 관리', icon: <Hospital size={15} /> };
+        else if (pathname?.includes('/admin')) defaultObj = { text: '관리자 모드 · 효율적인 운영 관리', icon: <ShieldCheck size={15} /> };
 
-        setCurrentSectionText(defaultText);
+        setCurrentSectionObj(defaultObj);
 
         const observer = new IntersectionObserver((entries) => {
             let maxVisible = 0;
-            let bestText = defaultText;
+            let bestObj = defaultObj;
 
             entries.forEach(entry => {
                 if (entry.isIntersecting && entry.intersectionRatio > maxVisible) {
@@ -60,22 +69,22 @@ const GlobalMascotSprite = () => {
                     const className = entry.target.className.toLowerCase();
                     const combined = id + ' ' + className;
 
-                    if (combined.includes('hero')) bestText = '파우(FaWW)에 오신 것을 환영합니다 ✦';
-                    else if (combined.includes('teaser')) bestText = '기업 근골격계 복지의 새로운 기준 · 파우';
-                    else if (combined.includes('magnify')) bestText = '숨은 통증과 원인을 정밀하게 들여다봅니다 ∙';
-                    else if (combined.includes('jelly') || combined.includes('chart')) bestText = '데이터로 증명되는 명확한 개선 지표 ↗';
-                    else if (combined.includes('agenda')) bestText = '임직원 건강을 위한 핵심 솔루션 제안 ✦';
-                    else if (combined.includes('comparison')) bestText = '기존 복지와 차원이 다른 맞춤형 관리 ∙';
-                    else if (combined.includes('gateway')) bestText = '우리 회사에 꼭 맞는 서비스를 시작해 보세요 →';
-                    else if (combined.includes('review')) bestText = '도입 기업 임직원분들의 생생한 만족 후기 ★';
-                    else if (combined.includes('map') || combined.includes('contact')) bestText = '전국 어디서나 편리하게 만나는 파우 센터 ∙';
-                    else if (combined.includes('partner')) bestText = '수많은 리딩 기업들이 파우와 함께합니다 ◆';
-                    else if (combined.includes('media')) bestText = '언론과 미디어가 주목하는 파우의 혁신 ∙';
+                    if (combined.includes('hero')) bestObj = { text: '파우(FaWW)에 오신 것을 환영합니다', icon: <Sparkles size={15} /> };
+                    else if (combined.includes('teaser')) bestObj = { text: '기업 근골격계 복지의 새로운 기준 · 파우', icon: <ShieldCheck size={15} /> };
+                    else if (combined.includes('magnify')) bestObj = { text: '숨은 통증과 원인을 정밀하게 진단합니다', icon: <Activity size={15} /> };
+                    else if (combined.includes('jelly') || combined.includes('chart')) bestObj = { text: '데이터로 증명되는 명확한 개선 지표', icon: <TrendingUp size={15} /> };
+                    else if (combined.includes('agenda')) bestObj = { text: '임직원 건강을 위한 핵심 솔루션 제안', icon: <Lightbulb size={15} /> };
+                    else if (combined.includes('comparison')) bestObj = { text: '기존 복지와 차원이 다른 맞춤형 관리', icon: <Scale size={15} /> };
+                    else if (combined.includes('gateway')) bestObj = { text: '우리 회사에 꼭 맞는 서비스를 시작해 보세요', icon: <ArrowRight size={15} /> };
+                    else if (combined.includes('review')) bestObj = { text: '도입 기업 임직원분들의 생생한 만족 후기', icon: <ThumbsUp size={15} /> };
+                    else if (combined.includes('map') || combined.includes('contact')) bestObj = { text: '전국 어디서나 편리하게 만나는 파우 센터', icon: <MapPin size={15} /> };
+                    else if (combined.includes('partner')) bestObj = { text: '수많은 리딩 기업들이 파우와 함께합니다', icon: <Users size={15} /> };
+                    else if (combined.includes('media')) bestObj = { text: '언론과 미디어가 주목하는 파우의 혁신', icon: <Play size={15} /> };
                 }
             });
             
             if (maxVisible > 0) {
-                setCurrentSectionText(bestText);
+                setCurrentSectionObj(bestObj);
             }
         }, { threshold: [0.2, 0.5, 0.8] });
 
@@ -211,34 +220,34 @@ const GlobalMascotSprite = () => {
     }, []);
 
     let spriteImage = '/images/pawmi/ai_mascot_idle_clean_strip_transparent.png';
-    let tooltipText = currentSectionText;
+    let tooltipObj = currentSectionObj;
     let extraAnimation = 'floatSmooth 3s ease-in-out infinite';
     
-    const isHeroSection = currentSectionText.includes('환영합니다') || currentSectionText.includes('파우미야');
+    const isHeroSection = currentSectionObj.text.includes('환영합니다') || currentSectionObj.text.includes('파우미야');
 
     if (isChasingState) {
         spriteImage = '/images/pawmi/ai_mascot_running_clean_strip_transparent.png';
-        tooltipText = isHeroSection ? '잡았다 요놈!! 다다다다' : currentSectionText;
+        tooltipObj = isHeroSection ? { text: '잡았다 요놈!! 다다다다', icon: <Flame size={15} /> } : currentSectionObj;
         extraAnimation = 'runSmooth 0.3s ease-in-out infinite';
     } else if (state === 'hover') {
         spriteImage = '/images/pawmi/ai_mascot_waving_strip_transparent.png';
-        tooltipText = isHeroSection ? '더블클릭 하거나 Shift 키를 꾹 눌러보세요 ✦' : currentSectionText;
+        tooltipObj = isHeroSection ? { text: '더블클릭 하거나 Shift 키를 꾹 눌러보세요', icon: <Sparkles size={15} /> } : currentSectionObj;
         extraAnimation = 'none';
     } else if (state === 'click') {
         spriteImage = '/images/pawmi/ai_mascot_jumping_clean_strip_transparent.png';
-        tooltipText = isHeroSection ? '얍!!' : currentSectionText;
+        tooltipObj = isHeroSection ? { text: '얍!!', icon: <CheckCircle2 size={15} /> } : currentSectionObj;
         extraAnimation = 'jumpSmooth 0.5s ease-out';
     } else if (state === 'double_click') {
         spriteImage = '/images/pawmi/ai_mascot_dancing_clean_strip_transparent.png';
-        tooltipText = isHeroSection ? '신난다!! 춤추자!!' : currentSectionText;
+        tooltipObj = isHeroSection ? { text: '신난다!! 춤추자', icon: <Sparkles size={15} /> } : currentSectionObj;
         extraAnimation = 'danceSmooth 1s ease-in-out infinite';
     } else if (state === 'sleep') {
         spriteImage = '/images/pawmi/ai_mascot_sleeping_clean_strip_transparent.png';
-        tooltipText = isHeroSection ? '쿨쿨... Zzz...' : currentSectionText;
+        tooltipObj = isHeroSection ? { text: '쿨쿨... Zzz...', icon: <Activity size={15} /> } : currentSectionObj;
         extraAnimation = 'sleepSmooth 4s ease-in-out infinite';
     } else if (state === 'roam') {
         spriteImage = '/images/pawmi/ai_mascot_flying_clean_strip_transparent.png';
-        tooltipText = isHeroSection ? '슈우웅~!' : currentSectionText;
+        tooltipObj = isHeroSection ? { text: '슈우웅~!', icon: <Navigation size={15} /> } : currentSectionObj;
         extraAnimation = 'floatSmooth 1s ease-in-out infinite';
     }
 
@@ -328,7 +337,10 @@ const GlobalMascotSprite = () => {
                     letterSpacing: '-0.5px',
                     zIndex: 2
                 }}>
-                    {tooltipText}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        {tooltipObj.icon}
+                        <span>{tooltipObj.text}</span>
+                    </div>
                 </div>
                 
                 <div ref={spriteRef} className="pawmi-sprite" style={{
