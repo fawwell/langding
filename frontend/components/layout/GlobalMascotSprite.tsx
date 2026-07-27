@@ -15,6 +15,7 @@ const GlobalMascotSprite = () => {
     const vel = useRef({ vx: -2, vy: -1.5 });
     const isRoaming = useRef(false);
     const isChasing = useRef(false);
+    const isRunningRef = useRef(false);
     const mousePos = useRef({ x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0 });
 
     // Initial appearance
@@ -60,7 +61,11 @@ const GlobalMascotSprite = () => {
             if (maxVisible > 0) {
                 if (bestText !== currentSectionText) {
                     setIsRunningState(true);
-                    setTimeout(() => setIsRunningState(false), 2000);
+                    isRunningRef.current = true;
+                    setTimeout(() => {
+                        setIsRunningState(false);
+                        isRunningRef.current = false;
+                    }, 2000);
                 }
                 setCurrentSectionText(bestText);
             }
@@ -183,10 +188,11 @@ const GlobalMascotSprite = () => {
                 containerRef.current.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0)`;
                 // Flip mascot horizontally if moving left vs right (apply to sprite only)
                 if (spriteRef.current) {
+                    const isRun = isChasing.current || isRunningRef.current;
                     if (vel.current.vx < -0.05) {
-                         spriteRef.current.style.scale = '1 1';
+                         spriteRef.current.style.scale = isRun ? '-1 1' : '1 1';
                     } else if (vel.current.vx > 0.05) {
-                         spriteRef.current.style.scale = '-1 1'; // look right
+                         spriteRef.current.style.scale = isRun ? '1 1' : '-1 1';
                     }
                 }
             }
