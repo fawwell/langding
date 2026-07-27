@@ -7,7 +7,6 @@ const GlobalMascotSprite = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [currentSectionText, setCurrentSectionText] = useState('안녕? 난 파우미야!');
     const [isChasingState, setIsChasingState] = useState(false);
-    const [isRunningState, setIsRunningState] = useState(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const spriteRef = useRef<HTMLDivElement>(null);
@@ -15,7 +14,6 @@ const GlobalMascotSprite = () => {
     const vel = useRef({ vx: -2, vy: -1.5 });
     const isRoaming = useRef(false);
     const isChasing = useRef(false);
-    const isRunningRef = useRef(false);
     const mousePos = useRef({ x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0 });
 
     // Initial appearance
@@ -59,14 +57,6 @@ const GlobalMascotSprite = () => {
             });
             
             if (maxVisible > 0) {
-                if (bestText !== currentSectionText) {
-                    setIsRunningState(true);
-                    isRunningRef.current = true;
-                    setTimeout(() => {
-                        setIsRunningState(false);
-                        isRunningRef.current = false;
-                    }, 2000);
-                }
                 setCurrentSectionText(bestText);
             }
         }, { threshold: [0.2, 0.5, 0.8] });
@@ -188,7 +178,7 @@ const GlobalMascotSprite = () => {
                 containerRef.current.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0)`;
                 // Flip mascot horizontally if moving left vs right (apply to sprite only)
                 if (spriteRef.current) {
-                    const isRun = isChasing.current || isRunningRef.current;
+                    const isRun = isChasing.current;
                     if (vel.current.vx < -0.05) {
                          spriteRef.current.style.scale = isRun ? '-1 1' : '1 1';
                     } else if (vel.current.vx > 0.05) {
@@ -211,10 +201,6 @@ const GlobalMascotSprite = () => {
     if (isChasingState) {
         spriteImage = '/images/pawmi/ai_mascot_running_clean_strip_transparent.png';
         tooltipText = isHeroSection ? '잡았다 요놈!! 다다다다!' : currentSectionText;
-        extraAnimation = 'runSmooth 0.3s ease-in-out infinite';
-    } else if (isRunningState) {
-        spriteImage = '/images/pawmi/ai_mascot_running_clean_strip_transparent.png';
-        tooltipText = currentSectionText;
         extraAnimation = 'runSmooth 0.3s ease-in-out infinite';
     } else if (state === 'hover') {
         spriteImage = '/images/pawmi/ai_mascot_waving_strip_transparent.png';
