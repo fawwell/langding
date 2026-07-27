@@ -94,12 +94,12 @@ const GlobalMascotSprite = () => {
     if (!isVisible) return null;
 
     const handleMouseEnter = () => {
-        if (state === 'roam' || isDragging.current) return;
+        if (state === 'roam') return;
         if (state !== 'click' && state !== 'double_click') setState('hover');
     };
 
     const handleMouseLeave = () => {
-        if (state === 'roam' || isDragging.current) return;
+        if (state === 'roam') return;
         if (state !== 'click' && state !== 'double_click') setState('default');
     };
 
@@ -141,7 +141,6 @@ const GlobalMascotSprite = () => {
             }}
         >
             <div 
-                ref={spriteRef}
                 className="global-pawmi-sprite-container"
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
