@@ -158,16 +158,16 @@ const GlobalMascotSprite = () => {
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
                 // Steer towards target smoothly (slower when roaming for floating feel)
-                const targetVx = (dx / (dist || 1)) * (isChasing.current ? 3.5 : 1.2);
-                const targetVy = (dy / (dist || 1)) * (isChasing.current ? 3.5 : 1.2);
+                const targetVx = (dx / (dist || 1)) * (isChasing.current ? 5.0 : 2.5);
+                const targetVy = (dy / (dist || 1)) * (isChasing.current ? 5.0 : 2.5);
 
                 // Add erratic zigzag noise (much gentler noise for floating feel)
-                const noise = isChasing.current ? 0.3 : 0.25;
+                const noise = isChasing.current ? 0.4 : 0.3;
                 vel.current.vx += (targetVx - vel.current.vx) * 0.04 + (Math.random() - 0.5) * noise;
                 vel.current.vy += (targetVy - vel.current.vy) * 0.04 + (Math.random() - 0.5) * noise;
 
                 // Cap max velocity to avoid insane speeds (slower for gentle floating)
-                const maxSpeed = isChasing.current ? 4.0 : 2.0;
+                const maxSpeed = isChasing.current ? 6.0 : 4.0;
                 const speed = Math.sqrt(vel.current.vx * vel.current.vx + vel.current.vy * vel.current.vy);
                 if (speed > maxSpeed) {
                     vel.current.vx = (vel.current.vx / speed) * maxSpeed;
