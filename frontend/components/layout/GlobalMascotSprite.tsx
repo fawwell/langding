@@ -3,14 +3,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 const GlobalMascotSprite = () => {
-    const [state, setState] = useState<'default' | 'hover' | 'click' | 'double_click' | 'sleep' | 'roam'>('default');
-    const [isVisible, setIsVisible] = useState(false);
+    const [currentSectionText, setCurrentSectionText] = useState('안녕? 난 파우미야!');
+    const [isChasingState, setIsChasingState] = useState(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const spriteRef = useRef<HTMLDivElement>(null);
     const pos = useRef({ x: 0, y: 0 });
     const vel = useRef({ vx: -2, vy: -1.5 });
     const isRoaming = useRef(false);
+    const isChasing = useRef(false);
+    const mousePos = useRef({ x: typeof window !== 'undefined' ? window.innerWidth / 2 : 0, y: typeof window !== 'undefined' ? window.innerHeight / 2 : 0 });
 
     // Initial appearance
     useEffect(() => {
@@ -28,6 +30,70 @@ const GlobalMascotSprite = () => {
         }, 5000); 
         return () => clearTimeout(timer);
     }, [state]);
+
+    // Section Scroll Observer
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+            let maxVisible = 0;
+            let bestText = '안녕? 난 파우미야!';
+
+            entries.forEach(entry => {
+                if (entry.isIntersecting && entry.intersectionRatio > maxVisible) {
+                    maxVisible = entry.intersectionRatio;
+                    const id = entry.target.id.toLowerCase();
+                    const className = entry.target.className.toLowerCase();
+                    const combined = id + ' ' + className;
+
+                    if (combined.includes('review')) bestText = '다들 너무 만족하신대요! 👍';
+                    else if (combined.includes('hero') || combined.includes('teaser')) bestText = '여기가 메인이에요! ✨';
+                    else if (combined.includes('partner') || combined.includes('media')) bestText = '저희와 함께하는 든든한 파트너들이에요! 🤝';
+                    else if (combined.includes('comparison')) bestText = '비교해 보면 확실히 다르죠? 😎';
+                    else if (combined.includes('map') || combined.includes('contact')) bestText = '저희 위치가 궁금하신가요? 🗺️';
+                    else if (combined.includes('jelly') || combined.includes('chart')) bestText = '쑥쑥 성장하는 지표를 보세요! 📈';
+                    else if (combined.includes('agenda')) bestText = '핵심 아젠다를 확인해 보세요! 💡';
+                }
+            });
+            
+            if (maxVisible > 0) setCurrentSectionText(bestText);
+        }, { threshold: [0.2, 0.5, 0.8] });
+
+        const sections = document.querySelectorAll('section, [class*="section" i], [class*="Section"]');
+        sections.forEach(s => observer.observe(s));
+        return () => observer.disconnect();
+    }, []);
+
+    // Mouse & Chase Event Listeners
+    useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            mousePos.current = { x: e.clientX, y: e.clientY };
+        };
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+            if (e.key === 'Shift' && !isChasing.current) {
+                isChasing.current = true;
+                setIsChasingState(true);
+                if (!isRoaming.current) {
+                    isRoaming.current = true;
+                    setState('roam');
+                }
+            }
+        };
+        const handleKeyUp = (e: KeyboardEvent) => {
+            if (e.key === 'Shift' && isChasing.current) {
+                isChasing.current = false;
+                setIsChasingState(false);
+            }
+        };
+
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('keyup', handleKeyUp);
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener('keyup', handleKeyUp);
+        };
+    }, []);
 
     // High performance Organic Roaming Engine (Boids/Steering)
     const targetPos = useRef({ x: -200, y: -200 });
@@ -48,41 +114,62 @@ const GlobalMascotSprite = () => {
                 const minY = Math.min(calcMinY, calcMaxY - 10);
                 const maxY = Math.max(calcMaxY, calcMinY + 10);
 
-                const dx = targetPos.current.x - pos.current.x;
-                const dy = targetPos.current.y - pos.current.y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
+                let currentTarget = targetPos.current;
 
-                // If close to target, pick a new random target within safe bounds
-                if (dist < 100) {
-                    targetPos.current = {
-                        x: minX + Math.random() * (maxX - minX),
-                        y: minY + Math.random() * (maxY - minY)
+                if (isChasing.current) {
+                    // Translate mouse coordinates to sprite's local translation space
+                    // container is fixed at bottom:160, right:30 (width:130, height:130)
+                    // We want the CENTER of the sprite (offset 65) to match the mouse
+                    const containerOriginX = window.innerWidth - 160;
+                    const containerOriginY = window.innerHeight - 290; // 160 (bottom) + 130 (height)
+                    
+                    currentTarget = {
+                        x: mousePos.current.x - containerOriginX - 65,
+                        y: mousePos.current.y - containerOriginY - 65
                     };
+                } else {
+                    const dxTarget = targetPos.current.x - pos.current.x;
+                    const dyTarget = targetPos.current.y - pos.current.y;
+                    if (Math.sqrt(dxTarget * dxTarget + dyTarget * dyTarget) < 100) {
+                        targetPos.current = {
+                            x: minX + Math.random() * (maxX - minX),
+                            y: minY + Math.random() * (maxY - minY)
+                        };
+                    }
+                    currentTarget = targetPos.current;
                 }
 
+                const dx = currentTarget.x - pos.current.x;
+                const dy = currentTarget.y - pos.current.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
                 // Steer towards target smoothly
-                const targetVx = (dx / (dist || 1)) * 3;
-                const targetVy = (dy / (dist || 1)) * 3;
+                const targetVx = (dx / (dist || 1)) * (isChasing.current ? 6 : 3);
+                const targetVy = (dy / (dist || 1)) * (isChasing.current ? 6 : 3);
 
                 // Add erratic zigzag noise
-                vel.current.vx += (targetVx - vel.current.vx) * 0.03 + (Math.random() - 0.5) * 1.5;
-                vel.current.vy += (targetVy - vel.current.vy) * 0.03 + (Math.random() - 0.5) * 1.5;
+                const noise = isChasing.current ? 0.5 : 1.5;
+                vel.current.vx += (targetVx - vel.current.vx) * 0.05 + (Math.random() - 0.5) * noise;
+                vel.current.vy += (targetVy - vel.current.vy) * 0.05 + (Math.random() - 0.5) * noise;
 
                 // Cap max velocity to avoid insane speeds
+                const maxSpeed = isChasing.current ? 10 : 5;
                 const speed = Math.sqrt(vel.current.vx * vel.current.vx + vel.current.vy * vel.current.vy);
-                if (speed > 5) {
-                    vel.current.vx = (vel.current.vx / speed) * 5;
-                    vel.current.vy = (vel.current.vy / speed) * 5;
+                if (speed > maxSpeed) {
+                    vel.current.vx = (vel.current.vx / speed) * maxSpeed;
+                    vel.current.vy = (vel.current.vy / speed) * maxSpeed;
                 }
 
                 pos.current.x += vel.current.vx;
                 pos.current.y += vel.current.vy;
 
-                // Soft boundaries to gently repel it if it drifts too far out
-                if (pos.current.x < minX - 50) vel.current.vx += 1;
-                if (pos.current.x > maxX + 50) vel.current.vx -= 1;
-                if (pos.current.y < minY - 50) vel.current.vy += 1;
-                if (pos.current.y > maxY + 50) vel.current.vy -= 1;
+                // Soft boundaries (only apply if not chasing)
+                if (!isChasing.current) {
+                    if (pos.current.x < minX - 50) vel.current.vx += 1;
+                    if (pos.current.x > maxX + 50) vel.current.vx -= 1;
+                    if (pos.current.y < minY - 50) vel.current.vy += 1;
+                    if (pos.current.y > maxY + 50) vel.current.vy -= 1;
+                }
 
                 containerRef.current.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0)`;
                 // Flip mascot horizontally if moving left vs right (apply to sprite only)
@@ -101,12 +188,16 @@ const GlobalMascotSprite = () => {
     }, []);
 
     let spriteImage = '/images/pawmi/ai_mascot_idle_clean_strip_transparent.png';
-    let tooltipText = '안녕? 난 파우미야!';
+    let tooltipText = currentSectionText;
     let extraAnimation = 'floatSmooth 3s ease-in-out infinite';
     
-    if (state === 'hover') {
+    if (isChasingState) {
+        spriteImage = '/images/pawmi/ai_mascot_flying_clean_strip_transparent.png';
+        tooltipText = '잡았다 요놈!! 슝슝!';
+        extraAnimation = 'floatSmooth 0.5s ease-in-out infinite';
+    } else if (state === 'hover') {
         spriteImage = '/images/pawmi/ai_mascot_waving_strip_transparent.png';
-        tooltipText = '반가워요! 더블클릭 해볼래요?';
+        tooltipText = 'Shift 키를 꾹 눌러보세요!';
         extraAnimation = 'none';
     } else if (state === 'click') {
         spriteImage = '/images/pawmi/ai_mascot_jumping_clean_strip_transparent.png';
