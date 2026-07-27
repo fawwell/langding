@@ -38,14 +38,43 @@ const GlobalMascotSprite = () => {
                 pos.current.x += vel.current.vx;
                 pos.current.y += vel.current.vy;
                 
-                // Boundaries (assuming it starts at bottom right)
-                const maxX = 50;
-                const minX = -window.innerWidth + 100;
-                const maxY = 50;
-                const minY = -window.innerHeight + 100;
+                // Precise boundaries based on sprite size (130x130) and start position (right: 30, bottom: 160)
+                const mascotWidth = 130;
+                const mascotHeight = 130;
+                const startRight = 30;
+                const startBottom = 160;
+                const padding = 10;
 
-                if (pos.current.x < minX || pos.current.x > maxX) vel.current.vx *= -1;
-                if (pos.current.y < minY || pos.current.y > maxY) vel.current.vy *= -1;
+                const minX = -window.innerWidth + (mascotWidth + startRight + padding);
+                const maxX = startRight - padding;
+
+                const minY = -window.innerHeight + (mascotHeight + startBottom + padding);
+                const maxY = startBottom - padding;
+
+                let hitWall = false;
+
+                if (pos.current.x <= minX || pos.current.x >= maxX) {
+                    vel.current.vx *= -1;
+                    vel.current.vy += (Math.random() - 0.5) * 2; // Flutter effect
+                    hitWall = true;
+                }
+                if (pos.current.y <= minY || pos.current.y >= maxY) {
+                    vel.current.vy *= -1;
+                    vel.current.vx += (Math.random() - 0.5) * 2; // Flutter effect
+                    hitWall = true;
+                }
+
+                // Prevent getting stuck outside boundaries
+                pos.current.x = Math.max(minX, Math.min(maxX, pos.current.x));
+                pos.current.y = Math.max(minY, Math.min(maxY, pos.current.y));
+
+                // Normalize velocity to keep a constant average speed
+                if (hitWall) {
+                    const speed = Math.sqrt(vel.current.vx * vel.current.vx + vel.current.vy * vel.current.vy);
+                    const targetSpeed = 2.5; // Constant speed
+                    vel.current.vx = (vel.current.vx / speed) * targetSpeed;
+                    vel.current.vy = (vel.current.vy / speed) * targetSpeed;
+                }
 
                 containerRef.current.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0)`;
                 // Flip mascot horizontally if moving left vs right
