@@ -35,15 +35,32 @@ const GlobalMascotSprite = () => {
         return () => clearTimeout(timer);
     }, []);
 
-    // Idle timer for sleeping (only when default)
+    // Idle timer for sleeping and wake up on scroll
     useEffect(() => {
-        if (state !== 'default') return;
-        const timer = setTimeout(() => {
-            if (!isRoaming.current) {
-                setState('sleep');
+        let timer: any;
+        const startTimer = () => {
+            clearTimeout(timer);
+            if (state === 'default' && !isRoaming.current) {
+                timer = setTimeout(() => setState('sleep'), 5000);
             }
-        }, 5000); 
-        return () => clearTimeout(timer);
+        };
+
+        const handleScroll = () => {
+            setState(prev => {
+                if (prev === 'sleep') return 'default';
+                return prev;
+            });
+            if (state === 'default') {
+                startTimer();
+            }
+        };
+
+        startTimer();
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => {
+            clearTimeout(timer);
+            window.removeEventListener('scroll', handleScroll);
+        };
     }, [state]);
 
     // Section Scroll Observer
