@@ -3780,3 +3780,6 @@ header ul li a:hover, header ul li a.active-nav {
     will-change: transform;
     transform: translateZ(0);
 }
+
+body:has(#page-home.page-content.active), body:has(#page-eap.page-content.active) { overflow-y: hidden !important; }
+

@@ -22,9 +22,7 @@ const GlobalMascotSprite = () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             style={{
-                position: 'fixed',
-                right: '30px',
-                bottom: '160px',
+                position: 'relative',
                 zIndex: 9999,
                 cursor: 'pointer',
                 transition: 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
