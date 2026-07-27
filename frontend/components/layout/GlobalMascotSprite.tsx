@@ -25,7 +25,7 @@ const GlobalMascotSprite = () => {
             if (!isRoaming.current) {
                 setState('sleep');
             }
-        }, 15000); 
+        }, 5000); 
         return () => clearTimeout(timer);
     }, [state]);
 
@@ -136,7 +136,7 @@ const GlobalMascotSprite = () => {
                 position: 'fixed',
                 bottom: typeof window !== 'undefined' && window.innerWidth <= 768 ? '140px' : '20px', 
                 right: '20px',
-                zIndex: 9999,
+                zIndex: 99999,
                 touchAction: 'none'
             }}
         >
