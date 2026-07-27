@@ -38,10 +38,15 @@ const GlobalMascotSprite = () => {
         const roamLoop = () => {
             if (isRoaming.current && containerRef.current) {
                 // Safe bounds for targeting and soft collisions
-                const minX = -window.innerWidth + 200;
-                const maxX = -20;
-                const minY = -window.innerHeight + 320;
-                const maxY = 80;
+                const calcMinX = -window.innerWidth + 200;
+                const calcMaxX = -20;
+                const calcMinY = -window.innerHeight + 320;
+                const calcMaxY = 80;
+
+                const minX = Math.min(calcMinX, calcMaxX - 10);
+                const maxX = Math.max(calcMaxX, calcMinX + 10);
+                const minY = Math.min(calcMinY, calcMaxY - 10);
+                const maxY = Math.max(calcMaxY, calcMinY + 10);
 
                 const dx = targetPos.current.x - pos.current.x;
                 const dy = targetPos.current.y - pos.current.y;
