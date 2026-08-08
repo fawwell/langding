@@ -102,8 +102,22 @@ const ReviewSection = () => {
                         )}
                     </div>
                     {/* 좌우 네비게이션 화살표 단추 */}
-                    <div className="swiper-button-prev review-swiper-button-prev" style={{ color: '#2b8a3e', left: '10px' }}></div>
-                    <div className="swiper-button-next review-swiper-button-next" style={{ color: '#2b8a3e', right: '10px' }}></div>
+                    <div 
+                        className="swiper-button-prev review-swiper-button-prev" 
+                        style={{ color: '#2b8a3e', left: '10px', zIndex: 20, cursor: 'pointer' }}
+                        onClick={() => {
+                            const swiper = (document.querySelector('.reviewSwiper') as any)?.swiper;
+                            if (swiper) swiper.slidePrev();
+                        }}
+                    ></div>
+                    <div 
+                        className="swiper-button-next review-swiper-button-next" 
+                        style={{ color: '#2b8a3e', right: '10px', zIndex: 20, cursor: 'pointer' }}
+                        onClick={() => {
+                            const swiper = (document.querySelector('.reviewSwiper') as any)?.swiper;
+                            if (swiper) swiper.slideNext();
+                        }}
+                    ></div>
                 </div>
             </div>
         </section>
